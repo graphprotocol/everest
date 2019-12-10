@@ -1,9 +1,6 @@
 /** @jsx jsx */
-import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
-import styled from 'styled-components'
-import { Styled, jsx } from 'theme-ui'
+import { jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 
 const Button = ({ to, text, variant }) => {

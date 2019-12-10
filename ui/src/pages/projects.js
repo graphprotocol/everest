@@ -1,8 +1,4 @@
 /** @jsx jsx */
-import React from 'react'
-import PropTypes from 'prop-types'
-
-import { graphql } from 'gatsby'
 import { Styled, jsx } from 'theme-ui'
 import Layout from '../components/Layout'
 import styled from 'styled-components'

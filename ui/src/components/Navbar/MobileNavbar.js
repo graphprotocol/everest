@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { Fragment } from 'react'
+import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 

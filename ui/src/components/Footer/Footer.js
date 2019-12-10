@@ -1,7 +1,6 @@
 /** @jsx jsx */
-import React from 'react'
-import styled from 'styled-components'
-import { Styled, jsx } from 'theme-ui'
+import { Styled, jsx, Footer as GatsbyFooter } from 'theme-ui'
+import { Grid } from '@theme-ui/components'
 
 import Github from '../../images/github.svg'
 import Discord from '../../images/discord-icon.svg'
@@ -10,46 +9,56 @@ import Twitter from '../../images/twitter-icon.svg'
 import Badges from '../../images/badges.svg'
 import Link from '../../components/Link'
 
-const Container = styled.div`
-  display: grid;
-  grid-column-gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
-  max-width: 300px;
-`
-
-const Root = styled.div`
-  display: grid;
-  grid-column-gap: 20px;
-  justify-content: space-between;
-  grid-template-columns: 1fr 140px 1fr;
-  align-items: center;
-`
-
-const Footer = ({}) => {
+const Footer = () => {
   return (
-    <Root>
+    <GatsbyFooter sx={rootStyles}>
       <Link to="/about">
         <Styled.a>About</Styled.a>
       </Link>
-      <Container>
-        <a href="https://github.com/graphprotocol" target="_blank">
+      <Grid columns={4} gap={3} sx={{ maxWidth: '300px' }}>
+        <a
+          href="https://github.com/graphprotocol"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Github />
         </a>
-        <a href="https://discord.gg/vtvv7FP" target="_blank">
+        <a
+          href="https://discord.gg/vtvv7FP"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Discord />
         </a>
-        <a href="https://medium.com/graphprotocol" target="_blank">
+        <a
+          href="https://medium.com/graphprotocol"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Medium />
         </a>
-        <a href="https://twitter.com/graphprotocol" target="_blank">
+        <a
+          href="https://twitter.com/graphprotocol"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Twitter />
         </a>
-      </Container>
+      </Grid>
       <div sx={{ textAlign: 'right' }}>
         <Badges />
       </div>
-    </Root>
+    </GatsbyFooter>
   )
+}
+
+const rootStyles = {
+  display: 'grid',
+  gridColumnGap: '20px',
+  justifyContent: 'space-between',
+  gridTemplateColumns: '1fr 140px 1fr',
+  alignItems: 'center',
+  height: '96px'
 }
 
 export default Footer

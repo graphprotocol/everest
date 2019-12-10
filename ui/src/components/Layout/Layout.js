@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
-import React, { Fragment } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import { jsx } from 'theme-ui'
+import { Fragment } from 'react'
+import { createGlobalStyle } from 'styled-components'
 import { reset } from 'styled-reset'
 import { Main } from 'theme-ui'
 

@@ -2,24 +2,15 @@
 import { jsx, Styled } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
-import styled from 'styled-components'
 import { Grid } from '@theme-ui/components'
-import { Flex, Box } from 'theme-ui'
+import { Box } from 'theme-ui'
 
 import Layout from '../components/Layout'
 import Stats from '../components/Stats'
 import Button from '../components/Button'
-import Card from '../components/Card'
-import Link from '../components/Link'
+import Section from '../components/Section'
+import Divider from '../components/Divider'
 import categories from '../data/categories.json'
-import Arrow from '../images/arrow.svg'
-
-const Image = styled.div`
-  background: url(/images/mountain.png) no-repeat 50% 50%;
-  background-size: cover;
-  width: 100%;
-  height: 344px;
-`
 
 const Index = ({ data }) => {
   const stats = [
@@ -27,6 +18,7 @@ const Index = ({ data }) => {
     { title: 'Registry Value (ETH)', value: '150,000' },
     { title: 'Issued Shares', value: '350' }
   ]
+
   return (
     <Layout>
       <Grid gap={[2, 2, 6]} columns={[1, null, 2]}>
@@ -44,87 +36,119 @@ const Index = ({ data }) => {
             <Button to="/project/new" text="Add project" variant="primary" />
           </Grid>
         </Box>
+        <Box
+          sx={{
+            ...imageStyles,
+            backgroundImage: 'url(./mountain.png)'
+          }}
+        />
+      </Grid>
+      <Grid sx={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <Stats stats={stats} />
+      </Grid>
+      <Divider />
+      <Section
+        title="Categories"
+        description="All projects belong to at least one category. Categories are also
+      curated in a decentralized way."
+        items={categories.slice(0, 10).map(cat => {
+          return {
+            name: cat,
+            description: '24 projects'
+          }
+        })}
+        to="/categories"
+        linkText="View all Categories"
+        variant="category"
+      />
+
+      <Section
+        title="Recent Projects"
+        description="These projects were recently added by members of the community."
+        items={data.everest.projects.map(project => {
+          return {
+            name: project.name,
+            description: project.description.slice(0, 20) + '...'
+          }
+        })}
+        to="/projects"
+        linkText="View all Projects"
+        variant="project"
+      />
+      {/* TODO: Combine projects and categories */}
+      <Section
+        title="Active Challenges"
+        description="These projects and categories were recently challanged by members of
+        the community."
+        items={data.everest.projects.map(project => {
+          return {
+            name: project.name,
+            description: project.description.slice(0, 20) + '...'
+          }
+        })}
+        to="/projects"
+        linkText="View all Challenges"
+        variant="project"
+      />
+      <Divider />
+      <Grid columns={[1, 2, 2]} gap={[1, 2, 6]}>
         <Box>
-          <Image />
-        </Box>
-      </Grid>
-      <Stats stats={stats} />
-      <Grid sx={dividerStyles} mt={[3, 6]} mb={[3, 6]} />
-      <Grid mt={7} mb={7}>
-        <Box sx={{ width: ['100%', '50%'] }}>
-          <Styled.h3 sx={{ color: 'primary' }}>Categories</Styled.h3>
-          <Styled.p>
-            All projects belong to at least one category. Categories are also
-            curated in a decentralized way.
+          <Styled.h3>Why curation</Styled.h3>
+          <Styled.p sx={{ fontSize: '0.875rem', lineHeight: '1.5rem' }}>
+            Everest is building toward a decentralized future where no
+            privileged group has control over public data. Curation allows
+            diverse stakeholders to agree on the contents of a shared registry
+            with neutrality.
+            <br />
+            <br />
+            To add a project to the registry you must submit a $10 listing fee
+            paid in ETH. The listing fee helps ensure the list's quality.
+            <br />
+            <br /> Anyone can challenge a listing by putting ETH at stake. With
+            these tools we can build consensus on a shared registry without
+            giving anyone control over the data. Let the decentralized future
+            begin!
           </Styled.p>
         </Box>
-        <Grid columns={[1, 2, 4]}>
-          {categories.slice(0, 10).map(category => (
-            <Card title={category} subtitle="24 projects" variant="category" />
-          ))}
-        </Grid>
-        <Link to="/categories">
-          View all Categories
-          <Arrow sx={{ verticalAlign: 'middle', marginLeft: 2 }} />
-        </Link>
+        <Box
+          sx={{
+            ...imageStyles,
+            backgroundSize: 'contain',
+            backgroundImage: 'url(./binoculars.png)',
+            order: [-1, 1, 1]
+          }}
+        />
       </Grid>
-
-      <Grid mt={7} mb={7}>
-        <Box sx={{ width: ['100%', '50%'] }}>
-          <Styled.h3 sx={{ color: 'primary' }}>Recent Projects</Styled.h3>
-          <Styled.p>
-            These projects were recently added by members of the community.
+      <Grid gap={[2, 2, 6]} columns={[1, null, 2]} mt={[2, 8]}>
+        <Box
+          sx={{
+            ...imageStyles,
+            backgroundImage: 'url(./bottom.png)'
+          }}
+        />
+        <Box sx={{ maxWidth: '396px' }}>
+          <Styled.h4>Be part of conquering Everest!</Styled.h4>
+          <Styled.p
+            sx={{ marginTop: 4, fontSize: '0.875rem', lineHeight: '1.5rem' }}
+          >
+            Having a complete and up-to-date list of projects is a major
+            achievement on the road to decentralization.
           </Styled.p>
+          <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
+            <Button to="/project/new" text="Add project" variant="primary" />
+          </Grid>
         </Box>
-        <Grid columns={[2, 6]} gap={0}>
-          {data.everest.projects.map(project => {
-            return (
-              <Card
-                title={project.name}
-                subtitle={project.description.slice(0, 20) + '...'}
-                variant="project"
-              />
-            )
-          })}
-        </Grid>
-        <Link to="/projects">
-          View all Projects
-          <Arrow sx={{ verticalAlign: 'middle', marginLeft: 2 }} />
-        </Link>
       </Grid>
-
-      <Grid mt={7} mb={7}>
-        <Box sx={{ width: ['100%', '50%'] }}>
-          <Styled.h3 sx={{ color: 'primary' }}>Active Challenges</Styled.h3>
-          <Styled.p>
-            These projects and categories were recently challanged by members of
-            the community.
-          </Styled.p>
-        </Box>
-        <Grid columns={[2, 6]} gap={0}>
-          {data.everest.projects.map(project => (
-            <Card
-              title={project.name}
-              subtitle={project.description.slice(0, 20) + '...'}
-              variant="project"
-            />
-          ))}
-        </Grid>
-        <Link to="/challenges">
-          View all Challenges
-          <Arrow sx={{ verticalAlign: 'middle', marginLeft: 2 }} />
-        </Link>
-      </Grid>
-
-      <Grid sx={dividerStyles} mt={[3, 6]} mb={[3, 6]} />
     </Layout>
   )
 }
 
-const dividerStyles = {
-  height: '2px',
+const imageStyles = {
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '50% 50%',
+  backgroundSize: 'cover',
   width: '100%',
-  border: '1px solid #cfcfcf'
+  height: ['280px', '344px']
 }
 
 Index.propTypes = {

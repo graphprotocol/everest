@@ -1,9 +1,7 @@
 /** @jsx jsx */
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Link as GatsbyLink } from 'gatsby'
-import { Styled, jsx } from 'theme-ui'
-import { navigate } from 'gatsby'
+import { jsx } from 'theme-ui'
 
 const Link = ({ to, children, ...props }) => {
   return (

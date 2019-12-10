@@ -1,6 +1,6 @@
 export default {
   colors: {
-    text: '#1E252C',
+    text: '#4A4A4A',
     background: '#fff',
     primary: '#1E252C',
     secondary: '#4C66FF'
@@ -13,7 +13,7 @@ export default {
     body: 400,
     heading: 600
   },
-  space: [0, 4, 8, 16, 32, 64, 96, 128],
+  space: [0, 4, 8, 16, 32, 64, 96, 128, 160],
   styles: {
     body: {
       fontFamily: 'body'
@@ -61,9 +61,19 @@ export default {
     p: {
       fontSize: '1rem',
       lineHeight: '2rem',
-      letterSpacing: '-0.5px'
+      letterSpacing: '-0.5px',
+      color: 'text'
     },
     a: {
+      textDecoration: 'none',
+      display: 'block',
+      color: '#4C66FF',
+      fontSize: '1rem',
+      fontWeight: 'bold',
+      letterSpacing: '0.31px',
+      lineHeight: '2.375rem'
+    },
+    Link: {
       textDecoration: 'none',
       display: 'block',
       color: '#4C66FF',
@@ -86,11 +96,10 @@ export default {
       cursor: 'pointer',
       '&:focus': {
         outline: 'none'
+      },
+      '&:hover': {
+        opacity: 0.8
       }
-    },
-    secondary: {
-      color: 'text',
-      bg: 'secondary'
     }
   }
 }

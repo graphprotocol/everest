@@ -1,18 +1,19 @@
 /** @jsx jsx */
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Styled, jsx, Header } from 'theme-ui'
 
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 
-const isMobile = () => typeof window !== undefined && window.innerWidth < 640
-
-const Navbar = ({}) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
-
+  const [isMobile, setIsMobile] = useState()
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 640)
+  }, [])
   return (
     <Header>
-      {isMobile() ? (
+      {isMobile ? (
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       ) : (
         <nav sx={navStyles}>

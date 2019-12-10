@@ -10,14 +10,14 @@ const Container = styled.div`
   min-height: 100vh;
 `
 
-const Categories = ({ data }) => {
+const Error = ({ data }) => {
   return (
     <Layout>
       <Container>
-        <Styled.p>Everest is the greatest project ever.</Styled.p>
+        <Styled.p>Page not found.</Styled.p>
       </Container>
     </Layout>
   )
 }
 
-export default Categories
+export default Error
