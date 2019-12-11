@@ -6,48 +6,50 @@ import PropTypes from 'prop-types'
 import Challenged from '../../images/challenged.svg'
 import styles from './Card.styles'
 
-const Card = ({ title, description, isChallenged, variant }) => {
-  if (variant === 'category') {
-    return (
-      <Grid sx={styles.categoryRoot}>
-        <Grid p={2} sx={{ gridTemplateColumns: '64px 1fr' }}>
+const Card = ({ title, description, isChallenged, variant, imageBase }) => {
+  console.log(
+    'image base: ',
+    `.${imageBase}/${title.toLowerCase().replace(/ /g, '-')}.png`
+  )
+  return (
+    <Grid
+      sx={styles.projectRoot}
+      ml={['auto', 'auto', 0]}
+      mr={['auto', 'auto', 0]}
+    >
+      <Grid
+        pt={variant === 'project' ? 4 : 0}
+        pb={4}
+        sx={{ justifyContent: 'center' }}
+      >
+        {variant === 'project' ? (
           <Box sx={styles.box}></Box>
-          <Box p={3}>
-            <Styled.p sx={styles.title}>{title}</Styled.p>
-            <Styled.p>{description}</Styled.p>
+        ) : (
+          <Box>
+            <img
+              src={`${imageBase}/${title.toLowerCase().replace(/ /g, '-')}.png`}
+              alt={title}
+              sx={{ height: '120px', width: '180px' }}
+            />
           </Box>
-        </Grid>
+        )}
+        <Box p={3} sx={{ textAlign: 'center' }}>
+          <Styled.p sx={styles.title}>{title}</Styled.p>
+          <Styled.p sx={{ fontSize: '0.75rem', lineHeight: '0.875rem' }}>
+            {description}
+          </Styled.p>
+          {isChallenged && <Challenged sx={{ paddingTop: 2 }} />}
+        </Box>
       </Grid>
-    )
-  } else {
-    return (
-      <Grid sx={styles.projectRoot}>
-        <Grid pt={4} pb={4} sx={{ justifyContent: 'center' }}>
-          <Box
-            sx={{
-              ...styles.box,
-              width: '80px',
-              height: '80px',
-              margin: '0 auto'
-            }}
-          ></Box>
-          <Box p={3} sx={{ maxWidth: '150px', textAlign: 'center' }}>
-            <Styled.p sx={styles.title}>{title}</Styled.p>
-            <Styled.p sx={{ fontSize: '0.75rem', lineHeight: '0.875rem' }}>
-              {description}
-            </Styled.p>
-            {isChallenged && <Challenged sx={{ paddingTop: 2 }} />}
-          </Box>
-        </Grid>
-      </Grid>
-    )
-  }
+    </Grid>
+  )
 }
 
 Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  imageBase: PropTypes.string
 }
 
 export default Card

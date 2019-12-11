@@ -1,16 +1,15 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
+import { jsx, Styled, Box } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import { Grid } from '@theme-ui/components'
-import { Box } from 'theme-ui'
 
 import Layout from '../components/Layout'
 import Stats from '../components/Stats'
 import Button from '../components/Button'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
-import categories from '../data/categories.json'
+import categories from '../../categories.json'
 
 const Index = ({ data }) => {
   const stats = [
@@ -53,8 +52,9 @@ const Index = ({ data }) => {
       curated in a decentralized way."
         items={categories.slice(0, 10).map(cat => {
           return {
-            name: cat,
-            description: '24 projects'
+            name: cat.name,
+            description: '24 projects',
+            imageBase: '/categories'
           }
         })}
         to="/categories"

@@ -9,24 +9,27 @@ import Arrow from '../../images/arrow.svg'
 
 const Section = ({ title, description, items, to, linkText, variant }) => {
   return (
-    <Grid mt={[3, 3, 7]} mb={[3, 3, 7]}>
+    <Grid mt={[3, 3, 6]} mb={[3, 3, 7]}>
       <Box sx={{ width: '100%' }}>
-        <Styled.h3 sx={{ color: 'primary' }}>{title}</Styled.h3>
-        <Styled.p>{description}</Styled.p>
+        {title && <Styled.h3 sx={{ color: 'primary' }}>{title}</Styled.h3>}
+        {description && <Styled.p>{description}</Styled.p>}
       </Box>
-      <Grid columns={variant === 'category' ? [1, 2, 4] : [2, 3, 6]} gap={1}>
+      <Grid columns={[2, 3, 6]} gap={1}>
         {items.map(item => (
           <Card
             title={item.name}
             description={item.description}
             variant={variant}
+            imageBase={item.imageBase}
           />
         ))}
       </Grid>
-      <Link to={to}>
-        {linkText}
-        <Arrow sx={{ verticalAlign: 'middle', marginLeft: 2 }} />
-      </Link>
+      {linkText && (
+        <Link to={to}>
+          {linkText}
+          <Arrow sx={{ verticalAlign: 'middle', marginLeft: 2 }} />
+        </Link>
+      )}
     </Grid>
   )
 }
