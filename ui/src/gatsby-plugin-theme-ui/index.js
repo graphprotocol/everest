@@ -3,17 +3,20 @@ export default {
     text: '#4A4A4A',
     background: '#fff',
     primary: '#1E252C',
-    secondary: '#4C66FF'
+    secondary: '#4C66FF',
+    tertiary: '#7D7D7D',
+    column: '#8A8A8A',
+    fill: '#CFCFCF'
   },
   fonts: {
-    body: 'monospace',
-    heading: 'monospace'
+    body: 'Space Mono, monospace',
+    heading: 'Space Mono, monospace'
   },
   fontWeights: {
     body: 400,
     heading: 600
   },
-  space: [0, 4, 8, 16, 32, 64, 96, 128, 160],
+  space: [0, 4, 8, 12, 16, 32, 64, 96, 128, 160],
   styles: {
     body: {
       fontFamily: 'body'
@@ -37,6 +40,12 @@ export default {
         fontSize: '2.75rem',
         lineHeight: '3.25rem'
       }
+    },
+    h2: {
+      fontSize: '2.75rem',
+      fontWeight: 'heading',
+      letterSpacing: '-0.4px',
+      lineHeight: '3.5rem'
     },
     h3: {
       fontSize: '2.5rem',

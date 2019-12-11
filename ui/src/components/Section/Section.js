@@ -10,7 +10,7 @@ import Arrow from '../../images/arrow.svg'
 const Section = ({ title, description, items, to, linkText, variant }) => {
   return (
     <Grid mt={[3, 3, 7]} mb={[3, 3, 7]}>
-      <Box sx={{ width: ['100%', '350%'] }}>
+      <Box sx={{ width: '100%' }}>
         <Styled.h3 sx={{ color: 'primary' }}>{title}</Styled.h3>
         <Styled.p>{description}</Styled.p>
       </Box>

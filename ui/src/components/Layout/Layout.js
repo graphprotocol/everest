@@ -14,14 +14,15 @@ const LayoutTemplate = ({ children }) => {
   ${reset}
   body {
     color: #1E252C;
-    font-family: monospace;
+    font-family: 'Space Mono', monospace;
   }
 `
   const styles = {
     maxWidth: '1260px',
     margin: '0 auto',
     padding: '0 20px',
-    boxSizing: 'content-box'
+    boxSizing: 'content-box',
+    position: 'relative'
   }
 
   return (

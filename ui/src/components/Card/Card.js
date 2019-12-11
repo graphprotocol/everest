@@ -3,9 +3,10 @@ import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import PropTypes from 'prop-types'
 
+import Challenged from '../../images/challenged.svg'
 import styles from './Card.styles'
 
-const Card = ({ title, description, variant }) => {
+const Card = ({ title, description, isChallenged, variant }) => {
   if (variant === 'category') {
     return (
       <Grid sx={styles.categoryRoot}>
@@ -35,6 +36,7 @@ const Card = ({ title, description, variant }) => {
             <Styled.p sx={{ fontSize: '0.75rem', lineHeight: '0.875rem' }}>
               {description}
             </Styled.p>
+            {isChallenged && <Challenged sx={{ paddingTop: 2 }} />}
           </Box>
         </Grid>
       </Grid>
