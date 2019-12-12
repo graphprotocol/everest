@@ -2,6 +2,7 @@
 import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import PropTypes from 'prop-types'
+import { navigate } from 'gatsby'
 
 import Challenged from '../../images/challenged.svg'
 import styles from './Card.styles'
@@ -16,9 +17,10 @@ const Card = ({
 }) => {
   return (
     <Grid
-      sx={styles.projectRoot}
+      sx={styles.root}
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
+      onClick={() => navigate(slug ? `/category/${slug}` : '/projects')}
     >
       <Grid
         pt={variant === 'project' ? 4 : 0}

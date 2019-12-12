@@ -46,7 +46,7 @@ const Projects = ({ data }) => {
           </Styled.p>
         </Box>
         <Grid
-          columns={3}
+          columns={2}
           sx={{
             maxWidth: '60px',
             justifySelf: 'flex-end',

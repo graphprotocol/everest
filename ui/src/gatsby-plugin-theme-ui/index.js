@@ -25,7 +25,7 @@ export default {
       position: 'relative'
     },
     Main: {
-      padding: '90px 0'
+      py: [5, 7]
     },
     Header: {
       position: 'relative'
