@@ -6,11 +6,14 @@ import PropTypes from 'prop-types'
 import Challenged from '../../images/challenged.svg'
 import styles from './Card.styles'
 
-const Card = ({ title, description, isChallenged, variant, imageBase }) => {
-  console.log(
-    'image base: ',
-    `.${imageBase}/${title.toLowerCase().replace(/ /g, '-')}.png`
-  )
+const Card = ({
+  title,
+  description,
+  slug,
+  isChallenged,
+  variant,
+  imageBase
+}) => {
   return (
     <Grid
       sx={styles.projectRoot}
@@ -27,7 +30,7 @@ const Card = ({ title, description, isChallenged, variant, imageBase }) => {
         ) : (
           <Box>
             <img
-              src={`${imageBase}/${title.toLowerCase().replace(/ /g, '-')}.png`}
+              src={`${imageBase}/${slug}.png`}
               alt={title}
               sx={{ height: '120px', width: '180px' }}
             />
@@ -49,7 +52,8 @@ Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   variant: PropTypes.string,
-  imageBase: PropTypes.string
+  imageBase: PropTypes.string,
+  slug: PropTypes.string
 }
 
 export default Card

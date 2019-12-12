@@ -27,7 +27,7 @@
     "gatsby-plugin-styled-components": "^3.1.14",
     "gatsby-plugin-theme-ui": "^0.2.43",
     "gatsby-source-filesystem": "^2.1.40",
-    "gatsby-source-graphql": "^2.1.25",
+    "gatsby-source-graphql": "2.1.28",
     "graphql": "^14.5.8",
     "isomorphic-fetch": "^2.2.1",
     "react": "^16.12.0",

@@ -21,6 +21,7 @@ const Section = ({ title, description, items, to, linkText, variant }) => {
             description={item.description}
             variant={variant}
             imageBase={item.imageBase}
+            slug={item.slug}
           />
         ))}
       </Grid>

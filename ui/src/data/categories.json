@@ -1,0 +1,200 @@
+[
+  { "name": "Identity", "slug": "identity", "description": "PLACEHOLDER" },
+  {
+    "name": "DeFi",
+    "slug": "defi",
+    "description": "PLACEHOLDER",
+    "subcategories": [
+      { "name": "Wallets", "slug": "wallets", "description": "PLACEHOLDER" },
+      { "name": "Payments", "slug": "payments", "description": "PLACEHOLDER" },
+      {
+        "name": "Currencies",
+        "slug": "currencies",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Derivatives",
+        "slug": "derivatives",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Exchanges",
+        "slug": "exchanges",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Lending", "slug": "lending", "description": "PLACEHOLDER" },
+      {
+        "name": "Insurance",
+        "slug": "insurance",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Ratings", "slug": "ratings", "description": "PLACEHOLDER" },
+      {
+        "name": "Investing",
+        "slug": "investing",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Staking", "slug": "staking", "description": "PLACEHOLDER" }
+    ]
+  },
+  {
+    "name": "Governance",
+    "slug": "governance",
+    "description": "PLACEHOLDER",
+    "subcategories": [
+      { "name": "DAOs", "slug": "daos", "description": "PLACEHOLDER" },
+      {
+        "name": "Voting Tools",
+        "slug": "voting-tools",
+        "description": "PLACEHOLDER"
+      }
+    ]
+  },
+  { "name": "Funds", "slug": "funds", "description": "PLACEHOLDER" },
+  { "name": "Work", "slug": "work", "description": "PLACEHOLDER" },
+  {
+    "name": "Entertainment",
+    "slug": "entertainment",
+    "description": "PLACEHOLDER",
+    "subcategories": [
+      {
+        "name": "Art",
+        "slug": "art",
+        "description": "PLACEHOLDER"
+      },
+
+      {
+        "name": "Collectibles",
+        "slug": "collectibles",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Games", "slug": "games", "description": "PLACEHOLDER" },
+      { "name": "Sports", "slug": "sports", "description": "PLACEHOLDER" },
+      { "name": "Music", "slug": "music", "description": "PLACEHOLDER" },
+      { "name": "Video", "slug": "video", "description": "PLACEHOLDER" }
+    ]
+  },
+  {
+    "name": "Philanthropy",
+    "slug": "philantropy",
+    "description": "PLACEHOLDER"
+  },
+  {
+    "name": "Marketplaces",
+    "slug": "marketplaces",
+    "description": "PLACEHOLDER"
+  },
+  { "name": "Social", "slug": "social", "description": "PLACEHOLDER" },
+  {
+    "name": "News & Media",
+    "slug": "news-and-media",
+    "description": "PLACEHOLDER"
+  },
+  {
+    "name": "Manufacturing",
+    "slug": "manufacturing",
+    "description": "PLACEHOLDER"
+  },
+  {
+    "name": "Supply Chain",
+    "slug": "supply-chain",
+    "description": "PLACEHOLDER"
+  },
+  { "name": "Energy", "slug": "energy", "description": "PLACEHOLDER" },
+  {
+    "name": "Environment",
+    "slug": "environment",
+    "description": "PLACEHOLDER"
+  },
+  { "name": "Lifestyle", "slug": "lifestyle", "description": "PLACEHOLDER" },
+  {
+    "name": "Services",
+    "slug": "services",
+    "description": "PLACEHOLDER",
+    "subcategories": [
+      {
+        "name": "Legal",
+        "slug": "legal",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Accounting",
+        "slug": "accounting",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Software Development",
+        "slug": "software-development",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "PR", "slug": "pr", "description": "PLACEHOLDER" },
+      {
+        "name": "Marketing",
+        "slug": "marketing",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Security", "slug": "security", "description": "PLACEHOLDER" },
+      { "name": "Custody", "slug": "custody", "description": "PLACEHOLDER" },
+      {
+        "name": "Incubation",
+        "slug": "incubation",
+        "description": "PLACEHOLDER"
+      }
+    ]
+  },
+  { "name": "Places", "slug": "places", "description": "PLACEHOLDER" },
+  { "name": "Health", "slug": "health", "description": "PLACEHOLDER" },
+  { "name": "Education", "slug": "education", "description": "PLACEHOLDER" },
+  {
+    "name": "Hardware",
+    "slug": "hardware",
+    "description": "PLACEHOLDER",
+    "subcategories": [
+      { "name": "Mining", "slug": "mining", "description": "PLACEHOLDER" }
+    ]
+  },
+  {
+    "name": "Software",
+    "slug": "software",
+    "description": "PLACEHOLDER",
+    "subcategories": [
+      {
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Libraries",
+        "slug": "libraries",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Analytics",
+        "slug": "analytics",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Storage", "slug": "storage", "description": "PLACEHOLDER" },
+      {
+        "name": "Computation",
+        "slug": "computation",
+        "description": "PLACEHOLDER"
+      },
+      { "name": "Scaling", "slug": "scaling", "description": "PLACEHOLDER" },
+      { "name": "Privacy", "slug": "privacy", "description": "PLACEHOLDER" },
+      { "name": "Oracles", "slug": "oracles", "description": "PLACEHOLDER" },
+      {
+        "name": "Networking",
+        "slug": "networking",
+        "description": "PLACEHOLDER"
+      },
+      {
+        "name": "Blockchain",
+        "slug": "blockchain",
+        "description": "PLACEHOLDER"
+      }
+    ]
+  },
+  { "name": "Research", "slug": "research", "description": "PLACEHOLDER" },
+  { "name": "Computing", "slug": "computing", "description": "PLACEHOLDER" },
+  { "name": "Publishing", "slug": "publishing", "description": "PLACEHOLDER" }
+]
