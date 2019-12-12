@@ -4,9 +4,9 @@ import { Grid } from '@theme-ui/components'
 import Challenged from '../../images/challenged.svg'
 import Placeholder from '../../images/project-placeholder.svg'
 import PropTypes from 'prop-types'
+import { convertDate } from '../../utils/helpers/date'
 
 const Row = ({ item }) => {
-  const date = new Date(item.createdAt)
   return (
     <Grid gap={1} columns={5} sx={rootStyles} p={3}>
       <Grid columns={2} gap={1} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
@@ -26,7 +26,7 @@ const Row = ({ item }) => {
               color: 'tertiary'
             }}
           >
-            {item.description}
+            {item.description.slice(0, 20) + '...'}
           </Styled.p>
         </Box>
       </Grid>
@@ -38,9 +38,7 @@ const Row = ({ item }) => {
         </Styled.p>
       </Box>
       <Box sx={boxStyles}>
-        <Styled.p>
-          {date.getMonth() + '-' + date.getDate() + '-' + date.getFullYear()}
-        </Styled.p>
+        <Styled.p>{convertDate(item.createdAt)}</Styled.p>
       </Box>
       <Box sx={boxStyles}>
         <Styled.p>{item.reputation}</Styled.p>

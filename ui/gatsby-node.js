@@ -1,6 +1,6 @@
 const categories = require('./src/data/categories.json')
 
-exports.createPages = ({ actions }) => {
+exports.createPages = ({ page, actions }) => {
   const { createPage } = actions
 
   categories.forEach(category => {
@@ -10,4 +10,13 @@ exports.createPages = ({ actions }) => {
       context: category
     })
   })
+}
+
+exports.onCreatePage = async ({ page, actions }) => {
+  const { createPage } = actions
+  // set up a client-side route
+  if (page.path.match(/^\/project/)) {
+    page.matchPath = '/project/*'
+    createPage(page)
+  }
 }

@@ -7,7 +7,8 @@ import Card from '../Card'
 import Link from '../Link'
 import Arrow from '../../images/arrow.svg'
 
-const Section = ({ title, description, items, to, linkText, variant }) => {
+// TODO: Add Table in here
+const Section = ({ title, description, items, linkText, variant, linkTo }) => {
   return (
     <Grid mt={[3, 3, 6]} mb={[3, 3, 7]}>
       <Box sx={{ width: '100%' }}>
@@ -18,15 +19,15 @@ const Section = ({ title, description, items, to, linkText, variant }) => {
         {items.map(item => (
           <Card
             title={item.name}
-            description={item.description}
+            description={item.description.slice(0, 20) + '...'}
             variant={variant}
-            imageBase={item.imageBase}
-            slug={item.slug}
+            image={item.image}
+            to={item.to}
           />
         ))}
       </Grid>
       {linkText && (
-        <Link to={to}>
+        <Link to={linkTo}>
           {linkText}
           <Arrow sx={{ verticalAlign: 'middle', marginLeft: 2 }} />
         </Link>
@@ -41,7 +42,8 @@ Section.propTypes = {
   items: PropTypes.any,
   to: PropTypes.string,
   linkText: PropTypes.string,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  linkTo: PropTypes.string
 }
 
 export default Section

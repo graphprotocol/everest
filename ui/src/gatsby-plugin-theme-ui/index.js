@@ -6,7 +6,9 @@ export default {
     secondary: '#4C66FF',
     tertiary: '#7D7D7D',
     column: '#8A8A8A',
-    fill: '#CFCFCF'
+    fill: '#CFCFCF',
+    black: '#090610',
+    blackFaded: 'rgba(9,6,16,0.64)'
   },
   fonts: {
     body: 'Space Mono, monospace',
@@ -62,6 +64,12 @@ export default {
       lineHeight: '2.75rem',
       fontWeight: 'bold'
     },
+    h5: {
+      fontSize: '1.5rem',
+      lineHeight: '2rem',
+      fontWeight: 'bold',
+      color: 'black'
+    },
     h6: {
       fontSize: '1.125rem',
       lineHeight: '2rem',
@@ -109,6 +117,26 @@ export default {
       '&:hover': {
         opacity: 0.8
       }
+    }
+  },
+  text: {
+    display: {
+      fontSize: '1.125rem',
+      lineHeight: '1.5rem',
+      fontWeight: 'heading',
+      color: 'secondary'
+    },
+    displaySmall: {
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
+      letterSpacing: '-0.5px',
+      color: 'blackFaded'
+    },
+    displayBig: {
+      fontSize: '1.375rem',
+      lineHeight: '1.75rem',
+      letterSpacing: '-0.2px',
+      color: 'black'
     }
   }
 }

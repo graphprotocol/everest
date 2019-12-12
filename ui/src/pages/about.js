@@ -1,20 +1,14 @@
-import React from 'react'
-import Layout from '../components/Layout'
-import styled from 'styled-components'
+/** @jsx jsx */
+import { Styled, jsx, Box } from 'theme-ui'
 
-const Container = styled.div`
-  display: grid;
-  justify-content: center;
-  align-iterms: center;
-  min-height: 100vh;
-`
+import Layout from '../components/Layout'
 
 const About = ({ data }) => {
   return (
     <Layout>
-      <Container>
-        <p>Everest is the greatest project ever.</p>
-      </Container>
+      <Box>
+        <Styled.p>Everest is the greatest project ever.</Styled.p>
+      </Box>
     </Layout>
   )
 }

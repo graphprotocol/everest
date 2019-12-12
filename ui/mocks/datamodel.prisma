@@ -3,11 +3,13 @@ type Project {
     name: String!
     description: String!
     website: String
-    blog: String
+    twitter: String
+    github: String
     socialFeed: String
     sourceCode: String
     categories: [String] @scalarList(strategy: RELATION)
     avatar: String
+    image: String
     ipfsHash: String
 
     owner: User
@@ -54,7 +56,7 @@ type User {
   name: String!
   bio: String
   website: String
-  social: String
+  twitter: String
   projects: [Project] @derivedFrom(field: "userID")
   challenges: [Challenge] @derivedFrom(field: "userID")
   createdAt: DateTime! @createdAt

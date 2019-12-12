@@ -18,6 +18,10 @@ const Index = ({ data }) => {
     { title: 'Issued Shares', value: '350' }
   ]
 
+  const challengedProjects = data.everest.projects.filter(
+    project => project.isChallenged === true
+  )
+
   return (
     <Layout>
       <Grid gap={[2, 2, 6]} columns={[1, null, 2]}>
@@ -50,14 +54,15 @@ const Index = ({ data }) => {
         title="Categories"
         description="All projects belong to at least one category. Categories are also
       curated in a decentralized way."
-        items={categories.slice(0, 10).map(cat => {
+        items={categories.slice(0, 10).map(category => {
           return {
-            name: cat.name,
+            name: category.name,
             description: '24 projects',
-            imageBase: '/categories'
+            image: `/categories/${category.slug}.png`,
+            to: `/category/${category.id}`
           }
         })}
-        to="/categories"
+        linkTo="/categories"
         linkText="View all Categories"
         variant="category"
       />
@@ -68,25 +73,28 @@ const Index = ({ data }) => {
         items={data.everest.projects.map(project => {
           return {
             name: project.name,
-            description: project.description.slice(0, 20) + '...'
+            description: project.description.slice(0, 20) + '...',
+            to: `/project/${project.id}`,
+            image: project.image
           }
         })}
-        to="/projects"
+        linkTo="/projects"
         linkText="View all Projects"
         variant="project"
       />
-      {/* TODO: Combine projects and categories */}
       <Section
         title="Active Challenges"
-        description="These projects and categories were recently challanged by members of
+        description="These projects were recently challanged by members of
         the community."
-        items={data.everest.projects.map(project => {
+        items={challengedProjects.map(project => {
           return {
             name: project.name,
-            description: project.description.slice(0, 20) + '...'
+            description: project.description.slice(0, 20) + '...',
+            to: `/project/${project.id}`,
+            image: project.image
           }
         })}
-        to="/projects"
+        linkTo="/projects"
         linkText="View all Challenges"
         variant="project"
       />
@@ -164,6 +172,8 @@ export const query = graphql`
         id
         name
         description
+        isChallenged
+        image
         owner {
           id
           name

@@ -7,20 +7,14 @@ import { navigate } from 'gatsby'
 import Challenged from '../../images/challenged.svg'
 import styles from './Card.styles'
 
-const Card = ({
-  title,
-  description,
-  slug,
-  isChallenged,
-  variant,
-  imageBase
-}) => {
+const Card = ({ title, description, image, isChallenged, variant, to }) => {
+  console.log('IMAGE: ', image)
   return (
     <Grid
       sx={styles.root}
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
-      onClick={() => navigate(slug ? `/category/${slug}` : '/projects')}
+      onClick={() => navigate(to)}
     >
       <Grid
         pt={variant === 'project' ? 4 : 0}
@@ -28,11 +22,20 @@ const Card = ({
         sx={{ justifyContent: 'center' }}
       >
         {variant === 'project' ? (
-          <Box sx={styles.box}></Box>
+          <Box sx={{ margin: 'auto' }}>
+            <img
+              src={
+                image ||
+                'https://storage.googleapis.com/graph-web/the-graph-livepeer.jpg'
+              }
+              alt={title}
+              sx={{ height: '80px', width: '80px', borderRadius: '50%' }}
+            />
+          </Box>
         ) : (
           <Box>
             <img
-              src={`${imageBase}/${slug}.png`}
+              src={image}
               alt={title}
               sx={{ height: '120px', width: '180px' }}
             />
@@ -53,9 +56,10 @@ const Card = ({
 Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
+  image: PropTypes.string,
+  isChallenged: PropTypes.bool,
   variant: PropTypes.string,
-  imageBase: PropTypes.string,
-  slug: PropTypes.string
+  to: PropTypes.string
 }
 
 export default Card

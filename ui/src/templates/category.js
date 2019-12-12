@@ -23,6 +23,8 @@ const Category = ({ pageContext, data }) => {
     return () => window.removeEventListener('resize', updateSize)
   }, [])
 
+  console.log('PAGE CONTEXT. name: ', pageContext.name)
+  console.log('projects: ', data.everest.projects)
   const categoryProjects = data.everest.projects.filter(project =>
     project.categories.includes(pageContext.name)
   )
@@ -54,8 +56,8 @@ const Category = ({ pageContext, data }) => {
             return {
               name: subcat.name,
               description: `6 projects`,
-              imageBase: '/categories',
-              slug: subcat.slug
+              image: `/categories/${subcat.slug}`,
+              to: `/category/${subcat.slug}`
             }
           })}
           variant="category"
@@ -114,7 +116,8 @@ const Category = ({ pageContext, data }) => {
           items={categoryProjects.map(categoryProject => {
             return {
               name: categoryProject.name,
-              description: categoryProject.description
+              description: categoryProject.description.slice(0, 30) + '...',
+              to: `/project/${categoryProject.id}`
             }
           })}
           variant="project"

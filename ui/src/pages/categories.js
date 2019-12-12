@@ -21,8 +21,8 @@ const Categories = ({ data }) => {
             description: cat.subcategories
               ? `${cat.subcategories.length} projects`
               : '',
-            imageBase: '/categories',
-            slug: cat.slug
+            image: `/categories/${cat.slug}.png`,
+            to: `/category/${cat.slug}`
           }
         })}
         variant="category"
