@@ -59,7 +59,7 @@ const Index = ({ data }) => {
             name: category.name,
             description: '24 projects',
             image: `/categories/${category.slug}.png`,
-            to: `/category/${category.id}`
+            to: `/category/${category.slug}`
           }
         })}
         linkTo="/categories"

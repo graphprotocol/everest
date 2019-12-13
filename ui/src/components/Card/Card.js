@@ -8,7 +8,6 @@ import Challenged from '../../images/challenged.svg'
 import styles from './Card.styles'
 
 const Card = ({ title, description, image, isChallenged, variant, to }) => {
-  console.log('IMAGE: ', image)
   return (
     <Grid
       sx={styles.root}

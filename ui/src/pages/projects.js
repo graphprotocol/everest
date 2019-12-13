@@ -6,8 +6,7 @@ import { Grid, Box } from '@theme-ui/components'
 import Layout from '../components/Layout'
 import Row from '../components/Row'
 import Card from '../components/Card'
-import TableIcon from '../images/table-icon.svg'
-import CardsIcon from '../images/cards-icon.svg'
+import Switcher from '../components/Switcher'
 
 const Projects = ({ data }) => {
   const [selected, setSelected] = useState('cards')
@@ -39,35 +38,15 @@ const Projects = ({ data }) => {
         <Box>
           <Styled.h2>Projects</Styled.h2>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {data.everest.projects.length} Projects -{' '}
+            {allProjects.length} Projects -{' '}
             {challengedProjects && (
               <span>{challengedProjects.length} Challenges</span>
             )}
           </Styled.p>
         </Box>
-        <Grid
-          columns={2}
-          sx={{
-            maxWidth: '60px',
-            justifySelf: 'flex-end',
-            display: ['none', 'none', 'grid', 'grid']
-          }}
-        >
-          <TableIcon
-            sx={{
-              ...iconStyles,
-              fill: selected === 'table' ? 'secondary' : 'fill'
-            }}
-            onClick={() => setSelected('table')}
-          />
-          <CardsIcon
-            sx={{
-              ...iconStyles,
-              fill: selected === 'cards' ? 'secondary' : 'fill'
-            }}
-            onClick={() => setSelected('cards')}
-          />
-        </Grid>
+        {allProjects.length > 0 && (
+          <Switcher selected={selected} setSelected={setSelected} />
+        )}
       </Grid>
       {selected === 'table' && size[0] > 830 ? (
         <Fragment>
@@ -90,6 +69,7 @@ const Projects = ({ data }) => {
               description={project.description}
               isChallenged={project.isChallenged}
               variant={'project'}
+              to={`/project/${project.id}`}
             />
           ))}
         </Grid>
@@ -99,8 +79,6 @@ const Projects = ({ data }) => {
 }
 
 const columnStyles = { textAlign: 'center', color: 'column' }
-
-const iconStyles = { cursor: 'pointer' }
 
 export default Projects
 

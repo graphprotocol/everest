@@ -1,10 +1,9 @@
 import React from 'react'
 import { Router } from '@reach/router'
 import Layout from '../components/Layout'
-import Project from './Project'
+import Project from './project'
 
 const App = props => {
-  console.log('PROPS: ', props)
   return (
     <Layout>
       <Router>
