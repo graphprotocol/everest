@@ -36,7 +36,7 @@ const Index = ({ data }) => {
             provide ongoing utility to the crypto community.
           </Styled.h6>
           <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
-            <Button to="/project/new" text="Add project" variant="primary" />
+            <Button to="/project/new" text="Add a project" variant="primary" />
           </Grid>
         </Box>
         <Box
@@ -46,7 +46,7 @@ const Index = ({ data }) => {
           }}
         />
       </Grid>
-      <Grid sx={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <Grid sx={{ maxWidth: '1100px' }} mx="auto" my={6}>
         <Stats stats={stats} />
       </Grid>
       <Divider />
@@ -66,7 +66,6 @@ const Index = ({ data }) => {
         linkText="View all Categories"
         variant="category"
       />
-
       <Section
         title="Recent Projects"
         description="These projects were recently added by members of the community."
@@ -82,6 +81,41 @@ const Index = ({ data }) => {
         linkText="View all Projects"
         variant="project"
       />
+      <Divider />
+      <Grid
+        columns={[1, 2, 2]}
+        gap={[1, 2, 6]}
+        sx={{ alignItems: 'center', mb: [5, 7, 7] }}
+      >
+        <Box
+          sx={{
+            ...imageStyles,
+            height: '246px',
+            backgroundSize: 'contain',
+            backgroundImage: 'url(./binoculars.png)',
+            filter: 'none',
+            boxShadow: 'none'
+          }}
+        />
+        <Box>
+          <Styled.h4>Why curation</Styled.h4>
+          <Styled.p sx={{ lineHeight: '1.5rem', mt: 4 }}>
+            Everest is building toward a decentralized future where no
+            privileged group has control over public data. Curation allows
+            diverse stakeholders to agree on the contents of a shared registry
+            with neutrality.
+            <br />
+            <br />
+            To add a project to the registry you must submit a $10 listing fee
+            paid in ETH. The listing fee helps ensure the list's quality.
+            <br />
+            <br /> Anyone can challenge a listing by putting ETH at stake. With
+            these tools we can build consensus on a shared registry without
+            giving anyone control over the data. Let the decentralized future
+            begin!
+          </Styled.p>
+        </Box>
+      </Grid>
       <Section
         title="Active Challenges"
         description="These projects were recently challanged by members of
@@ -99,35 +133,7 @@ const Index = ({ data }) => {
         variant="project"
       />
       <Divider />
-      <Grid columns={[1, 2, 2]} gap={[1, 2, 6]}>
-        <Box>
-          <Styled.h3>Why curation</Styled.h3>
-          <Styled.p sx={{ fontSize: '0.875rem', lineHeight: '1.5rem' }}>
-            Everest is building toward a decentralized future where no
-            privileged group has control over public data. Curation allows
-            diverse stakeholders to agree on the contents of a shared registry
-            with neutrality.
-            <br />
-            <br />
-            To add a project to the registry you must submit a $10 listing fee
-            paid in ETH. The listing fee helps ensure the list's quality.
-            <br />
-            <br /> Anyone can challenge a listing by putting ETH at stake. With
-            these tools we can build consensus on a shared registry without
-            giving anyone control over the data. Let the decentralized future
-            begin!
-          </Styled.p>
-        </Box>
-        <Box
-          sx={{
-            ...imageStyles,
-            backgroundSize: 'contain',
-            backgroundImage: 'url(./binoculars.png)',
-            order: [-1, 1, 1]
-          }}
-        />
-      </Grid>
-      <Grid gap={[2, 2, 6]} columns={[1, null, 2]} mt={[2, 8]}>
+      <Grid gap={[2, 6, 8]} columns={[1, 2, 2]} mt={[2, 7]}>
         <Box
           sx={{
             ...imageStyles,
@@ -136,14 +142,12 @@ const Index = ({ data }) => {
         />
         <Box sx={{ maxWidth: '396px' }}>
           <Styled.h4>Be part of conquering Everest!</Styled.h4>
-          <Styled.p
-            sx={{ marginTop: 4, fontSize: '0.875rem', lineHeight: '1.5rem' }}
-          >
+          <Styled.p sx={{ marginTop: 4, lineHeight: '1.5rem' }}>
             Having a complete and up-to-date list of projects is a major
             achievement on the road to decentralization.
           </Styled.p>
           <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
-            <Button to="/project/new" text="Add project" variant="primary" />
+            <Button to="/project/new" text="Add a project" variant="primary" />
           </Grid>
         </Box>
       </Grid>
@@ -156,7 +160,10 @@ const imageStyles = {
   backgroundPosition: '50% 50%',
   backgroundSize: 'cover',
   width: '100%',
-  height: ['280px', '344px']
+  height: ['280px', '344px'],
+  position: 'relative',
+  filter: 'drop-shadow(24px 24px 24px rgba(9,6,16,0.5))',
+  boxShadow: '24px 24px 24px rgba(76,102,255,0.12)'
 }
 
 Index.propTypes = {

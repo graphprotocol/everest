@@ -36,13 +36,15 @@ const Card = ({ title, description, image, isChallenged, variant, to }) => {
             <img
               src={image}
               alt={title}
-              sx={{ height: '120px', width: '180px' }}
+              sx={{ height: '120px', width: ['164px', '180px', '180px'] }}
             />
           </Box>
         )}
         <Box p={3} sx={{ textAlign: 'center' }}>
           <Styled.p sx={styles.title}>{title}</Styled.p>
-          <Styled.p sx={{ fontSize: '0.75rem', lineHeight: '0.875rem' }}>
+          <Styled.p
+            sx={{ fontSize: '0.75rem', lineHeight: '0.875rem', py: 0, px: 2 }}
+          >
             {description}
           </Styled.p>
           {isChallenged && <Challenged sx={{ paddingTop: 2 }} />}

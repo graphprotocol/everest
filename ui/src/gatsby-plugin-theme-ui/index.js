@@ -8,7 +8,8 @@ export default {
     column: '#8A8A8A',
     fill: '#CFCFCF',
     black: '#090610',
-    blackFaded: 'rgba(9,6,16,0.64)'
+    blackFaded: 'rgba(9,6,16,0.64)',
+    whiteFaded: 'rgba(255,255,255,0.5)'
   },
   fonts: {
     body: 'Space Mono, monospace',
@@ -104,6 +105,8 @@ export default {
     primary: {
       color: 'background',
       bg: 'secondary',
+      boxShadow:
+        '0 8px 32px 0 rgba(76,102,255,0.48), 0 4px 16px 0 rgba(0,0,0,0.16)',
       fontFamily: 'body',
       fontSize: '1rem',
       letterSpacing: '1px',
@@ -137,6 +140,12 @@ export default {
       lineHeight: '1.75rem',
       letterSpacing: '-0.2px',
       color: 'black'
+    },
+    field: {
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
+      letterSpacing: '-0.5px',
+      color: 'whiteFaded'
     }
   }
 }

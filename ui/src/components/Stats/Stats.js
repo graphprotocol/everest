@@ -7,8 +7,8 @@ import PropTypes from 'prop-types'
 const Stats = ({ stats }) => {
   return (
     <Grid gap={[2, 2, 6]} columns={3}>
-      {stats.map(stat => (
-        <Box sx={{ textAlign: 'center' }}>
+      {stats.map((stat, index) => (
+        <Box sx={{ textAlign: 'center' }} key={index}>
           <Styled.p>{stat.title}</Styled.p>
           <Styled.h3>{stat.value}</Styled.h3>
         </Box>

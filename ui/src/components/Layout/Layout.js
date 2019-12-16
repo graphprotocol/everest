@@ -9,7 +9,7 @@ import Footer from '../Footer'
 import Navbar from '../Navbar'
 import Seo from '../Seo'
 
-const LayoutTemplate = ({ children }) => {
+const LayoutTemplate = ({ children, ...props }) => {
   const GlobalStyle = createGlobalStyle`
   ${reset}
   body {
@@ -28,11 +28,13 @@ const LayoutTemplate = ({ children }) => {
   return (
     <Fragment>
       <GlobalStyle />
-      <div sx={styles}>
-        <Seo />
-        <Navbar />
-        <Main>{children}</Main>
-        <Footer />
+      <div {...props}>
+        <div sx={styles}>
+          <Seo />
+          <Navbar sx={{ backgroundColor: 'white' }} />
+          <Main>{children}</Main>
+          <Footer />
+        </div>
       </div>
     </Fragment>
   )

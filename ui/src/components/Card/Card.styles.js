@@ -1,7 +1,7 @@
 export default {
   root: {
     height: '216px',
-    width: '180px',
+    width: ['164', '180px', '180px'],
     backgroundColor: '#FFFFFF',
     boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
     marginTop: '8px',

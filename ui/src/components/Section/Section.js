@@ -56,9 +56,10 @@ const Section = ({
           {title && <Styled.h3 sx={{ color: 'primary' }}>{title}</Styled.h3>}
           {description && <Styled.p>{description}</Styled.p>}
         </Box>
-        <Grid columns={[2, 3, 6]} gap={1}>
-          {items.map(item => (
+        <Grid columns={[2, 3, 6]} gap={2}>
+          {items.map((item, index) => (
             <Card
+              key={index}
               title={item.name}
               description={item.description.slice(0, 20) + '...'}
               variant={variant}

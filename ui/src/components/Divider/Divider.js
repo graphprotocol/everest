@@ -2,7 +2,7 @@
 import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-const Divider = () => <Grid sx={styles} mt={[3, 6]} mb={[3, 6]} />
+const Divider = () => <Grid sx={styles} mt={[5, 6]} mb={[5, 6]} />
 
 const styles = {
   height: '2px',
