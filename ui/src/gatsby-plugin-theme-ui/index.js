@@ -79,6 +79,7 @@ export default {
     p: {
       fontSize: '1rem',
       lineHeight: '2rem',
+      fontFamily: 'body',
       letterSpacing: '-0.5px',
       color: 'text'
     },
@@ -120,6 +121,25 @@ export default {
       '&:hover': {
         opacity: 0.8
       }
+    },
+    secondary: {
+      color: 'secondary',
+      bg: 'white',
+      boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
+      fontFamily: 'body',
+      fontSize: '1rem',
+      fontWeight: 'heading',
+      letterSpacing: '1px',
+      lineHeight: '2.5rem',
+      width: ['100%', '250px', '250px'],
+      height: '48px',
+      cursor: 'pointer',
+      '&:focus': {
+        outline: 'none'
+      },
+      '&:hover': {
+        opacity: 0.8
+      }
     }
   },
   text: {
@@ -145,7 +165,7 @@ export default {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
       letterSpacing: '-0.5px',
-      color: 'whiteFaded'
+      color: 'white'
     }
   }
 }

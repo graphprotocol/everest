@@ -9,9 +9,9 @@ import Twitter from '../../images/twitter-icon.svg'
 import Badges from '../../images/badges.svg'
 import Link from '../../components/Link'
 
-const Footer = () => {
+const Footer = ({ ...props }) => {
   return (
-    <GatsbyFooter sx={rootStyles}>
+    <GatsbyFooter sx={rootStyles} {...props}>
       <Link to="/about">
         <Styled.a>About</Styled.a>
       </Link>

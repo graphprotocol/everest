@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
+import { jsx, Box } from 'theme-ui'
 import { Fragment } from 'react'
 import { createGlobalStyle } from 'styled-components'
 import { reset } from 'styled-reset'
@@ -28,14 +28,14 @@ const LayoutTemplate = ({ children, ...props }) => {
   return (
     <Fragment>
       <GlobalStyle />
-      <div {...props}>
-        <div sx={styles}>
-          <Seo />
-          <Navbar sx={{ backgroundColor: 'white' }} />
-          <Main>{children}</Main>
-          <Footer />
-        </div>
-      </div>
+      <Box {...props}>
+        <Seo />
+        <Box sx={{ background: 'white' }}>
+          <Navbar sx={styles} path={props && props.path} />
+        </Box>
+        <Main sx={styles}>{children}</Main>
+        <Footer sx={styles} />
+      </Box>
     </Fragment>
   )
 }

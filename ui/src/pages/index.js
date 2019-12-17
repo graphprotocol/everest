@@ -36,7 +36,7 @@ const Index = ({ data }) => {
             provide ongoing utility to the crypto community.
           </Styled.h6>
           <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
-            <Button to="/project/new" text="Add a project" variant="primary" />
+            <Button to="/projects/new" text="Add a project" variant="primary" />
           </Grid>
         </Box>
         <Box
@@ -147,7 +147,7 @@ const Index = ({ data }) => {
             achievement on the road to decentralization.
           </Styled.p>
           <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
-            <Button to="/project/new" text="Add a project" variant="primary" />
+            <Button to="/projects/new" text="Add a project" variant="primary" />
           </Grid>
         </Box>
       </Grid>

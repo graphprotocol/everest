@@ -1,18 +1,25 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import { Styled, jsx, Header } from 'theme-ui'
+import { Styled, jsx, Header, Box } from 'theme-ui'
+import { Grid } from '@theme-ui/components'
 
+import Link from '../../components/Link'
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
+import Plus from '../../images/close.svg'
 
-const Navbar = () => {
+const Navbar = ({ path, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState()
+
   useEffect(() => {
     setIsMobile(window.innerWidth < 640)
   }, [])
+
+  const isNewProjectPage = path && path.includes('new')
+
   return (
-    <Header>
+    <Header {...props}>
       {isMobile ? (
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       ) : (
@@ -27,7 +34,26 @@ const Navbar = () => {
           <Styled.a href="/categories">Categories</Styled.a>
         </nav>
       )}
-      <div sx={avatarStyles} />
+      <Grid
+        columns={2}
+        sx={{ position: 'absolute', right: '0', top: 5, alignItems: 'center' }}
+      >
+        <Link
+          to="/projects/new"
+          sx={{
+            backgroundColor: isNewProjectPage ? 'secondary' : 'white',
+            padding: 4
+          }}
+        >
+          <Plus
+            sx={{
+              transform: 'rotate(45deg)',
+              fill: isNewProjectPage ? 'white' : 'secondary'
+            }}
+          />
+        </Link>
+        <Box sx={avatarStyles} />
+      </Grid>
     </Header>
   )
 }
@@ -46,10 +72,7 @@ const avatarStyles = {
   height: '32px',
   borderRadius: '50%',
   border: '1px solid',
-  borderColor: 'secondary',
-  position: 'absolute',
-  right: '0',
-  top: 4
+  borderColor: 'secondary'
 }
 
 Navbar.propTypes = {}

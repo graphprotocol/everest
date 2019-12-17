@@ -44,10 +44,11 @@ const Project = ({ location }) => {
       id: projectId
     }
   })
+
   let project = data && data.project
   return (
     <Layout>
-      {loading ? (
+      {loading && !error ? (
         <Styled.p>Loading</Styled.p>
       ) : (
         <Fragment>

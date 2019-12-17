@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
     <title>Combined Shape</title>
     <desc>Created with Sketch.</desc>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icon-/-Add" transform="translate(-11.000000, -12.000000)" fill="#4C66FF">
+    <g id="Symbols" stroke="none" stroke-width="1" fill-rule="evenodd">
+        <g id="Icon-/-Add" transform="translate(-11.000000, -12.000000)">
             <path d="M20.5,9.5 L20.5,19.5 L30.5,19.5 L30.5,21.5 L20.5,21.5 L20.5,31.5 L18.5,31.5 L18.5,21.5 L8.5,21.5 L8.5,19.5 L18.5,19.5 L18.5,9.5 L20.5,9.5 Z" id="Combined-Shape" transform="translate(19.500000, 20.500000) rotate(45.000000) translate(-19.500000, -20.500000) "></path>
         </g>
     </g>
