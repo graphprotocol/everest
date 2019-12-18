@@ -8,6 +8,7 @@ const App = props => {
     <Layout>
       <Router>
         <Project exact path="/project/*" />
+        <Project exact path="/profile/*" />
       </Router>
     </Layout>
   )

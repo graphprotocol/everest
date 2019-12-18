@@ -10,7 +10,6 @@ const Link = ({ to, children, ...props }) => {
       sx={{
         textDecoration: 'none',
         display: 'block',
-        margin: '0 auto',
         color: '#4C66FF',
         fontSize: '1rem',
         fontWeight: 'bold',

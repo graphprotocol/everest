@@ -24,7 +24,7 @@ const Index = ({ data }) => {
 
   return (
     <Layout>
-      <Grid gap={[2, 2, 6]} columns={[1, null, 2]}>
+      <Grid gap={[2, 2, 6]} columns={[1, null, 2]} mt={[5, 5, 0]}>
         <Box>
           <Styled.h1>
             Universally <br />

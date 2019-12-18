@@ -11,7 +11,7 @@ import Layout from '../components/Layout'
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
 import ProjectImage from '../images/project-placeholder.svg'
-import UserImage from '../images/user-placeholder.svg'
+import UserImage from '../images/profile-placeholder.svg'
 
 const PROJECT_QUERY = gql`
   query everestProject($id: ID!) {

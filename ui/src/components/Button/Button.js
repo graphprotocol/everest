@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 
-const Button = ({ to, text, variant, onClick, disabled }) => {
+const Button = ({ to, text, variant, onClick, disabled, ...props }) => {
   return (
     <button
       sx={{
@@ -12,6 +12,7 @@ const Button = ({ to, text, variant, onClick, disabled }) => {
         pointerEvents: disabled ? 'none' : 'all'
       }}
       onClick={e => (onClick ? onClick(e) : navigate(to))}
+      {...props}
     >
       {text}
     </button>

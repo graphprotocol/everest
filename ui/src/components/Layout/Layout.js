@@ -19,7 +19,8 @@ const LayoutTemplate = ({ children, ...props }) => {
 `
   const styles = {
     maxWidth: '1260px',
-    margin: '0 auto',
+    mx: 'auto',
+    my: 0,
     padding: '0 20px',
     boxSizing: 'content-box',
     position: 'relative'
@@ -33,7 +34,11 @@ const LayoutTemplate = ({ children, ...props }) => {
         <Box sx={{ background: 'white' }}>
           <Navbar sx={styles} path={props && props.path} />
         </Box>
-        <Main sx={styles}>{children}</Main>
+        <Main
+          sx={{ ...styles, mt: [5, 5, 0], minHeight: 'calc(100vh - 400px)' }}
+        >
+          {children}
+        </Main>
         <Footer sx={styles} />
       </Box>
     </Fragment>

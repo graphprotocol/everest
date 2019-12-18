@@ -1,10 +1,18 @@
-import { ethers, utils } from 'ethers'
-import numeral from 'numeral'
+export const getAddress = async () => {
+  let address = null
+  if (window.ethereum !== undefined) {
+    address = window.ethereum.selectedAddress
+  } else if (window.web3 !== undefined) {
+    const accounts = await window.web3.listAccounts()
+    address = accounts[0]
+  }
+  return address
+}
 
 export const connectAccounts = async () => {
-  let accounts
+  let accounts = []
   if (window.ethereum !== undefined) {
-    accounts = await window.ethereum.enable()
+    accounts = window.ethereum.enable()
   } else if (window.web3 !== undefined) {
     accounts = await window.web3.listAccounts()
   }

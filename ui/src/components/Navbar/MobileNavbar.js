@@ -31,14 +31,15 @@ const MobileNavbar = ({ isOpen, setIsOpen }) => {
 
 const rootStyles = {
   position: 'relative',
-  top: 4,
-  height: '32px'
+  height: '32px',
+  lineHeight: '96px'
 }
 
 const boxStyles = {
   position: 'fixed',
   width: '100%',
-  backgroundColor: 'background'
+  backgroundColor: 'background',
+  zIndex: 10
 }
 
 MobileNavbar.propTypes = {
