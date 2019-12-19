@@ -23,7 +23,7 @@ const LayoutTemplate = ({ children, ...props }) => {
     my: 0,
     padding: '0 20px',
     boxSizing: 'content-box',
-    position: 'relative'
+    position: 'relative',
   }
 
   return (
@@ -35,7 +35,12 @@ const LayoutTemplate = ({ children, ...props }) => {
           <Navbar sx={styles} path={props && props.path} />
         </Box>
         <Main
-          sx={{ ...styles, mt: [5, 5, 0], minHeight: 'calc(100vh - 400px)' }}
+          sx={{
+            ...styles,
+            mt: [5, 5, 0],
+            minHeight: 'calc(100vh - 400px)',
+            position: 'static',
+          }}
         >
           {children}
         </Main>

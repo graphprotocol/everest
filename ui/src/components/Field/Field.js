@@ -15,9 +15,8 @@ const Field = ({
   uploadImage,
   placeholder,
   charsCount,
-  project,
-  setProject,
-  setIsDisabled
+  value,
+  setValue,
 }) => {
   return (
     <Box
@@ -26,41 +25,35 @@ const Field = ({
         borderBottom:
           type === 'input' || type === 'textarea' || type === 'filters'
             ? '1px solid rgba(255,255,255,0.32)'
-            : 'none'
+            : 'none',
       }}
     >
       <p>{title}</p>
       {text && <p sx={{ opacity: 0.64 }}>{text}</p>}
-      <Grid sx={{ gridTemplateColumns: '1fr max-content' }}>
+      <Grid
+        sx={{
+          gridTemplateColumns: ['1fr', '1fr max-content', '1fr max-content'],
+        }}
+      >
         {type === 'input' ? (
           <input
             placeholder={placeholder}
             onChange={e => {
               const value = e.target ? e.target.value : ''
-              setProject(state => ({
-                ...state,
-                [field]: value
-              }))
-              if (project.description !== '') {
-                setIsDisabled(false)
-              }
+              setValue(value)
             }}
             maxlength={charsCount}
+            value={value}
           />
         ) : type === 'textarea' ? (
           <textarea
             placeholder={placeholder}
             onChange={e => {
               const value = e.target ? e.target.value : ''
-              setProject(state => ({
-                ...state,
-                [field]: value
-              }))
-              if (project.name !== '') {
-                setIsDisabled(false)
-              }
+              setValue(value)
             }}
             maxlength={charsCount}
+            value={value}
           ></textarea>
         ) : type === 'filters' ? (
           <Filters />
@@ -68,7 +61,7 @@ const Field = ({
           <UploadImage
             imageName={imageName}
             imageUrl={imageUrl}
-            uploadImage={e => uploadImage(e, field)}
+            uploadImage={uploadImage}
           />
         ) : (
           <label sx={styles.toggle}>
@@ -76,11 +69,9 @@ const Field = ({
               type="checkbox"
               onClick={e => {
                 const value = e.target.checked
-                setProject(state => ({
-                  ...state,
-                  [field]: value
-                }))
+                setValue(value)
               }}
+              checked={value}
             />
             <span sx={styles.slider}></span>
           </label>
@@ -90,10 +81,10 @@ const Field = ({
             sx={{
               variant: 'text.field',
               color: 'whiteFaded',
-              alignSelf: 'end'
+              alignSelf: 'end',
             }}
           >
-            {charsCount - project[field].length} characters
+            {charsCount - value.length} characters
           </p>
         )}
       </Grid>
@@ -108,7 +99,7 @@ const styles = {
     pb: 2,
     '&>p': {
       variant: 'text.field',
-      mb: 2
+      mb: 2,
     },
     '& input, & textarea': {
       width: '100%',
@@ -121,13 +112,13 @@ const styles = {
       fontFamily: 'body',
       fontWeight: 'body',
       '&::placeholder': {
-        color: 'whiteFaded'
-      }
+        color: 'whiteFaded',
+      },
     },
     '& textarea': {
       height: '80px',
-      resize: 'none'
-    }
+      resize: 'none',
+    },
   },
   toggle: {
     position: 'relative',
@@ -137,15 +128,15 @@ const styles = {
     '& input': {
       opacity: 0,
       width: 0,
-      height: 0
+      height: 0,
     },
     '& input:checked + span': {
-      backgroundColor: 'white'
+      backgroundColor: 'white',
     },
     '& input:checked + span:before': {
       transform: 'translateX(16px)',
-      backgroundColor: 'secondary'
-    }
+      backgroundColor: 'secondary',
+    },
   },
   slider: {
     position: 'absolute',
@@ -168,15 +159,15 @@ const styles = {
       bottom: '4px',
       backgroundColor: 'white',
       boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
-      transition: '.4s'
-    }
-  }
+      transition: '.4s',
+    },
+  },
 }
 
 Field.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
-  charsCount: PropTypes.string
+  charsCount: PropTypes.string,
 }
 
 export default Field

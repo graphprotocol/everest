@@ -21,7 +21,7 @@ const NewProject = ({ data, ...props }) => {
     website: '',
     github: '',
     twitter: '',
-    isRepresentative: null
+    isRepresentative: null,
   })
 
   const uploadImage = async (e, field) => {
@@ -41,13 +41,13 @@ const NewProject = ({ data, ...props }) => {
               setProject(state => ({
                 ...state,
                 logoUrl: url,
-                logoName: image.name
+                logoName: image.name,
               }))
             } else {
               setProject(state => ({
                 ...state,
                 imageUrl: url,
-                imageName: image.name
+                imageName: image.name,
               }))
             }
           }
@@ -71,9 +71,15 @@ const NewProject = ({ data, ...props }) => {
     })
   }
 
+  const setValue = (field, value) =>
+    setProject(state => ({
+      ...state,
+      [field]: value,
+    }))
+
   return (
     <Layout sx={{ backgroundColor: 'secondary' }} {...props}>
-      <Grid sx={styles.grid} gap={[1, 8]}>
+      <Grid sx={styles.grid} gap={[1, 4, 8]}>
         <Box>
           <Styled.h1 sx={{ color: 'white', mb: 3 }}>Add Project</Styled.h1>
           <p sx={{ variant: 'text.field' }}>
@@ -95,28 +101,38 @@ const NewProject = ({ data, ...props }) => {
               title="Name"
               field="name"
               type="input"
+              value={project.name}
               charsCount="35"
               placeholder="Project Name"
               project={project}
-              setProject={setProject}
-              setIsDisabled={setIsDisabled}
+              setValue={async value => {
+                await setValue('name', value)
+                if (project.description !== '') {
+                  setIsDisabled(false)
+                }
+              }}
             />
             <Field
               title="Description"
-              field="name"
+              field="description"
+              value={project.description}
               type="textarea"
               charsCount="300"
               placeholder="Describe your project"
               project={project}
-              setProject={setProject}
-              setIsDisabled={setIsDisabled}
+              setValue={async value => {
+                await setValue('description', value)
+                if (project.name !== '') {
+                  setIsDisabled(false)
+                }
+              }}
             />
             <Field
               title="Category"
               field="category"
               type="filters"
               project={project}
-              setProject={setProject}
+              setValue={value => setValue('category', value)}
               setIsDisabled={setIsDisabled}
             />
             <Field
@@ -126,8 +142,7 @@ const NewProject = ({ data, ...props }) => {
               imageName={project.logoName}
               imageUrl={project.logoUrl}
               project={project}
-              setProject={setProject}
-              uploadImage={uploadImage}
+              uploadImage={e => uploadImage(e, 'logo')}
             />
             <Field
               title="Project image"
@@ -136,44 +151,43 @@ const NewProject = ({ data, ...props }) => {
               imageName={project.imageName}
               imageUrl={project.imageUrl}
               project={project}
-              setProject={setProject}
-              uploadImage={uploadImage}
+              uploadImage={e => uploadImage(e, 'image')}
             />
             <Field
               title="Website"
               field="website"
+              value={project.website}
               type="input"
               placeholder="Project website"
               project={project}
-              setProject={setProject}
-              setIsDisabled={setIsDisabled}
+              setValue={value => setValue('website', value)}
             />
             <Field
               title="Github"
               field="github"
+              value={project.github}
               type="input"
               placeholder="Github url"
               project={project}
-              setProject={setProject}
-              setIsDisabled={setIsDisabled}
+              setValue={value => setValue('github', value)}
             />
             <Field
               title="Twitter"
               field="twitter"
+              value={project.twitter}
               type="input"
               placeholder="Twitter url"
               project={project}
-              setProject={setProject}
-              setIsDisabled={setIsDisabled}
+              setValue={value => setValue('twitter', value)}
             />
             <Field
               title="Project representative"
               text="Are you a project representative"
+              value={project.isRepresentative}
               field="isRepresentative"
               type="checkbox"
               project={project}
-              setProject={setProject}
-              setIsDisabled={setIsDisabled}
+              setValue={value => setValue('isRepresentative', value)}
             />
             <Button
               disabled={isDisabled}
@@ -200,15 +214,15 @@ const styles = {
     '& input': {
       opacity: 0,
       width: 0,
-      height: 0
+      height: 0,
     },
     '& input:checked + span': {
-      backgroundColor: 'white'
+      backgroundColor: 'white',
     },
     '& input:checked + span:before': {
       transform: 'translateX(16px)',
-      backgroundColor: 'secondary'
-    }
+      backgroundColor: 'secondary',
+    },
   },
   slider: {
     position: 'absolute',
@@ -231,13 +245,13 @@ const styles = {
       bottom: '4px',
       backgroundColor: 'white',
       boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
-      transition: '.4s'
-    }
+      transition: '.4s',
+    },
   },
   grid: {
     gridTemplateColumns: ['1fr', '312px 1fr'],
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 }
 
 export default NewProject

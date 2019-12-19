@@ -9,29 +9,29 @@ export default {
     fill: '#CFCFCF',
     black: '#090610',
     blackFaded: 'rgba(9,6,16,0.64)',
-    whiteFaded: 'rgba(255,255,255,0.5)'
+    whiteFaded: 'rgba(255,255,255,0.5)',
   },
   fonts: {
     body: 'Space Mono, monospace',
-    heading: 'Space Mono, monospace'
+    heading: 'Space Mono, monospace',
   },
   fontWeights: {
     body: 400,
-    heading: 600
+    heading: 600,
   },
   space: [0, 4, 8, 12, 16, 32, 64, 96, 128, 160],
   styles: {
     body: {
-      fontFamily: 'body'
+      fontFamily: 'body',
     },
     root: {
-      position: 'relative'
+      position: 'relative',
     },
     Main: {
-      py: [5, 7]
+      py: [5, 7],
     },
     Header: {
-      position: 'relative'
+      position: 'relative',
     },
     h1: {
       fontWeight: 'heading',
@@ -41,14 +41,14 @@ export default {
       margin: 0,
       '@media (max-width: 640px)': {
         fontSize: '2.75rem',
-        lineHeight: '3.25rem'
-      }
+        lineHeight: '3.25rem',
+      },
     },
     h2: {
       fontSize: '2.75rem',
       fontWeight: 'heading',
       letterSpacing: '-0.4px',
-      lineHeight: '3.5rem'
+      lineHeight: '3.5rem',
     },
     h3: {
       fontSize: '2.5rem',
@@ -57,31 +57,31 @@ export default {
       color: '#4C66FF',
       '@media (max-width: 640px)': {
         fontSize: '1.5rem',
-        lineHeight: '2.5rem'
-      }
+        lineHeight: '2.5rem',
+      },
     },
     h4: {
       fontSize: '2rem',
       lineHeight: '2.75rem',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
     h5: {
       fontSize: '1.5rem',
       lineHeight: '2rem',
       fontWeight: 'bold',
-      color: 'black'
+      color: 'black',
     },
     h6: {
       fontSize: '1.125rem',
       lineHeight: '2rem',
-      fontWeight: 'normal'
+      fontWeight: 'normal',
     },
     p: {
       fontSize: '1rem',
       lineHeight: '2rem',
       fontFamily: 'body',
       letterSpacing: '-0.5px',
-      color: 'text'
+      color: 'text',
     },
     a: {
       textDecoration: 'none',
@@ -90,7 +90,7 @@ export default {
       fontSize: '1rem',
       fontWeight: 'bold',
       letterSpacing: '0.31px',
-      lineHeight: '2.375rem'
+      lineHeight: '2.375rem',
     },
     Link: {
       textDecoration: 'none',
@@ -99,8 +99,8 @@ export default {
       fontSize: '1rem',
       fontWeight: 'bold',
       letterSpacing: '0.31px',
-      lineHeight: '2.375rem'
-    }
+      lineHeight: '2.375rem',
+    },
   },
   buttons: {
     primary: {
@@ -116,16 +116,17 @@ export default {
       height: '48px',
       cursor: 'pointer',
       '&:focus': {
-        outline: 'none'
+        outline: 'none',
       },
       '&:hover': {
-        opacity: 0.8
-      }
+        opacity: 0.8,
+      },
     },
     secondary: {
       color: 'secondary',
       bg: 'white',
       boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
+      border: 'none',
       fontFamily: 'body',
       fontSize: '1rem',
       fontWeight: 'heading',
@@ -135,37 +136,37 @@ export default {
       height: '48px',
       cursor: 'pointer',
       '&:focus': {
-        outline: 'none'
+        outline: 'none',
       },
       '&:hover': {
-        opacity: 0.8
-      }
-    }
+        opacity: 0.8,
+      },
+    },
   },
   text: {
     display: {
       fontSize: '1.125rem',
       lineHeight: '1.5rem',
       fontWeight: 'heading',
-      color: 'secondary'
+      color: 'secondary',
     },
     displaySmall: {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
       letterSpacing: '-0.5px',
-      color: 'blackFaded'
+      color: 'blackFaded',
     },
     displayBig: {
       fontSize: '1.375rem',
       lineHeight: '1.75rem',
       letterSpacing: '-0.2px',
-      color: 'black'
+      color: 'black',
     },
     field: {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
       letterSpacing: '-0.5px',
-      color: 'white'
-    }
-  }
+      color: 'white',
+    },
+  },
 }
