@@ -1,0 +1,5 @@
+test every require statement
+
+use try catch for expected reverts
+
+do expectEvents
