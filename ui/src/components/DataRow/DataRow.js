@@ -7,7 +7,7 @@ const DataRow = ({ name, value, href }) => (
   <Grid
     sx={{
       gridTemplateColumns: [1, ' 72px 1fr'],
-      alignItems: 'center'
+      alignItems: 'center',
     }}
     gap={[0, 2, 2]}
   >
@@ -28,7 +28,8 @@ const textStyles = { color: 'secondary', fontWeight: 'heading' }
 
 DataRow.propTypes = {
   name: PropTypes.string,
-  text: PropTypes.string
+  value: PropTypes.string,
+  href: PropTypes.string,
 }
 
 export default DataRow

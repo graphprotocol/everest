@@ -2,19 +2,18 @@
 import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import Challenged from '../../images/challenged.svg'
-import Placeholder from '../../images/project-placeholder.svg'
 import PropTypes from 'prop-types'
 import { convertDate } from '../../utils/helpers/date'
 
 const Row = ({ item }) => {
   return (
     <Grid gap={1} columns={5} sx={rootStyles} p={3}>
-      <Grid columns={2} gap={1} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
-        {item.image ? (
-          <img src={item.image} sx={imageStyles} alt={item.name} />
-        ) : (
-          <Placeholder sx={imageStyles} />
-        )}
+      <Grid columns={2} gap={2} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
+        <img
+          src={item.image ? item.image : '/profiles/placeholder1.png'}
+          sx={imageStyles}
+          alt={item.name}
+        />
         <Box>
           <Styled.h6 sx={{ color: 'secondary', fontWeight: 'heading' }}>
             {item.name}
@@ -23,7 +22,7 @@ const Row = ({ item }) => {
             sx={{
               fontSize: '0.75rem',
               lineHeight: '0.875rem',
-              color: 'tertiary'
+              color: 'tertiary',
             }}
           >
             {item.description.slice(0, 20) + '...'}
@@ -55,17 +54,17 @@ const rootStyles = {
   background: '#FFF',
   height: '96px',
   alignItems: 'center',
-  margin: '16px 0'
+  margin: '16px 0',
 }
 
 const boxStyles = {
-  textAlign: 'center'
+  textAlign: 'center',
 }
 
 const imageStyles = {
   display: 'block',
   borderRadius: '50%',
-  width: '64px'
+  width: '64px',
 }
 
 Row.propTypes = {
@@ -75,8 +74,8 @@ Row.propTypes = {
     category: PropTypes.string,
     createdAt: PropTypes.string,
     reputation: PropTypes.string,
-    isChallenged: PropTypes.bool
-  })
+    isChallenged: PropTypes.bool,
+  }),
 }
 
 export default Row

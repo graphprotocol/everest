@@ -2,8 +2,13 @@
 import { useState, useEffect } from 'react'
 import { Styled, jsx, Header } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-
-import { getAddress, connectAccounts } from '../../services/ethers'
+import { useQuery } from '@apollo/react-hooks'
+import { gql } from 'apollo-boost'
+import {
+  getAddress,
+  connectAccounts,
+  metamaskAccountChange,
+} from '../../services/ethers'
 
 import Link from '../../components/Link'
 import Button from '../../components/Button'
@@ -12,12 +17,21 @@ import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
 import Placeholder from '../../images/profile-placeholder.svg'
 
+const PROFILE_QUERY = gql`
+  query everestProfile($id: ID!) {
+    user(where: { id: $id }) {
+      id
+    }
+  }
+`
+
 const Navbar = ({ path, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState()
   const [address, setAddress] = useState(null)
 
   useEffect(() => {
+    metamaskAccountChange(accounts => setAddress(accounts[0]))
     setIsMobile(window.innerWidth < 640)
     async function fetchAddress() {
       const ethAddress = await getAddress()
@@ -27,6 +41,12 @@ const Navbar = ({ path, ...props }) => {
   }, [])
 
   const isNewProjectPage = path && path.includes('new')
+
+  const { loading, error, data } = useQuery(PROFILE_QUERY, {
+    variables: {
+      id: address,
+    },
+  })
 
   return (
     <Header {...props} sx={{ height: '96px' }}>
@@ -50,24 +70,24 @@ const Navbar = ({ path, ...props }) => {
           right: '20px',
           top: 4,
           alignItems: 'center',
-          gridTemplateColumns: 'max-content 1fr'
+          gridTemplateColumns: 'max-content 1fr',
         }}
       >
         <Link
           to="/projects/new"
           sx={{
             backgroundColor: isNewProjectPage ? 'secondary' : 'white',
-            padding: '22px'
+            padding: '22px',
           }}
         >
           <Plus
             sx={{
               transform: 'rotate(45deg)',
-              fill: isNewProjectPage ? 'white' : 'secondary'
+              fill: isNewProjectPage ? 'white' : 'secondary',
             }}
           />
         </Link>
-        {address !== null ? (
+        {data && data.user ? (
           <Link to={`/profile/${address}`}>
             <Placeholder sx={avatarStyles} />
           </Link>
@@ -91,7 +111,7 @@ const navStyles = {
   gridTemplateColumns: ['auto', '50px 1fr 1fr 1fr'],
   width: [0, '100%', '100%'],
   maxWidth: '380px',
-  alignItems: 'center'
+  alignItems: 'center',
 }
 
 const avatarStyles = {
@@ -99,7 +119,7 @@ const avatarStyles = {
   height: '32px',
   borderRadius: '50%',
   border: '1px solid',
-  borderColor: 'secondary'
+  borderColor: 'secondary',
 }
 
 Navbar.propTypes = {}

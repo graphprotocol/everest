@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Styled, jsx, Footer as GatsbyFooter } from 'theme-ui'
+import { jsx, Footer as GatsbyFooter } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
 import Github from '../../images/github.svg'
@@ -12,9 +12,7 @@ import Link from '../../components/Link'
 const Footer = ({ ...props }) => {
   return (
     <GatsbyFooter sx={rootStyles} {...props}>
-      <Link to="/about">
-        <Styled.a>About</Styled.a>
-      </Link>
+      <Link to="/about">About</Link>
       <Grid columns={4} gap={3} sx={{ maxWidth: '300px' }}>
         <a
           href="https://github.com/graphprotocol"
@@ -58,7 +56,7 @@ const rootStyles = {
   justifyContent: 'space-between',
   gridTemplateColumns: '1fr 140px 1fr',
   alignItems: 'center',
-  height: '96px'
+  height: '96px',
 }
 
 export default Footer

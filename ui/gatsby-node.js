@@ -7,7 +7,7 @@ exports.createPages = ({ page, actions }) => {
     createPage({
       path: `/category/${category.slug}`,
       component: require.resolve('./src/templates/category.js'),
-      context: category
+      context: category,
     })
 
     if (category.subcategories) {
@@ -15,7 +15,7 @@ exports.createPages = ({ page, actions }) => {
         createPage({
           path: `/category/${subcategory.slug}`,
           component: require.resolve('./src/templates/category.js'),
-          context: subcategory
+          context: subcategory,
         })
       })
     }
@@ -33,5 +33,20 @@ exports.onCreatePage = async ({ page, actions }) => {
   if (page.path.match(/^\/profile\//)) {
     page.matchPath = '/profile/*'
     createPage(page)
+  }
+}
+
+exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+  if (stage === 'build-html') {
+    actions.setWebpackConfig({
+      module: {
+        rules: [
+          {
+            test: /3box/,
+            use: loaders.null(),
+          },
+        ],
+      },
+    })
   }
 }

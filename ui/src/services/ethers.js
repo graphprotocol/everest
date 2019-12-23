@@ -24,8 +24,7 @@ export const connectAccounts = async () => {
 export const metamaskAccountChange = callback => {
   if (typeof window.ethereum !== undefined && window.ethereum !== undefined) {
     window.ethereum.on('accountsChanged', accounts => {
-      // document.location.reload()
-      callback(accounts)
+      callback && callback(accounts)
     })
   }
 }

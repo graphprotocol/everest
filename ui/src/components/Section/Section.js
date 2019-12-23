@@ -17,7 +17,7 @@ const Section = ({
   linkText,
   variant,
   linkTo,
-  selected
+  selected,
 }) => {
   const [size, setSize] = useState([0, 0])
 
@@ -40,7 +40,7 @@ const Section = ({
                 <Styled.p sx={{ textAlign: 'center', color: 'column' }}>
                   {entry}
                 </Styled.p>
-              )
+              ),
             )}
           </Grid>
         )}
@@ -51,7 +51,7 @@ const Section = ({
     )
   } else {
     return (
-      <Grid mt={[3, 3, 6]} mb={[3, 3, 7]}>
+      <Grid mt={[3, 3, 5]} mb={[3, 3, 7]}>
         <Box sx={{ width: '100%' }}>
           {title && <Styled.h3 sx={{ color: 'primary' }}>{title}</Styled.h3>}
           {description && <Styled.p>{description}</Styled.p>}
@@ -87,7 +87,7 @@ Section.propTypes = {
   linkText: PropTypes.string,
   variant: PropTypes.string,
   linkTo: PropTypes.string,
-  selected: PropTypes.string
+  selected: PropTypes.string,
 }
 
 export default Section

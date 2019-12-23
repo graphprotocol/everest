@@ -14,7 +14,10 @@ const Link = ({ to, children, ...props }) => {
         fontSize: '1rem',
         fontWeight: 'bold',
         letterSpacing: '0.31px',
-        lineHeight: '2.375rem'
+        lineHeight: '2.375rem',
+        '&:focus': {
+          outline: 'none !important',
+        },
       }}
       {...props}
     >
@@ -25,7 +28,7 @@ const Link = ({ to, children, ...props }) => {
 
 Link.propTypes = {
   to: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.any,
 }
 
 export default Link
