@@ -1,0 +1,83 @@
+type Project {
+  id: ID!
+  # From IPFS / off chain storage
+  name: String!
+  description: String!
+  website: String
+  twitter: String
+  github: String # Make sure we call it github or something else
+  avatar: String
+  image: String
+  ipfsHash: String!
+  categories: [Category!]!
+
+  # From smart contracts directly
+  owner: User
+  isChallenged: Bool
+  challenges: [Challenge]
+  isWhitelistedProject: Bool! # check with Brandon
+  createdAt: Int! # This would allow you to know when it will become a full member too
+  delegateAddress: Bytes # Null if no delegate is set
+  isRepresentative: Bool
+
+  # Derived from smart contract events
+  totalVotes: Int!
+  reputation: Int!
+
+  # All votes a Project has made
+  votes: [Vote] @derivedFrom(field: "projectID")
+}
+
+type Category {
+  id: ID!
+  name: String!
+  description: String!
+  slug: String!
+  projects: [Project]
+  subcategories: [Category] @derivedFrom(field: "ID")
+}
+
+type Challenge {
+  id: ID!
+  description: String
+  createdAt: Int!
+  votesFor: Int!
+  votesAgainst: Int!
+  project: Project!
+  owner: Bytes!
+  resolved: Bool! #  means it's a past challenge
+  votes: [Vote] @derivedFrom(field: "challengeID")
+}
+
+# For global variables
+type Everest {
+  id: ID!
+  period: Int! # how long the challenge will last
+  votingPeriodDuration: Int!
+  whitelistPeriodDuration: Int!
+  challengeDeposit: BigInt!
+  applicationFee: BigInt!
+  approvedToken: Bytes!
+  reserveBank: Bytes!
+  registry: Bytes!
+}
+
+type Vote {
+  id: ID! # concatenation of challenge ID and voter address
+  challenge: Challenge!
+  choice: Choice!
+}
+
+enum Choice {
+  RemoveProject
+  KeepProject
+}
+
+type User {
+  id: ID!
+  name: String
+  bio: String
+  projects: [Project]
+  challenges: [Challenge] # challenges you started
+  votes: [Project] # participation in other people's challenges
+}

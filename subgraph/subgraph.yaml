@@ -1,0 +1,30 @@
+specVersion: 0.0.1
+description: Universally shared projects registry
+repository: https://github.com/graphprotocol/everest
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Everest
+    network: ropsten
+    source:
+      address: '' # Add address
+      abi: Everest
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/everest.ts
+      entities:
+        - Project
+        - Category
+        - Challenge
+        - Everest
+        - Vote
+        - User
+      abis:
+        - name: Everest
+          file: ./abis/everest.json
+      eventHandlers:
+        - event: ApplicationMade(address member, uint256 applicationTime)
+          handler: handleApplicationMade
