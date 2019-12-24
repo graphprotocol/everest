@@ -1,14 +1,19 @@
 /* global artifacts */
 
 const Token = artifacts.require('MockToken.sol')
-
 const fs = require('fs')
 const config = require('../conf/config.js')
 
 module.exports = (deployer, network) => {
-    // if (network === 'ganache' || network === 'rinkeby') {
-    //   config = JSON.parse(fs.readFileSync(`./conf/${process.argv[5]}.json`));
-    // }
+    let tokenHolders
+    let tokenMinter
+    if (network === 'development') {
+        tokenHolders = config.token.tokenHolders
+        tokenMinter = config.token.minter
+    } else if (network == 'ropsten') {
+        tokenHolders = config.token.ropstenTokenHolders
+        tokenMinter = config.token.ropstenMinter
+    }
 
     async function giveTokensTo(tokenHolders) {
         if (tokenHolders.length === 0) {
@@ -41,9 +46,9 @@ module.exports = (deployer, network) => {
                 config.token.name,
                 config.token.decimals,
                 config.token.symbol,
-                config.token.minter.address
+                tokenMinter.address
             )
-            .then(async () => giveTokensTo(config.token.tokenHolders))
+            .then(async () => giveTokensTo(tokenHolders))
     } else {
         // eslint-disable-next-line no-console
         console.log(

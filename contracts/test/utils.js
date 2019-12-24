@@ -1,6 +1,6 @@
 const ethers = require('ethers')
 const fs = require('fs')
-const {time, expectEvent, expectRevert, constants, BN} = require('openzeppelin-test-helpers')
+const { time, expectEvent, expectRevert, constants, BN } = require('openzeppelin-test-helpers')
 
 // const BN = require('bn.js') TODO - remove this and from package.json. We use BN from test helpers
 
