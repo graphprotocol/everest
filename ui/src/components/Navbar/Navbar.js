@@ -4,14 +4,11 @@ import { Styled, jsx, Header } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
-import {
-  getAddress,
-  connectAccounts,
-  metamaskAccountChange,
-} from '../../services/ethers'
+import { getAddress, metamaskAccountChange } from '../../services/ethers'
 
 import Link from '../../components/Link'
 import Button from '../../components/Button'
+import Modal from '../../components/Modal'
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
@@ -29,6 +26,9 @@ const Navbar = ({ path, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState()
   const [address, setAddress] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const openModal = () => setShowModal(true)
+  const closeModal = () => setShowModal(false)
 
   useEffect(() => {
     metamaskAccountChange(accounts => setAddress(accounts[0]))
@@ -41,10 +41,9 @@ const Navbar = ({ path, ...props }) => {
   }, [])
 
   const isNewProjectPage = path && path.includes('new')
-
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: address,
+      id: address || '',
     },
   })
 
@@ -68,39 +67,40 @@ const Navbar = ({ path, ...props }) => {
         sx={{
           position: 'absolute',
           right: '20px',
-          top: 4,
           alignItems: 'center',
           gridTemplateColumns: 'max-content 1fr',
+          height: '100%',
         }}
       >
-        <Link
-          to="/projects/new"
-          sx={{
-            backgroundColor: isNewProjectPage ? 'secondary' : 'white',
-            padding: '22px',
-          }}
-        >
-          <Plus
+        {data && data.user && (
+          <Link
+            to="/projects/new"
             sx={{
-              transform: 'rotate(45deg)',
-              fill: isNewProjectPage ? 'white' : 'secondary',
+              backgroundColor: isNewProjectPage ? 'secondary' : 'white',
+              padding: '22px',
             }}
-          />
-        </Link>
+          >
+            <Plus
+              sx={{
+                transform: 'rotate(45deg)',
+                fill: isNewProjectPage ? 'white' : 'secondary',
+              }}
+            />
+          </Link>
+        )}
         {data && data.user ? (
           <Link to={`/profile/${address}`}>
             <Placeholder sx={avatarStyles} />
           </Link>
         ) : (
-          <Button
-            variant="primary"
-            sx={{ maxWidth: '140px' }}
-            text="Sign in"
-            onClick={async () => {
-              const accounts = await connectAccounts()
-              setAddress(accounts[0])
-            }}
-          />
+          <Modal showModal={showModal} closeModal={closeModal}>
+            <Button
+              variant="primary"
+              sx={{ maxWidth: '140px' }}
+              text="Sign in"
+              onClick={() => openModal()}
+            />
+          </Modal>
         )}
       </Grid>
     </Header>
