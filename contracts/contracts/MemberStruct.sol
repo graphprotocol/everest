@@ -7,11 +7,12 @@ pragma solidity ^0.5.8;
 
  The delegate and owner are stored in ERC-1056s registry
 */
+
+// Exists here so that both Everest and Registry can inherit, and stay seperate contracts
 contract MemberStruct {
-    // Exists here so that both Everest and Registry can inherit, and stay seperate contracts
     struct Member {
         uint256 challengeID;    // Is 0 if it is not challenged
-        bool whitelisted;       // Indicates registry status (false if applicant)
-        uint256 appliedAt;      // Used for reputation (now - appliedAt) = voteWeight
+        // Used for reputation (now - appliedAt) = voteWeight. Used to determine full membership
+        uint256 appliedAt;
     }
 }

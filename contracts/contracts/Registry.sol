@@ -37,13 +37,11 @@ contract Registry is Ownable, MemberStruct {
 
     function getMember(address _member) external view returns (
         uint256,
-        bool,
         uint256
     ) {
         Member memory member = members[_member];
         return (
             member.challengeID,
-            member.whitelisted,
             member.appliedAt
         );
     }
@@ -53,17 +51,10 @@ contract Registry is Ownable, MemberStruct {
         return member.challengeID;
     }
 
-    function getWhitelisted(address _member) external view returns (bool) {
-        Member memory member = members[_member];
-        return member.whitelisted;
-    }
-
     function getAppliedAt(address _member) external view returns (uint256) {
         Member memory member = members[_member];
         return member.appliedAt;
     }
-
-
 
     // --------------------
     // SETTER FUNCTIONS
@@ -80,18 +71,12 @@ contract Registry is Ownable, MemberStruct {
         // Create the member struct
         Member memory member = Member({
             challengeID: 0,
-            whitelisted: false,
             appliedAt: _appliedAt
         });
         // Store the member
         members[_member] = member;
 
         // TODO - call into ERC 1056. Actually move this completely into Everest
-    }
-
-    function whitelistMember(address _member) external onlyOwner {
-        Member storage member = members[_member];
-        member.whitelisted = true;
     }
 
     function editChallengeID(address _member, uint256 _newChallengeID) external onlyOwner {

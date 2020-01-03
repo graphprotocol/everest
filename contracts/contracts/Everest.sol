@@ -1,7 +1,6 @@
 /*
  Everest is a DAO that is designed to curate a Registry of members. Specifically
- for Everest, it is a list of crypto projects. But this code can be forked
- and used for any type of list.
+ it is a list of crypto projects.
 
  This storage of the list is in Registry.sol and in the EthereumDIDRegistry,
  on mainnet, created by uport.
@@ -15,7 +14,7 @@ pragma solidity ^0.5.8;
 import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./MemberStruct.sol";
-import "./MockEthereumDIDRegistry.sol";
+import * as EthereumDIDRegistry from "./MockEthereumDIDRegistry.sol";
 
 contract Everest is MemberStruct, Ownable {
     using SafeMath for uint256;
@@ -23,10 +22,10 @@ contract Everest is MemberStruct, Ownable {
     /***************
     GLOBAL CONSTANTS
     ***************/
-    // Voting period length for a challenge
+    // Voting period length for a challenge (in unix seconds)
     uint256 public votingPeriodDuration;
     // Period a project must wait before they are officially a member
-    uint256 public whitelistPeriodDuration;
+    uint256 public waitingPeriod;
     // Deposit that must be made in order to submit a challenge. Returned if challenge is won
     uint256 public challengeDeposit;
     // Application fee to become a member
@@ -39,16 +38,12 @@ contract Everest is MemberStruct, Ownable {
     // Member Registry contract reference
     Registry public memberRegistry;
     // ERC-1056 contract reference
-    MockEthereumDIDRegistry public  erc1056Registry;
+    EthereumDIDRegistry public  erc1056Registry;
 
-    // Delegate type must be specified for ERC1056. Right now we only use ethereum
-    // accounts to be delegates. We pass in the bytes representation of the string 'ethereum'
-    // keccak256("ethereum") = 0x657468657265756d. Then add 48 zeros to the end
-    // TODO - confirm this is the right key that everyone is using for the standard
-    bytes32 delegateType = 0x657468657265756d000000000000000000000000000000000000000000000000;
-
-    // Used to prevent user input from causing overflow (for delegate and off chain data validity)
-    uint256 constant MAX_VALIDITY_LENGTH = 10**18;
+    // We pass in the bytes representation of the string 'everest'
+    // bytes("everest") = 0x65766572657374. Then add 50 zeros to the end. The bytes32 value
+    // is passed to the ERC-1056 registry, and hashed within the delegate functions
+    bytes32 delegateType = 0x6576657265737400000000000000000000000000000000000000000000000000;
 
     /******
     EVENTS
@@ -56,10 +51,9 @@ contract Everest is MemberStruct, Ownable {
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
     event ApplicationMade(address member, uint256 applicationTime);
     event ApplicationCancelled(address indexed member);
-    event MemberWhitelisted(address indexed member);
     event MemberRemoved(address indexed member);
     event MemberExited(address indexed member);
-    event MemberOwnerEdited(address indexed member);
+    event MemberOwnerChanged(address indexed member);
     event DelegateAdded(address indexed member);
     event DelegateRevoked(address indexed member);
     event MemberOffChainDataEdited(address indexed member);
@@ -106,17 +100,17 @@ contract Everest is MemberStruct, Ownable {
 
     // Note that challenge deposit and token held constant in global variable
     struct Challenge {
-        address challenger;         // the member who submitted the challenge
-        address member;             // the member
-        uint256 yesVotes;           // the total number of YES votes for this challenge
-        uint256 noVotes;            // the total number of NO votes for this challenge
-        uint256 voterCount;         // total count of voters participating in the challenge
+        address challenger;         // The member who submitted the challenge
+        address member;             // The member
+        uint256 yesVotes;           // The total number of YES votes for this challenge
+        uint256 noVotes;            // The total number of NO votes for this challenge
+        uint256 voterCount;         // Total count of voters participating in the challenge
         uint256 startingPeriod;
-        bool resolved;              // true if the challenge has been resolved
-        bool didPass;               // true only if the challenge passed
-        string details;             // challenge details - could be IPFS hash, plaintext, or JSON
-        mapping (address => VoteChoice) voteChoiceByMember;     // the choice by each member
-        mapping (address => uint256) voteWeightByMember;        // the vote weight of each member
+        bool resolved;              // True if the challenge has been resolved
+        bool didPass;               // True only if the challenge passed
+        string details;             // Challenge details - an IPFS hash
+        mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
+        mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
 
     Challenge[] public challenges;
@@ -125,32 +119,60 @@ contract Everest is MemberStruct, Ownable {
     MODIFIERS
     ********/
 
-    modifier onlyMemberOwnerOrDelegate(address _member) {
+    /**
+    @dev                Modifer that allows a function to be called only if the member is a full
+                        member. Either the member or a delegate can call
+    @param _member      Member interacting with everest
+    */
+    modifier onlyFullMemberOwnerOrDelegate(address _member) {
+        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
         require(
-            isWhitelisted(_member),
-            "Everest::onlyMemberOwnerOrDelegate - The member must be whitelisted"
+            isFullMember(_member),
+            "Everest::onlyFullMemberOwnerOrDelegate - Member hasn't passed applied phase"
         );
         address owner = erc1056Registry.identityOwner(_member);
         bool validDelegate = erc1056Registry.validDelegate(_member, delegateType, msg.sender);
         require(
             validDelegate || owner == msg.sender,
-            "Everest::onlyMemberOrDelegate - Caller must be the delegate or owner"
+            "Everest::onlyFullMemberOwnerOrDelegate - Caller must be delegate or owner"
         );
         _;
     }
 
-    modifier onlyMemberOwner(address _member) {
+    /**
+    @dev                Modifer that allows a function to be called only if the member is a full
+                        member. Only the member can call (no delegate permissions)
+    @param _member      Member interacting with everest
+    */
+    modifier onlyFullMemberOwner(address _member) {
+        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
         require(
-            isWhitelisted(_member),
-            "Everest::onlyMemberOwnerOrDelegate - The member must be whitelisted"
+            isFullMember(_member),
+            "Everest::onlyFullMemberOwner - Member has not passed the applied phase"
         );
         address owner = erc1056Registry.identityOwner(_member);
         require(
             owner == msg.sender,
-            "Everest::onlyMemberOrDelegate - Caller must be the delegate or owner"
+            "Everest::onlyFullMemberOwner - Caller must be the delegate or owner"
         );
         _;
     }
+
+    /**
+    @dev                Modifer that allows a function to be called by a partial or full member
+    @param _member      Member interacting with everest
+    */
+    modifier onlyMemberOwner(address _member) {
+        address owner = erc1056Registry.identityOwner(_member);
+        require(
+            owner == msg.sender,
+            "Everest::onlyMemberOwner - Caller must be the delegate or owner"
+        );
+        _;
+    }
+
+
+
 
     /********
     FUNCTIONS
@@ -160,7 +182,7 @@ contract Everest is MemberStruct, Ownable {
         address _approvedToken,
         uint256 _votingPeriodDuration,
         uint256 _challengeDeposit,
-        uint256 _whitelistPeriodDuration,
+        uint256 _waitingPeriod,
         uint256 _applicationFee,
         bytes32 _charter
     ) public {
@@ -179,7 +201,7 @@ contract Everest is MemberStruct, Ownable {
 
         votingPeriodDuration = _votingPeriodDuration;
         challengeDeposit = _challengeDeposit;
-        whitelistPeriodDuration = _whitelistPeriodDuration;
+        waitingPeriod = _waitingPeriod;
         applicationFee = _applicationFee;
 
     }
@@ -190,7 +212,134 @@ contract Everest is MemberStruct, Ownable {
 
     /**
     @dev                            Allows a user to apply to add a member to the Registry
-    @param _member                  The address of the member
+    @param _newMember               The address of the new member
+    @param _sigV                    V piece of the member signature
+    @param _sigR                    R piece of the member signature
+    @param _sigS                    S piece of the member signature
+    @param _owner                   Owner of the member application
+    */
+    function applySignedInternal(
+        address _newMember,
+        uint8 _sigV,
+        bytes32 _sigR,
+        bytes32 _sigS,
+        address _owner
+    ) internal {
+        require(
+            memberRegistry.getAppliedAt(_newMember) == 0,
+            "Everest::applySigned - This member already exists"
+        );
+        /* solium-disable-next-line security/no-block-members*/
+        memberRegistry.setMember(_newMember, now);
+
+        // First time applicants might have all three of these values be the same
+        // eth address, as the caller is the member, and they want to be the owner too
+        erc1056Registry.changeOwnerSigned(_newMember, _sigV, _sigR, _sigS, _owner);
+
+        // Transfers tokens from user to the Reserve Bank
+        require(
+            approvedToken.transferFrom(msg.sender, address(reserveBank), applicationFee),
+            "Everest::applySigned - Token transfer failed"
+        );
+
+        emit ApplicationMade(
+            _newMember,
+            /* solium-disable-next-line security/no-block-members*/
+            now
+        );
+    }
+
+    /**
+    @dev                            Allows a user to apply to add a member to the Registry
+    @param _newMember               The address of the new member
+    @param _sigV                    V piece of the member signature
+    @param _sigR                    R piece of the member signature
+    @param _sigS                    S piece of the member signature
+    @param _owner                   Owner of the member application
+    */
+    function applySigned(
+        address _newMember,
+        uint8 _sigV,
+        bytes32 _sigR,
+        bytes32 _sigS,
+        address _owner
+    ) external {
+        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+    }
+
+    /**
+    @dev                            Allows a user to apply to add a member to the Registry and add
+                                    a delegate to the DID registry
+    @param _newMember               The address of the new member
+    @param _sigV                    V piece of the member signature
+    @param _sigR                    R piece of the member signature
+    @param _sigS                    S piece of the member signature
+    @param _owner                   Owner of the member application
+    @param _delegate                Delegate designated for the member
+    @param _delegateValidity        Time delegate is valid
+    */
+    function applySignedWithDelegate(
+        address _newMember,
+        uint8 _sigV,
+        bytes32 _sigR,
+        bytes32 _sigS,
+        address _owner,
+        address _delegate,
+        uint256 _delegateValidity
+    ) external {
+        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        addDelegateSigned(
+            _newMember,
+            _sigV,
+            _sigR,
+            _sigS,
+            delegateType,
+            _delegate,
+            _delegateValidity
+        );
+    }
+
+    /**
+    @dev                            Allows a user to apply to add a member to the Registry and
+                                    add off chain data to the DID registry
+    @param _newMember               The address of the new member
+    @param _sigV                    V piece of the member signature
+    @param _sigR                    R piece of the member signature
+    @param _sigS                    S piece of the member signature
+    @param _owner                   Owner of the member application
+    @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
+                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
+    @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
+    @param _offChainDataValidity    Length of time attribute data is valid
+    */
+    function applySignedWithAttribute(
+        address _newMember,
+        uint8 _sigV,
+        bytes32 _sigR,
+        bytes32 _sigS,
+        address _owner,
+        address _delegate,
+        uint256 _delegateValidity,
+        bytes32 _offChainDataName,
+        bytes calldata _offChainDataValue,
+        uint256 _offChainDataValidity
+    ) external {
+        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        editOffChainDataSigned(
+            _newMember,
+            _sigV,
+            _sigR,
+            _sigS,
+            _offChainDataName,
+            _offChainDataValue,
+            _offChainDataValidity
+        );
+    }
+
+    /**
+    @dev                            Allows a user to apply to add a member to the Registry and
+                                    add off chain data  and a delegate to the DID registry
+    @param _newMember               The address of the new member
     @param _sigV                    V piece of the member signature
     @param _sigR                    R piece of the member signature
     @param _sigS                    S piece of the member signature
@@ -202,8 +351,8 @@ contract Everest is MemberStruct, Ownable {
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
-    function applyMember(
-        address _member,
+    function applySignedWithAttributeAndDelegate(
+        address _newMember,
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS,
@@ -214,33 +363,9 @@ contract Everest is MemberStruct, Ownable {
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        require(
-            !isWhitelisted(_member),
-            "Everest::applyMember - The member is already whitelisted"
-        );
-        require(
-            memberRegistry.getAppliedAt(_member) == 0,
-            "Everest::applyMember - The member is currently waiting to be whitelisted"
-        );
-        require(
-            _delegateValidity < MAX_VALIDITY_LENGTH,
-            "Everest::applyMember - _delegateValidity is too large"
-        );
-        require(
-            _offChainDataValidity < MAX_VALIDITY_LENGTH,
-            "Everest::applyMember - _offChainDataValidity is too large"
-        );
-        require(_owner != address(0), "Everest::applyMember - Owner can't be the 0 address");
-        require(_delegate != address(0), "Everest::applyMember - Delegate can't be the 0 address");
-        /* solium-disable-next-line security/no-block-members*/
-        memberRegistry.setMember(_member, now);
-
-        // First time applicants might have all three of these values be the same
-        // eth address, as the caller is the member, and they want to be the owner too
-        erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _owner);
-
-        erc1056Registry.addDelegateSigned(
-            _member,
+        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        addDelegateSigned(
+            _newMember,
             _sigV,
             _sigR,
             _sigS,
@@ -248,9 +373,8 @@ contract Everest is MemberStruct, Ownable {
             _delegate,
             _delegateValidity
         );
-
-        erc1056Registry.setAttributeSigned(
-            _member,
+        editOffChainDataSigned(
+            _newMember,
             _sigV,
             _sigR,
             _sigS,
@@ -258,51 +382,18 @@ contract Everest is MemberStruct, Ownable {
             _offChainDataValue,
             _offChainDataValidity
         );
-
-        // Transfers tokens from user to the Reserve Bank
-        require(
-            approvedToken.transferFrom(msg.sender, address(reserveBank), applicationFee),
-            "Everest::applyMember - Token transfer failed"
-        );
-
-        emit ApplicationMade(
-            _member,
-            /* solium-disable-next-line security/no-block-members*/
-            now
-        );
     }
 
-    /**
-    @dev                Whitelists a project if the application time has passed and
-                        it has not been challenged. Anyone can call this function.
-    @param _member      The member whose status is being updated
-    */
-    function whitelist(address _member) public {
-        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
-        require(
-            /* solium-disable-next-line security/no-block-members*/
-            now >= appliedAt.add(whitelistPeriodDuration),
-            "Everest::whitelist - The member has not passed the applied phase"
-        );
-        require(
-            !challengeExists(_member),
-            "Everest::whitelist - Member can't be whitelisted when it is being challenged"
-        );
-        memberRegistry.whitelistMember(_member);
-        emit MemberWhitelisted(_member);
-    }
 
     /**
-    @dev                Allow a member to voluntarily leave the whitelist. Note that this does not
+    @dev                Allow a member to voluntarily leave. Note that this does not
                         reset ownership or delegates in the ERC-1056 registry. This must be done by
                         calling the respective functions in the registry that handle those resets.
-    @param _member      Member exiting the whitelist
+    @param _member      Member exiting the list
     */
     function memberExit(
         address _member
     ) external onlyMemberOwner(_member) {
-        bool whitelisted = memberRegistry.getWhitelisted(_member);
-        require(whitelisted, "Everest::memberExit - Member must be whitelisted");
         require(
             !challengeExists(_member),
             "Everest::memberExit - Can't exit during ongoing challenge"
@@ -323,20 +414,15 @@ contract Everest is MemberStruct, Ownable {
     @param _sigR        R piece of the member signature
     @param _sigS        S piece of the member signature
      */
-    function editMemberOwner(
+    function changeOwnerSigned(
         address _newOwner,
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS
     ) external onlyMemberOwner(_member) {
-        require(_newOwner != address(0), "Everest::applyMember - Owner can't be the 0 address");
-        require(
-            !challengeExists(_member),
-            "Everest::editMemberOwner - Can't edit during ongoing challenge"
-        );
         erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _newOwner);
-        emit MemberOwnerEdited(_member);
+        emit MemberOwnerChanged(_member);
     }
 
     /**
@@ -352,7 +438,7 @@ contract Everest is MemberStruct, Ownable {
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
      */
-    function editOffChainData(
+    function editOffChainDataSigned(
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
@@ -361,14 +447,6 @@ contract Everest is MemberStruct, Ownable {
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external onlyMemberOwner(_member) {
-        require(
-            !challengeExists(_member),
-            "Everest::editOffChainData - Can't edit during ongoing challenge"
-        );
-        require(
-            _offChainDataValidity < MAX_VALIDITY_LENGTH,
-            "Everest::editOffChainData - _offChainDataValidity is too large"
-        );
         erc1056Registry.setAttributeSigned(
             _member,
             _sigV,
@@ -382,7 +460,7 @@ contract Everest is MemberStruct, Ownable {
     }
 
     /**
-    @dev                        Allows a delegate to be added (there can be multiple)
+    @dev                        Allows a delegate to be added (there can be multiple delegates)
     @param _member              The address of the member
     @param _sigV                V piece of the member signature
     @param _sigR                R piece of the member signature
@@ -390,7 +468,7 @@ contract Everest is MemberStruct, Ownable {
     @param _newDelegate         The new delegate
     @param _delegateValidity    The time the new delegate is valid
      */
-    function addDelegate(
+    function addDelegateSigned(
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
@@ -398,16 +476,6 @@ contract Everest is MemberStruct, Ownable {
         address _newDelegate,
         uint256 _delegateValidity
     ) external onlyMemberOwner(_member) {
-        require(_newDelegate != address(0), "Everest::applyMember - Delegate can't be 0 address");
-        require(
-            !challengeExists(_member),
-            "Everest::editDelegate - Can't edit during ongoing challenge"
-        );
-        require(
-            _delegateValidity < MAX_VALIDITY_LENGTH,
-            "Everest::editDelegate - _delegateValidity is too large"
-        );
-
         erc1056Registry.addDelegateSigned(
             _member,
             _sigV,
@@ -417,31 +485,24 @@ contract Everest is MemberStruct, Ownable {
             _newDelegate,
             _delegateValidity
         );
-
         emit DelegateAdded(_member);
     }
 
     /**
-    @dev                Allows a member delegate to be added
+    @dev                Allows a member delegate to be revoked
     @param _member      The address of the member
     @param _sigV        V piece of the member signature
     @param _sigR        R piece of the member signature
     @param _sigS        S piece of the member signature
     @param _delegate    The delegate being removed
      */
-    function revokeDelegate(
+    function revokeDelegateSigned(
         address _delegate,
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS
     ) external onlyMemberOwner(_member) {
-        require(_delegate != address(0), "Everest::applyMember - Delegate can't be 0 address");
-        require(
-            !challengeExists(_member),
-            "Everest::editDelegate - Can't edit during ongoing challenge"
-        );
-
         erc1056Registry.revokeDelegateSigned(
             _member,
             _sigV,
@@ -450,7 +511,6 @@ contract Everest is MemberStruct, Ownable {
             delegateType,
             _delegate
         );
-
         emit DelegateRevoked(_member);
     }
 
@@ -468,7 +528,7 @@ contract Everest is MemberStruct, Ownable {
         address _challengingMember,
         address _challengedMember,
         string calldata _details
-    ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
+    ) external onlyFullMemberOwner(_challengingMember) returns (uint256 challengeID) {
         uint256 challengerAppliedAt = memberRegistry.getAppliedAt(_challengingMember);
 
         require(
@@ -526,7 +586,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 _challengeID,
         VoteChoice _voteChoice,
         address _voter
-    ) public onlyMemberOwnerOrDelegate(_voter) {
+    ) public onlyFullMemberOwnerOrDelegate(_voter) {
         require(
             _challengeID <= challenges.length,
             "Everest::submitVote - Challenge does not exist"
@@ -534,7 +594,10 @@ contract Everest is MemberStruct, Ownable {
         Challenge storage storedChallenge = challenges[_challengeID];
         uint256 appliedAt = memberRegistry.getAppliedAt(_voter);
 
-        require(uint8(_voteChoice) < 3, "Everest::submitVote - _voteChoice must be less than 3");
+        require(
+            _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
+            "Everest::submitVote - Vote must be either Yes or No"
+        );
         uint256 voteWeight = storedChallenge.startingPeriod - appliedAt;
 
         require(
@@ -544,10 +607,6 @@ contract Everest is MemberStruct, Ownable {
         require(
             storedChallenge.voteChoiceByMember[_voter] == VoteChoice.Null,
             "Everest::submitVote - Member has already voted on this challenge"
-        );
-        require(
-            _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
-            "Everest::submitVote - Vote must be either Yes or No"
         );
 
         // Store vote (can't be msg.sender because delegate can be voting)
@@ -578,9 +637,9 @@ contract Everest is MemberStruct, Ownable {
         if (didPass && moreThanOneVote) {
             storedChallenge.didPass = true;
 
-            // Transfer challenge deposit and project application fee to challenger
+            // Transfer challenge deposit to challenger for winning challenge
             require(
-                reserveBank.withdraw(storedChallenge.challenger, applicationFee),
+                reserveBank.withdraw(storedChallenge.challenger, challengeDeposit),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
             memberRegistry.deleteMember(storedChallenge.member);
@@ -593,7 +652,12 @@ contract Everest is MemberStruct, Ownable {
             );
 
         } else {
-            // No token transfer necessary, the challenger has lost their deposit
+            // Transfer challenge deposit to challengee. This keeps the token balance the same
+            // whether or not the challenge fails.
+            require(
+                reserveBank.withdraw(storedChallenge.challenger, challengeDeposit),
+                "Everest::resolveChallenge - Rewarding challenger failed"
+            );
             emit ChallengeFailed(
                 storedChallenge.member,
                 _challengeID,
@@ -672,11 +736,16 @@ contract Everest is MemberStruct, Ownable {
     }
 
     /**
-    @dev            Returns true if the provided member is whitelisted
+    @dev            Returns true if the provided member is a full member
     @param _member  The member name of the member whose status is to be examined
     */
-    function isWhitelisted(address _member) public view returns (bool){
-        return memberRegistry.getWhitelisted(_member);
+    function isFullMember(address _member) public view returns (bool){
+        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
+        /* solium-disable-next-line security/no-block-members*/
+        if (now >= appliedAt.add(waitingPeriod)){
+            return true;
+        }
+        return false;
     }
 
     /**
