@@ -1,5 +1,7 @@
 export const walletExists = () => {
-  return window.ethereum !== undefined || window.web3 !== undefined
+  if (typeof window !== undefined) {
+    return window.web3 || window.ethereum
+  }
 }
 
 export const getAddress = async () => {

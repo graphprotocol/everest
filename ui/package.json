@@ -22,6 +22,10 @@
     "@reach/menu-button": "^0.6.4",
     "@reach/router": "^1.2.1",
     "@theme-ui/components": "^0.2.50",
+    "@web3-react/core": "^6.0.2",
+    "@web3-react/injected-connector": "^6.0.3",
+    "@web3-react/walletconnect-connector": "^6.0.2",
+    "@web3-react/walletlink-connector": "^6.0.2",
     "apollo-boost": "^0.4.4",
     "babel-plugin-styled-components": "^1.10.6",
     "base-x": "^3.0.7",
@@ -38,13 +42,15 @@
     "ipfs-http-client": "^40.1.0",
     "isomorphic-fetch": "^2.2.1",
     "numeral": "^2.0.6",
+    "qrcode.react": "^1.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "styled-components": "^4.4.1",
     "styled-components-grid": "^2.2.2",
     "styled-reset": "^4.0.8",
-    "theme-ui": "^0.2.49"
+    "theme-ui": "^0.2.49",
+    "web3-react": "^5.0.5"
   },
   "devDependencies": {
     "prettier": "^1.19.1"

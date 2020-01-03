@@ -4,6 +4,8 @@ import { Styled, jsx, Header } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import { useWeb3React } from '@web3-react/core'
+
 import { getAddress, metamaskAccountChange } from '../../services/ethers'
 
 import Link from '../../components/Link'
@@ -27,8 +29,17 @@ const Navbar = ({ path, ...props }) => {
   const [isMobile, setIsMobile] = useState()
   const [address, setAddress] = useState(null)
   const [showModal, setShowModal] = useState(false)
+  const [userAccount, setUserAccount] = useState('')
   const openModal = () => setShowModal(true)
-  const closeModal = () => setShowModal(false)
+
+  const { account } = useWeb3React()
+
+  const closeModal = () => {
+    if (account) {
+      setUserAccount(account)
+    }
+    setShowModal(false)
+  }
 
   useEffect(() => {
     metamaskAccountChange(accounts => setAddress(accounts[0]))
@@ -88,8 +99,8 @@ const Navbar = ({ path, ...props }) => {
             />
           </Link>
         )}
-        {data && data.user ? (
-          <Link to={`/profile/${address}`}>
+        {(data && data.user) || userAccount ? (
+          <Link to={`/profile/${userAccount ? userAccount : address}`}>
             <Placeholder sx={avatarStyles} />
           </Link>
         ) : (
