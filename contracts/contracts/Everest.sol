@@ -525,10 +525,14 @@ contract Everest is MemberStruct, Ownable {
         address _challengedMember,
         string calldata _details
     ) external onlyFullMemberOwner(_challengingMember) returns (uint256 challengeID) {
-        uint256 challengerAppliedAt = memberRegistry.getAppliedAt(_challengingMember);
-
         require(
-            !challengeExists(_challengingMember),
+            !isChallengedNewFullMember(_challengingMember),
+            "Everest::submitVote - Voter became a full member while challenged, and can't vote"
+        );
+
+        uint256 challengerAppliedAt = memberRegistry.getAppliedAt(_challengingMember);
+        require(
+            !challengeExists(_challengedMember),
             "Everest::challenge - Member can't be challenged multiple times at once"
         );
 
@@ -583,6 +587,10 @@ contract Everest is MemberStruct, Ownable {
         VoteChoice _voteChoice,
         address _voter
     ) public onlyFullMemberOwnerOrDelegate(_voter) {
+        require(
+            !isChallengedNewFullMember(_voter),
+            "Everest::submitVote - Voter became a full member while challenged, and can't vote"
+        );
         require(
             _challengeID <= challenges.length,
             "Everest::submitVote - Challenge does not exist"
@@ -742,6 +750,33 @@ contract Everest is MemberStruct, Ownable {
             return true;
         }
         return false;
+    }
+
+    /**
+    @dev            Returns true if the provided member was challenged before they became a full
+                    member. Since full membership is implicit, a member can become a full member,
+                    while being challenged upon their application. They should not be able to vote
+                    until they pass the challenge.
+    @param _member  The member name of the member whose status is to be examined
+    */
+    function isChallengedNewFullMember(address _member) public view returns (bool){
+        // Challenge does not exist, so this member is okay to vote or challenge other members
+        // It is checked in the modifiers if they are a full member
+        // This will also prevent expired challenges from preventing members from voting
+        if (!challengeExists(_member))
+            return false;
+
+        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
+        int256 fullMemberTime = int256(appliedAt + waitingPeriod);
+        uint256 challengeID = memberRegistry.getChallengeID(_member);
+        Challenge memory storedChallenge = challenges[challengeID];
+        int256 challengeStartPeriod = int256(storedChallenge.startingPeriod);
+
+        // fullMemberTime is the time that the member would become a full member. So in the case
+        // that it is larger than the challengeStartPeriod, it means the member was challenged
+        // when it was still a partial member. Therefore they can't vote or challenge until they
+        // win this challenge
+        return ((fullMemberTime - challengeStartPeriod) > 0);
     }
 
     /**
