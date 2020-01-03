@@ -4,9 +4,6 @@ import "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol";
 import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// TODO - Need to make sure there is a way to withdraw this in V1, but no need to
-//        have ways to spend the reserves uniquely by voting or
-
 contract ReserveBank is Ownable {
     using SafeMath for uint256;
 

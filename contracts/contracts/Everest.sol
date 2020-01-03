@@ -2,8 +2,7 @@
  Everest is a DAO that is designed to curate a Registry of members. Specifically
  it is a list of crypto projects.
 
- This storage of the list is in Registry.sol and in the EthereumDIDRegistry,
- on mainnet, created by uport.
+ This storage of the list is in Registry.sol and in the EthereumDIDRegistry (created by uport).
 
  The DAO is inspired by the Moloch DAO smart contracts https://github.com/MolochVentures/moloch
  The DAO allows anoyone to apply to the list.
@@ -25,7 +24,7 @@ contract Everest is MemberStruct, Ownable {
     // Voting period length for a challenge (in unix seconds)
     uint256 public votingPeriodDuration;
     // Period a project must wait before they are officially a member
-    uint256 public waitingPeriod;
+    uint256 public fullMemberWaitingPeriod;
     // Deposit that must be made in order to submit a challenge. Returned if challenge is won
     uint256 public challengeDeposit;
     // Application fee to become a member
@@ -38,7 +37,7 @@ contract Everest is MemberStruct, Ownable {
     // Member Registry contract reference
     Registry public memberRegistry;
     // ERC-1056 contract reference
-    EthereumDIDRegistry public  erc1056Registry;
+    EthereumDIDRegistry public erc1056Registry;
 
     // We pass in the bytes representation of the string 'everest'
     // bytes("everest") = 0x65766572657374. Then add 50 zeros to the end. The bytes32 value
@@ -50,8 +49,6 @@ contract Everest is MemberStruct, Ownable {
     ******/
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
     event ApplicationMade(address member, uint256 applicationTime);
-    event ApplicationCancelled(address indexed member);
-    event MemberRemoved(address indexed member);
     event MemberExited(address indexed member);
     event MemberOwnerChanged(address indexed member);
     event DelegateAdded(address indexed member);
@@ -105,7 +102,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 yesVotes;           // The total number of YES votes for this challenge
         uint256 noVotes;            // The total number of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
-        uint256 startingPeriod;
+        uint256 startingPeriod;     // Starting time of the challenge
         string details;             // Challenge details - an IPFS hash
         mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
@@ -171,9 +168,6 @@ contract Everest is MemberStruct, Ownable {
         _;
     }
 
-
-
-
     /********
     FUNCTIONS
     ********/
@@ -182,7 +176,7 @@ contract Everest is MemberStruct, Ownable {
         address _approvedToken,
         uint256 _votingPeriodDuration,
         uint256 _challengeDeposit,
-        uint256 _waitingPeriod,
+        uint256 _fullMemberWaitingPeriod,
         uint256 _applicationFee,
         bytes32 _charter
     ) public {
@@ -194,16 +188,15 @@ contract Everest is MemberStruct, Ownable {
         );
 
         approvedToken = IERC20(_approvedToken);
-        // TODO - confirm this creates contracts, it is not clear on ganache (can do this when
-        // testing, and should probably even emit constructor events)
+        // These contracts get created, but are not recorded in ganache or truffle
+        // They can be found on internal transactions on etherscan for any testnet or mainnet launch
         reserveBank = new ReserveBank(_approvedToken);
         memberRegistry = new Registry(address(this), _charter);
 
         votingPeriodDuration = _votingPeriodDuration;
         challengeDeposit = _challengeDeposit;
-        waitingPeriod = _waitingPeriod;
+        fullMemberWaitingPeriod = _fullMemberWaitingPeriod;
         applicationFee = _applicationFee;
-
     }
 
     /*******************
@@ -227,19 +220,16 @@ contract Everest is MemberStruct, Ownable {
     ) internal {
         require(
             memberRegistry.getAppliedAt(_newMember) == 0,
-            "Everest::applySigned - This member already exists"
+            "Everest::applySignedInternal - This member already exists"
         );
         /* solium-disable-next-line security/no-block-members*/
         memberRegistry.setMember(_newMember, now);
-
-        // First time applicants might have all three of these values be the same
-        // eth address, as the caller is the member, and they want to be the owner too
         erc1056Registry.changeOwnerSigned(_newMember, _sigV, _sigR, _sigS, _owner);
 
         // Transfers tokens from user to the Reserve Bank
         require(
             approvedToken.transferFrom(msg.sender, address(reserveBank), applicationFee),
-            "Everest::applySigned - Token transfer failed"
+            "Everest::applySignedInternal - Token transfer failed"
         );
 
         emit ApplicationMade(
@@ -307,7 +297,8 @@ contract Everest is MemberStruct, Ownable {
     @param _sigS                    S piece of the member signature
     @param _owner                   Owner of the member application
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
-                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
+                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
+                                    with zeros appended to make it a full 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
@@ -345,6 +336,7 @@ contract Everest is MemberStruct, Ownable {
     @param _delegateValidity        Time delegate is valid
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
+                                    with zeros appended to make it a full 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
@@ -431,6 +423,7 @@ contract Everest is MemberStruct, Ownable {
     @param _sigS                    S piece of the member signature
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
+                                    with zeros appended to make it a full 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
      */
@@ -527,7 +520,7 @@ contract Everest is MemberStruct, Ownable {
     ) external onlyFullMemberOwner(_challengingMember) returns (uint256 challengeID) {
         require(
             !isChallengedNewFullMember(_challengingMember),
-            "Everest::submitVote - Voter became a full member while challenged, and can't vote"
+            "Everest::challenge - Member became a full member while challenged"
         );
 
         uint256 challengerAppliedAt = memberRegistry.getAppliedAt(_challengingMember);
@@ -546,8 +539,6 @@ contract Everest is MemberStruct, Ownable {
             voterCount: 1,
             /* solium-disable-next-line security/no-block-members*/
             startingPeriod: now,
-            // resolved: false,
-            // didPass: false,
             details: _details
         });
         challengeCounter++;
@@ -590,7 +581,7 @@ contract Everest is MemberStruct, Ownable {
     ) public onlyFullMemberOwnerOrDelegate(_voter) {
         require(
             !isChallengedNewFullMember(_voter),
-            "Everest::submitVote - Voter became a full member while challenged, and can't vote"
+            "Everest::submitVote - Member became a full member while challenged"
         );
         require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
@@ -629,7 +620,8 @@ contract Everest is MemberStruct, Ownable {
     }
 
     /**
-    @dev                    Resolve a challenge. Anyone can call this function.
+    @dev                    Resolve a challenge. Anyone can call this function. A successful
+                            challenge means the member is removed.
     @param _challengeID     The challenge ID
     */
     function resolveChallenge(uint256 _challengeID) public {
@@ -646,14 +638,12 @@ contract Everest is MemberStruct, Ownable {
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
             memberRegistry.deleteMember(storedChallenge.member);
-
             emit ChallengeSucceeded(
                 storedChallenge.member,
                 _challengeID,
                 storedChallenge.yesVotes,
                 storedChallenge.noVotes
             );
-
         } else {
             // Transfer challenge deposit to challengee. This keeps the token balance the same
             // whether or not the challenge fails.
@@ -661,6 +651,8 @@ contract Everest is MemberStruct, Ownable {
                 reserveBank.withdraw(storedChallenge.challenger, challengeDeposit),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
+            // Remove challenge ID from registry
+            memberRegistry.editChallengeID(storedChallenge.member, 0);
             emit ChallengeFailed(
                 storedChallenge.member,
                 _challengeID,
@@ -668,9 +660,8 @@ contract Everest is MemberStruct, Ownable {
                 storedChallenge.noVotes
             );
         }
-        // Remove challenge ID from registry
-        memberRegistry.editChallengeID(storedChallenge.member, 0);
-        // Delete challenge from Everest
+
+        // Delete challenge from Everest in either case
         delete challenges[_challengeID];
     }
 
@@ -699,7 +690,6 @@ contract Everest is MemberStruct, Ownable {
         return reserveBank.withdraw(_receiver, _amount);
     }
 
-
     /***************
     GETTER FUNCTIONS
     ***************/
@@ -720,7 +710,7 @@ contract Everest is MemberStruct, Ownable {
     function isFullMember(address _member) public view returns (bool){
         uint256 appliedAt = memberRegistry.getAppliedAt(_member);
         /* solium-disable-next-line security/no-block-members*/
-        if (now >= appliedAt.add(waitingPeriod)){
+        if (now >= appliedAt.add(fullMemberWaitingPeriod)){
             return true;
         }
         return false;
@@ -740,7 +730,7 @@ contract Everest is MemberStruct, Ownable {
             return false;
 
         uint256 appliedAt = memberRegistry.getAppliedAt(_member);
-        int256 fullMemberTime = int256(appliedAt + waitingPeriod);
+        int256 fullMemberTime = int256(appliedAt + fullMemberWaitingPeriod);
         uint256 challengeID = memberRegistry.getChallengeID(_member);
         Challenge memory storedChallenge = challenges[challengeID];
         int256 challengeStartPeriod = int256(storedChallenge.startingPeriod);
