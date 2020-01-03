@@ -106,14 +106,14 @@ contract Everest is MemberStruct, Ownable {
         uint256 noVotes;            // The total number of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
         uint256 startingPeriod;
-        bool resolved;              // True if the challenge has been resolved
-        bool didPass;               // True only if the challenge passed
         string details;             // Challenge details - an IPFS hash
         mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
 
-    Challenge[] public challenges;
+    mapping (uint256 => Challenge) challenges;
+    // Challenge counter for challenge IDs. Starts at 1 to prevent confusion with zeroed values
+    uint256 challengeCounter = 1;
 
     /********
     MODIFIERS
@@ -536,7 +536,7 @@ contract Everest is MemberStruct, Ownable {
             "Everest::challenge - Member can't be challenged multiple times at once"
         );
 
-        uint256 newChallengeID = challenges.length.add(1);
+        uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
             challenger: _challengingMember,
             member: _challengingMember,
@@ -546,12 +546,13 @@ contract Everest is MemberStruct, Ownable {
             voterCount: 1,
             /* solium-disable-next-line security/no-block-members*/
             startingPeriod: now,
-            resolved: false,
-            didPass: false,
+            // resolved: false,
+            // didPass: false,
             details: _details
         });
+        challengeCounter++;
 
-        challenges.push(newChallenge);
+        challenges[newChallengeID] = newChallenge;
 
         // Updates member to store most recent challenge
         memberRegistry.editChallengeID(_challengedMember, newChallengeID);
@@ -592,18 +593,15 @@ contract Everest is MemberStruct, Ownable {
             "Everest::submitVote - Voter became a full member while challenged, and can't vote"
         );
         require(
-            _challengeID <= challenges.length,
-            "Everest::submitVote - Challenge does not exist"
-        );
-        Challenge storage storedChallenge = challenges[_challengeID];
-        uint256 appliedAt = memberRegistry.getAppliedAt(_voter);
-
-        require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
             "Everest::submitVote - Vote must be either Yes or No"
         );
-        uint256 voteWeight = storedChallenge.startingPeriod - appliedAt;
 
+        Challenge storage storedChallenge = challenges[_challengeID];
+        require(
+            storedChallenge.startingPeriod > 0,
+            "Everest::submitVote - Challenge does not exist"
+        );
         require(
             !hasVotingPeriodExpired(storedChallenge.startingPeriod),
             "Everest::submitVote - Challenge voting period has expired"
@@ -612,6 +610,8 @@ contract Everest is MemberStruct, Ownable {
             storedChallenge.voteChoiceByMember[_voter] == VoteChoice.Null,
             "Everest::submitVote - Member has already voted on this challenge"
         );
+        uint256 appliedAt = memberRegistry.getAppliedAt(_voter);
+        uint256 voteWeight = storedChallenge.startingPeriod - appliedAt;
 
         // Store vote (can't be msg.sender because delegate can be voting)
         storedChallenge.voteChoiceByMember[_voter] = _voteChoice;
@@ -639,7 +639,6 @@ contract Everest is MemberStruct, Ownable {
         bool didPass = storedChallenge.yesVotes > storedChallenge.noVotes;
         bool moreThanOneVote = storedChallenge.voterCount > 1;
         if (didPass && moreThanOneVote) {
-            storedChallenge.didPass = true;
 
             // Transfer challenge deposit to challenger for winning challenge
             require(
@@ -669,7 +668,10 @@ contract Everest is MemberStruct, Ownable {
                 storedChallenge.noVotes
             );
         }
-        storedChallenge.resolved = true;
+        // Remove challenge ID from registry
+        memberRegistry.editChallengeID(storedChallenge.member, 0);
+        // Delete challenge from Everest
+        delete challenges[_challengeID];
     }
 
     /***************
@@ -703,40 +705,12 @@ contract Everest is MemberStruct, Ownable {
     ***************/
 
     /**
-    @dev    Return the challenge count, which is just the length of the challenge array. Must be
-            exposed through this view function.
-    */
-    function getChallengeCount() public view returns (uint256) {
-        return challenges.length;
-    }
-
-    /**
     @dev                    Returns a boolean if a challenge vote period has finished
     @param _startingPeriod  The starting period of the challenge
     */
     function hasVotingPeriodExpired(uint256 _startingPeriod) public view returns (bool) {
         /* solium-disable-next-line security/no-block-members*/
         return now >= _startingPeriod.add(votingPeriodDuration);
-    }
-
-    /**
-    @dev                    Returns the members vote choice and weight for a specific challenge
-    @param _memberAddress   The member
-    @param _challengeID     The challenge they voted on
-    */
-    function getMemberProposalVote(address _memberAddress, uint256 _challengeID)
-        public
-        view
-        returns (VoteChoice, uint256)
-    {
-        require(
-            _challengeID < challenges.length,
-            "Everest::getMemberProposalVote - Challenge doesn't exist"
-        );
-
-        uint256 voteWeight = challenges[_challengeID].voteWeightByMember[_memberAddress];
-        VoteChoice choice = challenges[_challengeID].voteChoiceByMember[_memberAddress];
-        return (choice, voteWeight);
     }
 
     /**
@@ -762,7 +736,6 @@ contract Everest is MemberStruct, Ownable {
     function isChallengedNewFullMember(address _member) public view returns (bool){
         // Challenge does not exist, so this member is okay to vote or challenge other members
         // It is checked in the modifiers if they are a full member
-        // This will also prevent expired challenges from preventing members from voting
         if (!challengeExists(_member))
             return false;
 
@@ -786,7 +759,7 @@ contract Everest is MemberStruct, Ownable {
     */
     function challengeExists(address _member) public view returns (bool) {
         uint256 challengeID = memberRegistry.getChallengeID(_member);
-        return (challengeID > 0 && !challenges[challengeID].resolved);
+        return (challengeID > 0);
     }
 
     /**
@@ -797,16 +770,12 @@ contract Everest is MemberStruct, Ownable {
     function challengeCanBeResolved(uint256 _challengeID) public view returns (bool) {
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
-            _challengeID < challenges.length,
-            "Everest::challengeCanBeResolved - Challenge does not exist"
+            challenges[_challengeID].startingPeriod > 0,
+            "Everest::challengeCanBeResolved - Challenge does not exist or was completed"
         );
         require(
             hasVotingPeriodExpired(storedChallenge.startingPeriod),
             "Everest::challengeCanBeResolved - Challenge is not ready to be resolved"
-        );
-        require(
-            storedChallenge.resolved == false,
-            "Everest::challengeCanBeResolved - Challenge has already been resolved"
         );
         return true;
     }
