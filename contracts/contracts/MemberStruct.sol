@@ -10,8 +10,8 @@ pragma solidity ^0.5.8;
 contract MemberStruct {
     struct Member {
         uint256 challengeID;    // Is 0 if it is not challenged
-        // Used for reputation: (now - appliedAt) = voteWeight
-        // Used to determine full membership as well: (now - waitingPeriod) > appliedAt
-        uint256 appliedAt;
+        // Used for reputation: (now - membershipStartTime) = voteWeight
+        // Used to determine membership as well: membershipStartTime > now
+        uint256 membershipStartTime;
     }
 }

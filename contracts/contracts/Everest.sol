@@ -24,7 +24,7 @@ contract Everest is MemberStruct, Ownable {
     // Voting period length for a challenge (in unix seconds)
     uint256 public votingPeriodDuration;
     // Period a project must wait before they are officially a member
-    uint256 public fullMemberWaitingPeriod;
+    uint256 public waitingPeriod;
     // Deposit that must be made in order to submit a challenge. Returned if challenge is won
     uint256 public challengeDeposit;
     // Application fee to become a member
@@ -117,49 +117,48 @@ contract Everest is MemberStruct, Ownable {
     ********/
 
     /**
-    @dev                Modifer that allows a function to be called only if the member is a full
-                        member. Either the member or a delegate can call
+    @dev                Modifer that allows a function to be called by a real member.
+                        Either the member or a delegate can call
     @param _member      Member interacting with everest
     */
-    modifier onlyFullMemberOwnerOrDelegate(address _member) {
-        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
+    modifier onlyMemberOwnerOrDelegate(address _member) {
         require(
-            isFullMember(_member),
-            "Everest::onlyFullMemberOwnerOrDelegate - Member hasn't passed applied phase"
+            isMember(_member),
+            "Everest::onlyMemberOwnerOrDelegate - Member hasn't passed applied phase"
         );
         address owner = erc1056Registry.identityOwner(_member);
         bool validDelegate = erc1056Registry.validDelegate(_member, delegateType, msg.sender);
         require(
             validDelegate || owner == msg.sender,
-            "Everest::onlyFullMemberOwnerOrDelegate - Caller must be delegate or owner"
+            "Everest::onlyMemberOwnerOrDelegate - Caller must be delegate or owner"
         );
         _;
     }
 
     /**
-    @dev                Modifer that allows a function to be called only if the member is a full
-                        member. Only the member can call (no delegate permissions)
+    @dev                Modifer that allows a function to be called by a real member.
+                        Only the member can call (no delegate permissions)
     @param _member      Member interacting with everest
     */
-    modifier onlyFullMemberOwner(address _member) {
-        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
+    modifier onlyMemberOwner(address _member) {
         require(
-            isFullMember(_member),
-            "Everest::onlyFullMemberOwner - Member has not passed the applied phase"
+            isMember(_member),
+            "Everest::onlyMemberOwner - Member has not passed the applied phase"
         );
         address owner = erc1056Registry.identityOwner(_member);
         require(
             owner == msg.sender,
-            "Everest::onlyFullMemberOwner - Caller must be the delegate or owner"
+            "Everest::onlyMemberOwner - Caller must be the delegate or owner"
         );
         _;
     }
 
     /**
-    @dev                Modifer that allows a function to be called by a partial or full member
+    @dev                Modifer that allows a function to be called by an applicant that hasn't
+                        been accepted as a member yet
     @param _member      Member interacting with everest
     */
-    modifier onlyMemberOwner(address _member) {
+    modifier onlyAppliedMemberOwner(address _member) {
         address owner = erc1056Registry.identityOwner(_member);
         require(
             owner == msg.sender,
@@ -176,7 +175,7 @@ contract Everest is MemberStruct, Ownable {
         address _approvedToken,
         uint256 _votingPeriodDuration,
         uint256 _challengeDeposit,
-        uint256 _fullMemberWaitingPeriod,
+        uint256 _waitingPeriod,
         uint256 _applicationFee,
         bytes32 _charter
     ) public {
@@ -195,7 +194,7 @@ contract Everest is MemberStruct, Ownable {
 
         votingPeriodDuration = _votingPeriodDuration;
         challengeDeposit = _challengeDeposit;
-        fullMemberWaitingPeriod = _fullMemberWaitingPeriod;
+        waitingPeriod = _waitingPeriod;
         applicationFee = _applicationFee;
     }
 
@@ -219,7 +218,7 @@ contract Everest is MemberStruct, Ownable {
         address _owner
     ) internal {
         require(
-            memberRegistry.getAppliedAt(_newMember) == 0,
+            memberRegistry.getMembershipStartTime(_newMember) == 0,
             "Everest::applySignedInternal - This member already exists"
         );
         /* solium-disable-next-line security/no-block-members*/
@@ -298,7 +297,7 @@ contract Everest is MemberStruct, Ownable {
     @param _owner                   Owner of the member application
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
-                                    with zeros appended to make it a full 32 bytes
+                                    with zeros appended to make it 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
@@ -336,7 +335,7 @@ contract Everest is MemberStruct, Ownable {
     @param _delegateValidity        Time delegate is valid
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
-                                    with zeros appended to make it a full 32 bytes
+                                    with zeros appended to make it 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
@@ -381,9 +380,9 @@ contract Everest is MemberStruct, Ownable {
     */
     function memberExit(
         address _member
-    ) external onlyMemberOwner(_member) {
+    ) external onlyAppliedMemberOwner(_member) {
         require(
-            !challengeExists(_member),
+            !memberChallengeExists(_member),
             "Everest::memberExit - Can't exit during ongoing challenge"
         );
         memberRegistry.deleteMember(_member);
@@ -408,7 +407,7 @@ contract Everest is MemberStruct, Ownable {
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS
-    ) public onlyMemberOwner(_member) {
+    ) public onlyAppliedMemberOwner(_member) {
         erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _newOwner);
         emit MemberOwnerChanged(_member);
     }
@@ -423,7 +422,7 @@ contract Everest is MemberStruct, Ownable {
     @param _sigS                    S piece of the member signature
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
-                                    with zeros appended to make it a full 32 bytes
+                                    with zeros appended to make it 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
      */
@@ -435,7 +434,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _offChainDataName,
         bytes memory _offChainDataValue,
         uint256 _offChainDataValidity
-    ) public onlyMemberOwner(_member) {
+    ) public onlyAppliedMemberOwner(_member) {
         erc1056Registry.setAttributeSigned(
             _member,
             _sigV,
@@ -464,7 +463,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigS,
         address _newDelegate,
         uint256 _delegateValidity
-    ) public onlyMemberOwner(_member) {
+    ) public onlyAppliedMemberOwner(_member) {
         erc1056Registry.addDelegateSigned(
             _member,
             _sigV,
@@ -491,7 +490,7 @@ contract Everest is MemberStruct, Ownable {
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS
-    ) external onlyMemberOwner(_member) {
+    ) external onlyAppliedMemberOwner(_member) {
         erc1056Registry.revokeDelegateSigned(
             _member,
             _sigV,
@@ -517,15 +516,15 @@ contract Everest is MemberStruct, Ownable {
         address _challengingMember,
         address _challengedMember,
         string calldata _details
-    ) external onlyFullMemberOwner(_challengingMember) returns (uint256 challengeID) {
+    ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
         require(
-            !isChallengedNewFullMember(_challengingMember),
-            "Everest::challenge - Member became a full member while challenged"
+            !isChallengedNewMember(_challengingMember),
+            "Everest::challenge - Applicant became a member while challenged"
         );
 
-        uint256 challengerAppliedAt = memberRegistry.getAppliedAt(_challengingMember);
+        uint256 challengerMemberTime = memberRegistry.getMembershipStartTime(_challengingMember);
         require(
-            !challengeExists(_challengedMember),
+            !memberChallengeExists(_challengedMember),
             "Everest::challenge - Member can't be challenged multiple times at once"
         );
 
@@ -534,7 +533,7 @@ contract Everest is MemberStruct, Ownable {
             challenger: _challengingMember,
             member: _challengingMember,
             /* solium-disable-next-line security/no-block-members*/
-            yesVotes: now - challengerAppliedAt,
+            yesVotes: now - challengerMemberTime,
             noVotes: 0,
             voterCount: 1,
             /* solium-disable-next-line security/no-block-members*/
@@ -578,10 +577,10 @@ contract Everest is MemberStruct, Ownable {
         uint256 _challengeID,
         VoteChoice _voteChoice,
         address _voter
-    ) public onlyFullMemberOwnerOrDelegate(_voter) {
+    ) public onlyMemberOwnerOrDelegate(_voter) {
         require(
-            !isChallengedNewFullMember(_voter),
-            "Everest::submitVote - Member became a full member while challenged"
+            !isChallengedNewMember(_voter),
+            "Everest::submitVote - Applicant became a member while challenged"
         );
         require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
@@ -601,8 +600,8 @@ contract Everest is MemberStruct, Ownable {
             storedChallenge.voteChoiceByMember[_voter] == VoteChoice.Null,
             "Everest::submitVote - Member has already voted on this challenge"
         );
-        uint256 appliedAt = memberRegistry.getAppliedAt(_voter);
-        uint256 voteWeight = storedChallenge.startingPeriod - appliedAt;
+        uint256 memberStartTime = memberRegistry.getMembershipStartTime(_voter);
+        uint256 voteWeight = storedChallenge.startingPeriod - memberStartTime;
 
         // Store vote (can't be msg.sender because delegate can be voting)
         storedChallenge.voteChoiceByMember[_voter] = _voteChoice;
@@ -704,42 +703,41 @@ contract Everest is MemberStruct, Ownable {
     }
 
     /**
-    @dev            Returns true if the provided member is a full member
+    @dev            Returns true if the address is a member
     @param _member  The member name of the member whose status is to be examined
     */
-    function isFullMember(address _member) public view returns (bool){
-        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
+    function isMember(address _member) public view returns (bool){
+        uint256 startTime = memberRegistry.getMembershipStartTime(_member);
         /* solium-disable-next-line security/no-block-members*/
-        if (now >= appliedAt.add(fullMemberWaitingPeriod)){
+        if (now >= startTime){
             return true;
         }
         return false;
     }
 
     /**
-    @dev            Returns true if the provided member was challenged before they became a full
-                    member. Since full membership is implicit, a member can become a full member,
+    @dev            Returns true if the provided member was challenged before they became a
+                    member. Since membership is implicit, a member can become a member,
                     while being challenged upon their application. They should not be able to vote
                     until they pass the challenge.
     @param _member  The member name of the member whose status is to be examined
     */
-    function isChallengedNewFullMember(address _member) public view returns (bool){
+    function isChallengedNewMember(address _member) public view returns (bool){
         // Challenge does not exist, so this member is okay to vote or challenge other members
-        // It is checked in the modifiers if they are a full member
-        if (!challengeExists(_member))
+        // It is checked in the modifiers if they are a member
+        if (!memberChallengeExists(_member))
             return false;
 
-        uint256 appliedAt = memberRegistry.getAppliedAt(_member);
-        int256 fullMemberTime = int256(appliedAt + fullMemberWaitingPeriod);
+        int256 memberStartTime = int256(memberRegistry.getMembershipStartTime(_member));
         uint256 challengeID = memberRegistry.getChallengeID(_member);
         Challenge memory storedChallenge = challenges[challengeID];
         int256 challengeStartPeriod = int256(storedChallenge.startingPeriod);
 
-        // fullMemberTime is the time that the member would become a full member. So in the case
+        // memberStartTime is the time that the applicant would become a member. So in the case
         // that it is larger than the challengeStartPeriod, it means the member was challenged
         // when it was still a partial member. Therefore they can't vote or challenge until they
         // win this challenge
-        return ((fullMemberTime - challengeStartPeriod) > 0);
+        return ((memberStartTime - challengeStartPeriod) > 0);
     }
 
     /**
@@ -747,7 +745,7 @@ contract Everest is MemberStruct, Ownable {
                     does not exist.
     @param _member  The member that is being checked for a challenge.
     */
-    function challengeExists(address _member) public view returns (bool) {
+    function memberChallengeExists(address _member) public view returns (bool) {
         uint256 challengeID = memberRegistry.getChallengeID(_member);
         return (challengeID > 0);
     }

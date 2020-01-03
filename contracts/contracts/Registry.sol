@@ -39,9 +39,9 @@ contract Registry is Ownable, MemberStruct {
         return member.challengeID;
     }
 
-    function getAppliedAt(address _member) external view returns (uint256) {
+    function getMembershipStartTime(address _member) external view returns (uint256) {
         Member memory member = members[_member];
-        return member.appliedAt;
+        return member.membershipStartTime;
     }
 
     // --------------------
@@ -54,12 +54,12 @@ contract Registry is Ownable, MemberStruct {
 
     function setMember(
         address _member,
-        uint256 _appliedAt
+        uint256 _membershipStartTime
     ) external onlyOwner {
         // Create the member struct
         Member memory member = Member({
             challengeID: 0,
-            appliedAt: _appliedAt
+            membershipStartTime: _membershipStartTime
         });
         // Store the member
         members[_member] = member;
