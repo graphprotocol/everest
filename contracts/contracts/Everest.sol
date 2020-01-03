@@ -61,7 +61,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 indexed challengeID,
         address indexed challenger,
         uint256 challengeEndTime,
-        string details
+        bytes32 details
     );
 
     event SubmitVote(
@@ -103,7 +103,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 noVotes;            // The total number of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
         uint256 endTime;            // Ending time of the challenge
-        string details;             // Challenge details - an IPFS hash
+        bytes32 details;             // Challenge details - an IPFS hash, without Qm
         mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
@@ -510,12 +510,12 @@ contract Everest is MemberStruct, Ownable {
     @dev                        Starts a challenge on a member. Challenger deposits a fee.
     @param _challengingMember   The memberName of the member who is challenging another member
     @param _challengedMember    The memberName of the member being challenged
-    @param _details             Extra details relevant to the challenge
+    @param _details             Extra details relevant to the challenge. (IPFS hash without Qm)
     */
     function challenge(
         address _challengingMember,
         address _challengedMember,
-        string calldata _details
+        bytes32 _details
     ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
         uint256 challengerMemberTime = memberRegistry.getMembershipStartTime(_challengingMember);
         require(
