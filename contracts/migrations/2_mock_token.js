@@ -4,7 +4,7 @@ const Token = artifacts.require('MockToken.sol')
 const fs = require('fs')
 const config = require('../conf/config.js')
 
-module.exports = (deployer, network) => {
+module.exports = async (deployer, network) => {
     let tokenHolders
     let tokenMinter
     if (network === 'development') {
@@ -36,24 +36,23 @@ module.exports = (deployer, network) => {
         giveTokensTo(tokenHolders.slice(1))
     }
 
-    if (config.token.deployToken) {
-        console.log('Deploying token.....')
-
-        deployer
-            .deploy(
-                Token,
-                config.token.supply,
-                config.token.name,
-                config.token.decimals,
-                config.token.symbol,
-                tokenMinter.address
-            )
-            .then(async () => giveTokensTo(tokenHolders))
+    if (config.token.deployTestingToken) {
+        // eslint-disable-next-line no-console
+        console.log('Deploying token to a test network.....')
+        await deployer.deploy(
+            Token,
+            config.token.supply,
+            config.token.name,
+            config.token.decimals,
+            config.token.symbol,
+            tokenMinter.address
+        )
+        await giveTokensTo(tokenHolders)
     } else {
         // eslint-disable-next-line no-console
         console.log(
-            'skipping optional token deploy and using the token at address ' +
-                `${config.token.address} on network ${network}.`
+            'Deploying to mainnet, so skipping mock token deploy, and using token at ' +
+                `${config.token.mainnetAddress}.`
         )
     }
 }

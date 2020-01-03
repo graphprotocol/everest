@@ -32,6 +32,9 @@ but in general we want to avoid using web3 because of its instability. Ethers is
 3. Run `yarn` at project root directory
 4. Start ganache with `ganache-cli -d -l 9900000 -i 9854`. Note - we use 9,900,000 because that 
    is what mainnet eth is doing today (Dec 2019)
+5. Run `truffle deploy`
+6. Truffle stores the contracts each time you deploy. So the easiest way to restart is to just
+   restart ganache with `CRTL-C`, and then start it up again and run `truffle deploy`
  
 ## Current Contract Addresses
 See `addresses.json` 
