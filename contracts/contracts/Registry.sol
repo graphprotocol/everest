@@ -25,7 +25,6 @@ contract Registry is Ownable, MemberStruct {
     constructor (
         address _owner,
         bytes32 _charter
-        // TODO - bootstrap list
     ) public {
         _owner = _owner;
         charter = _charter;
@@ -34,17 +33,6 @@ contract Registry is Ownable, MemberStruct {
     // --------------------
     // GETTER FUNCTIONS
     // --------------------
-
-    function getMember(address _member) external view returns (
-        uint256,
-        uint256
-    ) {
-        Member memory member = members[_member];
-        return (
-            member.challengeID,
-            member.appliedAt
-        );
-    }
 
     function getChallengeID(address _member) external view returns (uint256) {
         Member memory member = members[_member];
@@ -75,8 +63,6 @@ contract Registry is Ownable, MemberStruct {
         });
         // Store the member
         members[_member] = member;
-
-        // TODO - call into ERC 1056. Actually move this completely into Everest
     }
 
     function editChallengeID(address _member, uint256 _newChallengeID) external onlyOwner {
@@ -86,6 +72,5 @@ contract Registry is Ownable, MemberStruct {
 
     function deleteMember(address _member) external onlyOwner {
         delete members[_member];
-        // TODO - ensure we also delete and update the ERC1056 registry in the Everest contract
     }
 }
