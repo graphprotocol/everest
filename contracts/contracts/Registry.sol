@@ -70,6 +70,11 @@ contract Registry is Ownable, MemberStruct {
         member.challengeID = _newChallengeID;
     }
 
+    function editMembershipStartTime(address _member, uint256 _newTime) external onlyOwner {
+        Member storage member = members[_member];
+        member.membershipStartTime = _newTime;
+    }
+
     function deleteMember(address _member) external onlyOwner {
         delete members[_member];
     }

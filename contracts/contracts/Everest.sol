@@ -60,7 +60,7 @@ contract Everest is MemberStruct, Ownable {
         address indexed member,
         uint256 indexed challengeID,
         address indexed challenger,
-        uint256 startingPeriod,
+        uint256 challengeEndTime,
         string details
     );
 
@@ -102,7 +102,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 yesVotes;           // The total number of YES votes for this challenge
         uint256 noVotes;            // The total number of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
-        uint256 startingPeriod;     // Starting time of the challenge
+        uint256 endTime;            // Ending time of the challenge
         string details;             // Challenge details - an IPFS hash
         mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
@@ -517,16 +517,21 @@ contract Everest is MemberStruct, Ownable {
         address _challengedMember,
         string calldata _details
     ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
-        require(
-            !isChallengedNewMember(_challengingMember),
-            "Everest::challenge - Applicant became a member while challenged"
-        );
-
         uint256 challengerMemberTime = memberRegistry.getMembershipStartTime(_challengingMember);
         require(
             !memberChallengeExists(_challengedMember),
             "Everest::challenge - Member can't be challenged multiple times at once"
         );
+
+        // We check if it was a new member that was challenged before they were accepted. We then
+        // reset their member time so that they can't vote during the challenge period they are
+        // being challenged
+        uint256 challengeeMemberTime = memberRegistry.getMembershipStartTime(_challengedMember);
+        /* solium-disable-next-line security/no-block-members*/
+        if (challengeeMemberTime > now){
+            /* solium-disable-next-line security/no-block-members*/
+            memberRegistry.editMembershipStartTime(_challengedMember, (now + votingPeriodDuration));
+        }
 
         uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
@@ -537,7 +542,7 @@ contract Everest is MemberStruct, Ownable {
             noVotes: 0,
             voterCount: 1,
             /* solium-disable-next-line security/no-block-members*/
-            startingPeriod: now,
+            endTime: now + votingPeriodDuration,
             details: _details
         });
         challengeCounter++;
@@ -579,21 +584,17 @@ contract Everest is MemberStruct, Ownable {
         address _voter
     ) public onlyMemberOwnerOrDelegate(_voter) {
         require(
-            !isChallengedNewMember(_voter),
-            "Everest::submitVote - Applicant became a member while challenged"
-        );
-        require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
             "Everest::submitVote - Vote must be either Yes or No"
         );
 
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
-            storedChallenge.startingPeriod > 0,
+            storedChallenge.endTime > 0,
             "Everest::submitVote - Challenge does not exist"
         );
         require(
-            !hasVotingPeriodExpired(storedChallenge.startingPeriod),
+            !hasVotingPeriodExpired(storedChallenge.endTime),
             "Everest::submitVote - Challenge voting period has expired"
         );
         require(
@@ -601,7 +602,7 @@ contract Everest is MemberStruct, Ownable {
             "Everest::submitVote - Member has already voted on this challenge"
         );
         uint256 memberStartTime = memberRegistry.getMembershipStartTime(_voter);
-        uint256 voteWeight = storedChallenge.startingPeriod - memberStartTime;
+        uint256 voteWeight = storedChallenge.endTime - memberStartTime;
 
         // Store vote (can't be msg.sender because delegate can be voting)
         storedChallenge.voteChoiceByMember[_voter] = _voteChoice;
@@ -694,12 +695,12 @@ contract Everest is MemberStruct, Ownable {
     ***************/
 
     /**
-    @dev                    Returns a boolean if a challenge vote period has finished
-    @param _startingPeriod  The starting period of the challenge
+    @dev                    Returns true if a challenge vote period has finished
+    @param _endTime  The starting period of the challenge
     */
-    function hasVotingPeriodExpired(uint256 _startingPeriod) public view returns (bool) {
+    function hasVotingPeriodExpired(uint256 _endTime) public view returns (bool) {
         /* solium-disable-next-line security/no-block-members*/
-        return now >= _startingPeriod.add(votingPeriodDuration);
+        return now >= _endTime;
     }
 
     /**
@@ -713,31 +714,6 @@ contract Everest is MemberStruct, Ownable {
             return true;
         }
         return false;
-    }
-
-    /**
-    @dev            Returns true if the provided member was challenged before they became a
-                    member. Since membership is implicit, a member can become a member,
-                    while being challenged upon their application. They should not be able to vote
-                    until they pass the challenge.
-    @param _member  The member name of the member whose status is to be examined
-    */
-    function isChallengedNewMember(address _member) public view returns (bool){
-        // Challenge does not exist, so this member is okay to vote or challenge other members
-        // It is checked in the modifiers if they are a member
-        if (!memberChallengeExists(_member))
-            return false;
-
-        int256 memberStartTime = int256(memberRegistry.getMembershipStartTime(_member));
-        uint256 challengeID = memberRegistry.getChallengeID(_member);
-        Challenge memory storedChallenge = challenges[challengeID];
-        int256 challengeStartPeriod = int256(storedChallenge.startingPeriod);
-
-        // memberStartTime is the time that the applicant would become a member. So in the case
-        // that it is larger than the challengeStartPeriod, it means the member was challenged
-        // when it was still a partial member. Therefore they can't vote or challenge until they
-        // win this challenge
-        return ((memberStartTime - challengeStartPeriod) > 0);
     }
 
     /**
@@ -758,11 +734,11 @@ contract Everest is MemberStruct, Ownable {
     function challengeCanBeResolved(uint256 _challengeID) public view returns (bool) {
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
-            challenges[_challengeID].startingPeriod > 0,
+            challenges[_challengeID].endTime > 0,
             "Everest::challengeCanBeResolved - Challenge does not exist or was completed"
         );
         require(
-            hasVotingPeriodExpired(storedChallenge.startingPeriod),
+            hasVotingPeriodExpired(storedChallenge.endTime),
             "Everest::challengeCanBeResolved - Challenge is not ready to be resolved"
         );
         return true;
