@@ -1,15 +1,22 @@
 /*
- Original Author: https://github.com/uport-project/ethr-did-registry
+Original Author: https://github.com/uport-project/ethr-did-registry
 
- Pragma has been changed for this document from what is deployed on mainnet.
+Pragma has been changed for this document from what is deployed on mainnet.
 This shouldn"t pose a problem, but it means a lot of syntax has been changed.
 
 This contract is only used for testing. On mainnet, we will use the existing
 DID registry: https://etherscan.io/address/0xdca7ef03e98e0dc2b855be647c39abe984fcf21b#code
- */
+
+This contract is also deployed on all testnets, which can be found here:
+https://github.com/uport-project/ethr-did-registry
+
+This contract is included in this repository for testing purposes on ganache. For deploying
+to testnets or mainnet, it will never be included in the deploy script, since we will use the
+deployed versions in the above link.
+*/
 pragma solidity ^0.5.8;
 
-contract MockEthereumDIDRegistry {
+contract EthereumDIDRegistry {
     mapping(address => address) public owners;
     mapping(address => mapping(bytes32 => mapping(address => uint256))) public delegates;
     mapping(address => uint256) public changed;

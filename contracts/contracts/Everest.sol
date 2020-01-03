@@ -14,7 +14,7 @@ pragma solidity ^0.5.8;
 import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./MemberStruct.sol";
-import * as EthereumDIDRegistry from "./MockEthereumDIDRegistry.sol";
+import "./EthereumDIDRegistry.sol";
 
 contract Everest is MemberStruct, Ownable {
     using SafeMath for uint256;
@@ -264,7 +264,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigS,
         address _owner
     ) external {
-        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
     }
 
     /**
@@ -287,13 +287,12 @@ contract Everest is MemberStruct, Ownable {
         address _delegate,
         uint256 _delegateValidity
     ) external {
-        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
         addDelegateSigned(
             _newMember,
             _sigV,
             _sigR,
             _sigS,
-            delegateType,
             _delegate,
             _delegateValidity
         );
@@ -318,13 +317,11 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigR,
         bytes32 _sigS,
         address _owner,
-        address _delegate,
-        uint256 _delegateValidity,
         bytes32 _offChainDataName,
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
         editOffChainDataSigned(
             _newMember,
             _sigV,
@@ -363,13 +360,12 @@ contract Everest is MemberStruct, Ownable {
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        applySigned(_newMember, _sigV, _sigR, _sigS, owner);
+        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
         addDelegateSigned(
             _newMember,
             _sigV,
             _sigR,
             _sigS,
-            delegateType,
             _delegate,
             _delegateValidity
         );
@@ -420,7 +416,7 @@ contract Everest is MemberStruct, Ownable {
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS
-    ) external onlyMemberOwner(_member) {
+    ) public onlyMemberOwner(_member) {
         erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _newOwner);
         emit MemberOwnerChanged(_member);
     }
@@ -444,9 +440,9 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigR,
         bytes32 _sigS,
         bytes32 _offChainDataName,
-        bytes calldata _offChainDataValue,
+        bytes memory _offChainDataValue,
         uint256 _offChainDataValidity
-    ) external onlyMemberOwner(_member) {
+    ) public onlyMemberOwner(_member) {
         erc1056Registry.setAttributeSigned(
             _member,
             _sigV,
@@ -475,7 +471,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigS,
         address _newDelegate,
         uint256 _delegateValidity
-    ) external onlyMemberOwner(_member) {
+    ) public onlyMemberOwner(_member) {
         erc1056Registry.addDelegateSigned(
             _member,
             _sigV,
@@ -533,7 +529,7 @@ contract Everest is MemberStruct, Ownable {
 
         require(
             !challengeExists(_challengingMember),
-            "Everest::challenge - Member can't be challenge multiple times at once"
+            "Everest::challenge - Member can't be challenged multiple times at once"
         );
 
         uint256 newChallengeID = challenges.length.add(1);
