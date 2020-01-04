@@ -1,0 +1,9 @@
+Config Explanation
+- MockDAI has 100M tokens, to closely match real DAI supply
+- It is split up between 4 users at 25M
+- Users and contract addresses are based on Ganache deterministic mnemonic
+- $10 DAI application fee
+- $50 DAI challenge fee
+- Vote times currently set to 1200 seconds arbitrarily
+- Charter is a fake IPFS hash right now, in bytes, not base58
+- Owner is the first address of Ganache deterministic mnemonic
