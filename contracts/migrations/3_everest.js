@@ -1,11 +1,11 @@
 /* global artifacts */
 
-const Registry = artifacts.require('Registry.sol')
 const Everest = artifacts.require('Everest.sol')
 const Token = artifacts.require('MockToken.sol')
-const ReserveBank = artifacts.require('ReserveBank.sol')
 const config = require('../conf/config.js')
-const fs = require('fs')
+// const fs = require('fs')
+// const Registry = artifacts.require('Registry.sol')
+// const ReserveBank = artifacts.require('ReserveBank.sol')
 
 module.exports = async (deployer, network, accounts) => {
     // Approve all token holders to allow everest to spend on their behalf

@@ -1,13 +1,20 @@
 /* Tests all challenge functionality, which is:
-- challenge()
-- submitVote()
-- resolveChallenge()
+- funcs
+    - What should it do
+        - Only members can challenge
+        - Members and Delegates can vote
+        - Votes and vote weight work properly
+        - Anyone can resolve a challenge
+        - Challenges properly pass
+        - Challenges properly fail
+    - challenge()
+    - submitVote()
+    - resolveChallenge()
 - getters
-    - getChallengeCount()
     - hasVotingPeriodExpired()
-    - getMemberProposalVote()
-    - challengeExists()
+    - memberChallengeExists()
     - challengeCanBeResolved()
+    - just make sure they work
 
 */
 

@@ -33,7 +33,7 @@ module.exports = {
                 ),
             network_id: 3, // Ropsten's id
             gas: 8000000,
-            gasPrice: ethers.utils.parseUnits('5', 'gwei'), // To easily get in blocks on ropsten
+            gasPrice: ethers.utils.parseUnits('11', 'gwei'), // To easily get in blocks on ropsten
             skipDryRun: true
         }
     },
