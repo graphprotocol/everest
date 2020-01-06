@@ -54,7 +54,6 @@ contract Everest is MemberStruct, Ownable {
     event DelegateAdded(address indexed member);
     event DelegateRevoked(address indexed member);
     event MemberOffChainDataEdited(address indexed member);
-
     event CharterUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
 

@@ -1,4 +1,4 @@
-type Project {
+type Project @entity {
   id: ID!
   # From IPFS / off chain storage
   name: String!
@@ -13,31 +13,32 @@ type Project {
 
   # From smart contracts directly
   owner: User
-  isChallenged: Bool
-  challenges: [Challenge]
-  isWhitelistedProject: Bool! # check with Brandon
+  isChallenged: Boolean
+  challenges: [Challenge!]
+  isWhitelistedProject: Boolean! # check with Brandon
   createdAt: Int! # This would allow you to know when it will become a full member too
   delegateAddress: Bytes # Null if no delegate is set
-  isRepresentative: Bool
+  isRepresentative: Boolean
 
   # Derived from smart contract events
   totalVotes: Int!
   reputation: Int!
 
   # All votes a Project has made
-  votes: [Vote] @derivedFrom(field: "projectID")
+  votes: [Vote!] @derivedFrom(field: "voter")
 }
 
-type Category {
+type Category @entity {
   id: ID!
   name: String!
   description: String!
   slug: String!
-  projects: [Project]
-  subcategories: [Category] @derivedFrom(field: "ID")
+  projects: [Project!]
+  subcategories: [Category!] @derivedFrom(field: "parentCategory")
+  parentCategory: Category
 }
 
-type Challenge {
+type Challenge @entity {
   id: ID!
   description: String
   createdAt: Int!
@@ -45,12 +46,12 @@ type Challenge {
   votesAgainst: Int!
   project: Project!
   owner: Bytes!
-  resolved: Bool! #  means it's a past challenge
-  votes: [Vote] @derivedFrom(field: "challengeID")
+  resolved: Boolean! #  means it's a past challenge
+  votes: [Vote!] @derivedFrom(field: "challenge")
 }
 
 # For global variables
-type Everest {
+type Everest @entity {
   id: ID!
   period: Int! # how long the challenge will last
   votingPeriodDuration: Int!
@@ -62,8 +63,9 @@ type Everest {
   registry: Bytes!
 }
 
-type Vote {
+type Vote @entity {
   id: ID! # concatenation of challenge ID and voter address
+  voter: Project!
   challenge: Challenge!
   choice: Choice!
 }
@@ -73,11 +75,11 @@ enum Choice {
   KeepProject
 }
 
-type User {
+type User @entity {
   id: ID!
   name: String
   bio: String
-  projects: [Project]
-  challenges: [Challenge] # challenges you started
-  votes: [Project] # participation in other people's challenges
+  projects: [Project!]
+  challenges: [Challenge!] # challenges you started
+  votes: [Project!] # participation in other people's challenges
 }

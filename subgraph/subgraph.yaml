@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 description: Universally shared projects registry
 repository: https://github.com/graphprotocol/everest
 schema:
@@ -8,7 +8,7 @@ dataSources:
     name: Everest
     network: ropsten
     source:
-      address: '' # Add address
+      address: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b' # TODO Add address (THIS IS NOT THE RIGHT ADDR)
       abi: Everest
     mapping:
       kind: ethereum/events
@@ -26,5 +26,53 @@ dataSources:
         - name: Everest
           file: ./abis/everest.json
       eventHandlers:
-        - event: ApplicationMade(address member, uint256 applicationTime)
+        - event: ApplicationMade(address,uint256)
           handler: handleApplicationMade
+        - event: MemberExited(indexed address)
+          handler: handleMemberExited
+        - event: MemberOwnerChanged(indexed address)
+          handler: handleMemberOwnerChanged
+        - event: DelegateAdded(indexed address)
+          handler: handleDelegateAdded
+        - event: DelegateRevoked(indexed address)
+          handler: handleDelegateRevoked
+        - event: MemberOffChainDataEdited(indexed address)
+          handler: handleMemberOffChainDataEdited
+        - event: CharterUpdated(indexed bytes32)
+          handler: handleCharterUpdated
+        - event: Withdrawal(indexed address,uint256)
+          handler: handleWithdrawal
+        - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
+          handler: handleMemberChallenged
+        - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
+          handler: handleSubmitVote
+        - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256)
+          handler: handleChallengeFailed
+        - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256)
+          handler: handleChallengeSucceeded
+  - kind: ethereum/contract
+    name: EthereumDIDRegistry
+    network: ropsten
+    source:
+      address: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
+      abi: Everest
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/ethereumDIDRegistry.ts
+      entities:
+        - Project
+        - User
+      abis:
+        - name: Everest
+          file: ./abis/EthereumDIDRegistry.json
+      eventHandlers:
+        # TODO - figure out how to make this only track the data we NEED
+        # not all eth did registry data
+        - event: DIDOwnerChanged(indexed address,address,uint256)
+          handler: handleDIDOwnerChanged
+        - event: DIDDelegateChanged(indexed address,bytes32,address,uint256,uint256)
+          handler: handleDIDDelegateChanged
+        - event: DIDAttributeChanged(indexed address,bytes32,bytes,uint256,uint256)
+          handler: handleDIDAttributeChanged
