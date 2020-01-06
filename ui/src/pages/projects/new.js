@@ -98,7 +98,7 @@ const NewProject = ({ data, ...props }) => {
         <Box>
           <form sx={{ maxWidth: '504px', width: '100%', mt: [5, 0, 0] }}>
             <Field
-              title="Name"
+              title="Name *"
               field="name"
               type="input"
               value={project.name}
@@ -113,7 +113,7 @@ const NewProject = ({ data, ...props }) => {
               }}
             />
             <Field
-              title="Description"
+              title="Description *"
               field="description"
               value={project.description}
               type="textarea"
@@ -128,7 +128,7 @@ const NewProject = ({ data, ...props }) => {
               }}
             />
             <Field
-              title="Category"
+              title="Categories *"
               field="category"
               type="filters"
               project={project}

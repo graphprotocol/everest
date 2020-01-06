@@ -7,7 +7,7 @@ import { convertDate } from '../../utils/helpers/date'
 
 const Row = ({ item }) => {
   return (
-    <Grid gap={1} columns={5} sx={rootStyles} p={3}>
+    <Grid gap={1} columns={5} sx={rootStyles}>
       <Grid columns={2} gap={2} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
         <img
           src={item.image ? item.image : '/profiles/placeholder1.png'}

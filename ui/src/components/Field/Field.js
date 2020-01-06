@@ -23,7 +23,7 @@ const Field = ({
       sx={{
         ...styles.field,
         borderBottom:
-          type === 'input' || type === 'textarea' || type === 'filters'
+          type === 'input' || type === 'textarea'
             ? '1px solid rgba(255,255,255,0.32)'
             : 'none',
       }}
@@ -42,7 +42,7 @@ const Field = ({
               const value = e.target ? e.target.value : ''
               setValue(value)
             }}
-            maxlength={charsCount}
+            maxLength={charsCount}
             value={value}
           />
         ) : type === 'textarea' ? (
@@ -52,7 +52,7 @@ const Field = ({
               const value = e.target ? e.target.value : ''
               setValue(value)
             }}
-            maxlength={charsCount}
+            maxLength={charsCount}
             value={value}
           ></textarea>
         ) : type === 'filters' ? (

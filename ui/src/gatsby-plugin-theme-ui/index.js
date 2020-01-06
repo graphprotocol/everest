@@ -156,6 +156,12 @@ export default {
       letterSpacing: '-0.5px',
       color: 'blackFaded',
     },
+    displaySmaller: {
+      fontSize: '0.75rem',
+      lineHeight: '1.25rem',
+      letterSpacing: '-0.5px',
+      color: 'blackFaded',
+    },
     displayBig: {
       fontSize: '1.375rem',
       lineHeight: '1.75rem',
@@ -167,6 +173,12 @@ export default {
       lineHeight: '1.25rem',
       letterSpacing: '-0.5px',
       color: 'white',
+    },
+    emphasis: {
+      fontSize: '1rem',
+      fontWeight: 'bold',
+      color: 'secondary',
+      lineHeight: '1.5rem',
     },
   },
 }
