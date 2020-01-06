@@ -55,7 +55,7 @@ dataSources:
     network: ropsten
     source:
       address: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
-      abi: Everest
+      abi: EthereumDIDRegistry
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -65,7 +65,7 @@ dataSources:
         - Project
         - User
       abis:
-        - name: Everest
+        - name: EthereumDIDRegistry
           file: ./abis/EthereumDIDRegistry.json
       eventHandlers:
         # TODO - figure out how to make this only track the data we NEED
