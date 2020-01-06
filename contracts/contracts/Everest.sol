@@ -54,7 +54,10 @@ contract Everest is MemberStruct, Ownable {
     event DelegateAdded(address indexed member);
     event DelegateRevoked(address indexed member);
     event MemberOffChainDataEdited(address indexed member);
+
     event CharterUpdated(bytes32 indexed data);
+    event Withdrawal(address indexed receiver, uint256 amount);
+
 
     event MemberChallenged(
         address indexed member,
@@ -634,7 +637,7 @@ contract Everest is MemberStruct, Ownable {
 
             // Transfer challenge deposit to challenger for winning challenge
             require(
-                reserveBank.withdraw(storedChallenge.challenger, challengeDeposit),
+                withdraw(storedChallenge.challenger, challengeDeposit),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
             memberRegistry.deleteMember(storedChallenge.member);
@@ -648,7 +651,7 @@ contract Everest is MemberStruct, Ownable {
             // Transfer challenge deposit to challengee. This keeps the token balance the same
             // whether or not the challenge fails.
             require(
-                reserveBank.withdraw(storedChallenge.challenger, challengeDeposit),
+                withdraw(storedChallenge.challenger, challengeDeposit),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
             // Remove challenge ID from registry
@@ -686,7 +689,8 @@ contract Everest is MemberStruct, Ownable {
     @param _receiver    The address receiving funds
     @param _amount      The amount of funds being withdrawn
     */
-    function withdraw(address _receiver, uint256 _amount) external onlyOwner returns (bool) {
+    function withdraw(address _receiver, uint256 _amount) public onlyOwner returns (bool) {
+        emit Withdrawal(_receiver, _amount);
         return reserveBank.withdraw(_receiver, _amount);
     }
 
