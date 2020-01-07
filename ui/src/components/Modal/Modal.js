@@ -115,11 +115,14 @@ const Modal = ({ children, showModal, closeModal }) => {
                     />
                   </Box>
                   <Box>
-                    <Styled.p>
+                    <Styled.h6 sx={{ lineHeight: '1.5rem' }}>
                       {!walletEnabled && wallet.name === 'MetaMask'
                         ? 'Install MetaMask '
                         : wallet.name}
-                    </Styled.p>
+                    </Styled.h6>
+                    <p sx={{ variant: 'text.displaySmaller' }}>
+                      {wallet.description}
+                    </p>
                   </Box>
                 </Grid>
               )
@@ -142,6 +145,11 @@ const gridStyles = {
   cursor: 'pointer',
 }
 
-const iconStyles = { width: '24px', height: 'auto', mr: 3 }
+const iconStyles = {
+  height: '44px',
+  width: '44px',
+  objectFit: 'contain',
+  mr: 3,
+}
 
 export default Modal

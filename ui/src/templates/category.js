@@ -12,11 +12,11 @@ const Category = ({ pageContext, data }) => {
   const [selected, setSelected] = useState('cards')
 
   const categoryProjects = data.everest.projects.filter(project =>
-    project.categories.includes(pageContext.name)
+    project.categories.includes(pageContext.name),
   )
 
   const challengedProjects = categoryProjects.filter(
-    p => p.isChallenged === true
+    p => p.isChallenged === true,
   )
 
   return (
@@ -31,7 +31,11 @@ const Category = ({ pageContext, data }) => {
         </Box>
         <Box sx={boxStyles}>
           <Styled.h1>{pageContext.name}</Styled.h1>
-          <Styled.p>{pageContext.description}</Styled.p>
+          <Styled.p>
+            That's why you always leave a note! Army had half a day. Bad news.
+            Andy Griffith turned us down. He didn't like his nice trailer.
+            That's why you always leave a note! Lala another one blurb
+          </Styled.p>
         </Box>
       </Grid>
       <Divider />
@@ -44,7 +48,7 @@ const Category = ({ pageContext, data }) => {
               name: subcat.name,
               description: `6 projects`,
               image: `/categories/${subcat.slug}.png`,
-              to: `/category/${subcat.slug}`
+              to: `/category/${subcat.slug}`,
             }
           })}
           variant="category"
@@ -70,7 +74,7 @@ const Category = ({ pageContext, data }) => {
           return {
             ...categoryProject,
             description: categoryProject.description.slice(0, 30) + '...',
-            to: `/project/${categoryProject.id}`
+            to: `/project/${categoryProject.id}`,
           }
         })}
         variant="project"
@@ -82,13 +86,13 @@ const Category = ({ pageContext, data }) => {
 
 const topStyles = {
   gridTemplateColumns: ['1fr', '286px 1fr'],
-  position: 'relative'
+  position: 'relative',
 }
 
 const imageStyles = {
   width: '286px',
   height: '178px',
-  objectFit: 'cover'
+  objectFit: 'cover',
 }
 
 const boxStyles = { mx: ['auto', 0] }

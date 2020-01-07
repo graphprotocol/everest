@@ -1,16 +1,16 @@
-import { injected, walletconnect } from './index'
+import { injected, walletconnect, walletlink } from './index'
 
 export default {
   METAMASK: {
     name: 'MetaMask',
     connector: injected,
     icon: 'metamask.png',
-    description: 'Connect to Metamask',
+    description: 'Activate or install Metamask',
     href: 'https://metamask.io/',
   },
   COINBASE_WALLET: {
     name: 'Coinbase Wallet',
-    connector: 'walletlink',
+    connector: walletlink,
     icon: 'coinbase-wallet.png',
     description: 'Connect to Coinbase Wallet on your phone',
     href: null,
@@ -19,7 +19,8 @@ export default {
     name: 'Wallet Connect',
     connector: walletconnect,
     icon: 'wallet-connect.png',
-    description: 'Connect to Wallet Connect',
+    description:
+      'Connect to Trust Wallet, Rainbow Wallet and others on your phone.',
     href: null,
   },
 }
