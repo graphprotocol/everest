@@ -48,12 +48,10 @@ contract Everest is MemberStruct, Ownable {
     EVENTS
     ******/
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
+    // We rely on ApplicationMade and MemberExited to distingushing between identities on
+    // ERC-1056 that are part of everest and aren't
     event ApplicationMade(address member, uint256 applicationTime);
     event MemberExited(address indexed member);
-    event MemberOwnerChanged(address indexed member);
-    event DelegateAdded(address indexed member);
-    event DelegateRevoked(address indexed member);
-    event MemberOffChainDataEdited(address indexed member);
     event CharterUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
 
@@ -224,8 +222,9 @@ contract Everest is MemberStruct, Ownable {
             "Everest::applySignedInternal - This member already exists"
         );
         /* solium-disable-next-line security/no-block-members*/
-        memberRegistry.setMember(_newMember, now);
-        erc1056Registry.changeOwnerSigned(_newMember, _sigV, _sigR, _sigS, _owner);
+        uint256 membershipTime = now + waitingPeriod;
+        memberRegistry.setMember(_newMember, membershipTime);
+        changeOwnerSigned(_newMember, _sigV, _sigR, _sigS, _owner);
 
         // Transfers tokens from user to the Reserve Bank
         require(
@@ -235,8 +234,7 @@ contract Everest is MemberStruct, Ownable {
 
         emit ApplicationMade(
             _newMember,
-            /* solium-disable-next-line security/no-block-members*/
-            now
+            membershipTime
         );
     }
 
@@ -404,14 +402,13 @@ contract Everest is MemberStruct, Ownable {
     @param _sigS        S piece of the member signature
      */
     function changeOwnerSigned(
-        address _newOwner,
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
-        bytes32 _sigS
+        bytes32 _sigS,
+        address _newOwner
     ) public onlyAppliedMemberOwner(_member) {
         erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _newOwner);
-        emit MemberOwnerChanged(_member);
     }
 
     /**
@@ -446,7 +443,6 @@ contract Everest is MemberStruct, Ownable {
             _offChainDataValue,
             _offChainDataValidity
         );
-        emit MemberOffChainDataEdited(_member);
     }
 
     /**
@@ -475,7 +471,6 @@ contract Everest is MemberStruct, Ownable {
             _newDelegate,
             _delegateValidity
         );
-        emit DelegateAdded(_member);
     }
 
     /**
@@ -501,7 +496,6 @@ contract Everest is MemberStruct, Ownable {
             delegateType,
             _delegate
         );
-        emit DelegateRevoked(_member);
     }
 
     /******************

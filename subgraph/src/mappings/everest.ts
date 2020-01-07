@@ -16,17 +16,21 @@ import {
 } from '../types/Everest/Everest'
 
 export function handleApplicationMade(event: ApplicationMade): void {
-  // TODO: implement this
+  // We just get the application time and member
+  // DID registry gets changeOwnerSigned()
+  //     event DIDOwnerChanged(address indexed identity, address owner, uint256 previousChange);
 }
 
 export function handleMemberExited(event: MemberExited): void {
   // TODO: implement this
 }
 
+// next
 export function handleMemberOwnerChanged(event: MemberOwnerChanged): void {
   // TODO: implement this
 }
 
+// next
 export function handleDelegateAdded(event: DelegateAdded): void {
   // TODO: implement this
 }
@@ -35,6 +39,7 @@ export function handleDelegateRevoked(event: DelegateRevoked): void {
   // TODO: implement this
 }
 
+// next
 export function handleMemberOffChainDataEdited(event: MemberOffChainDataEdited): void {
   // TODO: implement this
 }
