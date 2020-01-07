@@ -15,10 +15,15 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
+import { Project, User, Category } from '../types/schema'
+
 export function handleApplicationMade(event: ApplicationMade): void {
   // We just get the application time and member
   // DID registry gets changeOwnerSigned()
   //     event DIDOwnerChanged(address indexed identity, address owner, uint256 previousChange);
+  // project = new Project(id)
+  // project.isChallenged = false
+  // project.totalVotes = 0
 }
 
 export function handleMemberExited(event: MemberExited): void {

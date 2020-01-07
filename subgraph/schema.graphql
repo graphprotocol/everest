@@ -1,39 +1,45 @@
 type Project @entity {
   id: ID!
   # From IPFS / off chain storage
-  name: String!
-  description: String!
+  # None of these are required, since first the event DIDOwnerChanged creates the project first
+  # Then DIDAttributeChanged gets emitted, where we will see theses values filled in
+  # Note - someone could not upload any data here (blank IPFS file, or never calling 
+  # DIDAttributeChanged). But this is okay, because that project should get challenged
+  name: String
+  description: String
   website: String
   twitter: String
   github: String # Make sure we call it github or something else
   avatar: String
   image: String
-  ipfsHash: String!
-  categories: [Category!]!
+  categories: [Category!]
+  isRepresentative: Boolean
 
   # From smart contracts directly
   owner: User
-  isChallenged: Boolean
+  isChallenged: Boolean!
   challenges: [Challenge!]
-  isWhitelistedProject: Boolean! # check with Brandon
-  createdAt: Int! # This would allow you to know when it will become a full member too
-  delegateAddress: Bytes # Null if no delegate is set
-  isRepresentative: Boolean
+  # If now > memberShipStartTime , this project is a member. 
+  # reputation = now - membershipStartTime. if negative, then reputation is just 0
+  membershipStartTime: Int 
+  delegates: [Bytes!] # Null if no delegate is set. There can be many delegates
+  delegateValidities: [Int!] # Time delegate is valid
+  ipfsHash: String # aka DIDAttribute
+
+
 
   # Derived from smart contract events
   totalVotes: Int!
-  reputation: Int!
 
   # All votes a Project has made
   votes: [Vote!] @derivedFrom(field: "voter")
 }
 
 type Category @entity {
-  id: ID!
-  name: String!
+  id: ID! # id is the name of the category
   description: String!
   slug: String!
-  projects: [Project!]
+  projects: [Project!] @derivedFrom(field: "categories") # TODO - ensure this works on the categories array
   subcategories: [Category!] @derivedFrom(field: "parentCategory")
   parentCategory: Category
 }

@@ -224,6 +224,15 @@ contract Everest is MemberStruct, Ownable {
         /* solium-disable-next-line security/no-block-members*/
         uint256 membershipTime = now + waitingPeriod;
         memberRegistry.setMember(_newMember, membershipTime);
+
+        // This event must be emitted before changeOwnerSigned() is called. This creates an identity
+        // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
+        // identity
+        emit ApplicationMade(
+            _newMember,
+            membershipTime
+        );
+
         changeOwnerSigned(_newMember, _sigV, _sigR, _sigS, _owner);
 
         // Transfers tokens from user to the Reserve Bank
@@ -232,10 +241,7 @@ contract Everest is MemberStruct, Ownable {
             "Everest::applySignedInternal - Token transfer failed"
         );
 
-        emit ApplicationMade(
-            _newMember,
-            membershipTime
-        );
+
     }
 
     /**
