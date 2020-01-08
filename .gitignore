@@ -72,3 +72,4 @@ yarn-error.log
 # private keys
 .privkey.txt
 .infurakey.txt
+ui/now.json

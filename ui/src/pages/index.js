@@ -10,16 +10,17 @@ import Button from '../components/Button'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import categories from '../data/categories.json'
+import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 
 const Index = ({ data }) => {
   const stats = [
     { title: 'Projects', value: '150' },
     { title: 'Registry Value (ETH)', value: '150,000' },
-    { title: 'Issued Shares', value: '350' }
+    { title: 'Issued Shares', value: '350' },
   ]
 
   const challengedProjects = data.everest.projects.filter(
-    project => project.isChallenged === true
+    project => project.isChallenged === true,
   )
 
   return (
@@ -42,7 +43,7 @@ const Index = ({ data }) => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(./mountain.png)'
+            backgroundImage: 'url(./mountain.png)',
           }}
         />
       </Grid>
@@ -59,7 +60,7 @@ const Index = ({ data }) => {
             name: category.name,
             description: '24 projects',
             image: `/categories/${category.slug}.png`,
-            to: `/category/${category.slug}`
+            to: `/category/${category.slug}`,
           }
         })}
         linkTo="/categories"
@@ -74,7 +75,7 @@ const Index = ({ data }) => {
             name: project.name,
             description: project.description.slice(0, 20) + '...',
             to: `/project/${project.id}`,
-            image: project.image
+            image: project.image,
           }
         })}
         linkTo="/projects"
@@ -94,7 +95,7 @@ const Index = ({ data }) => {
             backgroundSize: 'contain',
             backgroundImage: 'url(./binoculars.png)',
             filter: 'none',
-            boxShadow: 'none'
+            boxShadow: 'none',
           }}
         />
         <Box>
@@ -125,7 +126,7 @@ const Index = ({ data }) => {
             name: project.name,
             description: project.description.slice(0, 20) + '...',
             to: `/project/${project.id}`,
-            image: project.image
+            image: project.image,
           }
         })}
         linkTo="/projects"
@@ -137,7 +138,7 @@ const Index = ({ data }) => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(./bottom.png)'
+            backgroundImage: 'url(./bottom.png)',
           }}
         />
         <Box sx={{ maxWidth: '396px' }}>
@@ -163,11 +164,11 @@ const imageStyles = {
   height: ['280px', '344px'],
   position: 'relative',
   filter: 'drop-shadow(24px 24px 24px rgba(9,6,16,0.5))',
-  boxShadow: '24px 24px 24px rgba(76,102,255,0.12)'
+  boxShadow: '24px 24px 24px rgba(76,102,255,0.12)',
 }
 
 Index.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 }
 
 export default Index

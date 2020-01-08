@@ -22,6 +22,7 @@ const NewProject = ({ data, ...props }) => {
     github: '',
     twitter: '',
     isRepresentative: null,
+    categories: [],
   })
 
   const uploadImage = async (e, field) => {
@@ -71,11 +72,32 @@ const NewProject = ({ data, ...props }) => {
     })
   }
 
-  const setValue = (field, value) =>
-    setProject(state => ({
+  const setValue = async (field, value) => {
+    await setProject(state => ({
       ...state,
       [field]: value,
     }))
+  }
+
+  const setDisabled = value => {
+    if (typeof value === 'string') {
+      setIsDisabled(
+        !(
+          value.length > 0 &&
+          project.categories &&
+          project.categories.length > 0
+        ),
+      )
+    } else {
+      setIsDisabled(
+        !(
+          value.length > 0 &&
+          project.description !== '' &&
+          project.name !== ''
+        ),
+      )
+    }
+  }
 
   return (
     <Layout sx={{ backgroundColor: 'secondary' }} {...props}>
@@ -107,9 +129,7 @@ const NewProject = ({ data, ...props }) => {
               project={project}
               setValue={async value => {
                 await setValue('name', value)
-                if (project.description !== '') {
-                  setIsDisabled(false)
-                }
+                setDisabled(value)
               }}
             />
             <Field
@@ -122,9 +142,7 @@ const NewProject = ({ data, ...props }) => {
               project={project}
               setValue={async value => {
                 await setValue('description', value)
-                if (project.name !== '') {
-                  setIsDisabled(false)
-                }
+                setDisabled(value)
               }}
             />
             <Field
@@ -132,8 +150,10 @@ const NewProject = ({ data, ...props }) => {
               field="category"
               type="filters"
               project={project}
-              setValue={value => setValue('category', value)}
-              setIsDisabled={setIsDisabled}
+              setValue={async value => {
+                await setValue('categories', value)
+                setDisabled(value)
+              }}
             />
             <Field
               title="Project logo"

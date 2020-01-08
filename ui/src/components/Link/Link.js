@@ -10,7 +10,7 @@ const Link = ({ to, children, ...props }) => {
       sx={{
         textDecoration: 'none',
         display: 'block',
-        color: '#4C66FF',
+        color: 'secondary',
         fontSize: '1rem',
         fontWeight: 'bold',
         letterSpacing: '0.31px',
@@ -18,8 +18,12 @@ const Link = ({ to, children, ...props }) => {
         '&:focus': {
           outline: 'none !important',
         },
+        '&:hover': {
+          color: 'primary',
+        },
       }}
       {...props}
+      activeStyle={{ color: '#1E252C' }}
     >
       {children}
     </GatsbyLink>

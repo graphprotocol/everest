@@ -6493,7 +6493,7 @@ dot-prop@^5.1.0:
 
 dotenv@^8.2.0:
   version "8.2.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 download@^7.1.0:
@@ -8633,6 +8633,13 @@ gatsby-plugin-react-svg@^2.1.2:
   integrity sha512-y2vqiI/+bW8UPNL8628NwoX6kHtM4WJz6CiHPc9fhvSUa2Y8wriFJnGl1K249/9RXomOUQhl7r7JOuVhweSl1w==
   dependencies:
     svg-react-loader "^0.4.4"
+
+gatsby-plugin-remove-trailing-slashes@^2.1.17:
+  version "2.1.17"
+  resolved "https://registry.npmjs.org/gatsby-plugin-remove-trailing-slashes/-/gatsby-plugin-remove-trailing-slashes-2.1.17.tgz#4d68f21d6d8b22998da9a6d78270a8265948b6ba"
+  integrity sha512-MtN4nxd1Zk6IzCbjrKp3eR1pqbUKSDP7SIyQ/Nf9PmCLrcPJzkzZqIiMevL+qVJsZdDJ5b9LBOEhs4ylz2X5CQ==
+  dependencies:
+    "@babel/runtime" "^7.7.6"
 
 gatsby-plugin-styled-components@^3.1.14:
   version "3.1.14"

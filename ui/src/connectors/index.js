@@ -17,6 +17,7 @@ export const walletconnect = new WalletConnectConnector({
   pollingInterval: POLLING_INTERVAL,
 })
 
+// Coinbase wallet
 export const walletlink = new WalletLinkConnector({
   url: process.env.GATSBY_NETWORK_URI,
   appName: 'Everest',

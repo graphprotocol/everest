@@ -8,7 +8,7 @@ import Button from '../Button'
 import Row from './Row'
 import Search from '../../images/search.svg'
 
-const Filters = () => {
+const Filters = ({ setValue }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState([])
   const [searchText, setSearchText] = useState('')
@@ -56,6 +56,7 @@ const Filters = () => {
           <Styled.p
             sx={{
               color: 'white',
+              opacity: 0.64,
             }}
           >
             {selected.length > 0 ? (
@@ -106,7 +107,7 @@ const Filters = () => {
                       fontSize: '1.125rem !important',
                     },
                   }}
-                  autofocus="autofocus"
+                  autoFocus="autofocus"
                   placeholder="Search category"
                   onChange={e => {
                     setSearchText(
@@ -123,6 +124,7 @@ const Filters = () => {
                 e.preventDefault()
                 setIsOpen(false)
                 setSearchText('')
+                setValue(selected)
               }}
               text={`Select (${selected.length})`}
               variant="primary"
@@ -136,6 +138,7 @@ const Filters = () => {
             <Box sx={{ position: 'relative' }}>
               {allCategories().map(category => (
                 <Row
+                  key={category.name}
                   item={category}
                   parent={category.parent}
                   selected={selected}
@@ -147,6 +150,7 @@ const Filters = () => {
         )}
         {selected.map(item => (
           <Row
+            key={item.name}
             item={item}
             parent={item.parent}
             selected={selected}

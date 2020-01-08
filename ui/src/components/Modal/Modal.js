@@ -102,6 +102,7 @@ const Modal = ({ children, showModal, closeModal }) => {
               const wallet = wallets[key]
               return (
                 <Grid
+                  key={wallet.name}
                   columns={2}
                   gap={2}
                   sx={gridStyles}

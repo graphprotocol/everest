@@ -10,6 +10,7 @@ export default {
     black: '#090610',
     blackFaded: 'rgba(9,6,16,0.64)',
     whiteFaded: 'rgba(255,255,255,0.5)',
+    hover: '#3925E5',
   },
   fonts: {
     body: 'Space Mono, monospace',
@@ -91,6 +92,9 @@ export default {
       fontWeight: 'bold',
       letterSpacing: '0.31px',
       lineHeight: '2.375rem',
+      '&:hover': {
+        color: 'primary',
+      },
     },
     Link: {
       textDecoration: 'none',
@@ -119,7 +123,8 @@ export default {
         outline: 'none',
       },
       '&:hover': {
-        opacity: 0.8,
+        border: '1px solid',
+        borderColor: '#3925E5',
       },
     },
     secondary: {
@@ -139,7 +144,8 @@ export default {
         outline: 'none',
       },
       '&:hover': {
-        opacity: 0.8,
+        border: '1px solid',
+        borderColor: '#3925E5',
       },
     },
   },

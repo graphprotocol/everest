@@ -9,6 +9,7 @@ import { useWeb3React } from '@web3-react/core'
 import { getAddress, metamaskAccountChange } from '../../services/ethers'
 
 import Link from '../../components/Link'
+import Menu from '../../components/Menu'
 import Button from '../../components/Button'
 import Modal from '../../components/Modal'
 import MobileNavbar from './MobileNavbar'
@@ -42,6 +43,9 @@ const Navbar = ({ path, ...props }) => {
   }
 
   useEffect(() => {
+    if (account) {
+      setUserAccount(account)
+    }
     metamaskAccountChange(accounts => setAddress(accounts[0]))
     setIsMobile(window.innerWidth < 640)
     async function fetchAddress() {
@@ -64,14 +68,14 @@ const Navbar = ({ path, ...props }) => {
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       ) : (
         <Grid sx={navStyles}>
-          <Styled.a href="/">
+          <Link to="/">
             <Logo sx={{ verticalAlign: 'middle' }} />
-          </Styled.a>
-          <Styled.a href="/">
-            <span sx={{ color: 'primary' }}>Everest</span>
-          </Styled.a>
-          <Styled.a href="/projects">Projects</Styled.a>
-          <Styled.a href="/categories">Categories</Styled.a>
+          </Link>
+          <Link to="/">
+            <span>Everest</span>
+          </Link>
+          <Link to="/projects">Projects</Link>
+          <Link to="/categories">Categories</Link>
         </Grid>
       )}
       <Grid
@@ -99,10 +103,8 @@ const Navbar = ({ path, ...props }) => {
             />
           </Link>
         )}
-        {(data && data.user) || userAccount ? (
-          <Link to={`/profile/${userAccount ? userAccount : address}`}>
-            <Placeholder sx={avatarStyles} />
-          </Link>
+        {(data && data.user) || userAccount || address ? (
+          <Menu accountId={userAccount ? userAccount : address} />
         ) : (
           <Modal showModal={showModal} closeModal={closeModal}>
             <Button

@@ -56,7 +56,7 @@ const Field = ({
             value={value}
           ></textarea>
         ) : type === 'filters' ? (
-          <Filters />
+          <Filters setValue={setValue} />
         ) : type === 'upload' ? (
           <UploadImage
             imageName={imageName}

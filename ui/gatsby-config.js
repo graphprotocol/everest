@@ -4,6 +4,10 @@
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
 
+require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -17,18 +21,18 @@ module.exports = {
         // This is the field under which it's accessible
         fieldName: 'everest',
         // URL to query from
-        url: 'https://eu1.prisma.sh/nevena-djaja/ui-mocks/dev'
-      }
+        url: 'https://eu1.prisma.sh/nevena-djaja/ui-mocks/dev',
+      },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'images',
-        path: `${__dirname}/src/images`
-      }
+        path: `${__dirname}/src/images`,
+      },
     },
     {
-      resolve: 'gatsby-plugin-react-svg'
+      resolve: 'gatsby-plugin-react-svg',
     },
     {
       resolve: `gatsby-plugin-prefetch-google-fonts`,
@@ -36,11 +40,11 @@ module.exports = {
         fonts: [
           {
             family: 'Space Mono',
-            variants: ['400', '400i', '700', '700i']
-          }
-        ]
-      }
-    }
+            variants: ['400', '400i', '700', '700i'],
+          },
+        ],
+      },
+    },
   ],
   siteMetadata: {
     title: 'Everest',
@@ -48,6 +52,6 @@ module.exports = {
     description: 'Repository of crypto projects',
     url: 'http://test22.eth', // No trailing slash allowed!
     image: '', // Path to your image you placed in the 'static' folder
-    twitterUsername: '@graphprotocol'
-  }
+    twitterUsername: '@graphprotocol',
+  },
 }
