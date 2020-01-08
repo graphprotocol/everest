@@ -1,13 +1,4 @@
-import {
-  BigInt,
-  BigDecimal,
-  Address,
-  log,
-  json,
-  ipfs,
-  ByteArray,
-  Bytes,
-} from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -16,6 +7,7 @@ import {
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
 import { Project } from '../types/schema'
+import { addQm } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
 // If a project is null, it was not added to everest and we want to ignore it
@@ -124,16 +116,4 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
     }
     project.save()
   }
-}
-
-// Helper adding 0x12 and 0x20 to make the proper ipfs hash
-// the returned bytes32 is so [0,31]
-function addQm(a: ByteArray): ByteArray {
-  let out = new Uint8Array(34)
-  out[0] = 0x12
-  out[1] = 0x20
-  for (let i = 0; i < 32; i++) {
-    out[i + 2] = a[i]
-  }
-  return out as ByteArray
 }

@@ -17,11 +17,11 @@ type Project @entity {
 
   # From smart contracts directly
   owner: User
-  isChallenged: Boolean!
-  challenges: [Challenge!]
+  currentChallenge: Challenge
+  pastChallenges: [Challenge!]
   # If now > memberShipStartTime , this project is a member. 
   # reputation = now - membershipStartTime. if negative, then reputation is just 0
-  membershipStartTime: Int 
+  membershipStartTime: Int!
   delegates: [Bytes!] # Null if no delegate is set. There can be many delegates
   delegateValidities: [Int!] # Time delegate is valid
   ipfsHash: String # aka DIDAttribute
@@ -47,26 +47,38 @@ type Category @entity {
 type Challenge @entity {
   id: ID!
   description: String
-  createdAt: Int!
+  endTime: Int!
   votesFor: Int!
   votesAgainst: Int!
   project: Project!
   owner: Bytes!
-  resolved: Boolean! #  means it's a past challenge
   votes: [Vote!] @derivedFrom(field: "challenge")
+  resolved: Boolean! # This is when the challenge is resolved, which is different from end time
 }
 
 # For global variables
 type Everest @entity {
   id: ID!
-  period: Int! # how long the challenge will last
-  votingPeriodDuration: Int!
-  whitelistPeriodDuration: Int!
-  challengeDeposit: BigInt!
-  applicationFee: BigInt!
+  "Owner of the Everest contract"
+  owner: Bytes!
+  "Approved token for fees (DAI)"
   approvedToken: Bytes!
-  reserveBank: Bytes!
+  "Voting period for challenges"
+  votingPeriodDuration: Int!
+  "Challege deposit in DAI"
+  challengeDeposit: BigInt!
+  "Waiting period for member application to be accepted"
+  waitingPeriod: Int!
+  "Fee to apply to be in Everest"
+  applicationFee: BigInt!
+  "Address of the reserve bank"
+  reserveBankAddress: Bytes!
+  "Balance of the reserve bank (DAI)"
+  reserveBankBalance: BigInt!
+  "Address of the registry"
   registry: Bytes!
+  "IPFS hash pointing to the charter"
+  charter: Bytes!
 }
 
 type Vote @entity {
@@ -74,6 +86,7 @@ type Vote @entity {
   voter: Project!
   challenge: Challenge!
   choice: Choice!
+  weight: Int!
 }
 
 enum Choice {

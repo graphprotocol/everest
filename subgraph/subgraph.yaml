@@ -24,25 +24,21 @@ dataSources:
         - User
       abis:
         - name: Everest
-          file: ./abis/everest.json
+          file: ../contracts/build/contracts/Everest.json
+        - name: Registry
+          file: ../contracts/build/contracts/Registry.json
       eventHandlers:
         - event: ApplicationMade(address,uint256)
           handler: handleApplicationMade
         - event: MemberExited(indexed address)
           handler: handleMemberExited
-        - event: MemberOwnerChanged(indexed address)
-          handler: handleMemberOwnerChanged
-        - event: DelegateAdded(indexed address)
-          handler: handleDelegateAdded
-        - event: DelegateRevoked(indexed address)
-          handler: handleDelegateRevoked
-        - event: MemberOffChainDataEdited(indexed address)
-          handler: handleMemberOffChainDataEdited
         - event: CharterUpdated(indexed bytes32)
           handler: handleCharterUpdated
         - event: Withdrawal(indexed address,uint256)
           handler: handleWithdrawal
-        - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
+        - event: EverestDeployed(address,address,uint256,uint256,uint256,uint256,address,address,bytes32)
+          handler: handleEverestDeployed
+        - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32,bool)
           handler: handleMemberChallenged
         - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
           handler: handleSubmitVote
@@ -66,7 +62,7 @@ dataSources:
         - User
       abis:
         - name: EthereumDIDRegistry
-          file: ./abis/EthereumDIDRegistry.json
+          file: ../contracts/build/contracts/EthereumDIDRegistry.json
       eventHandlers:
         # TODO - figure out how to make this only track the data we NEED
         # not all eth did registry data

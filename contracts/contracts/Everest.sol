@@ -55,13 +55,25 @@ contract Everest is MemberStruct, Ownable {
     event CharterUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
 
+    event EverestDeployed(
+        address owner,
+        address approvedToken,
+        uint256 votingPeriodDuration,
+        uint256 challengeDeposit,
+        uint256 waitingPeriod,
+        uint256 applicationFee,
+        address reserveBank,
+        address registry,
+        bytes32 charter
+    );
 
     event MemberChallenged(
         address indexed member,
         uint256 indexed challengeID,
         address indexed challenger,
         uint256 challengeEndTime,
-        bytes32 details
+        bytes32 details,
+        bool challengedOnApplication // true if member was challenged upon application
     );
 
     event SubmitVote(
@@ -196,6 +208,18 @@ contract Everest is MemberStruct, Ownable {
         challengeDeposit = _challengeDeposit;
         waitingPeriod = _waitingPeriod;
         applicationFee = _applicationFee;
+
+        emit EverestDeployed(
+            _owner,
+            _approvedToken,
+            _votingPeriodDuration,
+            _challengeDeposit,
+            _waitingPeriod,
+            _applicationFee,
+            address(reserveBank),
+            address(memberRegistry),
+            _charter
+        );
     }
 
     /*******************
@@ -519,6 +543,8 @@ contract Everest is MemberStruct, Ownable {
         address _challengedMember,
         bytes32 _details
     ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
+        uint256 challengeeMemberTime = memberRegistry.getMembershipStartTime(_challengedMember);
+        require (challengeeMemberTime > 0, "Everest::challenge - Chalengee must exist");
         uint256 challengerMemberTime = memberRegistry.getMembershipStartTime(_challengingMember);
         require(
             !memberChallengeExists(_challengedMember),
@@ -528,11 +554,12 @@ contract Everest is MemberStruct, Ownable {
         // We check if it was a new member that was challenged before they were accepted. We then
         // reset their member time so that they can't vote during the challenge period they are
         // being challenged
-        uint256 challengeeMemberTime = memberRegistry.getMembershipStartTime(_challengedMember);
+        bool challengedOnApplication;
         /* solium-disable-next-line security/no-block-members*/
         if (challengeeMemberTime > now){
             /* solium-disable-next-line security/no-block-members*/
             memberRegistry.editMembershipStartTime(_challengedMember, (now + votingPeriodDuration));
+            challengedOnApplication = true;
         }
 
         uint256 newChallengeID = challengeCounter;
@@ -565,8 +592,9 @@ contract Everest is MemberStruct, Ownable {
             newChallengeID,
             _challengingMember,
             /* solium-disable-next-line security/no-block-members*/
-            now,
-            newChallenge.details
+            now + votingPeriodDuration,
+            newChallenge.details,
+            challengedOnApplication
         );
 
         // Insert challengers vote into the challenge
