@@ -4,46 +4,52 @@
     "slug": "defi",
     "description": "projects focused on decentralized finance or open finance",
     "subcategories": [
-
-      { "name": "Currencies", 
-        "slug": "currencies", 
-        "description": "apps and protocols that issue a cryptocurrency, including stablecoins, ERC20s and non-fungible tokens" 
+      {
+        "name": "Currencies",
+        "slug": "currencies",
+        "description": "apps and protocols that issue a cryptocurrency, including stablecoins, ERC20s and non-fungible tokens"
       },
 
-      { "name": "Derivatives", 
-        "slug": "derivatives", 
-        "description": "derivative issuance and trading platforms" 
+      {
+        "name": "Derivatives",
+        "slug": "derivatives",
+        "description": "derivative issuance and trading platforms"
       },
 
-      { "name": "Exchanges",
+      {
+        "name": "Exchanges",
         "slug": "exchanges",
         "description": "apps and protocols for exchanging and trading cryptocurrencies and tokens, including decentralized and centralized exchanges and liquidity networks"
       },
-      
-      { "name": "Insurance",
+
+      {
+        "name": "Insurance",
         "slug": "insurance",
         "description": "insurance services providers"
       },
-      
+
       {
         "name": "Investing",
         "slug": "investing",
         "description": "investment funds, venture capital funds and asset management apps"
       },
 
-      { "name": "Lending", 
-        "slug": "lending", 
-        "description": "apps and protocols for lending cryptocurrencies and tokenized assets and tokenizing collateral" 
+      {
+        "name": "Lending",
+        "slug": "lending",
+        "description": "apps and protocols for lending cryptocurrencies and tokenized assets and tokenizing collateral"
       },
 
-      { "name": "Payments",
+      {
+        "name": "Payments",
         "slug": "payments",
         "description": "payment providers supporting cryptocurrencies and tokenized assets, including on-ramps, payment and settlement solutions"
       },
 
-      { "name": "Ratings", 
-        "slug": "ratings", 
-        "description": "financial ratings or credit score providers" 
+      {
+        "name": "Ratings",
+        "slug": "ratings",
+        "description": "financial ratings or credit score providers"
       },
 
       {
@@ -52,26 +58,30 @@
         "description": "projects focused on providing data and research about DeFi"
       },
 
-      { "name": "Staking", 
-        "slug": "staking", 
-        "description": "projects focused on providing staking services, such as staking research, delegated staking or node operations" 
+      {
+        "name": "Staking",
+        "slug": "staking",
+        "description": "projects focused on providing staking services, such as staking research, delegated staking or node operations"
       },
-      
-      { "name": "Wallets", 
-        "slug": "wallets", 
-        "description": "wallet apps that support cryptocurrencies and tokenized assets and can provide other DeFi services" 
-      },
+
+      {
+        "name": "Wallets",
+        "slug": "wallets",
+        "description": "wallet apps that support cryptocurrencies and tokenized assets and can provide other DeFi services"
+      }
     ]
   },
-  
-  { "name": "Education", 
-    "slug": "education", 
-    "description": "any projects focused on education and learning provision, including institutional academia, technical skills learning, Web3 resources and more" 
+
+  {
+    "name": "Education",
+    "slug": "education",
+    "description": "any projects focused on education and learning provision, including institutional academia, technical skills learning, Web3 resources and more"
   },
 
-  { "name": "Energy", 
-    "slug": "energy", 
-    "description": "projects focused on the energy and oil sectorsR" 
+  {
+    "name": "Energy",
+    "slug": "energy",
+    "description": "projects focused on the energy and oil sectorsR"
   },
   {
     "name": "Entertainment",
@@ -94,74 +104,91 @@
         "description": "projects for collectibles issuance, exchange and hosting"
       },
 
-      { "name": "Gaming", 
-        "slug": "gaming", 
-        "description": "applications and protocols for gaming and gambling " 
-      },
-      
-      { "name": "Music", 
-        "slug": "music", 
-        "description": "apps and protocols for music streaming and recording" 
-      },
-      
-      { "name": "Blogs", 
-        "slug": "blogs", 
-        "description": "projects focused on writing and hosting blogs" 
-      },
-      
-      { "name": "Books", 
-        "slug": "books", 
-        "description": "projects focused on writing and publishing books and formalized content"       },
-      
-      { "name": "Sports", 
-        "slug": "sports", 
-        "description": "sporting applications and tools" },
-      
-      { "name": "Video", 
-        "slug": "video", 
-        "description": "apps and protocols for video streaming and recording" 
+      {
+        "name": "Gaming",
+        "slug": "gaming",
+        "description": "applications and protocols for gaming and gambling "
       },
 
-      { "name": "Virtual Reality",
+      {
+        "name": "Music",
+        "slug": "music",
+        "description": "apps and protocols for music streaming and recording"
+      },
+
+      {
+        "name": "Blogs",
+        "slug": "blogs",
+        "description": "projects focused on writing and hosting blogs"
+      },
+
+      {
+        "name": "Books",
+        "slug": "books",
+        "description": "projects focused on writing and publishing books and formalized content"
+      },
+
+      {
+        "name": "Sports",
+        "slug": "sports",
+        "description": "sporting applications and tools"
+      },
+
+      {
+        "name": "Video",
+        "slug": "video",
+        "description": "apps and protocols for video streaming and recording"
+      },
+
+      {
+        "name": "Virtual Reality",
         "slug": "virtual-reality",
         "description": "PLACEHOLDER"
-  },
+      }
     ]
   },
-   { "name": "Environment", 
-    "slug": "environment", 
-     "description": "PLACEHOLDER" 
-   },
+  {
+    "name": "Environment",
+    "slug": "environment",
+    "description": "PLACEHOLDER"
+  },
 
-   { "name": "Events", 
-    "slug": "events", 
-     "description": "projects focused on supporting events, including ticketing, sponsorships or event planning" 
-   },
+  {
+    "name": "Events",
+    "slug": "events",
+    "description": "projects focused on supporting events, including ticketing, sponsorships or event planning"
+  },
 
-   { "name": "Funds", 
-    "slug": "funds", 
-    "description": "investment and hedge funds, venture capital funds or private equity organizations focused on Web3" 
-   },
-  
-   { "name": "Grants Organizations", 
-    "slug": "grants-organizations", 
-     "description": "organizations distributing grant funding to other projects" 
-   },
-   
-   { "name": "Governance",
-     "slug": "governance",
-     "description": "Porganizations focused on decentralized governance implementations and research, such as DAOs, voting tools and consensus mechanisms",
+  {
+    "name": "Funds",
+    "slug": "funds",
+    "description": "investment and hedge funds, venture capital funds or private equity organizations focused on Web3"
+  },
+
+  {
+    "name": "Grants Organizations",
+    "slug": "grants-organizations",
+    "description": "organizations distributing grant funding to other projects"
+  },
+
+  {
+    "name": "Governance",
+    "slug": "governance",
+    "description": "Porganizations focused on decentralized governance implementations and research, such as DAOs, voting tools and consensus mechanisms",
 
     "subcategories": [
+      {
+        "name": "DAOs",
+        "slug": "daos",
+        "description": "decentralized autonomous organizations and projects focused on building frameworks and tooling for decentralized organizations"
+      },
 
-      { "name": "DAOs", 
-        "slug": "daos", 
-        "description": "decentralized autonomous organizations and projects focused on building frameworks and tooling for decentralized organizations" },
-      
-      { "name": "Research", 
-        "slug": "research", 
-        "description": "organizations focused on researching decentralized consensus mechanisms, such as Proof-of-Work or Proof-of-Stake" },
-      
+      {
+        "name": "Research",
+        "slug": "research",
+        "description": "organizations focused on researching decentralized consensus mechanisms, such as Proof-of-Work or Proof-of-Stake"
+      },
+
       {
         "name": "Voting",
         "slug": "voting",
@@ -172,32 +199,39 @@
   {
     "name": "Hardware",
     "slug": "hardware",
-    "description": "projects focused on developing hardware for Web3 apps and protocols" },
-  
-  { "name": "Health & Wellness", 
-    "slug": "health-and-wellness", 
-    "description": "projects focused on health care, wellness and medicine" },
-     
-  { "name": "Identity", 
-    "slug": "identity", 
-     "description": "projects focused on identity, reputation and user authentication solutions" },
-  
-  { "name": "Lifestyle", 
-    "slug": "lifestyle", 
-    "description": "projects providing lifestyle services or selling lifestyle goods" },
-  
+    "description": "projects focused on developing hardware for Web3 apps and protocols"
+  },
+
+  {
+    "name": "Health & Wellness",
+    "slug": "health-and-wellness",
+    "description": "projects focused on health care, wellness and medicine"
+  },
+
+  {
+    "name": "Identity",
+    "slug": "identity",
+    "description": "projects focused on identity, reputation and user authentication solutions"
+  },
+
+  {
+    "name": "Lifestyle",
+    "slug": "lifestyle",
+    "description": "projects providing lifestyle services or selling lifestyle goods"
+  },
+
   {
     "name": "Manufacturing",
     "slug": "manufacturing",
     "description": "projects focused on manufacturing and production services"
   },
-  
+
   {
     "name": "Marketplaces",
     "slug": "marketplaces",
     "description": "projects focused on providing venues of exchange for specific goods and services"
   },
-  
+
   {
     "name": "News & Media",
     "slug": "news-and-media",
@@ -250,11 +284,13 @@
       }
     ]
   },
-  
-  { "name": "Social Networks", 
-    "slug": "social-networks", 
-    "description": "projects providing social networking platforms and tools" },
-  
+
+  {
+    "name": "Social Networks",
+    "slug": "social-networks",
+    "description": "projects providing social networking platforms and tools"
+  },
+
   {
     "name": "Software",
     "slug": "software",
@@ -300,33 +336,42 @@
         "slug": "oracles",
         "description": "projects researching or building oracle solutions for Web3 apps and protocols, including oracles for on-chain and off-chain data"
       },
-      
-      { "name": "Privacy", 
-        "slug": "privacy", 
-        "description": "projects researching or building privacy solutions for Web3 apps and protocols, such as cryptography research, mixers" },
-      
-      { "name": "Scaling", 
-        "slug": "scaling", 
-        "description": "projects researching or building blockchain scaling solutions, including layer 1 (mainnet) and layer 2 scalability" },
-      
-      { "name": "Security & Audits", 
-        "slug": "security-and-audits", 
-        "description": "projects focused on providing software or hardware security, including code security, audits and testing and general security practices" },
-      
-      { "name": "Storage", 
-        "slug": "storage", 
-        "description": "projects focused on storage for Web3 protocols, including file sharing, cloud storage and more" }
+
+      {
+        "name": "Privacy",
+        "slug": "privacy",
+        "description": "projects researching or building privacy solutions for Web3 apps and protocols, such as cryptography research, mixers"
+      },
+
+      {
+        "name": "Scaling",
+        "slug": "scaling",
+        "description": "projects researching or building blockchain scaling solutions, including layer 1 (mainnet) and layer 2 scalability"
+      },
+
+      {
+        "name": "Security & Audits",
+        "slug": "security-and-audits",
+        "description": "projects focused on providing software or hardware security, including code security, audits and testing and general security practices"
+      },
+
+      {
+        "name": "Storage",
+        "slug": "storage",
+        "description": "projects focused on storage for Web3 protocols, including file sharing, cloud storage and more"
+      }
     ]
   },
-  
+
   {
     "name": "Supply Chain",
     "slug": "supply-chain",
     "description": "apps and protocols focused on supply chain management, tracking and optimization"
   },
 
-  { "name": "Work", 
-    "slug": "work", 
-    "description": "projects focused on gig economies, future of work and professional reputation" 
+  {
+    "name": "Work",
+    "slug": "work",
+    "description": "projects focused on gig economies, future of work and professional reputation"
   }
 ]
