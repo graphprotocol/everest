@@ -327,7 +327,7 @@ contract Everest is MemberStruct, Ownable {
     @param _owner                   Owner of the member application
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
-                                    with zeros appended to make it 32 bytes
+                                    with zeros appended to make it 32 bytes. (add 42 zeros)
     @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
