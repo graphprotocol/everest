@@ -34,7 +34,13 @@ const Button = ({
     >
       {icon && <img sx={iconStyles} src={`../${icon}`} alt={'icon'} />}
       {text}
-      {loading && <img src="/dots.png" sx={{ pt: 1, pl: 2, width: '24px' }} />}
+      {loading && (
+        <img
+          src="/dots.png"
+          sx={{ pt: 1, pl: 2, width: '24px' }}
+          alt="dots icon"
+        />
+      )}
     </button>
   )
 }

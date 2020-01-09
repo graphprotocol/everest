@@ -124,7 +124,7 @@ export default {
       },
       '&:hover': {
         border: '1px solid',
-        borderColor: '#3925E5',
+        borderColor: 'hover',
       },
     },
     secondary: {

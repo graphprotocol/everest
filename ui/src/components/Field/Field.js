@@ -8,7 +8,6 @@ import UploadImage from '../UploadImage'
 const Field = ({
   title,
   type,
-  field,
   text,
   imageName,
   imageUrl,
@@ -167,7 +166,7 @@ const styles = {
 Field.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
-  charsCount: PropTypes.string,
+  charsCount: PropTypes.number,
 }
 
 export default Field

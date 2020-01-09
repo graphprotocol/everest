@@ -74,6 +74,7 @@ const Modal = ({ children, showModal, closeModal }) => {
       <Dialog
         isOpen={showModal}
         onDismiss={closeModal}
+        aria-label="Connect to a wallet dialog"
         sx={{ position: 'relative', maxWidth: '400px', width: '100%' }}
       >
         <Close

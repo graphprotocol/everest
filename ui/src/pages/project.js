@@ -11,7 +11,7 @@ import Layout from '../components/Layout'
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
 import Button from '../components/Button'
-import Field from '../components/Field'
+import TabView from '../components/TabView'
 import Link from '../components/Link'
 
 import ProjectImage from '../images/project-placeholder.svg'
@@ -43,7 +43,11 @@ const PROJECT_QUERY = gql`
 
 const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
+  const [showTransfer, setShowTransfer] = useState(false)
+  const [showDelegate, setShowDelegate] = useState(false)
   const [challengeDescription, setChallengeDescription] = useState('')
+  const [transferAddress, setTransferAddress] = useState('')
+  const [delegateAddress, setDelegateAddress] = useState('')
 
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
@@ -206,14 +210,16 @@ const Project = ({ location }) => {
         <Styled.h6 sx={{ fontWeight: 'heading' }}>
           Challenge this project
         </Styled.h6>
-        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>
-          Challenge this project - needs copy
-        </p>
+        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
         <Button
           disabled={false}
           variant={showChallenge ? 'primary' : 'secondary'}
           onClick={e => {
             setShowChallenge(!showChallenge)
+            if (!showChallenge) {
+              setShowDelegate(false)
+              setShowTransfer(false)
+            }
           }}
           text="Challenge"
           icon={showChallenge ? 'challenging.png' : 'challenge.png'}
@@ -221,61 +227,86 @@ const Project = ({ location }) => {
         />
       </Box>
       {showChallenge && (
-        <Grid
-          sx={{
-            backgroundColor: 'secondary',
-            position: 'absolute',
-            zIndex: 10,
-            left: 0,
-            width: '100%',
-            marginTop: '-1px',
+        <TabView
+          fieldType="textarea"
+          charsCount={300}
+          title="Desription"
+          placeholder="Challenge Description"
+          heading={`Remove ${project.name}`}
+          description="lala"
+          value={transferAddress}
+          setValue={setTransferAddress}
+          text="Transfer"
+          icon="transfer-icon.svg"
+        />
+      )}
+      <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
+        <Styled.h6 sx={{ fontWeight: 'heading' }}>
+          Transfer this project
+        </Styled.h6>
+        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
+        <Button
+          disabled={false}
+          variant={showTransfer ? 'primary' : 'secondary'}
+          onClick={e => {
+            setShowTransfer(!showTransfer)
+            if (!showTransfer) {
+              setShowChallenge(false)
+              setShowDelegate(false)
+            }
           }}
-        >
-          <Grid
-            sx={{
-              gridTemplateColumns: ['1fr', '312px 1fr'],
-              position: 'relative',
-              maxWidth: '1260px',
-              padding: '0 20px',
-              margin: '0 auto',
-              width: '100%',
-              my: 7,
-            }}
-            gap={[1, 8]}
-          >
-            <Box>
-              <Styled.h1 sx={{ color: 'white', mb: 3 }}>
-                Remove {project.name}
-              </Styled.h1>
-              <p sx={{ variant: 'text.field' }}>Blah blah - needs copy</p>
-              <p sx={{ variant: 'text.field', mt: 5 }}>Challenge fee</p>
-              <p sx={{ variant: 'text.displayBig', color: 'white' }}>10 DAI</p>
-            </Box>
-            <Box sx={{ maxWidth: '504px', width: '100%', mt: [5, 0] }}>
-              <Field
-                title="Description"
-                field="description"
-                value={challengeDescription}
-                type="textarea"
-                charsCount="300"
-                placeholder="Challenge Description"
-                setValue={async value => {
-                  setChallengeDescription(value)
-                }}
-              />
-              <Button
-                variant={'secondary'}
-                onClick={e => {
-                  setShowChallenge(false)
-                }}
-                text="Challenge"
-                icon={'challenge.png'}
-                sx={{ margin: ['auto', 'auto', 0] }}
-                disabled={challengeDescription.length === 0}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+          text="Transfer"
+          icon={showTransfer ? 'transferring-icon.svg' : 'transfer-icon.svg'}
+          sx={{ margin: ['auto', 'auto', 0] }}
+        />
+      </Box>
+      {showTransfer && (
+        <TabView
+          fieldType="input"
+          charsCount={42}
+          title="Ethereum address"
+          placeholder="Enter address"
+          heading={`Transfer ${project.name}`}
+          description="PLACEHOLDER"
+          value={challengeDescription}
+          setValue={setChallengeDescription}
+          text="Transfer"
+          icon="transfer-icon.svg"
+        />
+      )}
+      <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
+        <Styled.h6 sx={{ fontWeight: 'heading' }}>
+          Delegate this project
+        </Styled.h6>
+        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
+        <Button
+          disabled={false}
+          variant={showDelegate ? 'primary' : 'secondary'}
+          onClick={e => {
+            setShowDelegate(!showDelegate)
+            if (!showDelegate) {
+              setShowChallenge(false)
+              setShowTransfer(false)
+            }
+          }}
+          text="Delegate"
+          icon={showDelegate ? 'delegating-icon.svg' : 'delegate-icon.svg'}
+          sx={{ margin: ['auto', 'auto', 0] }}
+        />
+      </Box>
+      {showDelegate && (
+        <TabView
+          fieldType="input"
+          charsCount={42}
+          title="Ethereum address"
+          placeholder="Enter address"
+          heading={`Delegate ${project.name}`}
+          description="PLACEHOLDER"
+          value={delegateAddress}
+          setValue={setDelegateAddress}
+          text="Delegate"
+          icon="delegate-icon.svg"
+        />
       )}
     </Layout>
   )

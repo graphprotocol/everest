@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
 
 import Challenged from '../../images/challenged.svg'
-import styles from './Card.styles'
 
 const Card = ({ title, description, image, isChallenged, variant, to }) => {
   return (
@@ -32,11 +31,27 @@ const Card = ({ title, description, image, isChallenged, variant, to }) => {
             />
           </Box>
         ) : (
-          <Box>
+          <Box
+            sx={{
+              '&:hover': {
+                alignSelf: 'center',
+                justifySelf: 'center',
+                img: {
+                  '&:hover': {
+                    height: '112px',
+                    width: ['152px', '164px', '164px'],
+                  },
+                },
+              },
+            }}
+          >
             <img
               src={image}
               alt={title}
-              sx={{ height: '120px', width: ['164px', '180px', '180px'] }}
+              sx={{
+                height: '120px',
+                width: ['164px', '180px', '180px'],
+              }}
             />
           </Box>
         )}
@@ -54,13 +69,40 @@ const Card = ({ title, description, image, isChallenged, variant, to }) => {
   )
 }
 
+const styles = {
+  root: {
+    height: '216px',
+    width: ['164', '180px', '180px'],
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
+    marginTop: '8px',
+    marginBottom: '8px',
+    cursor: 'pointer',
+    '&:hover': {
+      border: '2px solid',
+      borderColor: 'hover',
+    },
+  },
+  box: {
+    border: '1px solid #4C66FF',
+    borderRadius: '50%',
+    width: '80px',
+    height: '80px',
+    margin: '0 auto',
+  },
+  title: {
+    fontWeight: 'heading',
+    color: 'secondary',
+  },
+}
+
 Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   image: PropTypes.string,
   isChallenged: PropTypes.bool,
   variant: PropTypes.string,
-  to: PropTypes.string
+  to: PropTypes.string,
 }
 
 export default Card

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import { Styled, jsx, Header } from 'theme-ui'
+import { jsx, Header } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
@@ -15,7 +15,6 @@ import Modal from '../../components/Modal'
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
-import Placeholder from '../../images/profile-placeholder.svg'
 
 const PROFILE_QUERY = gql`
   query everestProfile($id: ID!) {
@@ -125,14 +124,6 @@ const navStyles = {
   width: [0, '100%', '100%'],
   maxWidth: '380px',
   alignItems: 'center',
-}
-
-const avatarStyles = {
-  width: '32px',
-  height: '32px',
-  borderRadius: '50%',
-  border: '1px solid',
-  borderColor: 'secondary',
 }
 
 Navbar.propTypes = {}

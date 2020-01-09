@@ -1,6 +1,6 @@
 /** @jsx jsx */
-import { Styled, jsx } from 'theme-ui'
-import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
+import { jsx } from 'theme-ui'
+import { useWeb3React } from '@web3-react/core'
 import { navigate } from 'gatsby'
 
 import Placeholder from '../../images/profile-placeholder.svg'
@@ -13,11 +13,8 @@ import {
 } from '@reach/menu-button'
 import '@reach/menu-button/styles.css'
 
-import Link from '../../components/Link'
-import { useEffect } from 'react'
-
 const Menu = ({ accountId }) => {
-  const { account, active, connector, library } = useWeb3React()
+  const { connector } = useWeb3React()
 
   const handleSignOut = () => {
     if (connector) {
