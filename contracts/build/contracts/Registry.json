@@ -253,14 +253,14 @@
     "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/Registry.sol",
     "exportedSymbols": {
       "Registry": [
-        2179
+        2169
       ]
     },
-    "id": 2180,
+    "id": 2170,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2024,
+        "id": 2014,
         "literals": [
           "solidity",
           "^",
@@ -273,10 +273,10 @@
       {
         "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/node_modules/@openzeppelin/contracts/ownership/Ownable.sol",
         "file": "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol",
-        "id": 2025,
+        "id": 2015,
         "nodeType": "ImportDirective",
-        "scope": 2180,
-        "sourceUnit": 2739,
+        "scope": 2170,
+        "sourceUnit": 2729,
         "src": "106:71:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -284,10 +284,10 @@
       {
         "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol",
         "file": "./MemberStruct.sol",
-        "id": 2026,
+        "id": 2016,
         "nodeType": "ImportDirective",
-        "scope": 2180,
-        "sourceUnit": 1918,
+        "scope": 2170,
+        "sourceUnit": 1908,
         "src": "178:28:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -298,17 +298,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2027,
+              "id": 2017,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2738,
+              "referencedDeclaration": 2728,
               "src": "229:7:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$2738",
+                "typeIdentifier": "t_contract$_Ownable_$2728",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 2028,
+            "id": 2018,
             "nodeType": "InheritanceSpecifier",
             "src": "229:7:5"
           },
@@ -316,56 +316,56 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2029,
+              "id": 2019,
               "name": "MemberStruct",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1917,
+              "referencedDeclaration": 1907,
               "src": "238:12:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_MemberStruct_$1917",
+                "typeIdentifier": "t_contract$_MemberStruct_$1907",
                 "typeString": "contract MemberStruct"
               }
             },
-            "id": 2030,
+            "id": 2020,
             "nodeType": "InheritanceSpecifier",
             "src": "238:12:5"
           }
         ],
         "contractDependencies": [
-          1917,
-          2249,
-          2738
+          1907,
+          2239,
+          2728
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 2179,
+        "id": 2169,
         "linearizedBaseContracts": [
-          2179,
-          1917,
-          2738,
-          2249
+          2169,
+          1907,
+          2728,
+          2239
         ],
         "name": "Registry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 2034,
+            "id": 2024,
             "name": "members",
             "nodeType": "VariableDeclaration",
-            "scope": 2179,
+            "scope": 2169,
             "src": "434:41:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
               "typeString": "mapping(address => struct MemberStruct.Member)"
             },
             "typeName": {
-              "id": 2033,
+              "id": 2023,
               "keyType": {
-                "id": 2031,
+                "id": 2021,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "442:7:5",
@@ -377,18 +377,18 @@
               "nodeType": "Mapping",
               "src": "434:26:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                 "typeString": "mapping(address => struct MemberStruct.Member)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 2032,
+                "id": 2022,
                 "name": "Member",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1916,
+                "referencedDeclaration": 1906,
                 "src": "453:6:5",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                  "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                   "typeString": "struct MemberStruct.Member"
                 }
               }
@@ -398,10 +398,10 @@
           },
           {
             "constant": false,
-            "id": 2036,
+            "id": 2026,
             "name": "charter",
             "nodeType": "VariableDeclaration",
-            "scope": 2179,
+            "scope": 2169,
             "src": "481:22:5",
             "stateVariable": true,
             "storageLocation": "default",
@@ -410,7 +410,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2035,
+              "id": 2025,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "481:7:5",
@@ -424,25 +424,25 @@
           },
           {
             "body": {
-              "id": 2051,
+              "id": 2041,
               "nodeType": "Block",
               "src": "803:60:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2045,
+                    "id": 2035,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 2043,
+                      "id": 2033,
                       "name": "_owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2038,
+                      "referencedDeclaration": 2028,
                       "src": "813:6:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -453,11 +453,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2044,
+                      "id": 2034,
                       "name": "_owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2038,
+                      "referencedDeclaration": 2028,
                       "src": "822:6:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -470,25 +470,25 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 2046,
+                  "id": 2036,
                   "nodeType": "ExpressionStatement",
                   "src": "813:15:5"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2049,
+                    "id": 2039,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 2047,
+                      "id": 2037,
                       "name": "charter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2036,
+                      "referencedDeclaration": 2026,
                       "src": "838:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -499,11 +499,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2048,
+                      "id": 2038,
                       "name": "_charter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2040,
+                      "referencedDeclaration": 2030,
                       "src": "848:8:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -516,29 +516,29 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "id": 2050,
+                  "id": 2040,
                   "nodeType": "ExpressionStatement",
                   "src": "838:18:5"
                 }
               ]
             },
             "documentation": "@dev Contructor     Sets the addresses for token, voting, and parameterizer\n@param _owner       Everest is the owner of the Registry",
-            "id": 2052,
+            "id": 2042,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2041,
+              "id": 2031,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2038,
+                  "id": 2028,
                   "name": "_owner",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2052,
+                  "scope": 2042,
                   "src": "749:14:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -547,7 +547,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2037,
+                    "id": 2027,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "749:7:5",
@@ -562,10 +562,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2040,
+                  "id": 2030,
                   "name": "_charter",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2052,
+                  "scope": 2042,
                   "src": "773:16:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -574,7 +574,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 2039,
+                    "id": 2029,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "773:7:5",
@@ -590,12 +590,12 @@
               "src": "739:56:5"
             },
             "returnParameters": {
-              "id": 2042,
+              "id": 2032,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "803:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "727:136:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -603,37 +603,37 @@
           },
           {
             "body": {
-              "id": 2068,
+              "id": 2058,
               "nodeType": "Block",
               "src": "1023:91:5",
               "statements": [
                 {
                   "assignments": [
-                    2060
+                    2050
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2060,
+                      "id": 2050,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2068,
+                      "scope": 2058,
                       "src": "1033:20:5",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2059,
+                        "id": 2049,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1033:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -641,30 +641,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2064,
+                  "id": 2054,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2061,
+                      "id": 2051,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "1056:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2063,
+                    "id": 2053,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2062,
+                      "id": 2052,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2054,
+                      "referencedDeclaration": 2044,
                       "src": "1064:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -678,7 +678,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1056:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -690,55 +690,55 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 2065,
+                      "id": 2055,
                       "name": "member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2060,
+                      "referencedDeclaration": 2050,
                       "src": "1089:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member memory"
                       }
                     },
-                    "id": 2066,
+                    "id": 2056,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
                     "lValueRequested": false,
                     "memberName": "challengeID",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 1913,
+                    "referencedDeclaration": 1903,
                     "src": "1089:18:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 2058,
-                  "id": 2067,
+                  "functionReturnParameters": 2048,
+                  "id": 2057,
                   "nodeType": "Return",
                   "src": "1082:25:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2069,
+            "id": 2059,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getChallengeID",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2055,
+              "id": 2045,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2054,
+                  "id": 2044,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2069,
+                  "scope": 2059,
                   "src": "974:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -747,7 +747,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2053,
+                    "id": 2043,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "974:7:5",
@@ -764,15 +764,15 @@
               "src": "973:17:5"
             },
             "returnParameters": {
-              "id": 2058,
+              "id": 2048,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2057,
+                  "id": 2047,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2069,
+                  "scope": 2059,
                   "src": "1014:7:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -781,7 +781,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2056,
+                    "id": 2046,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1014:7:5",
@@ -796,7 +796,7 @@
               ],
               "src": "1013:9:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "950:164:5",
             "stateMutability": "view",
             "superFunction": null,
@@ -804,37 +804,37 @@
           },
           {
             "body": {
-              "id": 2085,
+              "id": 2075,
               "nodeType": "Block",
               "src": "1201:99:5",
               "statements": [
                 {
                   "assignments": [
-                    2077
+                    2067
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2077,
+                      "id": 2067,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2085,
+                      "scope": 2075,
                       "src": "1211:20:5",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2076,
+                        "id": 2066,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1211:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -842,30 +842,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2081,
+                  "id": 2071,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2078,
+                      "id": 2068,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "1234:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2080,
+                    "id": 2070,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2079,
+                      "id": 2069,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2071,
+                      "referencedDeclaration": 2061,
                       "src": "1242:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -879,7 +879,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1234:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -891,55 +891,55 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 2082,
+                      "id": 2072,
                       "name": "member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2077,
+                      "referencedDeclaration": 2067,
                       "src": "1267:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member memory"
                       }
                     },
-                    "id": 2083,
+                    "id": 2073,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
                     "lValueRequested": false,
                     "memberName": "membershipStartTime",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 1915,
+                    "referencedDeclaration": 1905,
                     "src": "1267:26:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 2075,
-                  "id": 2084,
+                  "functionReturnParameters": 2065,
+                  "id": 2074,
                   "nodeType": "Return",
                   "src": "1260:33:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2086,
+            "id": 2076,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getMembershipStartTime",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2072,
+              "id": 2062,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2071,
+                  "id": 2061,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2086,
+                  "scope": 2076,
                   "src": "1152:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -948,7 +948,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2070,
+                    "id": 2060,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1152:7:5",
@@ -965,15 +965,15 @@
               "src": "1151:17:5"
             },
             "returnParameters": {
-              "id": 2075,
+              "id": 2065,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2074,
+                  "id": 2064,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2086,
+                  "scope": 2076,
                   "src": "1192:7:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -982,7 +982,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2073,
+                    "id": 2063,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1192:7:5",
@@ -997,7 +997,7 @@
               ],
               "src": "1191:9:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1120:180:5",
             "stateMutability": "view",
             "superFunction": null,
@@ -1005,25 +1005,25 @@
           },
           {
             "body": {
-              "id": 2097,
+              "id": 2087,
               "nodeType": "Block",
               "src": "1450:38:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2095,
+                    "id": 2085,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 2093,
+                      "id": 2083,
                       "name": "charter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2036,
+                      "referencedDeclaration": 2026,
                       "src": "1460:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -1034,11 +1034,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2094,
+                      "id": 2084,
                       "name": "_newCharter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2088,
+                      "referencedDeclaration": 2078,
                       "src": "1470:11:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -1051,27 +1051,27 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "id": 2096,
+                  "id": 2086,
                   "nodeType": "ExpressionStatement",
                   "src": "1460:21:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2098,
+            "id": 2088,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2091,
+                "id": 2081,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2090,
+                  "id": 2080,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "1440:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1085,15 +1085,15 @@
             "name": "updateCharter",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2089,
+              "id": 2079,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2088,
+                  "id": 2078,
                   "name": "_newCharter",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2098,
+                  "scope": 2088,
                   "src": "1410:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1102,7 +1102,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 2087,
+                    "id": 2077,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1410:7:5",
@@ -1118,12 +1118,12 @@
               "src": "1409:21:5"
             },
             "returnParameters": {
-              "id": 2092,
+              "id": 2082,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1450:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1387:101:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1131,37 +1131,37 @@
           },
           {
             "body": {
-              "id": 2120,
+              "id": 2110,
               "nodeType": "Block",
               "src": "1601:240:5",
               "statements": [
                 {
                   "assignments": [
-                    2108
+                    2098
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2108,
+                      "id": 2098,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2120,
+                      "scope": 2110,
                       "src": "1647:20:5",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2107,
+                        "id": 2097,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1647:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -1169,14 +1169,14 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2113,
+                  "id": 2103,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
                         "hexValue": "30",
-                        "id": 2110,
+                        "id": 2100,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1193,11 +1193,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 2111,
+                        "id": 2101,
                         "name": "_membershipStartTime",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2102,
+                        "referencedDeclaration": 2092,
                         "src": "1740:20:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -1216,18 +1216,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 2109,
+                      "id": 2099,
                       "name": "Member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1916,
+                      "referencedDeclaration": 1906,
                       "src": "1670:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_struct$_Member_$1916_storage_ptr_$",
+                        "typeIdentifier": "t_type$_t_struct$_Member_$1906_storage_ptr_$",
                         "typeString": "type(struct MemberStruct.Member storage pointer)"
                       }
                     },
-                    "id": 2112,
+                    "id": 2102,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1240,7 +1240,7 @@
                     "nodeType": "FunctionCall",
                     "src": "1670:101:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_memory",
+                      "typeIdentifier": "t_struct$_Member_$1906_memory",
                       "typeString": "struct MemberStruct.Member memory"
                     }
                   },
@@ -1250,7 +1250,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2118,
+                    "id": 2108,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1259,25 +1259,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 2114,
+                        "id": 2104,
                         "name": "members",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2034,
+                        "referencedDeclaration": 2024,
                         "src": "1809:7:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                           "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                         }
                       },
-                      "id": 2116,
+                      "id": 2106,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 2115,
+                        "id": 2105,
                         "name": "_member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2100,
+                        "referencedDeclaration": 2090,
                         "src": "1817:7:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1291,7 +1291,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1809:16:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage",
                         "typeString": "struct MemberStruct.Member storage ref"
                       }
                     },
@@ -1299,44 +1299,44 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2117,
+                      "id": 2107,
                       "name": "member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2108,
+                      "referencedDeclaration": 2098,
                       "src": "1828:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member memory"
                       }
                     },
                     "src": "1809:25:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
-                  "id": 2119,
+                  "id": 2109,
                   "nodeType": "ExpressionStatement",
                   "src": "1809:25:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2121,
+            "id": 2111,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2105,
+                "id": 2095,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2104,
+                  "id": 2094,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "1591:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1350,15 +1350,15 @@
             "name": "setMember",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2103,
+              "id": 2093,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2100,
+                  "id": 2090,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2121,
+                  "scope": 2111,
                   "src": "1522:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1367,7 +1367,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2099,
+                    "id": 2089,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1522:7:5",
@@ -1382,10 +1382,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2102,
+                  "id": 2092,
                   "name": "_membershipStartTime",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2121,
+                  "scope": 2111,
                   "src": "1547:28:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1394,7 +1394,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2101,
+                    "id": 2091,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1547:7:5",
@@ -1410,12 +1410,12 @@
               "src": "1512:69:5"
             },
             "returnParameters": {
-              "id": 2106,
+              "id": 2096,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1601:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1494:347:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1423,37 +1423,37 @@
           },
           {
             "body": {
-              "id": 2142,
+              "id": 2132,
               "nodeType": "Block",
               "src": "1933:103:5",
               "statements": [
                 {
                   "assignments": [
-                    2131
+                    2121
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2131,
+                      "id": 2121,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2142,
+                      "scope": 2132,
                       "src": "1943:21:5",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2130,
+                        "id": 2120,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1943:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -1461,30 +1461,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2135,
+                  "id": 2125,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2132,
+                      "id": 2122,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "1967:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2134,
+                    "id": 2124,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2133,
+                      "id": 2123,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2123,
+                      "referencedDeclaration": 2113,
                       "src": "1975:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1498,7 +1498,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1967:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -1508,7 +1508,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2140,
+                    "id": 2130,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1517,25 +1517,25 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 2136,
+                        "id": 2126,
                         "name": "member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2131,
+                        "referencedDeclaration": 2121,
                         "src": "1993:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member storage pointer"
                         }
                       },
-                      "id": 2138,
+                      "id": 2128,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "challengeID",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1913,
+                      "referencedDeclaration": 1903,
                       "src": "1993:18:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1546,11 +1546,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2139,
+                      "id": 2129,
                       "name": "_newChallengeID",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2125,
+                      "referencedDeclaration": 2115,
                       "src": "2014:15:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1563,27 +1563,27 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 2141,
+                  "id": 2131,
                   "nodeType": "ExpressionStatement",
                   "src": "1993:36:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2143,
+            "id": 2133,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2128,
+                "id": 2118,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2127,
+                  "id": 2117,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "1923:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1597,15 +1597,15 @@
             "name": "editChallengeID",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2126,
+              "id": 2116,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2123,
+                  "id": 2113,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2143,
+                  "scope": 2133,
                   "src": "1872:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1614,7 +1614,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2122,
+                    "id": 2112,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1872:7:5",
@@ -1629,10 +1629,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2125,
+                  "id": 2115,
                   "name": "_newChallengeID",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2143,
+                  "scope": 2133,
                   "src": "1889:23:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1641,7 +1641,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2124,
+                    "id": 2114,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1889:7:5",
@@ -1657,12 +1657,12 @@
               "src": "1871:42:5"
             },
             "returnParameters": {
-              "id": 2129,
+              "id": 2119,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1933:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1847:189:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1670,37 +1670,37 @@
           },
           {
             "body": {
-              "id": 2164,
+              "id": 2154,
               "nodeType": "Block",
               "src": "2129:104:5",
               "statements": [
                 {
                   "assignments": [
-                    2153
+                    2143
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2153,
+                      "id": 2143,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2164,
+                      "scope": 2154,
                       "src": "2139:21:5",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2152,
+                        "id": 2142,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "2139:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -1708,30 +1708,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2157,
+                  "id": 2147,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2154,
+                      "id": 2144,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "2163:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2156,
+                    "id": 2146,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2155,
+                      "id": 2145,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2145,
+                      "referencedDeclaration": 2135,
                       "src": "2171:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1745,7 +1745,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2163:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -1755,7 +1755,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2162,
+                    "id": 2152,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1764,25 +1764,25 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 2158,
+                        "id": 2148,
                         "name": "member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2153,
+                        "referencedDeclaration": 2143,
                         "src": "2189:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member storage pointer"
                         }
                       },
-                      "id": 2160,
+                      "id": 2150,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "membershipStartTime",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1915,
+                      "referencedDeclaration": 1905,
                       "src": "2189:26:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1793,11 +1793,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2161,
+                      "id": 2151,
                       "name": "_newTime",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2147,
+                      "referencedDeclaration": 2137,
                       "src": "2218:8:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1810,27 +1810,27 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 2163,
+                  "id": 2153,
                   "nodeType": "ExpressionStatement",
                   "src": "2189:37:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2165,
+            "id": 2155,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2150,
+                "id": 2140,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2149,
+                  "id": 2139,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "2119:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1844,15 +1844,15 @@
             "name": "editMembershipStartTime",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2148,
+              "id": 2138,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2145,
+                  "id": 2135,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2165,
+                  "scope": 2155,
                   "src": "2075:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1861,7 +1861,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2144,
+                    "id": 2134,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2075:7:5",
@@ -1876,10 +1876,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2147,
+                  "id": 2137,
                   "name": "_newTime",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2165,
+                  "scope": 2155,
                   "src": "2092:16:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1888,7 +1888,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2146,
+                    "id": 2136,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "2092:7:5",
@@ -1904,12 +1904,12 @@
               "src": "2074:35:5"
             },
             "returnParameters": {
-              "id": 2151,
+              "id": 2141,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2129:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "2042:191:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1917,14 +1917,14 @@
           },
           {
             "body": {
-              "id": 2177,
+              "id": 2167,
               "nodeType": "Block",
               "src": "2297:40:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2175,
+                    "id": 2165,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1937,25 +1937,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 2172,
+                        "id": 2162,
                         "name": "members",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2034,
+                        "referencedDeclaration": 2024,
                         "src": "2314:7:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                           "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                         }
                       },
-                      "id": 2174,
+                      "id": 2164,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 2173,
+                        "id": 2163,
                         "name": "_member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2167,
+                        "referencedDeclaration": 2157,
                         "src": "2322:7:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1969,7 +1969,7 @@
                       "nodeType": "IndexAccess",
                       "src": "2314:16:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage",
                         "typeString": "struct MemberStruct.Member storage ref"
                       }
                     },
@@ -1978,27 +1978,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 2176,
+                  "id": 2166,
                   "nodeType": "ExpressionStatement",
                   "src": "2307:23:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2178,
+            "id": 2168,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2170,
+                "id": 2160,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2169,
+                  "id": 2159,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "2287:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2012,15 +2012,15 @@
             "name": "deleteMember",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2168,
+              "id": 2158,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2167,
+                  "id": 2157,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2178,
+                  "scope": 2168,
                   "src": "2261:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2029,7 +2029,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2166,
+                    "id": 2156,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2261:7:5",
@@ -2046,19 +2046,19 @@
               "src": "2260:17:5"
             },
             "returnParameters": {
-              "id": 2171,
+              "id": 2161,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2297:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "2239:98:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 2180,
+        "scope": 2170,
         "src": "208:2131:5"
       }
     ],
@@ -2068,14 +2068,14 @@
     "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/Registry.sol",
     "exportedSymbols": {
       "Registry": [
-        2179
+        2169
       ]
     },
-    "id": 2180,
+    "id": 2170,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2024,
+        "id": 2014,
         "literals": [
           "solidity",
           "^",
@@ -2088,10 +2088,10 @@
       {
         "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/node_modules/@openzeppelin/contracts/ownership/Ownable.sol",
         "file": "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol",
-        "id": 2025,
+        "id": 2015,
         "nodeType": "ImportDirective",
-        "scope": 2180,
-        "sourceUnit": 2739,
+        "scope": 2170,
+        "sourceUnit": 2729,
         "src": "106:71:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2099,10 +2099,10 @@
       {
         "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol",
         "file": "./MemberStruct.sol",
-        "id": 2026,
+        "id": 2016,
         "nodeType": "ImportDirective",
-        "scope": 2180,
-        "sourceUnit": 1918,
+        "scope": 2170,
+        "sourceUnit": 1908,
         "src": "178:28:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2113,17 +2113,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2027,
+              "id": 2017,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2738,
+              "referencedDeclaration": 2728,
               "src": "229:7:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$2738",
+                "typeIdentifier": "t_contract$_Ownable_$2728",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 2028,
+            "id": 2018,
             "nodeType": "InheritanceSpecifier",
             "src": "229:7:5"
           },
@@ -2131,56 +2131,56 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2029,
+              "id": 2019,
               "name": "MemberStruct",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1917,
+              "referencedDeclaration": 1907,
               "src": "238:12:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_MemberStruct_$1917",
+                "typeIdentifier": "t_contract$_MemberStruct_$1907",
                 "typeString": "contract MemberStruct"
               }
             },
-            "id": 2030,
+            "id": 2020,
             "nodeType": "InheritanceSpecifier",
             "src": "238:12:5"
           }
         ],
         "contractDependencies": [
-          1917,
-          2249,
-          2738
+          1907,
+          2239,
+          2728
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 2179,
+        "id": 2169,
         "linearizedBaseContracts": [
-          2179,
-          1917,
-          2738,
-          2249
+          2169,
+          1907,
+          2728,
+          2239
         ],
         "name": "Registry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 2034,
+            "id": 2024,
             "name": "members",
             "nodeType": "VariableDeclaration",
-            "scope": 2179,
+            "scope": 2169,
             "src": "434:41:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
               "typeString": "mapping(address => struct MemberStruct.Member)"
             },
             "typeName": {
-              "id": 2033,
+              "id": 2023,
               "keyType": {
-                "id": 2031,
+                "id": 2021,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "442:7:5",
@@ -2192,18 +2192,18 @@
               "nodeType": "Mapping",
               "src": "434:26:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                 "typeString": "mapping(address => struct MemberStruct.Member)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 2032,
+                "id": 2022,
                 "name": "Member",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1916,
+                "referencedDeclaration": 1906,
                 "src": "453:6:5",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                  "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                   "typeString": "struct MemberStruct.Member"
                 }
               }
@@ -2213,10 +2213,10 @@
           },
           {
             "constant": false,
-            "id": 2036,
+            "id": 2026,
             "name": "charter",
             "nodeType": "VariableDeclaration",
-            "scope": 2179,
+            "scope": 2169,
             "src": "481:22:5",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2225,7 +2225,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 2035,
+              "id": 2025,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "481:7:5",
@@ -2239,25 +2239,25 @@
           },
           {
             "body": {
-              "id": 2051,
+              "id": 2041,
               "nodeType": "Block",
               "src": "803:60:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2045,
+                    "id": 2035,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 2043,
+                      "id": 2033,
                       "name": "_owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2038,
+                      "referencedDeclaration": 2028,
                       "src": "813:6:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2268,11 +2268,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2044,
+                      "id": 2034,
                       "name": "_owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2038,
+                      "referencedDeclaration": 2028,
                       "src": "822:6:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2285,25 +2285,25 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 2046,
+                  "id": 2036,
                   "nodeType": "ExpressionStatement",
                   "src": "813:15:5"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2049,
+                    "id": 2039,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 2047,
+                      "id": 2037,
                       "name": "charter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2036,
+                      "referencedDeclaration": 2026,
                       "src": "838:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -2314,11 +2314,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2048,
+                      "id": 2038,
                       "name": "_charter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2040,
+                      "referencedDeclaration": 2030,
                       "src": "848:8:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -2331,29 +2331,29 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "id": 2050,
+                  "id": 2040,
                   "nodeType": "ExpressionStatement",
                   "src": "838:18:5"
                 }
               ]
             },
             "documentation": "@dev Contructor     Sets the addresses for token, voting, and parameterizer\n@param _owner       Everest is the owner of the Registry",
-            "id": 2052,
+            "id": 2042,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2041,
+              "id": 2031,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2038,
+                  "id": 2028,
                   "name": "_owner",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2052,
+                  "scope": 2042,
                   "src": "749:14:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2362,7 +2362,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2037,
+                    "id": 2027,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "749:7:5",
@@ -2377,10 +2377,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2040,
+                  "id": 2030,
                   "name": "_charter",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2052,
+                  "scope": 2042,
                   "src": "773:16:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2389,7 +2389,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 2039,
+                    "id": 2029,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "773:7:5",
@@ -2405,12 +2405,12 @@
               "src": "739:56:5"
             },
             "returnParameters": {
-              "id": 2042,
+              "id": 2032,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "803:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "727:136:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -2418,37 +2418,37 @@
           },
           {
             "body": {
-              "id": 2068,
+              "id": 2058,
               "nodeType": "Block",
               "src": "1023:91:5",
               "statements": [
                 {
                   "assignments": [
-                    2060
+                    2050
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2060,
+                      "id": 2050,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2068,
+                      "scope": 2058,
                       "src": "1033:20:5",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2059,
+                        "id": 2049,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1033:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -2456,30 +2456,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2064,
+                  "id": 2054,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2061,
+                      "id": 2051,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "1056:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2063,
+                    "id": 2053,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2062,
+                      "id": 2052,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2054,
+                      "referencedDeclaration": 2044,
                       "src": "1064:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2493,7 +2493,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1056:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -2505,55 +2505,55 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 2065,
+                      "id": 2055,
                       "name": "member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2060,
+                      "referencedDeclaration": 2050,
                       "src": "1089:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member memory"
                       }
                     },
-                    "id": 2066,
+                    "id": 2056,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
                     "lValueRequested": false,
                     "memberName": "challengeID",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 1913,
+                    "referencedDeclaration": 1903,
                     "src": "1089:18:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 2058,
-                  "id": 2067,
+                  "functionReturnParameters": 2048,
+                  "id": 2057,
                   "nodeType": "Return",
                   "src": "1082:25:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2069,
+            "id": 2059,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getChallengeID",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2055,
+              "id": 2045,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2054,
+                  "id": 2044,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2069,
+                  "scope": 2059,
                   "src": "974:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2562,7 +2562,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2053,
+                    "id": 2043,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "974:7:5",
@@ -2579,15 +2579,15 @@
               "src": "973:17:5"
             },
             "returnParameters": {
-              "id": 2058,
+              "id": 2048,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2057,
+                  "id": 2047,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2069,
+                  "scope": 2059,
                   "src": "1014:7:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2596,7 +2596,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2056,
+                    "id": 2046,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1014:7:5",
@@ -2611,7 +2611,7 @@
               ],
               "src": "1013:9:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "950:164:5",
             "stateMutability": "view",
             "superFunction": null,
@@ -2619,37 +2619,37 @@
           },
           {
             "body": {
-              "id": 2085,
+              "id": 2075,
               "nodeType": "Block",
               "src": "1201:99:5",
               "statements": [
                 {
                   "assignments": [
-                    2077
+                    2067
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2077,
+                      "id": 2067,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2085,
+                      "scope": 2075,
                       "src": "1211:20:5",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2076,
+                        "id": 2066,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1211:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -2657,30 +2657,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2081,
+                  "id": 2071,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2078,
+                      "id": 2068,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "1234:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2080,
+                    "id": 2070,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2079,
+                      "id": 2069,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2071,
+                      "referencedDeclaration": 2061,
                       "src": "1242:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2694,7 +2694,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1234:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -2706,55 +2706,55 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 2082,
+                      "id": 2072,
                       "name": "member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2077,
+                      "referencedDeclaration": 2067,
                       "src": "1267:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member memory"
                       }
                     },
-                    "id": 2083,
+                    "id": 2073,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
                     "lValueRequested": false,
                     "memberName": "membershipStartTime",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 1915,
+                    "referencedDeclaration": 1905,
                     "src": "1267:26:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 2075,
-                  "id": 2084,
+                  "functionReturnParameters": 2065,
+                  "id": 2074,
                   "nodeType": "Return",
                   "src": "1260:33:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2086,
+            "id": 2076,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getMembershipStartTime",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2072,
+              "id": 2062,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2071,
+                  "id": 2061,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2086,
+                  "scope": 2076,
                   "src": "1152:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2763,7 +2763,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2070,
+                    "id": 2060,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1152:7:5",
@@ -2780,15 +2780,15 @@
               "src": "1151:17:5"
             },
             "returnParameters": {
-              "id": 2075,
+              "id": 2065,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2074,
+                  "id": 2064,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2086,
+                  "scope": 2076,
                   "src": "1192:7:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2797,7 +2797,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2073,
+                    "id": 2063,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1192:7:5",
@@ -2812,7 +2812,7 @@
               ],
               "src": "1191:9:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1120:180:5",
             "stateMutability": "view",
             "superFunction": null,
@@ -2820,25 +2820,25 @@
           },
           {
             "body": {
-              "id": 2097,
+              "id": 2087,
               "nodeType": "Block",
               "src": "1450:38:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2095,
+                    "id": 2085,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 2093,
+                      "id": 2083,
                       "name": "charter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2036,
+                      "referencedDeclaration": 2026,
                       "src": "1460:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -2849,11 +2849,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2094,
+                      "id": 2084,
                       "name": "_newCharter",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2088,
+                      "referencedDeclaration": 2078,
                       "src": "1470:11:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -2866,27 +2866,27 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "id": 2096,
+                  "id": 2086,
                   "nodeType": "ExpressionStatement",
                   "src": "1460:21:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2098,
+            "id": 2088,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2091,
+                "id": 2081,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2090,
+                  "id": 2080,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "1440:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2900,15 +2900,15 @@
             "name": "updateCharter",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2089,
+              "id": 2079,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2088,
+                  "id": 2078,
                   "name": "_newCharter",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2098,
+                  "scope": 2088,
                   "src": "1410:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2917,7 +2917,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 2087,
+                    "id": 2077,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1410:7:5",
@@ -2933,12 +2933,12 @@
               "src": "1409:21:5"
             },
             "returnParameters": {
-              "id": 2092,
+              "id": 2082,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1450:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1387:101:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -2946,37 +2946,37 @@
           },
           {
             "body": {
-              "id": 2120,
+              "id": 2110,
               "nodeType": "Block",
               "src": "1601:240:5",
               "statements": [
                 {
                   "assignments": [
-                    2108
+                    2098
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2108,
+                      "id": 2098,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2120,
+                      "scope": 2110,
                       "src": "1647:20:5",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2107,
+                        "id": 2097,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1647:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -2984,14 +2984,14 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2113,
+                  "id": 2103,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
                         "hexValue": "30",
-                        "id": 2110,
+                        "id": 2100,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -3008,11 +3008,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 2111,
+                        "id": 2101,
                         "name": "_membershipStartTime",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2102,
+                        "referencedDeclaration": 2092,
                         "src": "1740:20:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -3031,18 +3031,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 2109,
+                      "id": 2099,
                       "name": "Member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1916,
+                      "referencedDeclaration": 1906,
                       "src": "1670:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_struct$_Member_$1916_storage_ptr_$",
+                        "typeIdentifier": "t_type$_t_struct$_Member_$1906_storage_ptr_$",
                         "typeString": "type(struct MemberStruct.Member storage pointer)"
                       }
                     },
-                    "id": 2112,
+                    "id": 2102,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3055,7 +3055,7 @@
                     "nodeType": "FunctionCall",
                     "src": "1670:101:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_memory",
+                      "typeIdentifier": "t_struct$_Member_$1906_memory",
                       "typeString": "struct MemberStruct.Member memory"
                     }
                   },
@@ -3065,7 +3065,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2118,
+                    "id": 2108,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3074,25 +3074,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 2114,
+                        "id": 2104,
                         "name": "members",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2034,
+                        "referencedDeclaration": 2024,
                         "src": "1809:7:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                           "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                         }
                       },
-                      "id": 2116,
+                      "id": 2106,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 2115,
+                        "id": 2105,
                         "name": "_member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2100,
+                        "referencedDeclaration": 2090,
                         "src": "1817:7:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -3106,7 +3106,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1809:16:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage",
                         "typeString": "struct MemberStruct.Member storage ref"
                       }
                     },
@@ -3114,44 +3114,44 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2117,
+                      "id": 2107,
                       "name": "member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2108,
+                      "referencedDeclaration": 2098,
                       "src": "1828:6:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_memory_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_memory_ptr",
                         "typeString": "struct MemberStruct.Member memory"
                       }
                     },
                     "src": "1809:25:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
-                  "id": 2119,
+                  "id": 2109,
                   "nodeType": "ExpressionStatement",
                   "src": "1809:25:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2121,
+            "id": 2111,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2105,
+                "id": 2095,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2104,
+                  "id": 2094,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "1591:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3165,15 +3165,15 @@
             "name": "setMember",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2103,
+              "id": 2093,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2100,
+                  "id": 2090,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2121,
+                  "scope": 2111,
                   "src": "1522:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3182,7 +3182,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2099,
+                    "id": 2089,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1522:7:5",
@@ -3197,10 +3197,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2102,
+                  "id": 2092,
                   "name": "_membershipStartTime",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2121,
+                  "scope": 2111,
                   "src": "1547:28:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3209,7 +3209,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2101,
+                    "id": 2091,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1547:7:5",
@@ -3225,12 +3225,12 @@
               "src": "1512:69:5"
             },
             "returnParameters": {
-              "id": 2106,
+              "id": 2096,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1601:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1494:347:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3238,37 +3238,37 @@
           },
           {
             "body": {
-              "id": 2142,
+              "id": 2132,
               "nodeType": "Block",
               "src": "1933:103:5",
               "statements": [
                 {
                   "assignments": [
-                    2131
+                    2121
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2131,
+                      "id": 2121,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2142,
+                      "scope": 2132,
                       "src": "1943:21:5",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2130,
+                        "id": 2120,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "1943:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -3276,30 +3276,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2135,
+                  "id": 2125,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2132,
+                      "id": 2122,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "1967:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2134,
+                    "id": 2124,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2133,
+                      "id": 2123,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2123,
+                      "referencedDeclaration": 2113,
                       "src": "1975:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -3313,7 +3313,7 @@
                     "nodeType": "IndexAccess",
                     "src": "1967:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -3323,7 +3323,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2140,
+                    "id": 2130,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3332,25 +3332,25 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 2136,
+                        "id": 2126,
                         "name": "member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2131,
+                        "referencedDeclaration": 2121,
                         "src": "1993:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member storage pointer"
                         }
                       },
-                      "id": 2138,
+                      "id": 2128,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "challengeID",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1913,
+                      "referencedDeclaration": 1903,
                       "src": "1993:18:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -3361,11 +3361,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2139,
+                      "id": 2129,
                       "name": "_newChallengeID",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2125,
+                      "referencedDeclaration": 2115,
                       "src": "2014:15:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -3378,27 +3378,27 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 2141,
+                  "id": 2131,
                   "nodeType": "ExpressionStatement",
                   "src": "1993:36:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2143,
+            "id": 2133,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2128,
+                "id": 2118,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2127,
+                  "id": 2117,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "1923:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3412,15 +3412,15 @@
             "name": "editChallengeID",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2126,
+              "id": 2116,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2123,
+                  "id": 2113,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2143,
+                  "scope": 2133,
                   "src": "1872:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3429,7 +3429,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2122,
+                    "id": 2112,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1872:7:5",
@@ -3444,10 +3444,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2125,
+                  "id": 2115,
                   "name": "_newChallengeID",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2143,
+                  "scope": 2133,
                   "src": "1889:23:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3456,7 +3456,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2124,
+                    "id": 2114,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1889:7:5",
@@ -3472,12 +3472,12 @@
               "src": "1871:42:5"
             },
             "returnParameters": {
-              "id": 2129,
+              "id": 2119,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1933:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "1847:189:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3485,37 +3485,37 @@
           },
           {
             "body": {
-              "id": 2164,
+              "id": 2154,
               "nodeType": "Block",
               "src": "2129:104:5",
               "statements": [
                 {
                   "assignments": [
-                    2153
+                    2143
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 2153,
+                      "id": 2143,
                       "name": "member",
                       "nodeType": "VariableDeclaration",
-                      "scope": 2164,
+                      "scope": 2154,
                       "src": "2139:21:5",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                         "typeString": "struct MemberStruct.Member"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 2152,
+                        "id": 2142,
                         "name": "Member",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 1916,
+                        "referencedDeclaration": 1906,
                         "src": "2139:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member"
                         }
                       },
@@ -3523,30 +3523,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 2157,
+                  "id": 2147,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 2154,
+                      "id": 2144,
                       "name": "members",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2034,
+                      "referencedDeclaration": 2024,
                       "src": "2163:7:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                         "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                       }
                     },
-                    "id": 2156,
+                    "id": 2146,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 2155,
+                      "id": 2145,
                       "name": "_member",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2145,
+                      "referencedDeclaration": 2135,
                       "src": "2171:7:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -3560,7 +3560,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2163:16:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Member_$1916_storage",
+                      "typeIdentifier": "t_struct$_Member_$1906_storage",
                       "typeString": "struct MemberStruct.Member storage ref"
                     }
                   },
@@ -3570,7 +3570,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2162,
+                    "id": 2152,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3579,25 +3579,25 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 2158,
+                        "id": 2148,
                         "name": "member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2153,
+                        "referencedDeclaration": 2143,
                         "src": "2189:6:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Member_$1916_storage_ptr",
+                          "typeIdentifier": "t_struct$_Member_$1906_storage_ptr",
                           "typeString": "struct MemberStruct.Member storage pointer"
                         }
                       },
-                      "id": 2160,
+                      "id": 2150,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "membershipStartTime",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1915,
+                      "referencedDeclaration": 1905,
                       "src": "2189:26:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -3608,11 +3608,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 2161,
+                      "id": 2151,
                       "name": "_newTime",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2147,
+                      "referencedDeclaration": 2137,
                       "src": "2218:8:5",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -3625,27 +3625,27 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 2163,
+                  "id": 2153,
                   "nodeType": "ExpressionStatement",
                   "src": "2189:37:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2165,
+            "id": 2155,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2150,
+                "id": 2140,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2149,
+                  "id": 2139,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "2119:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3659,15 +3659,15 @@
             "name": "editMembershipStartTime",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2148,
+              "id": 2138,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2145,
+                  "id": 2135,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2165,
+                  "scope": 2155,
                   "src": "2075:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3676,7 +3676,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2144,
+                    "id": 2134,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2075:7:5",
@@ -3691,10 +3691,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 2147,
+                  "id": 2137,
                   "name": "_newTime",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2165,
+                  "scope": 2155,
                   "src": "2092:16:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3703,7 +3703,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 2146,
+                    "id": 2136,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "2092:7:5",
@@ -3719,12 +3719,12 @@
               "src": "2074:35:5"
             },
             "returnParameters": {
-              "id": 2151,
+              "id": 2141,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2129:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "2042:191:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3732,14 +3732,14 @@
           },
           {
             "body": {
-              "id": 2177,
+              "id": 2167,
               "nodeType": "Block",
               "src": "2297:40:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 2175,
+                    "id": 2165,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3752,25 +3752,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 2172,
+                        "id": 2162,
                         "name": "members",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2034,
+                        "referencedDeclaration": 2024,
                         "src": "2314:7:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1916_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Member_$1906_storage_$",
                           "typeString": "mapping(address => struct MemberStruct.Member storage ref)"
                         }
                       },
-                      "id": 2174,
+                      "id": 2164,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 2173,
+                        "id": 2163,
                         "name": "_member",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2167,
+                        "referencedDeclaration": 2157,
                         "src": "2322:7:5",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -3784,7 +3784,7 @@
                       "nodeType": "IndexAccess",
                       "src": "2314:16:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Member_$1916_storage",
+                        "typeIdentifier": "t_struct$_Member_$1906_storage",
                         "typeString": "struct MemberStruct.Member storage ref"
                       }
                     },
@@ -3793,27 +3793,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 2176,
+                  "id": 2166,
                   "nodeType": "ExpressionStatement",
                   "src": "2307:23:5"
                 }
               ]
             },
             "documentation": null,
-            "id": 2178,
+            "id": 2168,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 2170,
+                "id": 2160,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 2169,
+                  "id": 2159,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2671,
+                  "referencedDeclaration": 2661,
                   "src": "2287:9:5",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3827,15 +3827,15 @@
             "name": "deleteMember",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2168,
+              "id": 2158,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2167,
+                  "id": 2157,
                   "name": "_member",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2178,
+                  "scope": 2168,
                   "src": "2261:15:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3844,7 +3844,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2166,
+                    "id": 2156,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2261:7:5",
@@ -3861,19 +3861,19 @@
               "src": "2260:17:5"
             },
             "returnParameters": {
-              "id": 2171,
+              "id": 2161,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2297:0:5"
             },
-            "scope": 2179,
+            "scope": 2169,
             "src": "2239:98:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 2180,
+        "scope": 2170,
         "src": "208:2131:5"
       }
     ],
@@ -4108,7 +4108,7 @@
     }
   },
   "schemaVersion": "3.0.17",
-  "updatedAt": "2020-01-06T18:35:53.078Z",
+  "updatedAt": "2020-01-10T15:49:23.839Z",
   "devdoc": {
     "methods": {
       "constructor": {

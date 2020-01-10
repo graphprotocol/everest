@@ -23,8 +23,6 @@ contract Everest is MemberStruct, Ownable {
     ***************/
     // Voting period length for a challenge (in unix seconds)
     uint256 public votingPeriodDuration;
-    // Period a project must wait before they are officially a member
-    uint256 public waitingPeriod;
     // Deposit that must be made in order to submit a challenge. Returned if challenge is won
     uint256 public challengeDeposit;
     // Application fee to become a member
@@ -60,7 +58,6 @@ contract Everest is MemberStruct, Ownable {
         address approvedToken,
         uint256 votingPeriodDuration,
         uint256 challengeDeposit,
-        uint256 waitingPeriod,
         uint256 applicationFee,
         address reserveBank,
         address registry,
@@ -72,8 +69,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 indexed challengeID,
         address indexed challenger,
         uint256 challengeEndTime,
-        bytes32 details,
-        bool challengedOnApplication // true if member was challenged upon application
+        bytes32 details
     );
 
     event SubmitVote(
@@ -115,7 +111,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 noVotes;            // The total number of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
         uint256 endTime;            // Ending time of the challenge
-        bytes32 details;             // Challenge details - an IPFS hash, without Qm
+        bytes32 details;            // Challenge details - an IPFS hash, without Qm
         mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
@@ -187,7 +183,6 @@ contract Everest is MemberStruct, Ownable {
         address _approvedToken,
         uint256 _votingPeriodDuration,
         uint256 _challengeDeposit,
-        uint256 _waitingPeriod,
         uint256 _applicationFee,
         bytes32 _charter
     ) public {
@@ -206,7 +201,6 @@ contract Everest is MemberStruct, Ownable {
 
         votingPeriodDuration = _votingPeriodDuration;
         challengeDeposit = _challengeDeposit;
-        waitingPeriod = _waitingPeriod;
         applicationFee = _applicationFee;
 
         emit EverestDeployed(
@@ -214,7 +208,6 @@ contract Everest is MemberStruct, Ownable {
             _approvedToken,
             _votingPeriodDuration,
             _challengeDeposit,
-            _waitingPeriod,
             _applicationFee,
             address(reserveBank),
             address(memberRegistry),
@@ -246,7 +239,7 @@ contract Everest is MemberStruct, Ownable {
             "Everest::applySignedInternal - This member already exists"
         );
         /* solium-disable-next-line security/no-block-members*/
-        uint256 membershipTime = now + waitingPeriod;
+        uint256 membershipTime = now;
         memberRegistry.setMember(_newMember, membershipTime);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
@@ -544,23 +537,12 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _details
     ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
         uint256 challengeeMemberTime = memberRegistry.getMembershipStartTime(_challengedMember);
-        require (challengeeMemberTime > 0, "Everest::challenge - Chalengee must exist");
+        require (challengeeMemberTime > 0, "Everest::challenge - Challengee must exist");
         uint256 challengerMemberTime = memberRegistry.getMembershipStartTime(_challengingMember);
         require(
             !memberChallengeExists(_challengedMember),
             "Everest::challenge - Member can't be challenged multiple times at once"
         );
-
-        // We check if it was a new member that was challenged before they were accepted. We then
-        // reset their member time so that they can't vote during the challenge period they are
-        // being challenged
-        bool challengedOnApplication;
-        /* solium-disable-next-line security/no-block-members*/
-        if (challengeeMemberTime > now){
-            /* solium-disable-next-line security/no-block-members*/
-            memberRegistry.editMembershipStartTime(_challengedMember, (now + votingPeriodDuration));
-            challengedOnApplication = true;
-        }
 
         uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
@@ -593,8 +575,7 @@ contract Everest is MemberStruct, Ownable {
             _challengingMember,
             /* solium-disable-next-line security/no-block-members*/
             now + votingPeriodDuration,
-            newChallenge.details,
-            challengedOnApplication
+            newChallenge.details
         );
 
         // Insert challengers vote into the challenge
@@ -632,7 +613,8 @@ contract Everest is MemberStruct, Ownable {
             "Everest::submitVote - Member has already voted on this challenge"
         );
         uint256 memberStartTime = memberRegistry.getMembershipStartTime(_voter);
-        uint256 voteWeight = storedChallenge.endTime - memberStartTime;
+        // The lower the member start time (i.e. the older the member) the more vote weight
+        uint256 voteWeight = storedChallenge.endTime.sub(memberStartTime);
 
         // Store vote (can't be msg.sender because delegate can be voting)
         storedChallenge.voteChoiceByMember[_voter] = _voteChoice;
@@ -741,7 +723,7 @@ contract Everest is MemberStruct, Ownable {
     function isMember(address _member) public view returns (bool){
         uint256 startTime = memberRegistry.getMembershipStartTime(_member);
         /* solium-disable-next-line security/no-block-members*/
-        if (now >= startTime){
+        if (startTime > 0){
             return true;
         }
         return false;

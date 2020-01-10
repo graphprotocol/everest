@@ -12,8 +12,6 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Registry } from '../types/Everest/Registry'
-
 import { Project, Everest, Challenge, Vote } from '../types/schema'
 
 import { addQm } from './helpers'
@@ -51,7 +49,6 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.approvedToken = event.params.approvedToken
   everest.votingPeriodDuration = event.params.votingPeriodDuration
   everest.challengeDeposit = event.params.challengeDeposit
-  everest.waitingPeriod = event.params.waitingPeriod
   everest.applicationFee = event.params.applicationFee
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
@@ -82,16 +79,9 @@ export function handleMemberChallenged(event: MemberChallenged): void {
 
   challenge.save()
 
-  // If the member was challenged on application, we call the contract directly to get the new
-  // challenge time that was updated for the challengee
-  if (event.params.challengedOnApplication) {
-    let everest = Everest.load('1')
-    let registry = Registry.bind(everest.reserveBankAddress)
-    let project = Project.load(event.params.member.toHexString())
-    project.membershipStartTime = registry.getMembershipStartTime(event.params.member)
-    project.currentChallenge = event.params.challengeID.toString()
-    project.save()
-  }
+  let project = Project.load(event.params.member.toHexString())
+  project.currentChallenge = event.params.challengeID.toString()
+  project.save()
 
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(everest.challengeDeposit)
@@ -132,7 +122,8 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 
   let project = Project.load(event.params.member.toHexString())
   let pastChallenges = project.pastChallenges
-  project.pastChallenges.push(project.currentChallenge)
+  pastChallenges.push(project.currentChallenge)
+  project.pastChallenges = pastChallenges
   project.currentChallenge = null
   project.save()
 }

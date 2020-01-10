@@ -25,8 +25,6 @@ dataSources:
       abis:
         - name: Everest
           file: ../contracts/build/contracts/Everest.json
-        - name: Registry
-          file: ../contracts/build/contracts/Registry.json
       eventHandlers:
         - event: ApplicationMade(address,uint256)
           handler: handleApplicationMade
@@ -36,9 +34,9 @@ dataSources:
           handler: handleCharterUpdated
         - event: Withdrawal(indexed address,uint256)
           handler: handleWithdrawal
-        - event: EverestDeployed(address,address,uint256,uint256,uint256,uint256,address,address,bytes32)
+        - event: EverestDeployed(address,address,uint256,uint256,uint256,address,address,bytes32)
           handler: handleEverestDeployed
-        - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32,bool)
+        - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
           handler: handleMemberChallenged
         - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
           handler: handleSubmitVote
