@@ -9,8 +9,6 @@ contract ReserveBank is Ownable {
 
     IERC20 public approvedToken; // approved token contract reference
 
-    event Withdrawal(address indexed receiver, uint256 amount);
-
     constructor(address approvedTokenAddress) public {
         approvedToken = IERC20(approvedTokenAddress);
     }
@@ -20,7 +18,6 @@ contract ReserveBank is Ownable {
         onlyOwner
         returns (bool)
     {
-        emit Withdrawal(receiver, amount);
         return approvedToken.transfer(receiver, amount);
     }
 }

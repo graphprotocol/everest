@@ -73,3 +73,9 @@ yarn-error.log
 .privkey.txt
 .infurakey.txt
 ui/now.json
+
+# subgraph
+subgraph/build/
+subgraph/node_modules/
+subgraph/src/types/
+subgraph/.DS_STORE
