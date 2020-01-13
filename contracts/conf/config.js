@@ -58,7 +58,9 @@ const config = {
                 amount: '25000000000000000000000000'
             }
         ]
-    }
+    },
+    // Note the DID address is the same for mainnet, ropsten, rinkeby, kovan and goerli
+    ethereumDIDRegistryAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
 }
 
 module.exports = config

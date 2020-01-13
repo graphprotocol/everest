@@ -286,10 +286,10 @@ contract Everest is MemberStruct, Ownable {
     @param _applySigV               V piece of the apply signature
     @param _applySigR               R piece of the apply signature
     @param _applySigS               S piece of the apply signature
+    @param _owner                   Owner of the member application
     @param _delegateSigV            V piece of the delegate signature
     @param _delegateSigR            R piece of the delegate signature
     @param _delegateSigS            S piece of the delegate signature
-    @param _owner                   Owner of the member application
     @param _delegate                Delegate designated for the member
     @param _delegateValidity        Time delegate is valid
     */
@@ -298,10 +298,10 @@ contract Everest is MemberStruct, Ownable {
         uint8 _applySigV,
         bytes32 _applySigR,
         bytes32 _applySigS,
+        address _owner,
         uint8 _delegateSigV,
         bytes32 _delegateSigR,
         bytes32 _delegateSigS,
-        address _owner,
         address _delegate,
         uint256 _delegateValidity
     ) external {
@@ -323,10 +323,10 @@ contract Everest is MemberStruct, Ownable {
     @param _applySigV               V piece of the apply signature
     @param _applySigR               R piece of the apply signature
     @param _applySigS               S piece of the apply signature
+    @param _owner                   Owner of the member application
     @param _attributeSigV           V piece of the attribute signature
     @param _attributeSigR           R piece of the attribute signature
     @param _attributeSigS           S piece of the attribute signature
-    @param _owner                   Owner of the member application
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
                                     with zeros appended to make it 32 bytes. (add 42 zeros)
@@ -338,10 +338,10 @@ contract Everest is MemberStruct, Ownable {
         uint8 _applySigV,
         bytes32 _applySigR,
         bytes32 _applySigS,
+        address _owner,
         uint8 _attributeSigV,
         bytes32 _attributeSigR,
         bytes32 _attributeSigS,
-        address _owner,
         bytes32 _offChainDataName,
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity

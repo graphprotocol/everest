@@ -2,6 +2,7 @@
 
 const Everest = artifacts.require('Everest.sol')
 const Token = artifacts.require('MockToken.sol')
+const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const config = require('../conf/config.js')
 // const fs = require('fs')
 // const Registry = artifacts.require('Registry.sol')
@@ -24,6 +25,8 @@ module.exports = async (deployer, network, accounts) => {
     let owner
     if (network === 'development') {
         owner = config.everestParams.owner
+        // We must deploy our own DID registry for ganache
+        await deployer.deploy(EthereumDIDRegistry)
     } else if (network === 'ropsten') {
         owner = config.everestParams.ropstenOwner
     }
@@ -35,7 +38,6 @@ module.exports = async (deployer, network, accounts) => {
         params.approvedToken,
         params.votingPeriodDuration,
         params.challengeDeposit,
-        params.fullMemberPeriodDuration,
         params.applicationFee,
         params.charter
     )
