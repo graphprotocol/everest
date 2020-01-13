@@ -283,28 +283,34 @@ contract Everest is MemberStruct, Ownable {
     @dev                            Allows a user to apply to add a member to the Registry and add
                                     a delegate to the DID registry
     @param _newMember               The address of the new member
-    @param _sigV                    V piece of the member signature
-    @param _sigR                    R piece of the member signature
-    @param _sigS                    S piece of the member signature
+    @param _applySigV               V piece of the apply signature
+    @param _applySigR               R piece of the apply signature
+    @param _applySigS               S piece of the apply signature
+    @param _delegateSigV            V piece of the delegate signature
+    @param _delegateSigR            R piece of the delegate signature
+    @param _delegateSigS            S piece of the delegate signature
     @param _owner                   Owner of the member application
     @param _delegate                Delegate designated for the member
     @param _delegateValidity        Time delegate is valid
     */
     function applySignedWithDelegate(
         address _newMember,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
+        uint8 _applySigV,
+        bytes32 _applySigR,
+        bytes32 _applySigS,
+        uint8 _delegateSigV,
+        bytes32 _delegateSigR,
+        bytes32 _delegateSigS,
         address _owner,
         address _delegate,
         uint256 _delegateValidity
     ) external {
-        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
+        applySignedInternal(_newMember, _applySigV, _applySigR, _applySigS, _owner);
         addDelegateSigned(
             _newMember,
-            _sigV,
-            _sigR,
-            _sigS,
+            _delegateSigV,
+            _delegateSigR,
+            _delegateSigS,
             _delegate,
             _delegateValidity
         );
@@ -314,9 +320,12 @@ contract Everest is MemberStruct, Ownable {
     @dev                            Allows a user to apply to add a member to the Registry and
                                     add off chain data to the DID registry
     @param _newMember               The address of the new member
-    @param _sigV                    V piece of the member signature
-    @param _sigR                    R piece of the member signature
-    @param _sigS                    S piece of the member signature
+    @param _applySigV               V piece of the apply signature
+    @param _applySigR               R piece of the apply signature
+    @param _applySigS               S piece of the apply signature
+    @param _attributeSigV           V piece of the attribute signature
+    @param _attributeSigR           R piece of the attribute signature
+    @param _attributeSigS           S piece of the attribute signature
     @param _owner                   Owner of the member application
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
@@ -326,74 +335,28 @@ contract Everest is MemberStruct, Ownable {
     */
     function applySignedWithAttribute(
         address _newMember,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
+        uint8 _applySigV,
+        bytes32 _applySigR,
+        bytes32 _applySigS,
+        uint8 _attributeSigV,
+        bytes32 _attributeSigR,
+        bytes32 _attributeSigS,
         address _owner,
         bytes32 _offChainDataName,
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
+        applySignedInternal(_newMember, _applySigV, _applySigR, _applySigS, _owner);
         editOffChainDataSigned(
             _newMember,
-            _sigV,
-            _sigR,
-            _sigS,
+            _attributeSigV,
+            _attributeSigR,
+            _attributeSigS,
             _offChainDataName,
             _offChainDataValue,
             _offChainDataValidity
         );
     }
-
-    /**
-    @dev                            Allows a user to apply to add a member to the Registry and
-                                    add off chain data  and a delegate to the DID registry
-    @param _newMember               The address of the new member
-    @param _sigV                    V piece of the member signature
-    @param _sigR                    R piece of the member signature
-    @param _sigS                    S piece of the member signature
-    @param _owner                   Owner of the member application
-    @param _delegate                Delegate designated for the member
-    @param _delegateValidity        Time delegate is valid
-    @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
-                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
-                                    with zeros appended to make it 32 bytes
-    @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
-    @param _offChainDataValidity    Length of time attribute data is valid
-    */
-    function applySignedWithAttributeAndDelegate(
-        address _newMember,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
-        address _owner,
-        address _delegate,
-        uint256 _delegateValidity,
-        bytes32 _offChainDataName,
-        bytes calldata _offChainDataValue,
-        uint256 _offChainDataValidity
-    ) external {
-        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
-        addDelegateSigned(
-            _newMember,
-            _sigV,
-            _sigR,
-            _sigS,
-            _delegate,
-            _delegateValidity
-        );
-        editOffChainDataSigned(
-            _newMember,
-            _sigV,
-            _sigR,
-            _sigS,
-            _offChainDataName,
-            _offChainDataValue,
-            _offChainDataValidity
-        );
-    }
-
 
     /**
     @dev                Allow a member to voluntarily leave. Note that this does not
