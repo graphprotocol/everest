@@ -1,3 +1,5 @@
+import { ethers } from 'ethers'
+
 export const walletExists = () => {
   if (typeof window !== undefined) {
     return window.web3 || window.ethereum
@@ -33,4 +35,29 @@ export const metamaskAccountChange = callback => {
       callback && callback(accounts)
     })
   }
+}
+
+export function getProvider() {
+  let provider
+  if (typeof window !== undefined) {
+    provider = window.web3.currentProvider
+      ? new ethers.providers.Web3Provider(window.web3.currentProvider)
+      : window.web3
+  }
+  return provider
+}
+
+// connect to any contract with signer
+export function getContract(address, ABI, library, account) {
+  let signer
+  const provider = window.web3.currentProvider
+    ? new ethers.providers.Web3Provider(window.web3.currentProvider)
+    : window.web3
+
+  if (!library) {
+    signer = provider.getSigner(0)
+  } else {
+    library.getSigner(account)
+  }
+  return new ethers.Contract(address, ABI, signer)
 }

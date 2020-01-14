@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
 
 import { convertDate } from '../utils/helpers/date'
 import { formatNumber } from '../utils/helpers/number'
+
 import Layout from '../components/Layout'
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
@@ -16,30 +16,7 @@ import Link from '../components/Link'
 
 import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
-
-const PROJECT_QUERY = gql`
-  query everestProject($id: ID!) {
-    project(where: { id: $id }) {
-      id
-      name
-      description
-      categories
-      createdAt
-      reputation
-      isChallenged
-      website
-      twitter
-      github
-      image
-      avatar
-      totalVotes
-      owner {
-        id
-        name
-      }
-    }
-  }
-`
+import { PROJECT_QUERY } from '../utils/queries'
 
 const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
@@ -51,6 +28,21 @@ const Project = ({ location }) => {
 
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
+  const challengeProject = () => {
+    console.log('CHALLENGE PROJECT')
+    // TODO: Call contract function
+  }
+
+  const delegateProject = () => {
+    console.log('DELEGATE PROJECT')
+    // TODO: Call contract function
+  }
+
+  const transferOwnership = () => {
+    console.log('TRANSFER OWNERSHIP')
+    // TODO: Call contract function
+  }
+
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
       id: projectId,
@@ -61,6 +53,14 @@ const Project = ({ location }) => {
     return (
       <Layout>
         <Styled.p>Loading</Styled.p>
+      </Layout>
+    )
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <Styled.h3>Something went wrong - can't find a project </Styled.h3>
       </Layout>
     )
   }
@@ -206,26 +206,84 @@ const Project = ({ location }) => {
           ></Box>
         </Box>
       </Grid>
-      <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
-        <Styled.h6 sx={{ fontWeight: 'heading' }}>
-          Challenge this project
-        </Styled.h6>
-        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
-        <Button
-          disabled={false}
-          variant={showChallenge ? 'primary' : 'secondary'}
-          onClick={e => {
-            setShowChallenge(!showChallenge)
-            if (!showChallenge) {
-              setShowDelegate(false)
-              setShowTransfer(false)
-            }
+      <Grid columns={4} gap={0}>
+        <Box
+          sx={{
+            mt: 6,
+            textAlign: ['center', 'center', 'left'],
+            alignSelf: 'end',
           }}
-          text="Challenge"
-          icon={showChallenge ? 'challenging.png' : 'challenge.png'}
-          sx={{ margin: ['auto', 'auto', 0] }}
-        />
-      </Box>
+        >
+          <Button
+            disabled={false}
+            variant={'secondary'}
+            to={`/edit/${projectId}`}
+            text="Edit"
+            icon={'edit-icon.svg'}
+            sx={{ margin: ['auto', 'auto', 0] }}
+          />
+        </Box>
+        <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
+          <Styled.h6 sx={{ fontWeight: 'heading' }}>
+            Challenge this project
+          </Styled.h6>
+          <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
+          <Button
+            disabled={false}
+            variant={showChallenge ? 'primary' : 'secondary'}
+            onClick={e => {
+              setShowChallenge(!showChallenge)
+              if (!showChallenge) {
+                setShowDelegate(false)
+                setShowTransfer(false)
+              }
+            }}
+            text="Challenge"
+            icon={showChallenge ? 'challenging.png' : 'challenge.png'}
+            sx={{ margin: ['auto', 'auto', 0] }}
+          />
+        </Box>
+        <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
+          <Styled.h6 sx={{ fontWeight: 'heading' }}>
+            Transfer this project
+          </Styled.h6>
+          <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
+          <Button
+            disabled={false}
+            variant={showTransfer ? 'primary' : 'secondary'}
+            onClick={e => {
+              setShowTransfer(!showTransfer)
+              if (!showTransfer) {
+                setShowChallenge(false)
+                setShowDelegate(false)
+              }
+            }}
+            text="Transfer"
+            icon={showTransfer ? 'transferring-icon.svg' : 'transfer-icon.svg'}
+            sx={{ margin: ['auto', 'auto', 0] }}
+          />
+        </Box>
+        <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
+          <Styled.h6 sx={{ fontWeight: 'heading' }}>
+            Delegate this project
+          </Styled.h6>
+          <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
+          <Button
+            disabled={false}
+            variant={showDelegate ? 'primary' : 'secondary'}
+            onClick={e => {
+              setShowDelegate(!showDelegate)
+              if (!showDelegate) {
+                setShowChallenge(false)
+                setShowTransfer(false)
+              }
+            }}
+            text="Delegate"
+            icon={showDelegate ? 'delegating-icon.svg' : 'delegate-icon.svg'}
+            sx={{ margin: ['auto', 'auto', 0] }}
+          />
+        </Box>
+      </Grid>
       {showChallenge && (
         <TabView
           fieldType="textarea"
@@ -234,32 +292,13 @@ const Project = ({ location }) => {
           placeholder="Challenge Description"
           heading={`Remove ${project.name}`}
           description="lala"
-          value={transferAddress}
-          setValue={setTransferAddress}
-          text="Transfer"
-          icon="transfer-icon.svg"
+          value={challengeDescription}
+          setValue={setChallengeDescription}
+          text="Challenge"
+          icon="challenge.png"
+          handleClick={challengeProject}
         />
       )}
-      <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
-        <Styled.h6 sx={{ fontWeight: 'heading' }}>
-          Transfer this project
-        </Styled.h6>
-        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
-        <Button
-          disabled={false}
-          variant={showTransfer ? 'primary' : 'secondary'}
-          onClick={e => {
-            setShowTransfer(!showTransfer)
-            if (!showTransfer) {
-              setShowChallenge(false)
-              setShowDelegate(false)
-            }
-          }}
-          text="Transfer"
-          icon={showTransfer ? 'transferring-icon.svg' : 'transfer-icon.svg'}
-          sx={{ margin: ['auto', 'auto', 0] }}
-        />
-      </Box>
       {showTransfer && (
         <TabView
           fieldType="input"
@@ -268,32 +307,13 @@ const Project = ({ location }) => {
           placeholder="Enter address"
           heading={`Transfer ${project.name}`}
           description="PLACEHOLDER"
-          value={challengeDescription}
-          setValue={setChallengeDescription}
+          value={transferAddress}
+          setValue={setTransferAddress}
           text="Transfer"
           icon="transfer-icon.svg"
+          handleClick={transferOwnership}
         />
       )}
-      <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
-        <Styled.h6 sx={{ fontWeight: 'heading' }}>
-          Delegate this project
-        </Styled.h6>
-        <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
-        <Button
-          disabled={false}
-          variant={showDelegate ? 'primary' : 'secondary'}
-          onClick={e => {
-            setShowDelegate(!showDelegate)
-            if (!showDelegate) {
-              setShowChallenge(false)
-              setShowTransfer(false)
-            }
-          }}
-          text="Delegate"
-          icon={showDelegate ? 'delegating-icon.svg' : 'delegate-icon.svg'}
-          sx={{ margin: ['auto', 'auto', 0] }}
-        />
-      </Box>
       {showDelegate && (
         <TabView
           fieldType="input"
@@ -306,6 +326,7 @@ const Project = ({ location }) => {
           setValue={setDelegateAddress}
           text="Delegate"
           icon="delegate-icon.svg"
+          handleClick={delegateProject}
         />
       )}
     </Layout>

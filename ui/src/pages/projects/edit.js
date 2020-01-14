@@ -1,16 +1,29 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { navigate } from 'gatsby'
 import ipfs from '../../services/ipfs'
 import fetch from 'isomorphic-fetch'
+import { useQuery } from '@apollo/react-hooks'
+import { PROJECT_QUERY } from '../../utils/queries'
+import { useEverestContract, useAddress, useProvider } from '../../utils/hooks'
 
 import ProjectForm from '../../components/ProjectForm'
-import { useEverestContract, useAddress } from '../../utils/hooks'
 
-const NewProject = ({ data, ...props }) => {
+const EditProject = ({ location, ...props }) => {
+  const projectId = location ? location.pathname.split('/')[2] : ''
+  const [everestContract] = useState(useEverestContract())
+  const [address, setAddress] = useState(useAddress())
+  const [provider, setProvider] = useState(useProvider())
+
+  const { loading, error, data } = useQuery(PROJECT_QUERY, {
+    variables: {
+      id: projectId,
+    },
+  })
+
   const [isDisabled, setIsDisabled] = useState(true)
   const [project, setProject] = useState({
     name: '',
@@ -25,8 +38,54 @@ const NewProject = ({ data, ...props }) => {
     isRepresentative: null,
     categories: [],
   })
-  const [everestContract] = useState(useEverestContract())
-  const [address] = useAddress()
+
+  useEffect(() => {
+    if (data) {
+      let projectObj = data && data.project
+      setProject(state => ({
+        ...state,
+        name: projectObj ? projectObj.name : '',
+        description: projectObj ? projectObj.description : '',
+        logoName:
+          projectObj && projectObj.avatar
+            ? projectObj.avatar
+                .split('/')
+                .slice(-1)
+                .join('')
+            : '',
+        logoUrl: projectObj ? projectObj.avatar : '',
+        imageName:
+          projectObj && projectObj.image
+            ? projectObj.image
+                .split('/')
+                .slice(-1)
+                .join('')
+            : '',
+        imageUrl: projectObj ? projectObj.image : '',
+        website: projectObj ? projectObj.website : '',
+        github: projectObj ? projectObj.github : '',
+        twitter: projectObj ? projectObj.twitter : '',
+        isRepresentative: projectObj ? projectObj.isRepresentative : null,
+        categories: projectObj ? projectObj.categories : [],
+      }))
+    }
+  }, [])
+
+  if (loading && !error) {
+    return (
+      <Layout>
+        <Styled.p>Loading</Styled.p>
+      </Layout>
+    )
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <Styled.h3>Something went wrong - can't find a project </Styled.h3>
+      </Layout>
+    )
+  }
 
   const uploadImage = async (e, field) => {
     const image = e.target.files[0]
@@ -75,26 +134,7 @@ const NewProject = ({ data, ...props }) => {
       .then(async function(response) {
         const responseJSON = await response.json()
         if (responseJSON.IpfsHash) {
-          let sigV,
-            sigR,
-            sigS = undefined
-          let offChainDataName =
-            '0x50726f6a65637444617461000000000000000000000000000000000000000000'
-
-          // TODO: call the correct contract function
-          // If user doesn't exist in Everest - call applySignedWithAttribute
-          const transaction = await everestContract.applySignedWithAttribute(
-            address, // project's identity - figure out what this should be
-            sigV,
-            sigR,
-            sigS,
-            address, // this is the "owner" ?
-            offChainDataName,
-            responseJSON.IpfsHash,
-            3156895760, // unix timestamp in seconds for Jan 12, 2070
-          )
         }
-        navigate('/project/ck3t4oggr8ylh0922vgl9dwa9')
       })
       .catch(function(error) {
         setIsDisabled(false)
@@ -136,10 +176,10 @@ const NewProject = ({ data, ...props }) => {
         gap={[1, 4, 8]}
       >
         <Box>
-          <Styled.h1 sx={{ color: 'white', mb: 3 }}>Add Project</Styled.h1>
+          <Styled.h1 sx={{ color: 'white', mb: 3 }}>Edit Project</Styled.h1>
           <p sx={{ variant: 'text.field' }}>
-            Add a project to the Everest registry, a universally shared list of
-            projects in Web3. <br />
+            Edit your project in the Everest registry, a universally shared list
+            of projects in Web3. <br />
             <br />
             A project can be a dApp, DAO, protocol, NGO, research group service
             provider and more! <br />
@@ -158,7 +198,7 @@ const NewProject = ({ data, ...props }) => {
             handleSubmit={handleSubmit}
             setValue={setValue}
             setDisabled={setDisabled}
-            buttonText="Add project"
+            buttonText="Update project"
           />
         </Box>
       </Grid>
@@ -166,4 +206,4 @@ const NewProject = ({ data, ...props }) => {
   )
 }
 
-export default NewProject
+export default EditProject

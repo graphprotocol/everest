@@ -17,6 +17,7 @@ const TabView = ({
   setValue,
   text,
   icon,
+  handleClick,
 }) => {
   return (
     <Grid
@@ -62,7 +63,7 @@ const TabView = ({
             variant={'secondary'}
             onClick={e => {
               // TODO: loading state
-              // setShowChallenge(false)
+              handleClick(e)
             }}
             text={text}
             icon={icon}

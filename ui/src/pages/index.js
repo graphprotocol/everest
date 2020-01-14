@@ -1,17 +1,29 @@
 /** @jsx jsx */
+import { useState } from 'react'
 import { jsx, Styled, Box } from 'theme-ui'
 import PropTypes from 'prop-types'
-import { graphql } from 'gatsby'
+import { graphql, navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
+import { useWeb3React } from '../utils/hooks'
 
 import Layout from '../components/Layout'
 import Stats from '../components/Stats'
 import Button from '../components/Button'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
+import Modal from '../components/Modal'
 import categories from '../data/categories.json'
+import { getAddress } from '../services/ethers'
 
 const Index = ({ data }) => {
+  const { connector, library, chainId, account, active, error } = useWeb3React()
+  const [showModal, setShowModal] = useState(false)
+  const openModal = () => setShowModal(true)
+  const closeModal = () => {
+    setShowModal(false)
+    navigate('/projects/new')
+  }
+
   const stats = [
     { title: 'Projects', value: '150' },
     { title: 'Registry Value (ETH)', value: '150,000' },
@@ -36,7 +48,25 @@ const Index = ({ data }) => {
             provide ongoing utility to the crypto community.
           </Styled.h6>
           <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
-            <Button to="/projects/new" text="Add a project" variant="primary" />
+            {showModal ? (
+              <Modal showModal={showModal} closeModal={closeModal}>
+                <Button
+                  onClick={openModal}
+                  text="Add a project"
+                  variant="primary"
+                />
+              </Modal>
+            ) : (
+              <Button
+                onClick={() =>
+                  account || getAddress()
+                    ? navigate('/projects/new')
+                    : setShowModal(true)
+                }
+                text="Add a project"
+                variant="primary"
+              />
+            )}
           </Grid>
         </Box>
         <Box
