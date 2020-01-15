@@ -127,7 +127,17 @@ const utils = {
             ]
         )
         let setAttributeSignedData = ethers.utils.solidityKeccak256(
-            ['bytes1', 'bytes1', 'address', 'uint256', 'address', 'string', 'bytes32', 'uint256'],
+            [
+                'bytes1',
+                'bytes1',
+                'address',
+                'uint256',
+                'address',
+                'string',
+                'bytes32',
+                'bytes',
+                'uint256'
+            ],
             [
                 '0x19',
                 '0x0',
@@ -136,6 +146,7 @@ const utils = {
                 newMember,
                 'setAttribute',
                 offChainDataName,
+                // MISSING - VALUE
                 offChainDataValidity
             ]
         )
@@ -188,7 +199,7 @@ const utils = {
                 '0x0',
                 etherDIDRegistry.address,
                 nonceChangeOwnerNum,
-                newMember, // aka identity 
+                newMember, // aka identity
                 'changeOwner',
                 owner
             ]
@@ -202,18 +213,16 @@ const utils = {
             changeOwnerSignedData,
             wallet
         )
+        console.log('APLY SIG:', applySig)
         // console.log('Change owner: ', changeOwnerSig)
         // console.log('Set attribute: ', setAttributeSig)
         const everest = await Everest.deployed()
-        console.log("ASDAS: ", newMember)
-        console.log("ASDAS: ", owner)
-        await everest.applySigned(
-            newMember,
-            applySig.v,
-            applySig.r,
-            applySig.s,
-            owner,
-        )
+        // console.log("ASDAS: ", newMember)
+        // console.log("ASDAS: ", owner)
+        await everest.applySigned(newMember, applySig.v, applySig.r, applySig.s, owner, {
+            from: owner,
+            gas: '30000'
+        })
 
         // assert isMember()
     }

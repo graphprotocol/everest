@@ -32,7 +32,22 @@ module.exports = {
                     4 // Create 4 addresses, which are funded with MockDAI
                 ),
             network_id: 3, // Ropsten's id
-            gas: 8000000,
+            //gas: 8000000,
+            gasPrice: ethers.utils.parseUnits('11', 'gwei'), // To easily get in blocks on ropsten
+            skipDryRun: true
+        },
+        rinkeby: {
+            provider: () =>
+                new HDWalletProvider(
+                    fs.readFileSync(path.join(__dirname, '.privkey.txt'), 'utf-8').trim(),
+                    `https://ropsten.infura.io/v3/${fs
+                        .readFileSync(path.join(__dirname, '/.infurakey.txt'), 'utf-8')
+                        .trim()}`,
+                    0,
+                    4 // Create 4 addresses, which are funded with MockDAI
+                ),
+            network_id: 3, // Ropsten's id
+            //gas: 8000000,
             gasPrice: ethers.utils.parseUnits('11', 'gwei'), // To easily get in blocks on ropsten
             skipDryRun: true
         }

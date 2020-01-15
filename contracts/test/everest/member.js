@@ -44,7 +44,7 @@ contract('Everest', accounts => {
         it('should allow a member to apply, pass time, and get whitelisted', async () => {
             let applicantWallet = utils.ethersWallet(utils.walletPaths.zero)
             // await utils.applySignedWithAttribute(applicant, delegate, applicantWallet)
-            // await utils.applySigned(newMember, owner, applicantWallet, {from: owner})
+            await utils.applySigned(newMember, owner, applicantWallet)
             let everest = await Everest.deployed()
             // console.log(await everest.isMember(newMember))
             // console.log(await everest.memberChallengeExists(owner))

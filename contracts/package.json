@@ -10,22 +10,23 @@
     "prettier-js": "prettier -c '**/*.js'",
     "prettier-sol": "prettier -c '**/*.sol'",
     "prettier-write-js": "prettier --write '**/*.js'",
-    "prettier-write-sol": "prettier --write '**/*.sol'"
+    "prettier-write-sol": "prettier --write '**/*.sol'",
+    "flatten": "truffle-flattener ./contracts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "2.4.0",
+    "@truffle/hdwallet-provider": "1.0.28",
     "bn.js": "4.11.8",
     "chai": "4.2.0",
     "ethers": "4.0.39",
-    "openzeppelin-test-helpers": "0.5.1",
-    "@truffle/hdwallet-provider": "1.0.28"
-    },
+    "openzeppelin-test-helpers": "0.5.1"
+  },
   "devDependencies": {
     "eslint": "4.15.0",
     "eslint-config-prettier": "6.5.0",
     "husky": "1.2.0",
     "prettier": "1.18.2"
-    },
+  },
   "husky": {
     "hooks": {
       "pre-commit": "prettier --c '**/*.js' && eslint ./ && solium -d contracts/"
