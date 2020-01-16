@@ -46,11 +46,12 @@ module.exports = {
                     0,
                     4 // Create 4 addresses, which are funded with MockDAI
                 ),
-            network_id: 3, // Ropsten's id
+            network_id: 4, // rinkeby's id
             //gas: 8000000,
             gasPrice: ethers.utils.parseUnits('11', 'gwei'), // To easily get in blocks on ropsten
             skipDryRun: true
         }
+        // kovans id is 42
     },
     // Note, right now we are just using the compiler that truffle comes with.
     // We might lock down a version later

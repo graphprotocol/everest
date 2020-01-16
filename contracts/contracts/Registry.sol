@@ -1,5 +1,5 @@
 // Inspired by  https://fravoll.github.io/solidity-patterns/eternal_storage.html
-pragma solidity ^0.5.8;
+pragma solidity 0.5.12;
 
 import "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol";
 import "./MemberStruct.sol";

@@ -8,12 +8,13 @@
  The DAO allows anoyone to apply to the list.
  It also has reputation based voting for challenges based on how long a project has been a member.
 */
-pragma solidity ^0.5.8;
+pragma solidity 0.5.12;
 
 import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./MemberStruct.sol";
 import "./EthereumDIDRegistry.sol";
+import "./dai.sol";
 
 contract Everest is MemberStruct, Ownable {
     using SafeMath for uint256;
@@ -29,7 +30,7 @@ contract Everest is MemberStruct, Ownable {
     uint256 public applicationFee;
 
     // Approved token contract reference (this version = DAI)
-    IERC20 public approvedToken;
+    Dai public approvedToken;
     // Guild bank contract reference
     ReserveBank public reserveBank;
     // Member Registry contract reference
@@ -143,6 +144,8 @@ contract Everest is MemberStruct, Ownable {
         _;
     }
 
+    // TODO - fix the applied stuff in the modifiers, it doesnt exist anymore
+
     /**
     @dev                Modifer that allows a function to be called by a real member.
                         Only the member can call (no delegate permissions)
@@ -193,7 +196,7 @@ contract Everest is MemberStruct, Ownable {
             "Everest::constructor - _votingPeriodDuration cant be 0"
         );
 
-        approvedToken = IERC20(_approvedToken);
+        approvedToken = Dai(_approvedToken);
         // These contracts get created, but are not recorded in ganache or truffle
         // They can be found on internal transactions on etherscan for any testnet or mainnet launch
         reserveBank = new ReserveBank(_approvedToken);

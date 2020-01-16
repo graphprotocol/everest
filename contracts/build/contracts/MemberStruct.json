@@ -1,30 +1,29 @@
 {
   "contractName": "MemberStruct",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol\":\"MemberStruct\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol\":{\"keccak256\":\"0x1d2821a80de708836345285b7d26f6137f0980132735bad615871c3f468a4650\",\"urls\":[\"bzzr://2cbb701616b9bf7ac0cfa00ab9c97174ef162e00ef8851cbacc5de6f180ad461\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a7230582079787bfe7cf5ecc9a37c8223fc1ec7b9c492cfaffc994973f96479972c3ea2bd0029",
-  "deployedBytecode": "0x6080604052600080fdfea165627a7a7230582079787bfe7cf5ecc9a37c8223fc1ec7b9c492cfaffc994973f96479972c3ea2bd0029",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.12+commit.7709ece9\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol\":\"MemberStruct\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol\":{\"keccak256\":\"0xbdde6072b808789b33bd73225d7d3470c9662558c7d6938a6224fd858d09bf77\",\"urls\":[\"bzz-raw://8d212ba48220ead2a8cf5be26249f33f5b09e17482d9cbf0ba69368479d73036\",\"dweb:/ipfs/QmRdfnbysHfr7Fv3NpmAYxvVsj1CnmbtztcrriD4RYCENZ\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a723158200685cf75f725f5f3b268afb693ec1f29ec3212bbb0d1778e90d786fd6e851f6864736f6c634300050c0032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a723158200685cf75f725f5f3b268afb693ec1f29ec3212bbb0d1778e90d786fd6e851f6864736f6c634300050c0032",
   "sourceMap": "276:300:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;276:300:2;;;;;;;",
   "deployedSourceMap": "276:300:2:-;;;;;",
-  "source": "pragma solidity ^0.5.8;\n\n/*\n The delegate address can execute voting on behalf of the owner of the\n member project.\n The delegate and owner are stored in ERC-1056s registry\n*/\n\n// MemberStruct is here so that both Everest and Registry can inherit, and stay seperate contracts\ncontract MemberStruct {\n    struct Member {\n        uint256 challengeID;    // Is 0 if it is not challenged\n        // Used for reputation: (now - membershipStartTime) = voteWeight\n        // Used to determine membership as well: membershipStartTime > now\n        uint256 membershipStartTime;\n    }\n}",
+  "source": "pragma solidity 0.5.12;\n\n/*\n The delegate address can execute voting on behalf of the owner of the\n member project.\n The delegate and owner are stored in ERC-1056s registry\n*/\n\n// MemberStruct is here so that both Everest and Registry can inherit, and stay seperate contracts\ncontract MemberStruct {\n    struct Member {\n        uint256 challengeID;    // Is 0 if it is not challenged\n        // Used for reputation: (now - membershipStartTime) = voteWeight\n        // Used to determine membership as well: membershipStartTime > now\n        uint256 membershipStartTime;\n    }\n}",
   "sourcePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol",
   "ast": {
     "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol",
     "exportedSymbols": {
       "MemberStruct": [
-        1917
+        1869
       ]
     },
-    "id": 1918,
+    "id": 1870,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1911,
+        "id": 1863,
         "literals": [
           "solidity",
-          "^",
           "0.5",
-          ".8"
+          ".12"
         ],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
@@ -35,23 +34,23 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1917,
+        "id": 1869,
         "linearizedBaseContracts": [
-          1917
+          1869
         ],
         "name": "MemberStruct",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "MemberStruct.Member",
-            "id": 1916,
+            "id": 1868,
             "members": [
               {
                 "constant": false,
-                "id": 1913,
+                "id": 1865,
                 "name": "challengeID",
                 "nodeType": "VariableDeclaration",
-                "scope": 1916,
+                "scope": 1868,
                 "src": "328:19:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -60,7 +59,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1912,
+                  "id": 1864,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "328:7:2",
@@ -74,10 +73,10 @@
               },
               {
                 "constant": false,
-                "id": 1915,
+                "id": 1867,
                 "name": "membershipStartTime",
                 "nodeType": "VariableDeclaration",
-                "scope": 1916,
+                "scope": 1868,
                 "src": "540:27:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -86,7 +85,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1914,
+                  "id": 1866,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "540:7:2",
@@ -101,12 +100,12 @@
             ],
             "name": "Member",
             "nodeType": "StructDefinition",
-            "scope": 1917,
+            "scope": 1869,
             "src": "304:270:2",
             "visibility": "public"
           }
         ],
-        "scope": 1918,
+        "scope": 1870,
         "src": "276:300:2"
       }
     ],
@@ -116,19 +115,18 @@
     "absolutePath": "/Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts/contracts/MemberStruct.sol",
     "exportedSymbols": {
       "MemberStruct": [
-        1917
+        1869
       ]
     },
-    "id": 1918,
+    "id": 1870,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1911,
+        "id": 1863,
         "literals": [
           "solidity",
-          "^",
           "0.5",
-          ".8"
+          ".12"
         ],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
@@ -139,23 +137,23 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1917,
+        "id": 1869,
         "linearizedBaseContracts": [
-          1917
+          1869
         ],
         "name": "MemberStruct",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "MemberStruct.Member",
-            "id": 1916,
+            "id": 1868,
             "members": [
               {
                 "constant": false,
-                "id": 1913,
+                "id": 1865,
                 "name": "challengeID",
                 "nodeType": "VariableDeclaration",
-                "scope": 1916,
+                "scope": 1868,
                 "src": "328:19:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -164,7 +162,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1912,
+                  "id": 1864,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "328:7:2",
@@ -178,10 +176,10 @@
               },
               {
                 "constant": false,
-                "id": 1915,
+                "id": 1867,
                 "name": "membershipStartTime",
                 "nodeType": "VariableDeclaration",
-                "scope": 1916,
+                "scope": 1868,
                 "src": "540:27:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -190,7 +188,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1914,
+                  "id": 1866,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "540:7:2",
@@ -205,12 +203,12 @@
             ],
             "name": "Member",
             "nodeType": "StructDefinition",
-            "scope": 1917,
+            "scope": 1869,
             "src": "304:270:2",
             "visibility": "public"
           }
         ],
-        "scope": 1918,
+        "scope": 1870,
         "src": "276:300:2"
       }
     ],
@@ -218,11 +216,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.5.8+commit.23d335f2.Emscripten.clang"
+    "version": "0.5.12+commit.7709ece9.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.17",
-  "updatedAt": "2020-01-06T18:35:53.074Z",
+  "schemaVersion": "3.0.20",
+  "updatedAt": "2020-01-16T17:22:23.085Z",
   "devdoc": {
     "methods": {}
   },

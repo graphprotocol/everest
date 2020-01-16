@@ -1,16 +1,16 @@
-pragma solidity ^0.5.8;
+pragma solidity 0.5.12;
 
 import "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol";
 import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
-import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./dai.sol";
 
 contract ReserveBank is Ownable {
     using SafeMath for uint256;
 
-    IERC20 public approvedToken; // approved token contract reference
+    Dai public token; // approved token contract reference
 
-    constructor(address approvedTokenAddress) public {
-        approvedToken = IERC20(approvedTokenAddress);
+    constructor(address _daiAddress) public {
+        token = Dai(_daiAddress);
     }
 
     function withdraw(address receiver, uint256 amount)
@@ -18,6 +18,6 @@ contract ReserveBank is Ownable {
         onlyOwner
         returns (bool)
     {
-        return approvedToken.transfer(receiver, amount);
+        return token.transfer(receiver, amount);
     }
 }
