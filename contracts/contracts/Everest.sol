@@ -460,6 +460,11 @@ contract Everest is MemberStruct, Ownable {
             "Everest::challenge - Member can't be challenged multiple times at once"
         );
 
+        require(
+            _challengingMember != _challengedMember,
+            "Everest::challenge - Can't challenge self"
+        );
+
         uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
             challenger: _challengingMember,
@@ -528,6 +533,12 @@ contract Everest is MemberStruct, Ownable {
             storedChallenge.voteChoiceByMember[_voter] == VoteChoice.Null,
             "Everest::submitVote - Member has already voted on this challenge"
         );
+
+        require(
+            storedChallenge.member != _voter,
+            "Everest::submitVote - Member can't vote on their own challenge"
+        );
+
         uint256 memberStartTime = memberRegistry.getMembershipStartTime(_voter);
         // The lower the member start time (i.e. the older the member) the more vote weight
         uint256 voteWeight = storedChallenge.endTime.sub(memberStartTime);
@@ -547,6 +558,27 @@ contract Everest is MemberStruct, Ownable {
         emit SubmitVote(_challengeID, msg.sender, _voter, _voteChoice, voteWeight);
     }
 
+    // TODO - test gas limit for this, and maybe hard code in the array size
+    /**
+    @dev                    Submit many votes from owner or delegate with multiple members they own
+                            or are delegates of
+    @param _challengeID     The challenge ID
+    @param _voteChoices     The vote choices (yes or no)
+    @param _voters          The members who are voting
+    */
+    function submitVotes(
+        uint256 _challengeID,
+        VoteChoice[] memory _voteChoices,
+        address[] memory _voters
+    ) public {
+        require(
+            _voteChoices.length == _voters.length,
+            "Everest::SubmitVotes - Arrays must be equal"
+        );
+        for (uint256 i; i < _voteChoices.length; i++){
+            submitVote(_challengeID, _voteChoices[i], _voters[i]);
+        }
+    }
     /**
     @dev                    Resolve a challenge. Anyone can call this function. A successful
                             challenge means the member is removed.

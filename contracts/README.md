@@ -16,7 +16,8 @@ type.
 - `openzeppelin-test-helpers` is used. It depends on web3, which we want to avoid, but so far it is
 working fine
 - `Chai` is a dependancy of `openzeppelin-test-helpers`
-- `Truffle 5.0.43` is recommended (with the solidity compiler that comes with it)
+- `Truffle 5.1.18` is recommended (with the solidity compiler that comes with it), which is
+  `solc-js 0.5.12`
 - `Solium` is used for linting Solidity files. The `prettier solidity plugin` was tried, but it is
 buggy, so we removed it from the project until it is stable
 - `Prettier` and `eslint` are used for js files. Note you must put the files to lint in quotes for 
@@ -25,9 +26,14 @@ buggy, so we removed it from the project until it is stable
 - Node past v8 has had trouble with scrypt, which was a web3 dependancy. Web3 might be past this,
 but in general we want to avoid using web3 because of its instability. Ethers is the way to go.
 
+## Creating abis
+The `package.json` has a command `yarn abis` that will create the abis for the contract using
+`solc`. However, the docker image must be downloaded first. The instructions for that are found
+(here)[https://solidity.readthedocs.io/en/v0.6.1/installing-solidity.html#docker].
+
 ## Testing
 1. Make sure Node 12 is installed (It might work with newer versions, but it is unconfirmed)
-2. Make sure Truffle 5.0.43 is installed globally `yarn global add truffle@5.0.43`
+2. Make sure Truffle 5.1.8 is installed globally `yarn global add truffle@5.1.18`
 3. Run `yarn` at project root directory
 4. Start ganache with `ganache-cli -d -l 9900000 -i 9854`. Note - we use 9,900,000 because that 
    is what mainnet eth is doing today (Dec 2019)
