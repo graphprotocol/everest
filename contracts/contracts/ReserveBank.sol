@@ -1,8 +1,8 @@
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
-import "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol";
-import "../node_modules/@openzeppelin/contracts/math/SafeMath.sol";
-import "./dai.sol";
+import "./lib/Ownable.sol";
+import "./lib/SafeMath.sol";
+import "./lib/dai.sol";
 
 contract ReserveBank is Ownable {
     using SafeMath for uint256;

@@ -14,9 +14,10 @@
 /*
     Everest is using the dai contracts to mock the real dai that will be used.
     This contract lives here: https://github.com/makerdao/dss/blob/master/src/lib.sol
+    Also we changed the pragma from 0.5.12 to ^0.5.8
 */
 
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
 contract LibNote {
     event LogNote(
@@ -29,6 +30,7 @@ contract LibNote {
 
     modifier note {
         _;
+        /* solium-disable-next-line security/no-inline-assembly*/
         assembly {
             // log an 'anonymous' event with a constant 6 words of calldata
             // and four indexed topics: selector, caller, arg1 and arg2

@@ -14,7 +14,7 @@ This contract is included in this repository for testing purposes on ganache. Fo
 to testnets or mainnet, it will never be included in the deploy script, since we will use the
 deployed versions in the above link.
 */
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
 contract EthereumDIDRegistry {
     mapping(address => address) public owners;

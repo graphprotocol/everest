@@ -8,13 +8,13 @@
  The DAO allows anoyone to apply to the list.
  It also has reputation based voting for challenges based on how long a project has been a member.
 */
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
 import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./MemberStruct.sol";
-import "./EthereumDIDRegistry.sol";
-import "./dai.sol";
+import "./lib/EthereumDIDRegistry.sol";
+import "./lib/dai.sol";
 
 contract Everest is MemberStruct, Ownable {
     using SafeMath for uint256;
@@ -222,6 +222,13 @@ contract Everest is MemberStruct, Ownable {
     ADD MEMBER FUNCTIONS
     *******************/
 
+    // This struct is used to help avoid the stack too deep error of local variables for functions
+    struct Signature {
+        uint8 v;
+        bytes32 r;
+        bytes32 s;
+    }
+
     /**
     @dev                            Allows a user to apply to add a member to the Registry
     @param _newMember               The address of the new member
@@ -232,9 +239,9 @@ contract Everest is MemberStruct, Ownable {
     */
     function applySignedInternal(
         address _newMember,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
+        uint8[2] memory _sigV,
+        bytes32[2] memory _sigR,
+        bytes32[2] memory _sigS,
         address _owner
     ) internal {
         require(
@@ -253,7 +260,10 @@ contract Everest is MemberStruct, Ownable {
             membershipTime
         );
 
-        changeOwnerSigned(_newMember, _sigV, _sigR, _sigS, _owner);
+        changeOwnerSigned(_newMember, _sigV[0], _sigR[0], _sigS[0], _owner);
+
+        // Nonce starts at 1. Expiry = 0 is infinite. true is unlimited allowance
+        approvedToken.permit(_newMember, _owner, 1, 0, true, _sigV[1], _sigR[1], _sigS[1]);
 
         // Transfers tokens from user to the Reserve Bank
         require(
@@ -274,58 +284,21 @@ contract Everest is MemberStruct, Ownable {
     */
     function applySigned(
         address _newMember,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
+        uint8[2] calldata _sigV,
+        bytes32[2] calldata _sigR,
+        bytes32[2] calldata _sigS,
         address _owner
     ) external {
         applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
     }
 
     /**
-    @dev                            Allows a user to apply to add a member to the Registry and add
-                                    a delegate to the DID registry
-    @param _newMember               The address of the new member
-    @param _applySigV               V piece of the apply signature
-    @param _applySigR               R piece of the apply signature
-    @param _applySigS               S piece of the apply signature
-    @param _owner                   Owner of the member application
-    @param _delegateSigV            V piece of the delegate signature
-    @param _delegateSigR            R piece of the delegate signature
-    @param _delegateSigS            S piece of the delegate signature
-    @param _delegate                Delegate designated for the member
-    @param _delegateValidity        Time delegate is valid
-    */
-    function applySignedWithDelegate(
-        address _newMember,
-        uint8 _applySigV,
-        bytes32 _applySigR,
-        bytes32 _applySigS,
-        address _owner,
-        uint8 _delegateSigV,
-        bytes32 _delegateSigR,
-        bytes32 _delegateSigS,
-        address _delegate,
-        uint256 _delegateValidity
-    ) external {
-        applySignedInternal(_newMember, _applySigV, _applySigR, _applySigS, _owner);
-        addDelegateSigned(
-            _newMember,
-            _delegateSigV,
-            _delegateSigR,
-            _delegateSigS,
-            _delegate,
-            _delegateValidity
-        );
-    }
-
-    /**
     @dev                            Allows a user to apply to add a member to the Registry and
                                     add off chain data to the DID registry
     @param _newMember               The address of the new member
-    @param _applySigV               V piece of the apply signature
-    @param _applySigR               R piece of the apply signature
-    @param _applySigS               S piece of the apply signature
+    @param _sigV               V piece of the apply signature
+    @param _sigR               R piece of the apply signature
+    @param _sigS               S piece of the apply signature
     @param _owner                   Owner of the member application
     @param _attributeSigV           V piece of the attribute signature
     @param _attributeSigR           R piece of the attribute signature
@@ -338,9 +311,9 @@ contract Everest is MemberStruct, Ownable {
     */
     function applySignedWithAttribute(
         address _newMember,
-        uint8 _applySigV,
-        bytes32 _applySigR,
-        bytes32 _applySigS,
+        uint8[2] calldata _sigV,
+        bytes32[2] calldata _sigR,
+        bytes32[2] calldata _sigS,
         address _owner,
         uint8 _attributeSigV,
         bytes32 _attributeSigR,
@@ -349,7 +322,7 @@ contract Everest is MemberStruct, Ownable {
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        applySignedInternal(_newMember, _applySigV, _applySigR, _applySigS, _owner);
+        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
         editOffChainDataSigned(
             _newMember,
             _attributeSigV,

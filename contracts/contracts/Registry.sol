@@ -1,7 +1,7 @@
 // Inspired by  https://fravoll.github.io/solidity-patterns/eternal_storage.html
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
-import "../node_modules/@openzeppelin/contracts/ownership/Ownable.sol";
+import "./lib/Ownable.sol";
 import "./MemberStruct.sol";
 
 contract Registry is Ownable, MemberStruct {

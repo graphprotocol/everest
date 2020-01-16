@@ -16,9 +16,10 @@
 /*
     Everest is using the dai contracts to mock the real dai that will be used.
     This contract lives here: https://github.com/makerdao/dss/blob/master/src/dai.sol
+    Also we changed the pragma from 0.5.12 to ^0.5.8
 */
 
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
 import "./lib.sol";
 

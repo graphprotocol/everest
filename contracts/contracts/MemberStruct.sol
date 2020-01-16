@@ -1,4 +1,4 @@
-pragma solidity 0.5.12;
+pragma solidity ^0.5.8;
 
 /*
  The delegate address can execute voting on behalf of the owner of the
