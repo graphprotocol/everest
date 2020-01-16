@@ -133,7 +133,7 @@ contract Everest is MemberStruct, Ownable {
     modifier onlyMemberOwnerOrDelegate(address _member) {
         require(
             isMember(_member),
-            "Everest::onlyMemberOwnerOrDelegate - Member hasn't passed applied phase"
+            "Everest::onlyMemberOwnerOrDelegate - Address is not a Member"
         );
         address owner = erc1056Registry.identityOwner(_member);
         bool validDelegate = erc1056Registry.validDelegate(_member, delegateType, msg.sender);
@@ -144,32 +144,16 @@ contract Everest is MemberStruct, Ownable {
         _;
     }
 
-    // TODO - fix the applied stuff in the modifiers, it doesnt exist anymore
-
     /**
-    @dev                Modifer that allows a function to be called by a real member.
+    @dev                Modifer that allows a function to be called by a member.
                         Only the member can call (no delegate permissions)
     @param _member      Member interacting with everest
     */
     modifier onlyMemberOwner(address _member) {
         require(
             isMember(_member),
-            "Everest::onlyMemberOwner - Member has not passed the applied phase"
+            "Everest::onlyMemberOwner - Address is not a member"
         );
-        address owner = erc1056Registry.identityOwner(_member);
-        require(
-            owner == msg.sender,
-            "Everest::onlyMemberOwner - Caller must be the delegate or owner"
-        );
-        _;
-    }
-
-    /**
-    @dev                Modifer that allows a function to be called by an applicant that hasn't
-                        been accepted as a member yet
-    @param _member      Member interacting with everest
-    */
-    modifier onlyAppliedMemberOwner(address _member) {
         address owner = erc1056Registry.identityOwner(_member);
         require(
             owner == msg.sender,
@@ -222,19 +206,12 @@ contract Everest is MemberStruct, Ownable {
     ADD MEMBER FUNCTIONS
     *******************/
 
-    // This struct is used to help avoid the stack too deep error of local variables for functions
-    struct Signature {
-        uint8 v;
-        bytes32 r;
-        bytes32 s;
-    }
-
     /**
     @dev                            Allows a user to apply to add a member to the Registry
     @param _newMember               The address of the new member
-    @param _sigV                    V piece of the member signature
-    @param _sigR                    R piece of the member signature
-    @param _sigS                    S piece of the member signature
+    @param _sigV                    V piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigR                    R piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigS                    S piece of the apply and permit() signature : [0] = apply, [1] = permit
     @param _owner                   Owner of the member application
     */
     function applySignedInternal(
@@ -277,9 +254,9 @@ contract Everest is MemberStruct, Ownable {
     /**
     @dev                            Allows a user to apply to add a member to the Registry
     @param _newMember               The address of the new member
-    @param _sigV                    V piece of the member signature
-    @param _sigR                    R piece of the member signature
-    @param _sigS                    S piece of the member signature
+    @param _sigV                    V piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigR                    R piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigS                    S piece of the apply and permit() signature : [0] = apply, [1] = permit
     @param _owner                   Owner of the member application
     */
     function applySigned(
@@ -296,9 +273,9 @@ contract Everest is MemberStruct, Ownable {
     @dev                            Allows a user to apply to add a member to the Registry and
                                     add off chain data to the DID registry
     @param _newMember               The address of the new member
-    @param _sigV               V piece of the apply signature
-    @param _sigR               R piece of the apply signature
-    @param _sigS               S piece of the apply signature
+    @param _sigV                    V piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigR                    R piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigS                    S piece of the apply and permit() signature : [0] = apply, [1] = permit
     @param _owner                   Owner of the member application
     @param _attributeSigV           V piece of the attribute signature
     @param _attributeSigR           R piece of the attribute signature
@@ -342,7 +319,7 @@ contract Everest is MemberStruct, Ownable {
     */
     function memberExit(
         address _member
-    ) external onlyAppliedMemberOwner(_member) {
+    ) external onlyMemberOwner(_member) {
         require(
             !memberChallengeExists(_member),
             "Everest::memberExit - Can't exit during ongoing challenge"
@@ -369,7 +346,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigR,
         bytes32 _sigS,
         address _newOwner
-    ) public onlyAppliedMemberOwner(_member) {
+    ) public onlyMemberOwner(_member) {
         erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _newOwner);
     }
 
@@ -395,7 +372,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _offChainDataName,
         bytes memory _offChainDataValue,
         uint256 _offChainDataValidity
-    ) public onlyAppliedMemberOwner(_member) {
+    ) public onlyMemberOwner(_member) {
         erc1056Registry.setAttributeSigned(
             _member,
             _sigV,
@@ -423,7 +400,7 @@ contract Everest is MemberStruct, Ownable {
         bytes32 _sigS,
         address _newDelegate,
         uint256 _delegateValidity
-    ) public onlyAppliedMemberOwner(_member) {
+    ) public onlyMemberOwner(_member) {
         erc1056Registry.addDelegateSigned(
             _member,
             _sigV,
@@ -449,7 +426,7 @@ contract Everest is MemberStruct, Ownable {
         uint8 _sigV,
         bytes32 _sigR,
         bytes32 _sigS
-    ) external onlyAppliedMemberOwner(_member) {
+    ) external onlyMemberOwner(_member) {
         erc1056Registry.revokeDelegateSigned(
             _member,
             _sigV,
@@ -661,7 +638,6 @@ contract Everest is MemberStruct, Ownable {
     */
     function isMember(address _member) public view returns (bool){
         uint256 startTime = memberRegistry.getMembershipStartTime(_member);
-        /* solium-disable-next-line security/no-block-members*/
         if (startTime > 0){
             return true;
         }

@@ -11,10 +11,10 @@
     "prettier-sol": "prettier -c '**/*.sol'",
     "prettier-write-js": "prettier --write '**/*.js'",
     "prettier-write-sol": "prettier --write '**/*.sol'",
-    "flatten": "truffle-flattener ./contracts"
+    "flatten": "truffle-flattener ./contracts",
+    "abis": "docker run -v  /Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts:/abis-vol ethereum/solc:0.5.12 -o /abis-vol/abis --overwrite --abi /abis-vol/contracts/Everest.sol"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "2.4.0",
     "@truffle/hdwallet-provider": "1.0.28",
     "bn.js": "4.11.8",
     "chai": "4.2.0",

@@ -13,7 +13,6 @@ This repository works with Node 12. Some important notes about the npm packages 
 truffle uses `bn.js` as return values when interacting with contracts. It is therefore 
 recommended to use `bn.js` in all BigNumber situations, and to avoid using ethers BigNumber 
 type. 
-- `@openzeppelin/contracts` is used for ERC20 solidity files
 - `openzeppelin-test-helpers` is used. It depends on web3, which we want to avoid, but so far it is
 working fine
 - `Chai` is a dependancy of `openzeppelin-test-helpers`
