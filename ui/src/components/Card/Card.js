@@ -9,7 +9,21 @@ import Challenged from '../../images/challenged.svg'
 const Card = ({ title, description, image, isChallenged, variant, to }) => {
   return (
     <Grid
-      sx={styles.root}
+      sx={{
+        ...styles.root,
+        '&:hover': {
+          border: '2px solid',
+          borderColor: 'hover',
+          '.box': {
+            alignSelf: 'center',
+            justifySelf: 'center',
+          },
+          img: {
+            height: variant === 'project' ? '80px' : '112px',
+            width: variant === 'project' ? '80px' : ['152px', '164px', '164px'],
+          },
+        },
+      }}
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
       onClick={() => navigate(to)}
@@ -31,20 +45,7 @@ const Card = ({ title, description, image, isChallenged, variant, to }) => {
             />
           </Box>
         ) : (
-          <Box
-            sx={{
-              '&:hover': {
-                alignSelf: 'center',
-                justifySelf: 'center',
-                img: {
-                  '&:hover': {
-                    height: '112px',
-                    width: ['152px', '164px', '164px'],
-                  },
-                },
-              },
-            }}
-          >
+          <Box className="box">
             <img
               src={image}
               alt={title}
@@ -72,7 +73,7 @@ const Card = ({ title, description, image, isChallenged, variant, to }) => {
 const styles = {
   root: {
     height: '216px',
-    width: ['164', '180px', '180px'],
+    width: ['164px', '180px', '180px'],
     backgroundColor: '#FFFFFF',
     boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
     marginTop: '8px',

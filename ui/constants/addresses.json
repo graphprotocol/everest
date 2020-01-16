@@ -1,0 +1,19 @@
+{
+  "updated-on": "December 23rd 2019",
+  "ropsten": {
+    "everest": "0xC487a615e0A9C69De4c795a45c33A965aBFa3673",
+    "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
+    "mockToken": "0xE8fEac2d2cF46b90b8E83EAC90a02dCeF49b4b4f",
+    "migrations": "0xff59Eb6c6C5E66C8f0e749a58FeB20b5aef0f4C6",
+    "registry": "0x864bade51e4bc39d1822fbc5b7fc2730c4c31787",
+    "reserveBank": "0xbc0acd8ea4d39ff0a1957c51bd20b5998c21e9a6"
+  },
+  "ganache": {
+    "everest": "",
+    "ethereumDIDRegistry": "",
+    "mockToken": "",
+    "registry": "",
+    "reserveBank": ""
+  },
+  "mainnet": {}
+}

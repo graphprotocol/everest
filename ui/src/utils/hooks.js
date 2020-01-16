@@ -2,8 +2,8 @@ import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { useMemo, useEffect, useState } from 'react'
 
 import { getContract, getAddress, getProvider } from '../services/ethers'
-import addresses from '../../../contracts/addresses.json'
-import EVEREST_ABI from '../../../contracts/build/contracts/Everest.json'
+import addresses from '../../constants/addresses.json'
+import EVEREST_ABI from '../../constants/abis/Everest.json'
 
 export function useWeb3React() {
   const context = useWeb3ReactCore()

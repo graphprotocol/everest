@@ -4,16 +4,28 @@ import { Styled, jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import QRCode from 'qrcode.react'
 
-const QRCodeData = ({ size, uri = '', ...props }) => {
+import Divider from '../Divider'
+import Link from '../Link'
+import Arrow from '../../images/arrow.svg'
+
+const QRCodeData = ({ size, uri = '' }) => {
   return (
     <Grid columns={1} p={3}>
+      <Styled.h2>Wallet Connect...</Styled.h2>
+      <Styled.h6>
+        Launch a compatible wallet app on your mobile or tablet and scan the QR
+        icon.
+      </Styled.h6>
+      <Link>
+        Help with signing in <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+      </Link>
+      <Divider mt={0} mb={6} />
       <QRCode
         size={size}
         value={uri}
         bgColor={'white'}
         style={{ margin: '0 auto' }}
       />
-      <Styled.p>Scan QR code with a compatible wallet...</Styled.p>
     </Grid>
   )
 }

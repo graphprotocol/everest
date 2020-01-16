@@ -20,7 +20,7 @@ export default {
     body: 400,
     heading: 600,
   },
-  space: [0, 4, 8, 12, 16, 32, 64, 96, 128, 160],
+  space: [0, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160],
   styles: {
     body: {
       fontFamily: 'body',
@@ -116,8 +116,9 @@ export default {
       fontSize: '1rem',
       letterSpacing: '1px',
       lineHeight: '2.5rem',
-      width: ['100%', '250px', '250px'],
       height: '48px',
+      boxSizing: 'content-box',
+      px: 5,
       cursor: 'pointer',
       '&:focus': {
         outline: 'none',
@@ -137,8 +138,9 @@ export default {
       fontWeight: 'heading',
       letterSpacing: '1px',
       lineHeight: '2.5rem',
-      width: ['100%', '250px', '250px'],
       height: '48px',
+      boxSizing: 'content-box',
+      px: 5,
       cursor: 'pointer',
       '&:focus': {
         outline: 'none',

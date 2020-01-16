@@ -9,7 +9,6 @@ import Link from '../Link'
 import Row from '../Row'
 import Arrow from '../../images/arrow.svg'
 
-// TODO: Add Table in here
 const Section = ({
   title,
   description,

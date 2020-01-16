@@ -115,7 +115,7 @@ const Project = ({ location }) => {
       </Grid>
       <Divider />
       <Grid columns={[1, 1, 2]} gap={3}>
-        <Box sx={{ margin: ['auto', 'auto', 0] }}>
+        <Box sx={{ margin: ['auto', 'auto', 0], position: 'relative' }}>
           <Styled.p sx={{ maxWidth: '504px', width: '100%' }}>
             {project.description}
           </Styled.p>
@@ -143,6 +143,83 @@ const Project = ({ location }) => {
               />
             )}
           </Box>
+          <Grid
+            sx={{
+              gridTemplateColumns: 'min-content min-content min-content',
+              mt: 6,
+              position: project.image ? 'absolute' : 'static',
+              bottom: 0,
+            }}
+            gap={0}
+          >
+            <Box
+              sx={{
+                textAlign: ['center', 'center', 'left'],
+                mr: 4,
+              }}
+            >
+              <Button
+                disabled={false}
+                variant={'secondary'}
+                to={`/edit/${projectId}`}
+                text="Edit"
+                icon={'edit-icon.svg'}
+                sx={{ margin: ['auto', 'auto', 0] }}
+              />
+            </Box>
+            {/*  <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
+              <Button
+                disabled={false}
+                variant={showChallenge ? 'primary' : 'secondary'}
+                onClick={e => {
+                  setShowChallenge(!showChallenge)
+                  if (!showChallenge) {
+                    setShowDelegate(false)
+                    setShowTransfer(false)
+                  }
+                }}
+                text="Challenge"
+                icon={showChallenge ? 'challenging.png' : 'challenge.png'}
+                sx={{ margin: ['auto', 'auto', 0] }}
+              />
+              </Box> */}
+            <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
+              <Button
+                disabled={false}
+                variant={showTransfer ? 'primary' : 'secondary'}
+                onClick={e => {
+                  setShowTransfer(!showTransfer)
+                  if (!showTransfer) {
+                    setShowChallenge(false)
+                    setShowDelegate(false)
+                  }
+                }}
+                text="Transfer"
+                icon={
+                  showTransfer ? 'transferring-icon.svg' : 'transfer-icon.svg'
+                }
+                sx={{ margin: ['auto', 'auto', 0] }}
+              />
+            </Box>
+            <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
+              <Button
+                disabled={false}
+                variant={showDelegate ? 'primary' : 'secondary'}
+                onClick={e => {
+                  setShowDelegate(!showDelegate)
+                  if (!showDelegate) {
+                    setShowChallenge(false)
+                    setShowTransfer(false)
+                  }
+                }}
+                text="Delegate"
+                icon={
+                  showDelegate ? 'delegating-icon.svg' : 'delegate-icon.svg'
+                }
+                sx={{ margin: ['auto', 'auto', 0] }}
+              />
+            </Box>
+          </Grid>
         </Box>
         <Box sx={{ margin: ['32px auto', '32px auto', 0] }}>
           {project.isChallenged && (
@@ -197,93 +274,18 @@ const Project = ({ location }) => {
               </Grid>
             </Box>
           )}
-          <Box
-            sx={{
-              ...imageStyles,
-              backgroundImage: `url(${project.image})`,
-              margin: ['auto', 'auto', 0],
-            }}
-          ></Box>
+          {project.image && (
+            <Box
+              sx={{
+                ...imageStyles,
+                backgroundImage: `url(${project.image})`,
+                margin: ['auto', 'auto', 0],
+              }}
+            ></Box>
+          )}
         </Box>
       </Grid>
-      <Grid columns={4} gap={0}>
-        <Box
-          sx={{
-            mt: 6,
-            textAlign: ['center', 'center', 'left'],
-            alignSelf: 'end',
-          }}
-        >
-          <Button
-            disabled={false}
-            variant={'secondary'}
-            to={`/edit/${projectId}`}
-            text="Edit"
-            icon={'edit-icon.svg'}
-            sx={{ margin: ['auto', 'auto', 0] }}
-          />
-        </Box>
-        <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
-          <Styled.h6 sx={{ fontWeight: 'heading' }}>
-            Challenge this project
-          </Styled.h6>
-          <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
-          <Button
-            disabled={false}
-            variant={showChallenge ? 'primary' : 'secondary'}
-            onClick={e => {
-              setShowChallenge(!showChallenge)
-              if (!showChallenge) {
-                setShowDelegate(false)
-                setShowTransfer(false)
-              }
-            }}
-            text="Challenge"
-            icon={showChallenge ? 'challenging.png' : 'challenge.png'}
-            sx={{ margin: ['auto', 'auto', 0] }}
-          />
-        </Box>
-        <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
-          <Styled.h6 sx={{ fontWeight: 'heading' }}>
-            Transfer this project
-          </Styled.h6>
-          <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
-          <Button
-            disabled={false}
-            variant={showTransfer ? 'primary' : 'secondary'}
-            onClick={e => {
-              setShowTransfer(!showTransfer)
-              if (!showTransfer) {
-                setShowChallenge(false)
-                setShowDelegate(false)
-              }
-            }}
-            text="Transfer"
-            icon={showTransfer ? 'transferring-icon.svg' : 'transfer-icon.svg'}
-            sx={{ margin: ['auto', 'auto', 0] }}
-          />
-        </Box>
-        <Box sx={{ mt: 6, textAlign: ['center', 'center', 'left'] }}>
-          <Styled.h6 sx={{ fontWeight: 'heading' }}>
-            Delegate this project
-          </Styled.h6>
-          <p sx={{ variant: 'text.displaySmall', pb: 4 }}>PLACEHOLDER</p>
-          <Button
-            disabled={false}
-            variant={showDelegate ? 'primary' : 'secondary'}
-            onClick={e => {
-              setShowDelegate(!showDelegate)
-              if (!showDelegate) {
-                setShowChallenge(false)
-                setShowTransfer(false)
-              }
-            }}
-            text="Delegate"
-            icon={showDelegate ? 'delegating-icon.svg' : 'delegate-icon.svg'}
-            sx={{ margin: ['auto', 'auto', 0] }}
-          />
-        </Box>
-      </Grid>
+
       {showChallenge && (
         <TabView
           fieldType="textarea"
