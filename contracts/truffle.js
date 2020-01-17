@@ -16,7 +16,7 @@ module.exports = {
             network_id: '9854',
             host: '127.0.0.1',
             port: '8545',
-            gas: 9900000,
+            gas: 9900000, // Current gas limit on mainnet (Jan 2020)
             gasPrice: 20000000000,
             skipDryRun: true
         },
@@ -32,8 +32,23 @@ module.exports = {
                     4 // Create 4 addresses, which are funded with MockDAI
                 ),
             network_id: 3, // Ropsten's id
-            gas: 8000000,
-            gasPrice: ethers.utils.parseUnits('5', 'gwei'), // To easily get in blocks on ropsten
+            //gas: 8000000,
+            gasPrice: ethers.utils.parseUnits('25', 'gwei'), // To easily get in blocks on ropsten
+            skipDryRun: true
+        },
+        rinkeby: {
+            provider: () =>
+                new HDWalletProvider(
+                    fs.readFileSync(path.join(__dirname, '.privkey.txt'), 'utf-8').trim(),
+                    `https://ropsten.infura.io/v3/${fs
+                        .readFileSync(path.join(__dirname, '/.infurakey.txt'), 'utf-8')
+                        .trim()}`,
+                    0,
+                    4 // Create 4 addresses, which are funded with MockDAI
+                ),
+            network_id: 4, // rinkeby's id
+            //gas: 8000000,
+            gasPrice: ethers.utils.parseUnits('100', 'gwei'), // To easily get in blocks on ropsten
             skipDryRun: true
         }
     },

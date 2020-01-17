@@ -1,14 +1,14 @@
 /* global artifacts */
 
-const Registry = artifacts.require('Registry.sol')
 const Everest = artifacts.require('Everest.sol')
-const Token = artifacts.require('MockToken.sol')
-const ReserveBank = artifacts.require('ReserveBank.sol')
+const Token = artifacts.require('dai.sol')
+const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const config = require('../conf/config.js')
+// const fs = require('fs')
+// const Registry = artifacts.require('Registry.sol')
+// const ReserveBank = artifacts.require('ReserveBank.sol')
 
-const fs = require('fs')
-
-module.exports = (deployer, network, accounts) => {
+module.exports = async (deployer, network, accounts) => {
     // Approve all token holders to allow everest to spend on their behalf
     async function approveEverestFor(addresses) {
         const token = await Token.deployed()
@@ -25,30 +25,25 @@ module.exports = (deployer, network, accounts) => {
     let owner
     if (network === 'development') {
         owner = config.everestParams.owner
+        // We must deploy our own DID registry for ganache
+        await deployer.deploy(EthereumDIDRegistry)
     } else if (network === 'ropsten') {
         owner = config.everestParams.ropstenOwner
     }
 
-    return deployer
-        .then(async () => {
-            const params = config.everestParams
-            return deployer.deploy(
-                Everest,
-                owner,
-                params.approvedToken,
-                params.votingPeriodDuration,
-                params.challengeDeposit,
-                params.whitelistPeriodDuration,
-                params.applicationFee,
-                params.charter
-            )
-        })
-        .then(async () => {
-            if (network !== 'mainnet') {
-                await approveEverestFor(accounts)
-            }
-        })
-        .catch(err => {
-            throw err
-        })
+    const params = config.everestParams
+    await deployer.deploy(
+        Everest,
+        owner,
+        params.approvedToken,
+        params.votingPeriodDuration,
+        params.challengeDeposit,
+        params.applicationFee,
+        params.charter
+    )
+
+    // Not necessary for mainnet, since it will not be using the mock token
+    if (network !== 'mainnet') {
+        await approveEverestFor(accounts)
+    }
 }
