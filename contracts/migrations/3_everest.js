@@ -1,7 +1,7 @@
 /* global artifacts */
 
 const Everest = artifacts.require('Everest.sol')
-const Token = artifacts.require('MockToken.sol')
+const Token = artifacts.require('dai.sol')
 const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const config = require('../conf/config.js')
 // const fs = require('fs')

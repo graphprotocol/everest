@@ -15,20 +15,15 @@ const config = {
     token: {
         mainnetAddress: '0x6b175474e89094c44da98b954eedeac495271d0f', // mainnet DAI address
         deployTestingToken: true, // set to false when deploying to mainnet
-        decimals: '18',
-        name: 'MockDAI',
-        symbol: 'MDAI',
-        supply: '100000000000000000000000000', // $100 M MockDAI supply
-        // Minter gets all $100 M to start, and then sends $25 M to three accounts
-        minter: {
-            address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
-            amount: '1000000000000000000000000000'
+        supply: '100000000000000000000000000', // $100 DAI supply
+        ganacheMinter: {
+            address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1'
         },
-        ropstenMinter: {
-            address: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd',
-            amount: '1000000000000000000000000000'
+        testnetMinter: {
+            // Daves metamask
+            address: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd'
         },
-        ropstenTokenHolders: [
+        rtestnetTokenHolders: [
             // Other accounts in Daves metamask
             {
                 address: '0x7F11E5B7Fe8C04c1E4Ce0dD98aC5c922ECcfA4ed',
@@ -43,7 +38,7 @@ const config = {
                 amount: '25000000000000000000000000'
             }
         ],
-        tokenHolders: [
+        ganacheTokenHolders: [
             // accounts 1,2 and 3 from ganache deterministic mnemonic
             {
                 address: '0xffcf8fdee72ac11b5c542428b35eef5769c409f0',

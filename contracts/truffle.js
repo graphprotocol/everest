@@ -33,7 +33,7 @@ module.exports = {
                 ),
             network_id: 3, // Ropsten's id
             //gas: 8000000,
-            gasPrice: ethers.utils.parseUnits('11', 'gwei'), // To easily get in blocks on ropsten
+            gasPrice: ethers.utils.parseUnits('25', 'gwei'), // To easily get in blocks on ropsten
             skipDryRun: true
         },
         rinkeby: {
@@ -48,10 +48,9 @@ module.exports = {
                 ),
             network_id: 4, // rinkeby's id
             //gas: 8000000,
-            gasPrice: ethers.utils.parseUnits('11', 'gwei'), // To easily get in blocks on ropsten
+            gasPrice: ethers.utils.parseUnits('100', 'gwei'), // To easily get in blocks on ropsten
             skipDryRun: true
         }
-        // kovans id is 42
     },
     // Note, right now we are just using the compiler that truffle comes with.
     // We might lock down a version later
