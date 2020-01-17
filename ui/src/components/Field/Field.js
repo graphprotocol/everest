@@ -2,7 +2,8 @@
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import Filters from '../Filters'
+import MultiSelect from '../Filters/MultiSelect'
+import Select from '../Filters/Select'
 import UploadImage from '../UploadImage'
 
 const Field = ({
@@ -16,6 +17,8 @@ const Field = ({
   charsCount,
   value,
   setValue,
+  multiselect,
+  items,
 }) => {
   return (
     <Box
@@ -55,7 +58,11 @@ const Field = ({
             value={value}
           ></textarea>
         ) : type === 'filters' ? (
-          <Filters setValue={setValue} />
+          multiselect === true ? (
+            <MultiSelect setValue={setValue} />
+          ) : (
+            <Select items={items} />
+          )
         ) : type === 'upload' ? (
           <UploadImage
             imageName={imageName}
@@ -167,6 +174,7 @@ Field.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
   charsCount: PropTypes.number,
+  multiselect: PropTypes.bool,
 }
 
 export default Field

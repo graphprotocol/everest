@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
@@ -18,6 +19,8 @@ const TabView = ({
   text,
   icon,
   handleClick,
+  showFilters,
+  items,
 }) => {
   return (
     <Grid
@@ -46,9 +49,22 @@ const TabView = ({
           <Styled.h1 sx={{ color: 'white', mb: 3 }}>{heading}</Styled.h1>
           <p sx={{ variant: 'text.field' }}>{description}</p>
           <p sx={{ variant: 'text.field', mt: 5 }}>Fee</p>
-          <p sx={{ variant: 'text.displayBig', color: 'white' }}>10 DAI</p>
+          <p sx={{ variant: 'text.displayBig', color: 'white' }}>100 DAI</p>
         </Box>
         <Box sx={{ maxWidth: '504px', width: '100%', mt: [5, 0] }}>
+          {showFilters && (
+            <Field
+              multiselect={false}
+              title="Challenge on behalf of"
+              field="projects"
+              type="filters"
+              setValue={async value => {
+                await setValue('categories', value)
+                // setDisabled(value)
+              }}
+              items={items}
+            />
+          )}
           <Field
             title={title}
             value={value}
@@ -77,10 +93,19 @@ const TabView = ({
 }
 
 TabView.propTypes = {
-  project: PropTypes.object,
+  projects: PropTypes.array,
   fieldType: PropTypes.string,
   description: PropTypes.string,
-  setDescription: PropTypes.func,
+  charsCount: PropTypes.number,
+  title: PropTypes.string,
+  placeholder: PropTypes.string,
+  heading: PropTypes.string,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+  text: PropTypes.string,
+  icon: PropTypes.string,
+  handleClick: PropTypes.func,
+  showFilters: PropTypes.bool,
 }
 
 export default TabView

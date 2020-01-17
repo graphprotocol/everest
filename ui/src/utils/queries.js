@@ -28,3 +28,18 @@ export const PROJECT_QUERY = gql`
     }
   }
 `
+
+//ck3t926929y7w0922q88lnsww
+export const USER_PROJECTS_QUERY = gql`
+  query everestUserProjects($id: ID!) {
+    user(where: { id: $id }) {
+      id
+      name
+      projects {
+        id
+        name
+        image
+      }
+    }
+  }
+`

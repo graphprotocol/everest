@@ -50,6 +50,7 @@ const ProjectForm = ({
           await setValue('categories', value)
           setDisabled(value)
         }}
+        multiselect={true}
       />
       <Field
         title="Project logo"

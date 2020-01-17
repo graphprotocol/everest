@@ -15,11 +15,12 @@ const Filters = ({ setValue }) => {
 
   const allCategories = () => {
     let allCats = categories.reduce((acc, current) => {
-      acc.push(current)
+      acc.push({ ...current, image: `/categories/${current.slug}.png` })
       if (current.subcategories) {
         const cat = current.subcategories.map(subcat => ({
           ...subcat,
           parent: current,
+          image: `/categories/${subcat.slug}.png`,
         }))
         acc.push(cat)
       }
@@ -143,6 +144,7 @@ const Filters = ({ setValue }) => {
                   parent={category.parent}
                   selected={selected}
                   setSelected={setSelected}
+                  multiselect={true}
                 />
               ))}
             </Box>
@@ -157,6 +159,7 @@ const Filters = ({ setValue }) => {
             setSelected={setSelected}
             sx={{ background: 'white', mx: 0, my: 3 }}
             close={true}
+            multiselect={true}
           />
         ))}
       </Fragment>

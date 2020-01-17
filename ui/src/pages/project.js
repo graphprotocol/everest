@@ -16,7 +16,7 @@ import Link from '../components/Link'
 
 import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
-import { PROJECT_QUERY } from '../utils/queries'
+import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
 
 const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
@@ -48,6 +48,15 @@ const Project = ({ location }) => {
       id: projectId,
     },
   })
+
+  const { loading: testLoading, error: testError, data: userData } = useQuery(
+    USER_PROJECTS_QUERY,
+    {
+      variables: {
+        id: 'ck3t926929y7w0922q88lnsww',
+      },
+    },
+  )
 
   if (loading && !error) {
     return (
@@ -152,7 +161,7 @@ const Project = ({ location }) => {
             }}
             gap={0}
           >
-            <Box
+            {/* <Box
               sx={{
                 textAlign: ['center', 'center', 'left'],
                 mr: 4,
@@ -166,8 +175,8 @@ const Project = ({ location }) => {
                 icon={'edit-icon.svg'}
                 sx={{ margin: ['auto', 'auto', 0] }}
               />
-            </Box>
-            {/*  <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
+            </Box> */}
+            <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
               <Button
                 disabled={false}
                 variant={showChallenge ? 'primary' : 'secondary'}
@@ -182,7 +191,7 @@ const Project = ({ location }) => {
                 icon={showChallenge ? 'challenging.png' : 'challenge.png'}
                 sx={{ margin: ['auto', 'auto', 0] }}
               />
-              </Box> */}
+            </Box>
             <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
               <Button
                 disabled={false}
@@ -299,6 +308,8 @@ const Project = ({ location }) => {
           text="Challenge"
           icon="challenge.png"
           handleClick={challengeProject}
+          showFilters={true}
+          items={userData ? userData.user.projects : []}
         />
       )}
       {showTransfer && (

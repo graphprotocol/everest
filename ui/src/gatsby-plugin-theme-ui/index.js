@@ -118,7 +118,8 @@ export default {
       lineHeight: '2.5rem',
       height: '48px',
       boxSizing: 'content-box',
-      px: 5,
+      px: 6,
+      width: 'fit-content',
       cursor: 'pointer',
       '&:focus': {
         outline: 'none',
@@ -140,7 +141,8 @@ export default {
       lineHeight: '2.5rem',
       height: '48px',
       boxSizing: 'content-box',
-      px: 5,
+      px: 6,
+      width: 'fit-content',
       cursor: 'pointer',
       '&:focus': {
         outline: 'none',

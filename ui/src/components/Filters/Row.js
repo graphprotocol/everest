@@ -4,7 +4,15 @@ import { Grid } from '@theme-ui/components'
 
 import Close from '../../images/close.svg'
 
-const Row = ({ item, parent, selected, setSelected, close, ...props }) => {
+const Row = ({
+  item,
+  parent,
+  selected,
+  setSelected,
+  close,
+  multiselect,
+  ...props
+}) => {
   return (
     <Grid
       key={item.name}
@@ -16,24 +24,29 @@ const Row = ({ item, parent, selected, setSelected, close, ...props }) => {
         mx: 5,
         cursor: close ? 'auto' : 'pointer',
         alignItems: 'center',
-        border: selected.find(sel => sel.name === item.name)
-          ? '1px solid #4C66FF'
-          : 'none',
+        border:
+          multiselect && selected.find(sel => sel.name === item.name)
+            ? '1px solid #4C66FF'
+            : 'none',
       }}
       onClick={() => {
         if (close) return
-        if (selected.includes(item.name)) {
-          const index = selected.find(sel => sel.name === item.name)
-          delete selected[index]
-          setSelected(selected.flat())
+        if (multiselect) {
+          if (selected.includes(item.name)) {
+            const index = selected.find(sel => sel.name === item.name)
+            delete selected[index]
+            setSelected(selected.flat())
+          } else {
+            setSelected(selected.concat(item))
+          }
         } else {
-          setSelected(selected.concat(item))
+          setSelected(item)
         }
       }}
       {...props}
     >
       <img
-        src={`/categories/${item.slug}.png`}
+        src={item.image}
         alt={item.slug}
         sx={{ height: '48px', width: '64px', opacity: 0.8 }}
       />
@@ -47,10 +60,14 @@ const Row = ({ item, parent, selected, setSelected, close, ...props }) => {
         <Close
           onClick={e => {
             e.preventDefault()
-            const selectedItem = selected.find(sel => sel.name === item.name)
-            const index = selected.indexOf(selectedItem)
-            delete selected[index]
-            setSelected(selected.flat())
+            if (multiselect) {
+              const selectedItem = selected.find(sel => sel.name === item.name)
+              const index = selected.indexOf(selectedItem)
+              delete selected[index]
+              setSelected(selected.flat())
+            } else {
+              setSelected(null)
+            }
           }}
           sx={{ pr: 3, fill: 'secondary', cursor: 'pointer' }}
         />
