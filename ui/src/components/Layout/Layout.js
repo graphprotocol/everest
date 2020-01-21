@@ -9,7 +9,7 @@ import Footer from '../Footer'
 import Navbar from '../Navbar'
 import Seo from '../Seo'
 
-const LayoutTemplate = ({ children, ...props }) => {
+const LayoutTemplate = ({ children, mainStyles, ...props }) => {
   const GlobalStyle = createGlobalStyle`
   ${reset}
   body {
@@ -34,16 +34,27 @@ const LayoutTemplate = ({ children, ...props }) => {
         <Box sx={{ background: 'white' }}>
           <Navbar sx={styles} path={props && props.path} />
         </Box>
-        <Main
+        <Box
           sx={{
-            ...styles,
-            mt: [5, 5, 0],
-            minHeight: 'calc(100vh - 400px)',
-            position: 'static',
+            ...mainStyles,
+            '@keyframes fadein': {
+              from: { opacity: 0 },
+              to: { opacity: 1 },
+            },
+            animation: 'fadein 0.5s',
           }}
         >
-          {children}
-        </Main>
+          <Main
+            sx={{
+              ...styles,
+              mt: [5, 5, 0],
+              minHeight: 'calc(100vh - 400px)',
+              position: 'static',
+            }}
+          >
+            {children}
+          </Main>
+        </Box>
         <Footer sx={styles} />
       </Box>
     </Fragment>

@@ -1,9 +1,10 @@
 /** @jsx jsx */
+import PropTypes from 'prop-types'
 import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import Challenged from '../../images/challenged.svg'
-import PropTypes from 'prop-types'
+
 import { convertDate } from '../../utils/helpers/date'
+import Challenged from '../../images/challenged.svg'
 
 const Row = ({ item }) => {
   return (

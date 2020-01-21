@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="30px" viewBox="0 0 26 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>icon / footer / eth</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M17,15.8795018 L12.9989169,21.5139453 L9,15.8795018 L12.9989169,18.2407257 L17,15.8795018 Z M12.9989169,8.4860547 L16.9978337,15.1213106 L12.9989169,17.4847008 L9,15.1213106 L12.9989169,8.4860547 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Global/Footer" transform="translate(-1290.000000, -33.000000)">
+            <g id="icon-/-footer-/-eth" transform="translate(1290.000000, 33.000000)">
+                <polygon id="Fill-1-Copy" fill="#4C66FF" transform="translate(13.000000, 15.000000) rotate(90.000000) translate(-13.000000, -15.000000) " points="5.5 2 -2 14.9998499 5.5 28 20.4997 28 28 14.9998499 20.4997 2"></polygon>
+                <g id="Combined-Shape">
+                    <use fill="#0C0A1D" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -13,7 +13,7 @@ const UploadImage = ({ imageName, imageUrl, uploadImage }) => {
               border: 'none',
               backgroundColor: 'white',
               width: 'fit-content',
-              pr: 3
+              pr: 3,
             }
           : styles.label
       }
@@ -45,7 +45,7 @@ const styles = {
   grid: {
     gridTemplateColumns: '56px 1fr',
     textAlign: 'left',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   label: {
     color: 'white',
@@ -60,7 +60,7 @@ const styles = {
     display: 'block',
     textAlign: 'center',
     position: 'relative',
-    border: '1px solid white'
+    border: '1px solid white',
   },
   input: {
     fontSize: 0,
@@ -70,14 +70,14 @@ const styles = {
     height: '100%',
     top: 0,
     left: 0,
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 }
 
 UploadImage.propTypes = {
   imageName: PropTypes.string,
   imageUrl: PropTypes.string,
-  uploadImage: PropTypes.func
+  uploadImage: PropTypes.func,
 }
 
 export default UploadImage

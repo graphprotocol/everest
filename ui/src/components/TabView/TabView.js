@@ -1,5 +1,4 @@
 /** @jsx jsx */
-import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'

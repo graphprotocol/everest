@@ -1,8 +1,7 @@
 /** @jsx jsx */
+import PropTypes from 'prop-types'
 import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-
-import PropTypes from 'prop-types'
 
 const Stats = ({ stats }) => {
   return (
@@ -10,7 +9,7 @@ const Stats = ({ stats }) => {
       {stats.map((stat, index) => (
         <Box sx={{ textAlign: 'center' }} key={index}>
           <Styled.p>{stat.title}</Styled.p>
-          <Styled.h3>{stat.value}</Styled.h3>
+          <Styled.h2 sx={{ color: 'secondary' }}>{stat.value}</Styled.h2>
         </Box>
       ))}
     </Grid>
@@ -21,9 +20,9 @@ Stats.propTypes = {
   stats: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
-      value: PropTypes.string
-    })
-  )
+      value: PropTypes.string,
+    }),
+  ),
 }
 
 export default Stats

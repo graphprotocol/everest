@@ -9,10 +9,10 @@ const ipfsClient = require('ipfs-http-client')
 
 const ipfs = new ipfsClient('https://ipfs.infura.io:5001/')
 
-// convert ipfsHash to Hex string
+// convert from ipfsHash to Hex string
 export const ipfsHexHash = ipfsHash => {
   const base58 = base(
-    '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+    '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
   )
   return (
     '0x' +
@@ -26,7 +26,7 @@ export const ipfsHexHash = ipfsHash => {
 // convert to IPFS hash that starts with "Qm"
 export const ipfsHash = hexString => {
   const base58 = base(
-    '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+    '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
   )
   let bytesString = '1220' + `${hexString}`.substring(2)
   let buffer = Buffer.from(bytesString, 'hex')

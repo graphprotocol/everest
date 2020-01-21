@@ -2,18 +2,17 @@
 import { useState, Fragment, useEffect } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
+import { Dialog } from '@reach/dialog'
+import '@reach/dialog/styles.css'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import { URI_AVAILABLE } from '@web3-react/walletconnect-connector'
+
 import { walletExists, getAddress } from '../../services/ethers'
 import wallets from '../../connectors/wallets'
 import { walletconnect } from '../../connectors'
 
-import { Dialog } from '@reach/dialog'
-import '@reach/dialog/styles.css'
-
 import QRCodeData from './QRCodeData'
 import Divider from '../Divider'
-
 import Close from '../../images/close.svg'
 import Arrow from '../../images/arrow.svg'
 

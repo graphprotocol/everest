@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
+
 import MultiSelect from '../Filters/MultiSelect'
 import Select from '../Filters/Select'
 import UploadImage from '../UploadImage'

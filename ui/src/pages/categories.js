@@ -2,6 +2,7 @@
 import { Styled, jsx, Box } from 'theme-ui'
 
 import categories from '../data/categories.json'
+
 import Layout from '../components/Layout'
 import Section from '../components/Section'
 
@@ -22,7 +23,7 @@ const Categories = ({ data }) => {
               ? `${cat.subcategories.length} projects`
               : '',
             image: `/categories/${cat.slug}.png`,
-            to: `/category/${cat.slug}`
+            to: `/category/${cat.slug}`,
           }
         })}
         variant="category"

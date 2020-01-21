@@ -15,11 +15,17 @@ const Link = ({ to, children, ...props }) => {
         fontWeight: 'bold',
         letterSpacing: '0.31px',
         lineHeight: '2.375rem',
+        transition: 'all 0.3s ease',
         '&:focus': {
           outline: 'none !important',
         },
         '&:hover': {
-          color: 'primary',
+          color: 'linkHover',
+          svg: {
+            transition: 'all 0.2s ease',
+            fill: 'linkHover',
+            marginLeft: 3,
+          },
         },
       }}
       {...props}

@@ -1,23 +1,23 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import Layout from '../../components/Layout'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
-import { navigate } from 'gatsby'
-import ipfs from '../../services/ipfs'
 import fetch from 'isomorphic-fetch'
 import { useQuery } from '@apollo/react-hooks'
-import { PROJECT_QUERY } from '../../utils/queries'
-import { useEverestContract, useAddress, useProvider } from '../../utils/hooks'
 import { ethers } from 'ethers'
 
+import ipfs from '../../services/ipfs'
+import { useEverestContract, useAddress, useProvider } from '../../utils/hooks'
+import { PROJECT_QUERY } from '../../utils/queries'
+
+import Layout from '../../components/Layout'
 import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location, ...props }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
   const [everestContract] = useState(useEverestContract())
-  const [address, setAddress] = useState(useAddress())
-  const [provider, setProvider] = useState(useProvider())
+  const [address] = useState(useAddress())
+  const [provider] = useState(useProvider())
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -70,7 +70,7 @@ const EditProject = ({ location, ...props }) => {
         categories: projectObj ? projectObj.categories : [],
       }))
     }
-  }, [])
+  }, [data])
 
   if (loading && !error) {
     return (
@@ -169,7 +169,6 @@ const EditProject = ({ location, ...props }) => {
           )
           signaturePromise.then(async signature => {
             let { r, s, v } = ethers.utils.splitSignature(signature)
-            console.log('r, s, v ', r, s, v)
             // TODO: call the correct contract function (no need to register a user)
             // just editing the project data (new ipfs hash)
             const transaction = await everestContract.editOffChainDataSigned(

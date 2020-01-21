@@ -5,6 +5,7 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import ThreeBox from '3box'
+
 import { getAddress, metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 

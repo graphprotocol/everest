@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 

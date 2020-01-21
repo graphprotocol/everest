@@ -4,7 +4,10 @@ import { jsx, Styled, Box } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { graphql, navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
+
 import { useWeb3React } from '../utils/hooks'
+import { getAddress } from '../services/ethers'
+import categories from '../data/categories.json'
 
 import Layout from '../components/Layout'
 import Stats from '../components/Stats'
@@ -12,11 +15,9 @@ import Button from '../components/Button'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Modal from '../components/Modal'
-import categories from '../data/categories.json'
-import { getAddress } from '../services/ethers'
 
 const Index = ({ data }) => {
-  const { connector, library, chainId, account, active, error } = useWeb3React()
+  const { account } = useWeb3React()
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => {
@@ -24,10 +25,11 @@ const Index = ({ data }) => {
     navigate('/projects/new')
   }
 
+  // TODO: update these
   const stats = [
     { title: 'Projects', value: '150' },
-    { title: 'Registry Value (ETH)', value: '150,000' },
-    { title: 'Issued Shares', value: '350' },
+    { title: 'Categories', value: '48' },
+    { title: 'Registry Value (DAI)', value: '150,000' },
   ]
 
   const challengedProjects = data.everest.projects.filter(
@@ -58,8 +60,8 @@ const Index = ({ data }) => {
               </Modal>
             ) : (
               <Button
-                onClick={() =>
-                  account || getAddress()
+                onClick={async () =>
+                  account || (await getAddress())
                     ? navigate('/projects/new')
                     : setShowModal(true)
                 }
@@ -76,7 +78,7 @@ const Index = ({ data }) => {
           }}
         />
       </Grid>
-      <Grid sx={{ maxWidth: '1100px' }} mx="auto" my={6}>
+      <Grid sx={{ maxWidth: '1100px' }} mx="auto" my={8}>
         <Stats stats={stats} />
       </Grid>
       <Divider />
@@ -105,17 +107,18 @@ const Index = ({ data }) => {
             description: project.description.slice(0, 20) + '...',
             to: `/project/${project.id}`,
             image: project.image,
+            category:
+              project.categories.length > 0 ? project.categories[0] : '',
           }
         })}
         linkTo="/projects"
         linkText="View all Projects"
         variant="project"
       />
-      <Divider />
       <Grid
         columns={[1, 2, 2]}
         gap={[1, 2, 6]}
-        sx={{ alignItems: 'center', mb: [5, 7, 7] }}
+        sx={{ alignItems: 'center', mb: [5, 7, 7], mt: [5, 10, 10] }}
       >
         <Box
           sx={{
@@ -146,6 +149,7 @@ const Index = ({ data }) => {
           </Styled.p>
         </Box>
       </Grid>
+      <Divider />
       <Section
         title="Active Challenges"
         description="These projects were recently challanged by members of
@@ -156,6 +160,8 @@ const Index = ({ data }) => {
             description: project.description.slice(0, 20) + '...',
             to: `/project/${project.id}`,
             image: project.image,
+            category:
+              project.categories.length > 0 ? project.categories[0] : '',
           }
         })}
         linkTo="/projects"
@@ -209,6 +215,7 @@ export const query = graphql`
         id
         name
         description
+        categories
         isChallenged
         image
         owner {

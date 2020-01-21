@@ -4,6 +4,7 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
 import categories from '../../data/categories.json'
+
 import Button from '../Button'
 import Row from './Row'
 import Search from '../../images/search.svg'
@@ -137,9 +138,9 @@ const Filters = ({ setValue }) => {
               }}
             />
             <Box sx={{ position: 'relative' }}>
-              {allCategories().map(category => (
+              {allCategories().map((category, index) => (
                 <Row
-                  key={category.name}
+                  key={`${category.name}${index}`}
                   item={category}
                   parent={category.parent}
                   selected={selected}

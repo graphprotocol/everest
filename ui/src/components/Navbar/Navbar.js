@@ -52,10 +52,10 @@ const Navbar = ({ path, ...props }) => {
       setAddress(ethAddress)
     }
     fetchAddress()
-  }, [])
+  }, [account])
 
   const isNewProjectPage = path && path.includes('new')
-  const { loading, error, data } = useQuery(PROFILE_QUERY, {
+  const { data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: address || '',
     },
@@ -86,22 +86,27 @@ const Navbar = ({ path, ...props }) => {
           height: '100%',
         }}
       >
-        {data && data.user && (
-          <Link
-            to="/projects/new"
+        <Link
+          to="/projects/new"
+          sx={{
+            backgroundColor: isNewProjectPage ? 'secondary' : 'white',
+            padding: '12px 22px',
+            '&:hover': {
+              color: 'linkHover',
+              svg: {
+                fill: 'inherit',
+                marginLeft: 'inherit',
+              },
+            },
+          }}
+        >
+          <Plus
             sx={{
-              backgroundColor: isNewProjectPage ? 'secondary' : 'white',
-              padding: '22px',
+              transform: 'rotate(45deg)',
+              fill: isNewProjectPage ? 'white' : 'secondary',
             }}
-          >
-            <Plus
-              sx={{
-                transform: 'rotate(45deg)',
-                fill: isNewProjectPage ? 'white' : 'secondary',
-              }}
-            />
-          </Link>
-        )}
+          />
+        </Link>
         {(data && data.user) || userAccount || address ? (
           <Menu accountId={userAccount ? userAccount : address} />
         ) : (

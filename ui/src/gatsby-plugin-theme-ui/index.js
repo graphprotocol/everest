@@ -1,7 +1,6 @@
 export default {
   colors: {
     text: '#4A4A4A',
-    background: '#fff',
     primary: '#1E252C',
     secondary: '#4C66FF',
     tertiary: '#7D7D7D',
@@ -9,8 +8,9 @@ export default {
     fill: '#CFCFCF',
     black: '#090610',
     blackFaded: 'rgba(9,6,16,0.64)',
+    grey: 'rgba(30,37,44,0.16)',
     whiteFaded: 'rgba(255,255,255,0.5)',
-    hover: '#3925E5',
+    linkHover: '#3043B2',
   },
   fonts: {
     body: 'Space Mono, monospace',
@@ -20,7 +20,7 @@ export default {
     body: 400,
     heading: 600,
   },
-  space: [0, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160],
+  space: [0, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 154],
   styles: {
     body: {
       fontFamily: 'body',
@@ -49,17 +49,18 @@ export default {
       fontSize: '2.75rem',
       fontWeight: 'heading',
       letterSpacing: '-0.4px',
-      lineHeight: '3.5rem',
+      lineHeight: '3.375rem',
     },
     h3: {
-      fontSize: '2.5rem',
-      lineHeight: '3rem',
-      fontWeight: 'bold',
-      color: '#4C66FF',
-      '@media (max-width: 640px)': {
-        fontSize: '1.5rem',
-        lineHeight: '2.5rem',
-      },
+      fontSize: '2rem',
+      lineHeight: '2.75rem',
+      fontWeight: 'heading',
+      letterSpacing: '-0.8',
+      color: 'primary',
+      // '@media (max-width: 640px)': {
+      //   fontSize: '1.5rem',
+      //   lineHeight: '2.5rem',
+      // },
     },
     h4: {
       fontSize: '2rem',
@@ -79,7 +80,7 @@ export default {
     },
     p: {
       fontSize: '1rem',
-      lineHeight: '2rem',
+      lineHeight: '1.5rem',
       fontFamily: 'body',
       letterSpacing: '-0.5px',
       color: 'text',
@@ -108,7 +109,7 @@ export default {
   },
   buttons: {
     primary: {
-      color: 'background',
+      color: 'white',
       bg: 'secondary',
       boxShadow:
         '0 8px 32px 0 rgba(76,102,255,0.48), 0 4px 16px 0 rgba(0,0,0,0.16)',
@@ -121,12 +122,14 @@ export default {
       px: 6,
       width: 'fit-content',
       cursor: 'pointer',
+      transition: 'all 0.3s ease',
       '&:focus': {
         outline: 'none',
       },
       '&:hover': {
-        border: '1px solid',
-        borderColor: 'hover',
+        boxShadow:
+          '0 4px 32px 0 rgba(76,102,255,0.24), 0 12px 56px 0 rgba(30,37,44,0.32)',
+        transition: 'all 0.3s ease',
       },
     },
     secondary: {
@@ -154,6 +157,15 @@ export default {
     },
   },
   text: {
+    tag: {
+      fontSize: '9px',
+      lineHeight: '1.5rem',
+      letterSpacing: '1.5px',
+      textTransform: 'uppercase',
+      fontWeight: 'heading',
+      color: 'primary',
+      opacity: 0.64,
+    },
     display: {
       fontSize: '1.125rem',
       lineHeight: '1.5rem',

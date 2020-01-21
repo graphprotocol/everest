@@ -6,30 +6,24 @@ import { navigate } from 'gatsby'
 
 import Challenged from '../../images/challenged.svg'
 
-const Card = ({ title, description, image, isChallenged, variant, to }) => {
+const Card = ({
+  title,
+  description,
+  image,
+  category,
+  isChallenged,
+  variant,
+  to,
+}) => {
   return (
     <Grid
-      sx={{
-        ...styles.root,
-        '&:hover': {
-          border: '2px solid',
-          borderColor: 'hover',
-          '.box': {
-            alignSelf: 'center',
-            justifySelf: 'center',
-          },
-          img: {
-            height: variant === 'project' ? '80px' : '112px',
-            width: variant === 'project' ? '80px' : ['152px', '164px', '164px'],
-          },
-        },
-      }}
+      sx={styles.root}
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
       onClick={() => navigate(to)}
     >
       <Grid
-        pt={variant === 'project' ? 4 : 0}
+        p={variant === 'project' ? 4 : 0}
         pb={4}
         sx={{ justifyContent: 'center' }}
       >
@@ -57,10 +51,11 @@ const Card = ({ title, description, image, isChallenged, variant, to }) => {
           </Box>
         )}
         <Box p={3} sx={{ textAlign: 'center' }}>
+          {variant === 'project' && (
+            <p sx={{ variant: 'text.tag' }}>{category}</p>
+          )}
           <Styled.p sx={styles.title}>{title}</Styled.p>
-          <Styled.p
-            sx={{ fontSize: '0.75rem', lineHeight: '0.875rem', py: 0, px: 2 }}
-          >
+          <Styled.p sx={{ fontSize: '0.75rem', lineHeight: '0.875rem', py: 1 }}>
             {description}
           </Styled.p>
           {isChallenged && <Challenged sx={{ paddingTop: 2 }} />}
@@ -74,14 +69,17 @@ const styles = {
   root: {
     height: '216px',
     width: ['164px', '180px', '180px'],
-    backgroundColor: '#FFFFFF',
-    boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
+    background: 'white',
+    boxShadow: '0 4px 24px 0 rgba(30,37,44,0.16)',
     marginTop: '8px',
     marginBottom: '8px',
     cursor: 'pointer',
+    transition: 'all 0.3s ease',
     '&:hover': {
-      border: '2px solid',
-      borderColor: 'hover',
+      background: 'white',
+      transition: 'all 0.3s ease',
+      boxShadow:
+        '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
     },
   },
   box: {
@@ -101,6 +99,7 @@ Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   image: PropTypes.string,
+  category: PropTypes.string,
   isChallenged: PropTypes.bool,
   variant: PropTypes.string,
   to: PropTypes.string,

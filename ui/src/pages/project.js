@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { convertDate } from '../utils/helpers/date'
 import { formatNumber } from '../utils/helpers/number'
+import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
 
 import Layout from '../components/Layout'
 import Divider from '../components/Divider'
@@ -16,7 +17,6 @@ import Link from '../components/Link'
 
 import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
-import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
 
 const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
@@ -49,14 +49,11 @@ const Project = ({ location }) => {
     },
   })
 
-  const { loading: testLoading, error: testError, data: userData } = useQuery(
-    USER_PROJECTS_QUERY,
-    {
-      variables: {
-        id: 'ck3t926929y7w0922q88lnsww',
-      },
+  const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
+    variables: {
+      id: 'ck3t926929y7w0922q88lnsww',
     },
-  )
+  })
 
   if (loading && !error) {
     return (

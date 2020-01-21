@@ -1,14 +1,18 @@
 /** @jsx jsx */
 import { useState } from 'react'
-import Layout from '../../components/Layout'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { navigate } from 'gatsby'
-import ipfs from '../../services/ipfs'
 import fetch from 'isomorphic-fetch'
+import { ethers, utils } from 'ethers'
 
-import ProjectForm from '../../components/ProjectForm'
+import ipfs, { ipfsHexHash } from '../../services/ipfs'
 import { useEverestContract, useAddress } from '../../utils/hooks'
+
+import Layout from '../../components/Layout'
+import ProjectForm from '../../components/ProjectForm'
+
+const ETHEREUM_DID_REGISTRY = '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
 
 const NewProject = ({ data, ...props }) => {
   const [isDisabled, setIsDisabled] = useState(true)
@@ -75,30 +79,92 @@ const NewProject = ({ data, ...props }) => {
       .then(async function(response) {
         const responseJSON = await response.json()
         if (responseJSON.IpfsHash) {
-          let sigV,
-            sigR,
-            sigS = undefined
-          let offChainDataName =
+          // Create random wallet
+          const randomWallet = ethers.Wallet.createRandom()
+          const randomWalletAddress = randomWallet.signingKey.address
+          const offChainDataValidity = 3156895760
+          const offChainDataName =
             '0x50726f6a65637444617461000000000000000000000000000000000000000000'
 
-          // TODO: call the correct contract function
-          // If user doesn't exist in Everest - call applySignedWithAttribute
-          const transaction = await everestContract.applySignedWithAttribute(
-            address, // project's identity - figure out what this should be
-            sigV,
-            sigR,
-            sigS,
-            address, // this is the "owner" ?
-            offChainDataName,
-            responseJSON.IpfsHash,
-            3156895760, // unix timestamp in seconds for Jan 12, 2070
+          // create changeOwner signed data
+          let changeOwnerSignedData = ethers.utils.solidityKeccak256(
+            [
+              'bytes1',
+              'bytes1',
+              'address',
+              'uint256',
+              'address',
+              'string',
+              'address',
+            ],
+            [
+              '0x19',
+              '0x0',
+              ETHEREUM_DID_REGISTRY,
+              0,
+              randomWalletAddress,
+              'changeOwner',
+              address,
+            ],
           )
+
+          // creates setAttribute transaction  data
+          let setAttributeData = utils.solidityKeccak256(
+            [
+              'bytes1',
+              'bytes1',
+              'address',
+              'uint256',
+              'address',
+              'string',
+              'bytes32',
+              'bytes',
+              'uint256',
+            ],
+            [
+              '0x19',
+              '0x0',
+              ETHEREUM_DID_REGISTRY,
+              0,
+              randomWalletAddress, // project address
+              'setAttribute',
+              offChainDataName,
+              ipfsHexHash(responseJSON.IpfsHash),
+              offChainDataValidity,
+            ],
+          )
+          const signedMessage1 = await randomWallet.signMessage(
+            changeOwnerSignedData,
+          )
+          const signedMessage2 = await randomWallet.signMessage(
+            setAttributeData,
+          )
+          const sig1 = utils.splitSignature(signedMessage1)
+          const sig2 = utils.splitSignature(signedMessage2)
+
+          let { v1, r1, s1 } = sig1
+          let { v2, r2, s2 } = sig2
+
+          const transaction = await everestContract.applySignedWithAttribute(
+            randomWalletAddress,
+            v1,
+            r1,
+            s1,
+            address,
+            v2,
+            r2,
+            s2,
+            offChainDataName,
+            ipfsHexHash(responseJSON.IpfsHash),
+            offChainDataValidity,
+          )
+          console.log('transaction: ', transaction)
         }
-        navigate('/project/ck3t4oggr8ylh0922vgl9dwa9')
+        // navigate('/project/ck3t4oggr8ylh0922vgl9dwa9')
       })
       .catch(function(error) {
         setIsDisabled(false)
-        console.error('Error uploading data to Pinata IPFS: ', error)
+        console.error('ERROR: ', error)
       })
   }
 
@@ -130,9 +196,19 @@ const NewProject = ({ data, ...props }) => {
   }
 
   return (
-    <Layout sx={{ backgroundColor: 'secondary' }} {...props}>
+    <Layout
+      mainStyles={{
+        backgroundColor: 'secondary',
+        marginTop: -5,
+      }}
+      {...props}
+    >
       <Grid
-        sx={{ gridTemplateColumns: ['1fr', '312px 1fr'], position: 'relative' }}
+        sx={{
+          gridTemplateColumns: ['1fr', '312px 1fr'],
+          position: 'relative',
+          pt: 8,
+        }}
         gap={[1, 4, 8]}
       >
         <Box>
