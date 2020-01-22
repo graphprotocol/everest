@@ -41,8 +41,8 @@ const Category = ({ pageContext, data }) => {
       <Divider />
       {pageContext.subcategories && (
         <Section
-          title="Subcategories"
-          description={`${pageContext.subcategories.length} Categories`}
+          title=""
+          description={`${pageContext.subcategories.length} Subcategories`}
           items={pageContext.subcategories.map(subcat => {
             return {
               name: subcat.name,

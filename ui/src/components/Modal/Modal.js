@@ -94,6 +94,8 @@ const Modal = ({ children, showModal, closeModal }) => {
           maxWidth: '660px',
           width: '100%',
           padding: 7,
+          boxShadow:
+            '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
         }}
       >
         {showPendingView && !showWalletsView && (
@@ -180,6 +182,20 @@ const gridStyles = {
   padding: '16px',
   mt: 4,
   cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  svg: {
+    transition: 'all 0.2s ease',
+  },
+  '&:hover': {
+    h5: {
+      color: 'linkHover',
+    },
+    svg: {
+      transition: 'all 0.2s ease',
+      fill: 'linkHover',
+      marginLeft: 3,
+    },
+  },
 }
 
 const iconStyles = {
