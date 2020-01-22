@@ -194,7 +194,7 @@ const utils = {
                 '0x19',
                 '0x0',
                 etherDIDRegistry.address,
-                nonceChangeOwnerNum,
+                0,
                 newMember, // aka identity
                 'changeOwner',
                 owner

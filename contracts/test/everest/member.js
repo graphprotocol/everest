@@ -36,7 +36,7 @@ const config = require('../../conf/config.js')
 const paramConfig = config.everestParams
 const utils = require('../utils.js')
 const ethers = require('ethers')
-// const BN = require('bn.js')can get from uti;s
+// const BN = require('bn.js') can get from utils
 
 contract('Everest', accounts => {
     let [everestOwner, firstOwner] = accounts
@@ -47,7 +47,6 @@ contract('Everest', accounts => {
             // let applicantWallet = utils.ethersWallet(utils.walletPaths.zero)
 
             const projectWallet = ethers.Wallet.createRandom()
-            console.log(projectWallet)
             // await utils.applySignedWithAttribute(applicant, delegate, applicantWallet)
             await utils.applySigned(projectWallet.signingKey.address, firstOwner, projectWallet)
             let everest = await Everest.deployed()

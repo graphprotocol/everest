@@ -14,8 +14,9 @@ import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./lib/EthereumDIDRegistry.sol";
 import "./lib/dai.sol";
+import "./lib/Ownable.sol";
 
-contract Everest is Registry {
+contract Everest is Registry, Ownable {
     using SafeMath for uint256;
 
     /***************
@@ -232,7 +233,7 @@ contract Everest is Registry {
             membershipTime
         );
 
-        changeOwnerSigned(_newMember, _sigV[0], _sigR[0], _sigS[0], _owner);
+        erc1056Registry.changeOwnerSigned(_newMember, _sigV[0], _sigR[0], _sigS[0], _owner);
 
         // Nonce starts at 1. Expiry = 0 is infinite. true is unlimited allowance
         approvedToken.permit(_newMember, _owner, 1, 0, true, _sigV[1], _sigR[1], _sigS[1]);
@@ -333,7 +334,7 @@ contract Everest is Registry {
     @param _sigR        R piece of the member signature
     @param _sigS        S piece of the member signature
      */
-    function changeOwnerSigned(
+    function changeOwnerSignedWrap(
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
@@ -621,15 +622,6 @@ contract Everest is Registry {
     /***************
     EVEREST OWNER FUNCTIONS
     ***************/
-
-    // /**
-    // @dev                Allows the owner of Everest to update the charter in the memberRegistry
-    // @param _newCharter  The data that links to the new charter offchain
-    // */
-    // function updateCharter(bytes32 _newCharter) external onlyOwner returns (bool) {
-    //     emit CharterUpdated(_newCharter);
-    //     return true;
-    // }
 
     /**
     @dev                Allows the owner of everest to withdraw funds from the reserve bank

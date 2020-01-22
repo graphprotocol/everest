@@ -1,8 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "./lib/Ownable.sol";
-
-contract Registry is Ownable {
+contract Registry {
     // ------
     // STATE
     // ------
@@ -37,11 +35,11 @@ contract Registry is Ownable {
     // SETTER FUNCTIONS
     // --------------------
 
-    function updateCharter(bytes32 _newCharter) public onlyOwner {
+    function updateCharter(bytes32 _newCharter) internal {
         charter = _newCharter;
     }
 
-    function setMember(address _member, uint256 _membershipStartTime) public onlyOwner {
+    function setMember(address _member, uint256 _membershipStartTime) internal {
         // Create the member struct
         Member memory member = Member({
             challengeID: 0,
@@ -51,17 +49,17 @@ contract Registry is Ownable {
         members[_member] = member;
     }
 
-    function editChallengeID(address _member, uint256 _newChallengeID) public onlyOwner {
+    function editChallengeID(address _member, uint256 _newChallengeID) internal {
         Member storage member = members[_member];
         member.challengeID = _newChallengeID;
     }
 
-    function editMembershipStartTime(address _member, uint256 _newTime) internal onlyOwner {
+    function editMembershipStartTime(address _member, uint256 _newTime) internal {
         Member storage member = members[_member];
         member.membershipStartTime = _newTime;
     }
 
-    function deleteMember(address _member) public onlyOwner {
+    function deleteMember(address _member) internal {
         delete members[_member];
     }
 }
