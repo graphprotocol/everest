@@ -1,15 +1,14 @@
 /** @jsx jsx */
 import { Fragment, useState } from 'react'
-import { Styled, jsx, Box } from 'theme-ui'
+import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
 import categories from '../../data/categories.json'
 
 import Button from '../Button'
 import Row from './Row'
-import Search from '../../images/search.svg'
 
-const Filters = ({ setValue }) => {
+const Filters = ({ title, setValue }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState([])
   const [searchText, setSearchText] = useState('')
@@ -44,7 +43,6 @@ const Filters = ({ setValue }) => {
           sx={{
             gridTemplateColumns: 'max-content 1fr',
             alignItems: 'center',
-            pt: 2,
             cursor: 'pointer',
             borderBottom: '1px solid rgba(255,255,255,0.32)',
             pb: 2,
@@ -55,10 +53,11 @@ const Filters = ({ setValue }) => {
             setSearchText('')
           }}
         >
-          <Styled.p
+          <p
             sx={{
               color: 'white',
               opacity: 0.64,
+              variant: 'text.large',
             }}
           >
             {selected.length > 0 ? (
@@ -66,7 +65,7 @@ const Filters = ({ setValue }) => {
             ) : (
               <span>Pick categories</span>
             )}
-          </Styled.p>
+          </p>
           <Box
             sx={{
               justifySelf: 'end',
@@ -82,22 +81,35 @@ const Filters = ({ setValue }) => {
         {isOpen && (
           <Box
             sx={{
-              maxWidth: '512px',
+              maxWidth: '560px',
+              marginLeft: -5,
               position: 'absolute',
               background: 'white',
               width: '100%',
               height: '512px',
               overflowY: 'scroll',
               zIndex: 5,
+              marginTop: '-96px',
             }}
           >
             <Box>
+              <p
+                sx={{
+                  variant: 'text.field',
+                  color: 'blackFaded',
+                  pt: 5,
+                  pl: 5,
+                }}
+              >
+                {title}
+              </p>
               <Grid
                 sx={{
                   gridTemplateColumns: '1fr max-content',
                   alignItems: 'center',
                   px: 5,
                   pt: 4,
+                  position: 'relative',
                 }}
               >
                 <input
@@ -106,7 +118,7 @@ const Filters = ({ setValue }) => {
                     borderBottom: '1px solid rgba(9,6,16,0.34)',
                     '&::placeholder': {
                       color: 'rgba(9,6,16,0.34) !important',
-                      fontSize: '1.125rem !important',
+                      fontSize: '18px !important',
                     },
                   }}
                   autoFocus="autofocus"
@@ -118,25 +130,28 @@ const Filters = ({ setValue }) => {
                   }}
                   value={searchText}
                 />
-                <Search />
+                <Button
+                  onClick={e => {
+                    e.preventDefault()
+                    setIsOpen(false)
+                    setSearchText('')
+                    setValue(selected)
+                  }}
+                  text={`Select (${selected.length})`}
+                  variant="primary"
+                  sx={{
+                    m: 0,
+                    px: 4,
+                    right: '24px',
+                    fontSize: '1rem',
+                    position: 'absolute',
+                    boxSizing: 'border-box',
+                    opacity: selected && selected.length > 0 ? 1 : 0.64,
+                  }}
+                />
               </Grid>
             </Box>
-            <Button
-              onClick={e => {
-                e.preventDefault()
-                setIsOpen(false)
-                setSearchText('')
-                setValue(selected)
-              }}
-              text={`Select (${selected.length})`}
-              variant="primary"
-              sx={{
-                mx: 5,
-                my: 4,
-                right: '10px',
-                width: '172px',
-              }}
-            />
+
             <Box sx={{ position: 'relative' }}>
               {allCategories().map((category, index) => (
                 <Row

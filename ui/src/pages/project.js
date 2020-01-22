@@ -95,13 +95,7 @@ const Project = ({ location }) => {
             <Styled.h2>{project.name}</Styled.h2>
           </Box>
         </Grid>
-        <Grid columns={[1, 3, 3]} mt={[5, 5, 0]}>
-          <Box>
-            <p sx={{ variant: 'text.displaySmall' }}>Rep</p>
-            <p sx={{ variant: 'text.displayBig' }}>
-              {formatNumber(project.reputation)}
-            </p>
-          </Box>
+        <Grid columns={[1, 2, 2]} mt={[5, 5, 0]}>
           <Box>
             <p sx={{ variant: 'text.displaySmall' }}>Date Added</p>
             <p sx={{ variant: 'text.displayBig' }}>

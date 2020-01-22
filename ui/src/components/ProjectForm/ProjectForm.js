@@ -12,6 +12,7 @@ const ProjectForm = ({
   setValue,
   setDisabled,
   buttonText,
+  setImage,
 }) => {
   return (
     <form sx={{ maxWidth: '504px', width: '100%', mt: [5, 0, 0] }}>
@@ -60,6 +61,7 @@ const ProjectForm = ({
         imageUrl={project.logoUrl}
         project={project}
         uploadImage={e => uploadImage(e, 'logo')}
+        setImage={data => setImage('logo', data)}
       />
       <Field
         title="Project image"
@@ -69,6 +71,7 @@ const ProjectForm = ({
         imageUrl={project.imageUrl}
         project={project}
         uploadImage={e => uploadImage(e, 'image')}
+        setImage={data => setImage('image', data)}
       />
       <Field
         title="Website"

@@ -33,12 +33,26 @@ const Section = ({
     return (
       <Fragment>
         {items.length > 0 && (
-          <Grid gap={1} columns={5} mt={8}>
+          <Grid
+            gap={1}
+            mt={8}
+            sx={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr' }}
+          >
             {['Name', 'Category', 'Date Added', 'Reputation', 'Challenged'].map(
               entry => (
-                <Styled.p sx={{ textAlign: 'center', color: 'column' }}>
+                <p
+                  sx={{
+                    textAlign: 'left',
+                    color: 'column',
+                    variant: 'text.small',
+                    fontWeight: 'bold',
+                    '&:first-of-type': {
+                      pl: 9,
+                    },
+                  }}
+                >
                   {entry}
-                </Styled.p>
+                </p>
               ),
             )}
           </Grid>
@@ -50,7 +64,7 @@ const Section = ({
     )
   } else {
     return (
-      <Grid mt={[3, 3, 8]} mb={[3, 3, 7]}>
+      <Grid mt={title ? [3, 3, 8] : 0} mb={title ? [3, 3, 7] : 0}>
         <Box sx={{ width: '100%' }}>
           {title && (
             <Styled.h3 sx={{ color: 'primary', mb: 1 }}>{title}</Styled.h3>

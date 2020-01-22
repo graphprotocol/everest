@@ -18,14 +18,14 @@ const Footer = ({ ...props }) => {
         sx={{ textAlign: 'right', maxWidth: '100px', justifySelf: 'flex-end' }}
         columns={3}
       >
-        <Link to="https://thegraph.com" title="The Graph">
-          <img src={'./graph.svg'} alt="The Graph" />
+        <Link to="https://thegraph.com">
+          <img src={'/graph.svg'} alt="The Graph" title="The Graph" />
         </Link>
-        <Link to="https://ipfs.io/" title="IPFS">
-          <img src={'./ipfs.svg'} alt="IPFS" />
+        <Link to="https://ipfs.io/">
+          <img src={'/ipfs.svg'} alt="IPFS" title="IPFS" />
         </Link>
-        <Link to="https://ethereum.org/" title="Ethereum">
-          <img src={'./eth.svg'} alt="Ethereum" />
+        <Link to="https://ethereum.org/">
+          <img src={'/eth.svg'} alt="Ethereum" title="Ethereum" />
         </Link>
       </Grid>
     </GatsbyFooter>

@@ -2,7 +2,7 @@
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-import Close from '../../images/close.svg'
+import Close from '../../images/close-small.svg'
 
 const Row = ({
   item,
@@ -69,7 +69,11 @@ const Row = ({
               setSelected(null)
             }
           }}
-          sx={{ pr: 3, fill: 'secondary', cursor: 'pointer' }}
+          sx={{
+            pr: 3,
+            fill: 'secondary',
+            cursor: 'pointer',
+          }}
         />
       )}
     </Grid>

@@ -21,7 +21,7 @@ const Categories = ({ data }) => {
             name: cat.name,
             description: cat.subcategories
               ? `${cat.subcategories.length} projects`
-              : '',
+              : '0 projects',
             image: `/categories/${cat.slug}.png`,
             to: `/category/${cat.slug}`,
           }

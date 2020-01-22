@@ -9,7 +9,7 @@ export default {
     black: '#090610',
     blackFaded: 'rgba(9,6,16,0.64)',
     grey: 'rgba(30,37,44,0.16)',
-    whiteFaded: 'rgba(255,255,255,0.5)',
+    whiteFaded: 'rgba(255,255,255,0.4)',
     linkHover: '#3043B2',
   },
   fonts: {
@@ -82,7 +82,7 @@ export default {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       fontFamily: 'body',
-      letterSpacing: '-0.5px',
+      letterSpacing: '-0.4px',
       color: 'text',
     },
     a: {
@@ -166,6 +166,17 @@ export default {
       color: 'primary',
       opacity: 0.64,
     },
+    small: {
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
+      color: 'blackFaded',
+      letterSpacing: '-0.4px',
+    },
+    large: {
+      fontSize: '1.125rem',
+      lineHeight: '1.75rem',
+      letterSpacing: '-0.4px',
+    },
     display: {
       fontSize: '1.125rem',
       lineHeight: '1.5rem',
@@ -175,13 +186,13 @@ export default {
     displaySmall: {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
-      letterSpacing: '-0.5px',
+      letterSpacing: '-0.4px',
       color: 'blackFaded',
     },
     displaySmaller: {
       fontSize: '0.75rem',
       lineHeight: '1.25rem',
-      letterSpacing: '-0.5px',
+      letterSpacing: '-0.4px',
       color: 'blackFaded',
     },
     displayBig: {
@@ -193,7 +204,7 @@ export default {
     field: {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
-      letterSpacing: '-0.5px',
+      letterSpacing: '-0.4px',
       color: 'white',
     },
     emphasis: {

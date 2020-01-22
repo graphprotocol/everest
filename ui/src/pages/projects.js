@@ -1,35 +1,24 @@
 /** @jsx jsx */
-import { useState, useLayoutEffect, Fragment } from 'react'
+import { useState } from 'react'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 
 import Layout from '../components/Layout'
-import Row from '../components/Row'
-import Card from '../components/Card'
+import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 
 const Projects = ({ data }) => {
   const [selected, setSelected] = useState('cards')
-  const [size, setSize] = useState([0, 0])
 
   const allProjects = data.everest.projects.map(project => {
     return {
       ...project,
-      description: project.description.slice(0, 20) + '...'
+      description: project.description.slice(0, 20) + '...',
     }
   })
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight])
-    }
-    window.addEventListener('resize', updateSize)
-    updateSize()
-    return () => window.removeEventListener('resize', updateSize)
-  }, [])
-
   const challengedProjects = data.everest.projects.filter(
-    p => p.isChallenged === true
+    p => p.isChallenged === true,
   )
 
   return (
@@ -48,37 +37,20 @@ const Projects = ({ data }) => {
           <Switcher selected={selected} setSelected={setSelected} />
         )}
       </Grid>
-      {selected === 'table' && size[0] > 830 ? (
-        <Fragment>
-          <Grid gap={1} columns={5}>
-            {['Name', 'Category', 'Date Added', 'Reputation', 'Challenged'].map(
-              entry => (
-                <Styled.p sx={columnStyles}>{entry}</Styled.p>
-              )
-            )}
-          </Grid>
-          {allProjects.map(project => (
-            <Row item={project} />
-          ))}
-        </Fragment>
-      ) : (
-        <Grid columns={[2, 3, 4, 6]} gap={[3, 2, 3, 2]}>
-          {allProjects.map(project => (
-            <Card
-              title={project.name}
-              description={project.description}
-              isChallenged={project.isChallenged}
-              variant={'project'}
-              to={`/project/${project.id}`}
-            />
-          ))}
-        </Grid>
-      )}
+      <Section
+        items={allProjects.map(project => {
+          return {
+            ...project,
+            description: project.description.slice(0, 40) + '...',
+            to: `/project/${project.id}`,
+          }
+        })}
+        variant="project"
+        selected={selected}
+      />
     </Layout>
   )
 }
-
-const columnStyles = { textAlign: 'center', color: 'column' }
 
 export default Projects
 

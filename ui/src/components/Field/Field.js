@@ -1,7 +1,9 @@
 /** @jsx jsx */
+import { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
+import TextareaAutosize from 'react-textarea-autosize'
 
 import MultiSelect from '../Filters/MultiSelect'
 import Select from '../Filters/Select'
@@ -13,14 +15,23 @@ const Field = ({
   text,
   imageName,
   imageUrl,
-  uploadImage,
   placeholder,
   charsCount,
   value,
   setValue,
   multiselect,
   items,
+  setImage,
 }) => {
+  const charRef = useRef()
+
+  if (value && value.length === charsCount) {
+    charRef.current.style = `opacity: 1; transition: all 0.3s ease;`
+    setTimeout(() => {
+      charRef.current.style = 'opacity: 0.4; transition: all 0.3s ease '
+    }, 500)
+  }
+
   return (
     <Box
       sx={{
@@ -49,7 +60,9 @@ const Field = ({
             value={value}
           />
         ) : type === 'textarea' ? (
-          <textarea
+          <TextareaAutosize
+            minRows={1}
+            maxRows={6}
             placeholder={placeholder}
             onChange={e => {
               const value = e.target ? e.target.value : ''
@@ -57,10 +70,10 @@ const Field = ({
             }}
             maxLength={charsCount}
             value={value}
-          ></textarea>
+          />
         ) : type === 'filters' ? (
           multiselect === true ? (
-            <MultiSelect setValue={setValue} />
+            <MultiSelect setValue={setValue} title={title} />
           ) : (
             <Select items={items} />
           )
@@ -68,7 +81,7 @@ const Field = ({
           <UploadImage
             imageName={imageName}
             imageUrl={imageUrl}
-            uploadImage={uploadImage}
+            setImage={setImage}
           />
         ) : (
           <label sx={styles.toggle}>
@@ -87,11 +100,13 @@ const Field = ({
           <p
             sx={{
               variant: 'text.field',
-              color: 'whiteFaded',
+              color: 'white',
               alignSelf: 'end',
+              opacity: 0.4,
             }}
+            ref={charRef}
           >
-            {charsCount - value.length} characters
+            {value.length}/{charsCount}
           </p>
         )}
       </Grid>
@@ -104,6 +119,7 @@ const styles = {
     width: '100%',
     mb: '40px',
     pb: 2,
+    transition: 'all 0.3s ease',
     '&>p': {
       variant: 'text.field',
       mb: 2,
@@ -113,8 +129,9 @@ const styles = {
       background: 'none',
       border: 'none',
       outline: 'none',
-      fontSize: '1.375rem',
+      fontSize: '1.125rem',
       lineHeight: '1.75rem',
+      letterSpacing: '-0.4',
       color: 'white',
       fontFamily: 'body',
       fontWeight: 'body',
@@ -125,6 +142,10 @@ const styles = {
     '& textarea': {
       height: '80px',
       resize: 'none',
+    },
+    '&:hover': {
+      borderColor: 'white',
+      transition: 'all 0.3s ease',
     },
   },
   toggle: {

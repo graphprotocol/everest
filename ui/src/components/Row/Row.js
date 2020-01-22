@@ -2,14 +2,19 @@
 import PropTypes from 'prop-types'
 import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
+import { navigate } from 'gatsby'
 
 import { convertDate } from '../../utils/helpers/date'
 import Challenged from '../../images/challenged.svg'
 
 const Row = ({ item }) => {
   return (
-    <Grid gap={1} columns={5} sx={rootStyles}>
-      <Grid columns={2} gap={2} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
+    <Grid
+      gap={1}
+      sx={rootStyles}
+      onClick={() => navigate(`/project/${item.id}`)}
+    >
+      <Grid columns={2} gap={4} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
         <img
           src={item.image ? item.image : '/profiles/placeholder1.png'}
           sx={imageStyles}
@@ -26,7 +31,7 @@ const Row = ({ item }) => {
               color: 'tertiary',
             }}
           >
-            {item.description.slice(0, 20) + '...'}
+            {item.description}
           </Styled.p>
         </Box>
       </Grid>
@@ -56,16 +61,26 @@ const rootStyles = {
   height: '96px',
   alignItems: 'center',
   margin: '16px 0',
+  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    background: 'white',
+    transition: 'all 0.3s ease',
+    boxShadow:
+      '0 0 32px 0 rgba(149,152,171,0.08), 0 0 32px 0 rgba(30,37,44,0.08)',
+  },
 }
 
 const boxStyles = {
-  textAlign: 'center',
+  textAlign: 'left',
 }
 
 const imageStyles = {
   display: 'block',
   borderRadius: '50%',
   width: '64px',
+  ml: 4,
 }
 
 Row.propTypes = {

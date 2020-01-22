@@ -30,8 +30,8 @@ const Category = ({ pageContext, data }) => {
           />
         </Box>
         <Box sx={boxStyles}>
-          <Styled.h1>{pageContext.name}</Styled.h1>
-          <Styled.p>
+          <Styled.h2>{pageContext.name}</Styled.h2>
+          <Styled.p sx={{ maxWidth: '70%' }}>
             That's why you always leave a note! Army had half a day. Bad news.
             Andy Griffith turned us down. He didn't like his nice trailer.
             That's why you always leave a note! Lala another one blurb
@@ -54,9 +54,9 @@ const Category = ({ pageContext, data }) => {
           variant="category"
         />
       )}
-      <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+      <Grid columns={[1, 2, 2]} mb={1} mt={6} sx={{ alignItems: 'center' }}>
         <Box>
-          <Styled.h2>Projects</Styled.h2>
+          <Styled.h3>Projects</Styled.h3>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
             {categoryProjects.length} Projects -{' '}
             {challengedProjects && (
@@ -73,7 +73,7 @@ const Category = ({ pageContext, data }) => {
         items={categoryProjects.map(categoryProject => {
           return {
             ...categoryProject,
-            description: categoryProject.description.slice(0, 30) + '...',
+            description: categoryProject.description.slice(0, 40) + '...',
             to: `/project/${categoryProject.id}`,
           }
         })}
@@ -93,6 +93,8 @@ const imageStyles = {
   width: '286px',
   height: '178px',
   objectFit: 'cover',
+  filter: 'drop-shadow(8px 24px 24px rgba(9,6,16,0.4))',
+  boxShadow: '8px 24px 24px rgba(76,102,255,0.12)',
 }
 
 const boxStyles = { mx: ['auto', 0] }

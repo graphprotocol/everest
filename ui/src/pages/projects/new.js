@@ -6,7 +6,7 @@ import { navigate } from 'gatsby'
 import fetch from 'isomorphic-fetch'
 import { ethers, utils } from 'ethers'
 
-import ipfs, { ipfsHexHash } from '../../services/ipfs'
+import { ipfsHexHash } from '../../services/ipfs'
 import { useEverestContract, useAddress } from '../../utils/hooks'
 
 import Layout from '../../components/Layout'
@@ -32,35 +32,19 @@ const NewProject = ({ data, ...props }) => {
   const [everestContract] = useState(useEverestContract())
   const [address] = useAddress()
 
-  const uploadImage = async (e, field) => {
-    const image = e.target.files[0]
-    if (image) {
-      const reader = new window.FileReader()
-      reader.readAsArrayBuffer(image)
-      reader.onloadend = async () => {
-        const buffer = await Buffer.from(reader.result)
-        await ipfs.add(buffer, async (err, res) => {
-          if (err) {
-            console.error('Error saving doc to IPFS: ', err)
-          }
-          if (res) {
-            const url = `https://ipfs.infura.io:5001/api/v0/cat?arg=${res[0].hash}`
-            if (field === 'logo') {
-              setProject(state => ({
-                ...state,
-                logoUrl: url,
-                logoName: image.name,
-              }))
-            } else {
-              setProject(state => ({
-                ...state,
-                imageUrl: url,
-                imageName: image.name,
-              }))
-            }
-          }
-        })
-      }
+  const setImage = (field, data) => {
+    if (field === 'logo') {
+      setProject(state => ({
+        ...state,
+        logoUrl: data.url,
+        logoName: data.name,
+      }))
+    } else {
+      setProject(state => ({
+        ...state,
+        imageUrl: data.url,
+        imageName: data.name,
+      }))
     }
   }
 
@@ -195,6 +179,8 @@ const NewProject = ({ data, ...props }) => {
     }
   }
 
+  console.log('project: ', project)
+
   return (
     <Layout
       mainStyles={{
@@ -229,12 +215,12 @@ const NewProject = ({ data, ...props }) => {
         <Box>
           <ProjectForm
             project={project}
-            uploadImage={uploadImage}
             isDisabled={isDisabled}
             handleSubmit={handleSubmit}
             setValue={setValue}
             setDisabled={setDisabled}
             buttonText="Add project"
+            setImage={setImage}
           />
         </Box>
       </Grid>
