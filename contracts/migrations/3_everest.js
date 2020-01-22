@@ -23,16 +23,19 @@ module.exports = async (deployer, network, accounts) => {
     }
 
     let owner
+    let didAddress
     if (network === 'development') {
         owner = config.everestParams.owner
         // We must deploy our own DID registry for ganache
         await deployer.deploy(EthereumDIDRegistry)
+        const edr = await EthereumDIDRegistry.deployed()
+        didAddress = edr.address
     } else if (network === 'ropsten') {
         owner = config.everestParams.ropstenOwner
+        didAddress = config.ethereumDIDRegistryAddress
     }
 
     const params = config.everestParams
-    const didContract = await EthereumDIDRegistry.deployed()
     await deployer.deploy(
         Everest,
         owner,
@@ -41,7 +44,7 @@ module.exports = async (deployer, network, accounts) => {
         params.challengeDeposit,
         params.applicationFee,
         params.charter,
-        didContract.address
+        didAddress
     )
 
     // Not necessary for mainnet, since it will not be using the mock token

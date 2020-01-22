@@ -1,6 +1,9 @@
 const ethers = require('ethers')
 const fs = require('fs')
-const { time, expectEvent, expectRevert, constants, BN } = require('openzeppelin-test-helpers')
+const { time, expectEvent, expectRevert, constants } = require('openzeppelin-test-helpers')
+var sha3 = require('js-sha3').keccak_256
+var ethutil = require('ethereumjs-util')
+var BN = require('bn.js')
 
 // const BN = require('bn.js') TODO - remove this and from package.json. We use BN from test helpers
 
@@ -29,6 +32,29 @@ const offChainDataName = '0x50726f6a65637444617461000000000000000000000000000000
 const offChainDataValidity = 3153600000
 
 const randomBytes32 = ethers.utils.randomBytes(32)
+
+// Struct Data type
+const sigArgTypes = [
+    'bytes1', // 0x19
+    'bytes1', // 0x0
+    'address', // etherDIDRegistry address
+    'uint256', // nonce
+    'address', // newMember (aka identity)
+    'string', // 'changeOwner'
+    'address' // owner
+]
+
+const privateKey = Buffer.from(
+    'a285ab66393c5fdda46d6fbad9e27fafd438254ab72ad5acb681a0e9f20f5d7b',
+    'hex'
+)
+const signerAddress = '0x2036C6CD85692F0Fb2C26E6c6B2ECed9e4478Dfd'
+
+const privateKey2 = Buffer.from(
+    'a285ab66393c5fdda46d6fbad9e27fafd438254ab72ad5acb681a0e9f20f5d7a',
+    'hex'
+)
+const signerAddress2 = '0xEA91e58E9Fa466786726F0a947e8583c7c5B3185'
 
 /* Potential helpers for contract call flows
 - applyMember() then increaseTime, then whitelist()
@@ -62,34 +88,6 @@ const utils = {
         return etherDIDRegistry.nonce(identity)
     },
 
-    signTransaction: async (data, wallet) => {
-        // let tx = {
-        //     nonce: nonce,
-        //     to: to,
-        //     data: data
-        // }
-        // note - signature must be 65 BYTES (32 + 332 +1)
-        // let thing = ethers.utils.arrayify(tx)
-        let signedMessage = await wallet.signMessage(data)
-        // console.log('TEST: ', test)
-        // let signPromise = await wallet.sign(tx)
-        // console.log("SP", signPromise)
-
-        let sig = ethers.utils.splitSignature(signedMessage)
-        // console.log(sig)
-        // console.log("bleh")
-        return sig
-    },
-
-    /*
-    utils.hashMessage
-    utils.keccak256
-    utils.randomBytes(length)
-    utils.solidityKeccak256(types,values) *** USE IT
-    utils.splitSignature
-    utils.parseTransaction
-
-    */
     getStringHash: domain =>
         `${ethers.utils.solidityKeccak256(['string'], [domain]).toString('hex')}`,
 
@@ -106,121 +104,148 @@ const utils = {
     // challengeAndResolve: async
 
     applySignedWithAttribute: async (newMember, owner, wallet) => {
-        const etherDIDRegistry = await EthereumDIDRegistry.deployed()
-        const nonceChangeOwner = await module.exports.getIdentityNonce(newMember)
-        // Convert from web3 big number to js number. This is OK since we know nonce is a small
-        // number. It is a work around for the big number ethers/web3 problem
-        const nonceChangeOwnerNum = Number(nonceChangeOwner.toString())
-        // Must add one, since our solidity function wraps two ethrDIDRegistry functions
-        const nonceSetAttribute = nonceChangeOwnerNum + 1
-        let changeOwnerSignedData = ethers.utils.solidityKeccak256(
-            ['bytes1', 'bytes1', 'address', 'uint256', 'address', 'string', 'address'],
-            ['0x19', '0x0', etherDIDRegistry.address, 0, newMember, 'changeOwner', owner]
-        )
-        let setAttributeSignedData = ethers.utils.solidityKeccak256(
-            [
-                'bytes1',
-                'bytes1',
-                'address',
-                'uint256',
-                'address',
-                'string',
-                'bytes32',
-                'bytes',
-                'uint256'
-            ],
-            [
-                '0x19',
-                '0x0',
-                etherDIDRegistry.address,
-                1,
-                newMember,
-                'setAttribute',
-                offChainDataName,
-                offChainDataValue,
-                offChainDataValidity
-            ]
-        )
-        // console.log('DAATA1: ', changeOwnerSignedData)
-        // console.log('DATA2: ', setAttributeSignedData)
-        let applySig = await module.exports.signTransaction(
-            // nonceChangeOwnerNum,
-            // etherDIDRegistry.address,
-            changeOwnerSignedData,
-            wallet
-        )
-        let attributeSig = await module.exports.signTransaction(
-            // nonceSetAttribute,
-            // etherDIDRegistry.address,
-            setAttributeSignedData,
-            wallet
-        )
-
-        // console.log('Change owner: ', changeOwnerSig)
-        // console.log('Set attribute: ', setAttributeSig)
-        const everest = await Everest.deployed()
-        await everest.applySignedWithAttribute(
-            newMember,
-            applySig.v,
-            applySig.r,
-            applySig.s,
-            owner,
-            attributeSig.v,
-            attributeSig.r,
-            attributeSig.s,
-            offChainDataName,
-            randomBytes32,
-            offChainDataValidity
-        )
-
+        // const etherDIDRegistry = await EthereumDIDRegistry.deployed()
+        // const nonceChangeOwner = await module.exports.getIdentityNonce(newMember)
+        // // Convert from web3 big number to js number. This is OK since we know nonce is a small
+        // // number. It is a work around for the big number ethers/web3 problem
+        // const nonceChangeOwnerNum = Number(nonceChangeOwner.toString())
+        // // Must add one, since our solidity function wraps two ethrDIDRegistry functions
+        // const nonceSetAttribute = nonceChangeOwnerNum + 1
+        // let changeOwnerSignedData = ethers.utils.solidityKeccak256(
+        //     ['bytes1', 'bytes1', 'address', 'uint256', 'address', 'string', 'address'],
+        //     ['0x19', '0x0', etherDIDRegistry.address, 0, newMember, 'changeOwner', owner]
+        // )
+        // let setAttributeSignedData = ethers.utils.solidityKeccak256(
+        //     [
+        //         'bytes1',
+        //         'bytes1',
+        //         'address',
+        //         'uint256',
+        //         'address',
+        //         'string',
+        //         'bytes32',
+        //         'bytes',
+        //         'uint256'
+        //     ],
+        //     [
+        //         '0x19',
+        //         '0x0',
+        //         etherDIDRegistry.address,
+        //         1,
+        //         newMember,
+        //         'setAttribute',
+        //         offChainDataName,
+        //         offChainDataValue,
+        //         offChainDataValidity
+        //     ]
+        // )
+        // // console.log('DAATA1: ', changeOwnerSignedData)
+        // // console.log('DATA2: ', setAttributeSignedData)
+        // let applySig = await module.exports.signTransaction(
+        //     // nonceChangeOwnerNum,
+        //     // etherDIDRegistry.address,
+        //     changeOwnerSignedData,
+        //     wallet
+        // )
+        // let attributeSig = await module.exports.signTransaction(
+        //     // nonceSetAttribute,
+        //     // etherDIDRegistry.address,
+        //     setAttributeSignedData,
+        //     wallet
+        // )
+        // // console.log('Change owner: ', changeOwnerSig)
+        // // console.log('Set attribute: ', setAttributeSig)
+        // const everest = await Everest.deployed()
+        // await everest.applySignedWithAttribute(
+        //     newMember,
+        //     applySig.v,
+        //     applySig.r,
+        //     applySig.s,
+        //     owner,
+        //     attributeSig.v,
+        //     attributeSig.r,
+        //     attributeSig.s,
+        //     offChainDataName,
+        //     randomBytes32,
+        //     offChainDataValidity
+        // )
         // assert isMember()
     },
 
-    /*
-     * @param newMember - The project address that is created in the browser and thrown away
-     * @param owner     - The users address, which is becoming the owner of the project
-     * @param wallet    - The ethers.js wallet object of the project (to be thrown away)
-     */
-    applySigned: async (newMember, owner, wallet) => {
-        const etherDIDRegistry = await EthereumDIDRegistry.deployed()
-        const nonceChangeOwner = await module.exports.getIdentityNonce(newMember)
-        // Convert from web3 big number to js number. This is OK since we know nonce is a small
-        // number. It is a work around for the big number ethers/web3 problem
-        const nonceChangeOwnerNum = Number(nonceChangeOwner.toString())
-        // Must add one, since our solidity function wraps two ethrDIDRegistry functions
-        let changeOwnerSignedData = ethers.utils.solidityKeccak256(
-            ['bytes1', 'bytes1', 'address', 'uint256', 'address', 'string', 'address'],
-            [
-                '0x19',
-                '0x0',
-                etherDIDRegistry.address,
-                0,
-                newMember, // aka identity
-                'changeOwner',
-                owner
-            ]
+    signTransaction: async (data, wallet) => {
+        const hash = ethers.utils.keccak256(data)
+        const hashArray = ethers.utils.arrayify(hash)
+        let signedMessage = await wallet.signMessage(hashArray) // AUTO PREFIX Ethereum signed msg 19
+        sig = ethers.utils.splitSignature(signedMessage)
+        return sig
+    },
+
+    applySigned: async (owner, wallet) => {
+        const didReg = await EthereumDIDRegistry.deployed()
+        let newMember = wallet.signingKey.address
+
+        const sig = await module.exports.signData(
+            signerAddress,
+            signerAddress,
+            privateKey,
+            Buffer.from('changeOwner').toString('hex') +
+                module.exports.stripHexPrefix(signerAddress2)
         )
-
-        let applySig = await module.exports.signTransaction(changeOwnerSignedData, wallet)
-        let permitSig = await module.exports.permitSignature(newMember, owner, wallet)
-        console.log(newMember)
-        console.log(applySig)
-        console.log(owner)
-
-        // The permit sig is always second
-        let vArray = [applySig.v, permitSig.v]
-        let rArray = [applySig.r, permitSig.r]
-        let sArray = [applySig.s, permitSig.s]
-        // console.log(vArray)
-        // console.log(rArray)
-        // console.log(sArray)
-
-        const everest = await Everest.deployed()
-        await everest.applySigned(newMember, vArray, rArray, sArray, owner, {
-            from: owner
+        tx = await didReg.changeOwnerSigned(signerAddress, sig.v, sig.r, sig.s, signerAddress2, {
+            from: '0x1dF62f291b2E969fB0849d99D9Ce41e2F137006e' //temp random acct
         })
+        const owner2 = await didReg.owners(signerAddress)
+        console.log('Owner 2: ', owner2)
+        console.log('signerAddress2: ', signerAddress2)
+        assert.equal(owner2, signerAddress2)
+        // Packed encoding of transfer signature message
+        // sigData = ethers.utils.solidityPack(sigArgTypes, [
+        //     '0x19',
+        //     '0x00',
+        //     etherDIDRegistry.address,
+        //     0, // TODO - make this a contract call, since nonce isn't FORSURE 0
+        //     newMember, // aka identity
+        //     'changeOwner',
+        //     owner
+        // ])
 
-        // assert isMember()
+        // const hash = ethers.utils.keccak256(sigData)
+        // const hashArray = ethers.utils.arrayify(hash)
+        // let signedMessage = await wallet.signMessage(hashArray)
+        // sig = ethers.utils.splitSignature(signedMessage)
+
+        // let payload = ethers.utils.defaultAbiCoder.encode(sigArgTypes, [
+        //     '0x19',
+        //     '0x00',
+        //     etherDIDRegistry.address,
+        //     0, // TODO - make this a contract call, since nonce isn't FORSURE 0
+        //     newMember, // aka identity
+        //     'changeOwner',
+        //     owner
+        // ])
+
+        // console.log('Payload:', payload)
+
+        // let payloadHash = ethers.utils.keccak256(payload)
+        // console.log('PayloadHash:', payloadHash)
+
+        // // See the note in the Solidity; basically this would save 6 gas and
+        // // can potentially add security vulnerabilities in the future
+        // // let payloadHash = ethers.utils.solidityKeccak256([ "bytes32", "string" ], [ someHash, someDescr ]);
+
+        // let signature = await wallet.signMessage(ethers.utils.arrayify(payloadHash)) // This adds the message prefix
+
+        // let sig = ethers.utils.splitSignature(signature)
+        // console.log('Signature:', sig)
+
+        // console.log(
+        //     'Recovered:',
+        //     ethers.utils.verifyMessage(ethers.utils.arrayify(payloadHash), sig)
+        // )
+
+        // await etherDIDRegistry.changeOwnerSigned(newMember, sig.v, sig.r, sig.s, owner, {
+        //     from: newMember
+        // })
     },
 
     /*
@@ -253,9 +278,39 @@ const utils = {
         )
         let permitSig = await module.exports.signTransaction(permitSignedData, wallet)
         return permitSig
+    },
+    leftPad: (data, size = 64) => {
+        if (data.length === size) return data
+        return '0'.repeat(size - data.length) + data
+    },
+    stripHexPrefix: str => {
+        if (str.startsWith('0x')) {
+            return str.slice(2)
+        }
+        return str
+    },
+    signData: async (identity, signer, key, data) => {
+        const didReg = await EthereumDIDRegistry.deployed()
+        const nonce = await didReg.nonce(signer)
+        const paddedNonce = module.exports.leftPad(Buffer.from([nonce], 64).toString('hex'))
+        const dataToSign =
+            '1900' +
+            module.exports.stripHexPrefix(didReg.address) +
+            paddedNonce +
+            module.exports.stripHexPrefix(identity) +
+            data
+        const hash = Buffer.from(sha3.buffer(Buffer.from(dataToSign, 'hex')))
+        const signature = ethutil.ecsign(hash, key)
+        const publicKey = ethutil.ecrecover(hash, signature.v, signature.r, signature.s)
+        return {
+            r: '0x' + signature.r.toString('hex'),
+            s: '0x' + signature.s.toString('hex'),
+            v: signature.v
+        }
     }
 }
 
+// module.exports.etherDIDRegistryUtils = etherDIDRegistryUtils
 module.exports = utils
 
 // TODO - might use this, but trying to not use it if possible. Holding here for a bit

@@ -18,7 +18,9 @@
     "@truffle/hdwallet-provider": "1.0.28",
     "bn.js": "4.11.8",
     "chai": "4.2.0",
+    "ethereumjs-util": "^6.2.0",
     "ethers": "4.0.39",
+    "js-sha3": "^0.8.0",
     "openzeppelin-test-helpers": "0.5.1"
   },
   "devDependencies": {

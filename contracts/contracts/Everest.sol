@@ -334,7 +334,7 @@ contract Everest is Registry, Ownable {
     @param _sigR        R piece of the member signature
     @param _sigS        S piece of the member signature
      */
-    function changeOwnerSignedWrap(
+    function changeOwnerSigned(
         address _member,
         uint8 _sigV,
         bytes32 _sigR,
@@ -381,9 +381,6 @@ contract Everest is Registry, Ownable {
     /**
     @dev                        Allows a delegate to be added (there can be multiple delegates)
     @param _member              The address of the member
-    @param _sigV                V piece of the member signature
-    @param _sigR                R piece of the member signature
-    @param _sigS                S piece of the member signature
     @param _newDelegate         The new delegate
     @param _delegateValidity    The time the new delegate is valid
      */
