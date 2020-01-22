@@ -12,11 +12,10 @@ pragma solidity ^0.5.8;
 
 import "./ReserveBank.sol";
 import "./Registry.sol";
-import "./MemberStruct.sol";
 import "./lib/EthereumDIDRegistry.sol";
 import "./lib/dai.sol";
 
-contract Everest is MemberStruct, Ownable {
+contract Everest is Registry {
     using SafeMath for uint256;
 
     /***************
@@ -33,8 +32,6 @@ contract Everest is MemberStruct, Ownable {
     Dai public approvedToken;
     // Guild bank contract reference
     ReserveBank public reserveBank;
-    // Member Registry contract reference
-    Registry public memberRegistry;
     // ERC-1056 contract reference
     EthereumDIDRegistry public erc1056Registry;
 
@@ -47,9 +44,9 @@ contract Everest is MemberStruct, Ownable {
     EVENTS
     ******/
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
-    // We rely on ApplicationMade and MemberExited to distingushing between identities on
+    // We rely on NewMember and MemberExited to distingushing between identities on
     // ERC-1056 that are part of everest and aren't
-    event ApplicationMade(address member, uint256 applicationTime);
+    event NewMember(address member, uint256 applicationTime);
     event MemberExited(address indexed member);
     event CharterUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
@@ -61,7 +58,7 @@ contract Everest is MemberStruct, Ownable {
         uint256 challengeDeposit,
         uint256 applicationFee,
         address reserveBank,
-        address registry,
+        // address registry
         bytes32 charter
     );
 
@@ -171,7 +168,8 @@ contract Everest is MemberStruct, Ownable {
         uint256 _votingPeriodDuration,
         uint256 _challengeDeposit,
         uint256 _applicationFee,
-        bytes32 _charter
+        bytes32 _charter,
+        address _DIDregistry
     ) public {
         require(_owner != address(0), "Everest::constructor - owner cannot be 0");
         require(_approvedToken != address(0), "Everest::constructor - _approvedToken cannot be 0");
@@ -181,11 +179,9 @@ contract Everest is MemberStruct, Ownable {
         );
 
         approvedToken = Dai(_approvedToken);
-        // These contracts get created, but are not recorded in ganache or truffle
-        // They can be found on internal transactions on etherscan for any testnet or mainnet launch
         reserveBank = new ReserveBank(_approvedToken);
-        memberRegistry = new Registry(address(this), _charter);
-
+        erc1056Registry = EthereumDIDRegistry(_DIDregistry);
+        charter = _charter;
         votingPeriodDuration = _votingPeriodDuration;
         challengeDeposit = _challengeDeposit;
         applicationFee = _applicationFee;
@@ -197,7 +193,6 @@ contract Everest is MemberStruct, Ownable {
             _challengeDeposit,
             _applicationFee,
             address(reserveBank),
-            address(memberRegistry),
             _charter
         );
     }
@@ -220,19 +215,19 @@ contract Everest is MemberStruct, Ownable {
         bytes32[2] memory _sigR,
         bytes32[2] memory _sigS,
         address _owner
-    ) internal {
+    ) public {
         require(
-            memberRegistry.getMembershipStartTime(_newMember) == 0,
+            getMembershipStartTime(_newMember) == 0,
             "Everest::applySignedInternal - This member already exists"
         );
         /* solium-disable-next-line security/no-block-members*/
         uint256 membershipTime = now;
-        memberRegistry.setMember(_newMember, membershipTime);
+        setMember(_newMember, membershipTime);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
         // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
         // identity
-        emit ApplicationMade(
+        emit NewMember(
             _newMember,
             membershipTime
         );
@@ -247,8 +242,6 @@ contract Everest is MemberStruct, Ownable {
             approvedToken.transferFrom(msg.sender, address(reserveBank), applicationFee),
             "Everest::applySignedInternal - Token transfer failed"
         );
-
-
     }
 
     /**
@@ -324,7 +317,7 @@ contract Everest is MemberStruct, Ownable {
             !memberChallengeExists(_member),
             "Everest::memberExit - Can't exit during ongoing challenge"
         );
-        memberRegistry.deleteMember(_member);
+        deleteMember(_member);
         emit MemberExited(_member);
     }
 
@@ -451,10 +444,10 @@ contract Everest is MemberStruct, Ownable {
         address _challengingMember,
         address _challengedMember,
         bytes32 _details
-    ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
-        uint256 challengeeMemberTime = memberRegistry.getMembershipStartTime(_challengedMember);
+    ) external onlyMemberOwnerOrDelegate(_challengingMember) returns (uint256 challengeID) {
+        uint256 challengeeMemberTime = getMembershipStartTime(_challengedMember);
         require (challengeeMemberTime > 0, "Everest::challenge - Challengee must exist");
-        uint256 challengerMemberTime = memberRegistry.getMembershipStartTime(_challengingMember);
+        uint256 challengerMemberTime = getMembershipStartTime(_challengingMember);
         require(
             !memberChallengeExists(_challengedMember),
             "Everest::challenge - Member can't be challenged multiple times at once"
@@ -482,7 +475,7 @@ contract Everest is MemberStruct, Ownable {
         challenges[newChallengeID] = newChallenge;
 
         // Updates member to store most recent challenge
-        memberRegistry.editChallengeID(_challengedMember, newChallengeID);
+        editChallengeID(_challengedMember, newChallengeID);
 
         // Takes tokens from challenger
         require(
@@ -539,7 +532,7 @@ contract Everest is MemberStruct, Ownable {
             "Everest::submitVote - Member can't vote on their own challenge"
         );
 
-        uint256 memberStartTime = memberRegistry.getMembershipStartTime(_voter);
+        uint256 memberStartTime = getMembershipStartTime(_voter);
         // The lower the member start time (i.e. the older the member) the more vote weight
         uint256 voteWeight = storedChallenge.endTime.sub(memberStartTime);
 
@@ -597,7 +590,7 @@ contract Everest is MemberStruct, Ownable {
                 withdraw(storedChallenge.challenger, challengeDeposit),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
-            memberRegistry.deleteMember(storedChallenge.member);
+            deleteMember(storedChallenge.member);
             emit ChallengeSucceeded(
                 storedChallenge.member,
                 _challengeID,
@@ -612,7 +605,7 @@ contract Everest is MemberStruct, Ownable {
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
             // Remove challenge ID from registry
-            memberRegistry.editChallengeID(storedChallenge.member, 0);
+            editChallengeID(storedChallenge.member, 0);
             emit ChallengeFailed(
                 storedChallenge.member,
                 _challengeID,
@@ -629,15 +622,14 @@ contract Everest is MemberStruct, Ownable {
     EVEREST OWNER FUNCTIONS
     ***************/
 
-    /**
-    @dev                Allows the owner of Everest to update the charter in the memberRegistry
-    @param _newCharter  The data that links to the new charter offchain
-    */
-    function updateCharter(bytes32 _newCharter) external onlyOwner returns (bool) {
-        emit CharterUpdated(_newCharter);
-        memberRegistry.updateCharter(_newCharter);
-        return true;
-    }
+    // /**
+    // @dev                Allows the owner of Everest to update the charter in the memberRegistry
+    // @param _newCharter  The data that links to the new charter offchain
+    // */
+    // function updateCharter(bytes32 _newCharter) external onlyOwner returns (bool) {
+    //     emit CharterUpdated(_newCharter);
+    //     return true;
+    // }
 
     /**
     @dev                Allows the owner of everest to withdraw funds from the reserve bank
@@ -669,7 +661,7 @@ contract Everest is MemberStruct, Ownable {
     @param _member  The member name of the member whose status is to be examined
     */
     function isMember(address _member) public view returns (bool){
-        uint256 startTime = memberRegistry.getMembershipStartTime(_member);
+        uint256 startTime = getMembershipStartTime(_member);
         if (startTime > 0){
             return true;
         }
@@ -682,7 +674,7 @@ contract Everest is MemberStruct, Ownable {
     @param _member  The member that is being checked for a challenge.
     */
     function memberChallengeExists(address _member) public view returns (bool) {
-        uint256 challengeID = memberRegistry.getChallengeID(_member);
+        uint256 challengeID = getChallengeID(_member);
         return (challengeID > 0);
     }
 

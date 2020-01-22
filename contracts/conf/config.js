@@ -23,7 +23,7 @@ const config = {
             // Daves metamask
             address: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd'
         },
-        rtestnetTokenHolders: [
+        testnetTokenHolders: [
             // Other accounts in Daves metamask
             {
                 address: '0x7F11E5B7Fe8C04c1E4Ce0dD98aC5c922ECcfA4ed',

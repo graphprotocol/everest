@@ -56,11 +56,14 @@ module.exports = {
     // We might lock down a version later
     compilers: {
         solc: {
-            // version: '0.5.8',
+            version: '0.5.8',
             settings: {
                 optimizer: {
                     enabled: true,
-                    runs: 200
+                    runs: 200 //,
+                    // details: {
+                    //     yul: false
+                    // }
                 }
             }
         }

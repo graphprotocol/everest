@@ -17,8 +17,8 @@ const paramConfig = config.everestParams
 
 const Registry = artifacts.require('Registry.sol')
 const Everest = artifacts.require('Everest.sol')
-const Token = artifacts.require('MockToken.sol')
 const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
+const Token = artifacts.require('dai.sol')
 
 // The deterministic flag mneumonic
 const ganacheMneumonic =
@@ -70,13 +70,12 @@ const utils = {
         // }
         // note - signature must be 65 BYTES (32 + 332 +1)
         // let thing = ethers.utils.arrayify(tx)
-        let test = await wallet.signMessage(data)
+        let signedMessage = await wallet.signMessage(data)
         // console.log('TEST: ', test)
         // let signPromise = await wallet.sign(tx)
         // console.log("SP", signPromise)
 
-        // TODO - IT IS FAILING ON SPLIT SIGNATURE
-        let sig = ethers.utils.splitSignature(test)
+        let sig = ethers.utils.splitSignature(signedMessage)
         // console.log(sig)
         // console.log("bleh")
         return sig
@@ -116,15 +115,7 @@ const utils = {
         const nonceSetAttribute = nonceChangeOwnerNum + 1
         let changeOwnerSignedData = ethers.utils.solidityKeccak256(
             ['bytes1', 'bytes1', 'address', 'uint256', 'address', 'string', 'address'],
-            [
-                '0x19',
-                '0x0',
-                etherDIDRegistry.address,
-                nonceChangeOwnerNum,
-                newMember,
-                'changeOwner',
-                owner
-            ]
+            ['0x19', '0x0', etherDIDRegistry.address, 0, newMember, 'changeOwner', owner]
         )
         let setAttributeSignedData = ethers.utils.solidityKeccak256(
             [
@@ -142,11 +133,11 @@ const utils = {
                 '0x19',
                 '0x0',
                 etherDIDRegistry.address,
-                nonceSetAttribute,
+                1,
                 newMember,
                 'setAttribute',
                 offChainDataName,
-                // MISSING - VALUE
+                offChainDataValue,
                 offChainDataValidity
             ]
         )
@@ -185,6 +176,11 @@ const utils = {
         // assert isMember()
     },
 
+    /*
+     * @param newMember - The project address that is created in the browser and thrown away
+     * @param owner     - The users address, which is becoming the owner of the project
+     * @param wallet    - The ethers.js wallet object of the project (to be thrown away)
+     */
     applySigned: async (newMember, owner, wallet) => {
         const etherDIDRegistry = await EthereumDIDRegistry.deployed()
         const nonceChangeOwner = await module.exports.getIdentityNonce(newMember)
@@ -205,26 +201,58 @@ const utils = {
             ]
         )
 
-        // console.log('DAATA1: ', changeOwnerSignedData)
-        // console.log('DATA2: ', setAttributeSignedData)
-        let applySig = await module.exports.signTransaction(
-            // nonceChangeOwnerNum,
-            // etherDIDRegistry.address,
-            changeOwnerSignedData,
-            wallet
-        )
-        console.log('APLY SIG:', applySig)
-        // console.log('Change owner: ', changeOwnerSig)
-        // console.log('Set attribute: ', setAttributeSig)
+        let applySig = await module.exports.signTransaction(changeOwnerSignedData, wallet)
+        let permitSig = await module.exports.permitSignature(newMember, owner, wallet)
+        console.log(newMember)
+        console.log(applySig)
+        console.log(owner)
+
+        // The permit sig is always second
+        let vArray = [applySig.v, permitSig.v]
+        let rArray = [applySig.r, permitSig.r]
+        let sArray = [applySig.s, permitSig.s]
+        // console.log(vArray)
+        // console.log(rArray)
+        // console.log(sArray)
+
         const everest = await Everest.deployed()
-        // console.log("ASDAS: ", newMember)
-        // console.log("ASDAS: ", owner)
-        await everest.applySigned(newMember, applySig.v, applySig.r, applySig.s, owner, {
-            from: owner,
-            gas: '30000'
+        await everest.applySigned(newMember, vArray, rArray, sArray, owner, {
+            from: owner
         })
 
         // assert isMember()
+    },
+
+    /*
+     * @param newMember - The project address that is created in the browser and thrown away
+     * @param owner     - The users address, which is becoming the owner of the project
+     * @param wallet    - The ethers.js wallet object of the project (to be thrown away)
+     */
+    permitSignature: async (newMember, owner, wallet) => {
+        const token = Token.deployed()
+        // const nonce = token.nonces()
+
+        // nonce will always be one, then this account gets thrown away . we make it max, because
+        // it will be
+
+        // Convert from web3 big number to js number. This is OK since we know nonce is a small
+        // number. It is a work around for the big number ethers/web3 problem
+        // const nonceChangeOwnerNum = Number(nonceChangeOwner.toString())
+        // Must add one, since our solidity function wraps two ethrDIDRegistry functions
+        let permitSignedData = ethers.utils.solidityKeccak256(
+            ['bytes1', 'bytes1', 'address', 'address', 'uint256', 'uint256', 'bool'],
+            [
+                '0x19',
+                '0x0',
+                newMember,
+                owner,
+                1, // nonce always starts at 1
+                0, // allowance never expires
+                true // to represent an infinite amount of allowance
+            ]
+        )
+        let permitSig = await module.exports.signTransaction(permitSignedData, wallet)
+        return permitSig
     }
 }
 

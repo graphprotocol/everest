@@ -32,6 +32,7 @@ module.exports = async (deployer, network, accounts) => {
     }
 
     const params = config.everestParams
+    const didContract = await EthereumDIDRegistry.deployed()
     await deployer.deploy(
         Everest,
         owner,
@@ -39,7 +40,8 @@ module.exports = async (deployer, network, accounts) => {
         params.votingPeriodDuration,
         params.challengeDeposit,
         params.applicationFee,
-        params.charter
+        params.charter,
+        didContract.address
     )
 
     // Not necessary for mainnet, since it will not be using the mock token

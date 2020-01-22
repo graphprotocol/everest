@@ -35,16 +35,21 @@ const fs = require('fs')
 const config = require('../../conf/config.js')
 const paramConfig = config.everestParams
 const utils = require('../utils.js')
+const ethers = require('ethers')
 // const BN = require('bn.js')can get from uti;s
 
 contract('Everest', accounts => {
-    const [everestOwner, newMember, owner] = accounts
+    let [everestOwner, firstOwner] = accounts
     const memberName = 'The Graph'
+    // firstOwner = "0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd"
     describe('Member joining and leaving. Functions: applyMember(), whitelist(), memberExit(), isWhiteListed()', () => {
         it('should allow a member to apply, pass time, and get whitelisted', async () => {
-            let applicantWallet = utils.ethersWallet(utils.walletPaths.zero)
+            // let applicantWallet = utils.ethersWallet(utils.walletPaths.zero)
+
+            const projectWallet = ethers.Wallet.createRandom()
+            console.log(projectWallet)
             // await utils.applySignedWithAttribute(applicant, delegate, applicantWallet)
-            await utils.applySigned(newMember, owner, applicantWallet)
+            await utils.applySigned(projectWallet.signingKey.address, firstOwner, projectWallet)
             let everest = await Everest.deployed()
             // console.log(await everest.isMember(newMember))
             // console.log(await everest.memberChallengeExists(owner))
