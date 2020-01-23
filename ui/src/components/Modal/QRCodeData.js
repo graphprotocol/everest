@@ -16,9 +16,9 @@ const QRCodeData = ({ size, uri = '' }) => {
         Launch a compatible wallet app on your mobile or tablet and scan the QR
         icon.
       </Styled.h6>
-      <Link>
+      <a href="https://walletconnect.org/" target="_blank">
         Help with signing in <Arrow sx={{ ml: 1, fill: 'secondary' }} />
-      </Link>
+      </a>
       <Divider mt={0} mb={6} />
       <QRCode
         size={size}

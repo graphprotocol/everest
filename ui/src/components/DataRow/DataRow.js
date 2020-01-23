@@ -11,7 +11,7 @@ const DataRow = ({ name, value, href }) => (
     }}
     gap={[0, 2, 2]}
   >
-    <p sx={{ variant: 'text.displaySmall' }}>{name}</p>
+    <p sx={{ variant: 'text.small' }}>{name}</p>
     <Styled.p sx={textStyles}>
       {href ? (
         <Styled.a href={href} target="_blank">

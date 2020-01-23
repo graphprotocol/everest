@@ -5,6 +5,7 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { useWeb3React } from '@web3-react/core'
+import { navigate } from 'gatsby'
 
 import { getAddress, metamaskAccountChange } from '../../services/ethers'
 
@@ -61,6 +62,8 @@ const Navbar = ({ path, ...props }) => {
     },
   })
 
+  console.log('ADDRESS: ', address)
+
   return (
     <Header {...props} sx={{ height: '96px' }}>
       {isMobile ? (
@@ -87,7 +90,8 @@ const Navbar = ({ path, ...props }) => {
         }}
       >
         <Link
-          to="/projects/new"
+          to=""
+          onClick={() => (address ? navigate('/projects/new') : openModal())}
           sx={{
             backgroundColor: isNewProjectPage ? 'secondary' : 'white',
             padding: '12px 22px',

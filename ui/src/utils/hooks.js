@@ -4,6 +4,7 @@ import { useMemo, useEffect, useState } from 'react'
 import { getContract, getAddress, getProvider } from '../services/ethers'
 import addresses from '../../constants/addresses.json'
 import EVEREST_ABI from '../../constants/abis/Everest.json'
+import ETHEREUM_DID_REGISTRY_ABI from '../../constants/abis/EthereumDIDRegistry.json'
 
 export function useWeb3React() {
   const context = useWeb3ReactCore()
@@ -18,7 +19,23 @@ export function useEverestContract() {
     try {
       return getContract(
         addresses.ropsten.everest,
-        EVEREST_ABI.abi,
+        EVEREST_ABI,
+        library,
+        account,
+      )
+    } catch (e) {
+      return null
+    }
+  }, [library, account])
+}
+
+export function useEthereumDIDRegistry() {
+  const { library, account } = useWeb3ReactCore()
+  return useMemo(() => {
+    try {
+      return getContract(
+        addresses.ropsten.ethereumDIDRegistry,
+        ETHEREUM_DID_REGISTRY_ABI,
         library,
         account,
       )

@@ -7,15 +7,18 @@ import Link from '../../components/Link'
 const Footer = ({ ...props }) => {
   return (
     <GatsbyFooter sx={rootStyles} {...props}>
-      <Styled.p>
+      <Styled.p sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
         <Link to="https://thegraph.com" sx={{ display: 'inline-block' }}>
           The Graph
         </Link>
       </Styled.p>
-      <Grid columns={4} gap={3} sx={{ maxWidth: '300px' }}></Grid>
       <Grid
-        sx={{ textAlign: 'right', maxWidth: '100px', justifySelf: 'flex-end' }}
+        sx={{
+          textAlign: 'right',
+          maxWidth: '100px',
+          justifySelf: ['center', 'flex-end', 'flex-end'],
+        }}
         columns={3}
       >
         <Link to="https://thegraph.com">
@@ -35,10 +38,11 @@ const Footer = ({ ...props }) => {
 const rootStyles = {
   display: 'grid',
   gridColumnGap: '20px',
-  justifyContent: 'space-between',
-  gridTemplateColumns: '1fr 140px 1fr',
+  justifyContent: ['center', 'space-between', 'space-between'],
+  gridTemplateColumns: ['1fr', '1fr 1fr', '1fr 1fr'],
   alignItems: 'center',
   height: '96px',
+  my: [7, 0, 0],
 }
 
 export default Footer

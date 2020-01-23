@@ -20,8 +20,7 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
-    my: 0,
-    padding: '0 20px',
+    px: 4,
     boxSizing: 'content-box',
     position: 'relative',
   }

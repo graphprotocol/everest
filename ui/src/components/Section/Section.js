@@ -64,13 +64,15 @@ const Section = ({
     )
   } else {
     return (
-      <Grid mt={title ? [3, 3, 8] : 0} mb={title ? [3, 3, 7] : 0}>
+      <Grid mt={title ? [6, 6, 8] : 0} mb={title ? [3, 3, 7] : 0}>
         <Box sx={{ width: '100%' }}>
           {title && (
             <Styled.h3 sx={{ color: 'primary', mb: 1 }}>{title}</Styled.h3>
           )}
           {description && (
-            <Styled.p sx={{ maxWidth: '50%', mb: 4 }}>{description}</Styled.p>
+            <Styled.p sx={{ maxWidth: ['100%', '100%', '50%'], mb: 4 }}>
+              {description}
+            </Styled.p>
           )}
         </Box>
         <Grid columns={[2, 3, 6]} gap={2}>

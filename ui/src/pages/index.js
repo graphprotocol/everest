@@ -22,7 +22,7 @@ const Index = ({ data }) => {
   const openModal = () => setShowModal(true)
   const closeModal = () => {
     setShowModal(false)
-    navigate('/projects/new')
+    // navigate('/projects/new')
   }
 
   // TODO: update these
@@ -49,7 +49,12 @@ const Index = ({ data }) => {
             shift to Web3 by creating the first decentralized registry to
             provide ongoing utility to the crypto community.
           </Styled.h6>
-          <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
+          <Grid
+            columns={1}
+            mt={[7, 7, 5]}
+            mb={[6, 6, 5]}
+            sx={{ justifyContent: ['center', 'start', 'start'] }}
+          >
             {showModal ? (
               <Modal showModal={showModal} closeModal={closeModal}>
                 <Button
@@ -128,6 +133,7 @@ const Index = ({ data }) => {
             backgroundImage: 'url(./binoculars.png)',
             filter: 'none',
             boxShadow: 'none',
+            order: [2, 1, 1],
           }}
         />
         <Box>
@@ -169,11 +175,12 @@ const Index = ({ data }) => {
         variant="project"
       />
       <Divider />
-      <Grid gap={[2, 6, 8]} columns={[1, 2, 2]} mt={[2, 7]}>
+      <Grid gap={[2, 6, 8]} columns={[1, 2, 2]} mt={7}>
         <Box
           sx={{
             ...imageStyles,
             backgroundImage: 'url(./bottom.png)',
+            order: [2, 1, 1],
           }}
         />
         <Box sx={{ maxWidth: '396px' }}>
@@ -182,7 +189,7 @@ const Index = ({ data }) => {
             Having a complete and up-to-date list of projects is a major
             achievement on the road to decentralization.
           </Styled.p>
-          <Grid columns={['max-content', 1]} mt={[2, 2, 5]} mb={[2, 2, 5]}>
+          <Grid columns={['max-content', 1]} mt={[6, 6, 5]} mb={[6, 6, 5]}>
             <Button to="/projects/new" text="Add a project" variant="primary" />
           </Grid>
         </Box>

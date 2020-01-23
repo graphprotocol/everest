@@ -32,19 +32,19 @@ const MobileNavbar = ({ isOpen, setIsOpen }) => {
 const rootStyles = {
   position: 'relative',
   height: '32px',
-  lineHeight: '96px'
+  lineHeight: '96px',
 }
 
 const boxStyles = {
   position: 'fixed',
   width: '100%',
-  backgroundColor: 'background',
-  zIndex: 10
+  backgroundColor: 'white',
+  zIndex: 10,
 }
 
 MobileNavbar.propTypes = {
   isOpen: PropTypes.bool,
-  setIsOpen: PropTypes.func
+  setIsOpen: PropTypes.func,
 }
 
 export default MobileNavbar

@@ -51,9 +51,7 @@ const Row = ({
         sx={{ height: '48px', width: '64px', opacity: 0.8 }}
       />
       <Box>
-        {parent && (
-          <p sx={{ variant: 'text.displaySmaller' }}>{parent.name} ></p>
-        )}
+        {parent && <p sx={{ variant: 'text.smaller' }}>{parent.name} ></p>}
         <p sx={{ variant: 'text.emphasis' }}>{item.name}</p>
       </Box>
       {close && (

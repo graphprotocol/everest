@@ -5,7 +5,7 @@ import { Grid } from '@theme-ui/components'
 
 const Stats = ({ stats }) => {
   return (
-    <Grid gap={[2, 2, 6]} columns={3}>
+    <Grid gap={[2, 2, 6]} columns={[1, 3, 3]}>
       {stats.map((stat, index) => (
         <Box sx={{ textAlign: 'center' }} key={index}>
           <Styled.p>{stat.title}</Styled.p>

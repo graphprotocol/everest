@@ -8,11 +8,15 @@ import { ethers, utils } from 'ethers'
 
 import { ipfsHexHash } from '../../services/ipfs'
 import { useEverestContract, useAddress } from '../../utils/hooks'
+import {
+  changeOwnerSignedData,
+  setAttributeData,
+  permitSignedData,
+  VALIDITY_TIMESTAMP,
+} from '../../utils/helpers/metatransactions'
 
 import Layout from '../../components/Layout'
 import ProjectForm from '../../components/ProjectForm'
-
-const ETHEREUM_DID_REGISTRY = '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
 
 const NewProject = ({ data, ...props }) => {
   const [isDisabled, setIsDisabled] = useState(true)
@@ -66,81 +70,42 @@ const NewProject = ({ data, ...props }) => {
           // Create random wallet
           const randomWallet = ethers.Wallet.createRandom()
           const randomWalletAddress = randomWallet.signingKey.address
-          const offChainDataValidity = 3156895760
           const offChainDataName =
             '0x50726f6a65637444617461000000000000000000000000000000000000000000'
 
-          // create changeOwner signed data
-          let changeOwnerSignedData = ethers.utils.solidityKeccak256(
-            [
-              'bytes1',
-              'bytes1',
-              'address',
-              'uint256',
-              'address',
-              'string',
-              'address',
-            ],
-            [
-              '0x19',
-              '0x0',
-              ETHEREUM_DID_REGISTRY,
-              0,
-              randomWalletAddress,
-              'changeOwner',
-              address,
-            ],
-          )
-
-          // creates setAttribute transaction  data
-          let setAttributeData = utils.solidityKeccak256(
-            [
-              'bytes1',
-              'bytes1',
-              'address',
-              'uint256',
-              'address',
-              'string',
-              'bytes32',
-              'bytes',
-              'uint256',
-            ],
-            [
-              '0x19',
-              '0x0',
-              ETHEREUM_DID_REGISTRY,
-              0,
-              randomWalletAddress, // project address
-              'setAttribute',
-              offChainDataName,
-              ipfsHexHash(responseJSON.IpfsHash),
-              offChainDataValidity,
-            ],
-          )
           const signedMessage1 = await randomWallet.signMessage(
-            changeOwnerSignedData,
+            changeOwnerSignedData(randomWalletAddress, address),
           )
           const signedMessage2 = await randomWallet.signMessage(
-            setAttributeData,
+            permitSignedData(project.id, address),
           )
+          const signedMessage3 = await randomWallet.signMessage(
+            setAttributeData(
+              randomWalletAddress,
+              responseJSON.IpfsHash,
+              offChainDataName,
+            ),
+          )
+
           const sig1 = utils.splitSignature(signedMessage1)
           const sig2 = utils.splitSignature(signedMessage2)
-
+          const sig3 = utils.splitSignature(signedMessage3)
           let { v1, r1, s1 } = sig1
           let { v2, r2, s2 } = sig2
+          let { v3, r3, s3 } = sig3
 
           const transaction = await everestContract.applySignedWithAttribute(
             randomWalletAddress,
-            v1,
-            r1,
-            s1,
+            [v1, v2],
+            [r1, r2],
+            [s1, s2],
             address,
-            v2,
-            r2,
-            s2,
+            v3,
+            r3,
+            s3,
             offChainDataName,
             ipfsHexHash(responseJSON.IpfsHash),
-            offChainDataValidity,
+            VALIDITY_TIMESTAMP,
           )
           console.log('transaction: ', transaction)
         }
@@ -185,7 +150,7 @@ const NewProject = ({ data, ...props }) => {
     <Layout
       mainStyles={{
         backgroundColor: 'secondary',
-        marginTop: -5,
+        marginTop: '-18px',
       }}
       {...props}
     >
@@ -210,7 +175,7 @@ const NewProject = ({ data, ...props }) => {
             search for your project.
           </p>
           <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
-          <p sx={{ variant: 'text.displayBig', color: 'white' }}>10 DAI</p>
+          <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
         </Box>
         <Box>
           <ProjectForm

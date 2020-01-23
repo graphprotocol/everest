@@ -120,8 +120,8 @@ const Profile = ({ location }) => {
         >
           {user && user.createdAt && (
             <Box>
-              <p sx={{ variant: 'text.displaySmall' }}>Member Since</p>
-              <p sx={{ variant: 'text.displayBig' }}>
+              <p sx={{ variant: 'text.small' }}>Member Since</p>
+              <p sx={{ variant: 'text.huge' }}>
                 {user ? convertDate(user.createdAt) : ''}
               </p>
             </Box>

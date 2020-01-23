@@ -162,9 +162,7 @@ const Modal = ({ children, showModal, closeModal }) => {
 
                       <Arrow sx={{ ml: 1, fill: 'secondary' }} />
                     </Styled.h5>
-                    <p sx={{ variant: 'text.displaySmall' }}>
-                      {wallet.description}
-                    </p>
+                    <p sx={{ variant: 'text.small' }}>{wallet.description}</p>
                   </Box>
                 </Grid>
               )

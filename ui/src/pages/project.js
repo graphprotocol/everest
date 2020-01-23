@@ -1,11 +1,20 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, Fragment } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
+import {
+  useAddress,
+  useEverestContract,
+  useEthereumDIDRegistry,
+} from '../utils/hooks'
 import { convertDate } from '../utils/helpers/date'
-import { formatNumber } from '../utils/helpers/number'
+import { ipfsHexHash } from '../services/ipfs'
+import {
+  DELEGATE_TYPE,
+  VALIDITY_TIMESTAMP,
+} from '../utils/helpers/metatransactions'
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
 
 import Layout from '../components/Layout'
@@ -23,25 +32,82 @@ const Project = ({ location }) => {
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
   const [challengeDescription, setChallengeDescription] = useState('')
+  const [challengeIPFShash, setChallengeIPFShash] = useState('')
   const [transferAddress, setTransferAddress] = useState('')
   const [delegateAddress, setDelegateAddress] = useState('')
+  const [everestContract] = useState(useEverestContract())
+  const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
+  const [address] = useAddress()
 
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const challengeProject = () => {
     console.log('CHALLENGE PROJECT')
-    // TODO: Call contract function
+    // TODO: get this from the projects dropdown, what ever is selected
+    let challengerProjectId = ''
+    const transaction = everestContract.challenge(
+      challengerProjectId,
+      projectId,
+      ipfsHexHash(challengeIPFShash),
+    )
   }
 
-  const delegateProject = () => {
+  const delegateProject = async () => {
     console.log('DELEGATE PROJECT')
-    // TODO: Call contract function
+    const transaction = ethereumDIDRegistryContract.addDelegate(
+      projectId,
+      DELEGATE_TYPE,
+      delegateAddress,
+      VALIDITY_TIMESTAMP,
+    )
   }
 
-  const transferOwnership = () => {
+  const transferOwnership = async () => {
     console.log('TRANSFER OWNERSHIP')
-    // TODO: Call contract function
+    const transaction = await ethereumDIDRegistryContract.changeOwner(
+      projectId,
+      transferAddress,
+    )
   }
+
+  const setChallengeData = value => {
+    setChallengeDescription(value)
+    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        pinata_api_key: process.env.GATSBY_PINATA_API_KEY,
+        pinata_secret_api_key: process.env.GATSBY_PINATA_API_SECRET_KEY,
+      },
+      body: JSON.stringify(project),
+    }).then(async function(response) {
+      const responseJSON = await response.json()
+      if (responseJSON.IpfsHash) {
+        setChallengeIPFShash(responseJSON.IpfsHash)
+      }
+    })
+  }
+
+  const voteOnProject = choice => {
+    // TODO: get this from the subgraph
+    let challengeId = ''
+    // TODO: get this from the projects dropdown (Multiselect)
+    let projectIds = []
+    let voteChoice = new Array(projectIds.length)
+    // yes: [1,1,1] -> depending how many projects you have selected
+    // no: [2,2,2]
+    const voteChoices = voteChoice.map(vc =>
+      choice === 'yes' ? (vc = 1) : (vc = 2),
+    )
+    const transaction = everestContract.submitVotes(
+      challengeId,
+      voteChoices,
+      projectIds,
+    )
+  }
+
+  const removeProject = () => {}
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -89,7 +155,7 @@ const Project = ({ location }) => {
             )}
           </Box>
           <Box>
-            <p sx={{ variant: 'text.display' }}>
+            <p sx={{ variant: 'text.large' }}>
               {project.categories.join(', ')}
             </p>
             <Styled.h2>{project.name}</Styled.h2>
@@ -97,8 +163,8 @@ const Project = ({ location }) => {
         </Grid>
         <Grid columns={[1, 2, 2]} mt={[5, 5, 0]}>
           <Box>
-            <p sx={{ variant: 'text.displaySmall' }}>Date Added</p>
-            <p sx={{ variant: 'text.displayBig' }}>
+            <p sx={{ variant: 'text.small' }}>Date Added</p>
+            <p sx={{ variant: 'text.huge' }}>
               {convertDate(project.createdAt)}
             </p>
           </Box>
@@ -107,8 +173,8 @@ const Project = ({ location }) => {
               {project.owner.image ? '' : <UserImage sx={userImageStyle} />}
             </Box>
             <Box>
-              <p sx={{ variant: 'text.displaySmall' }}>Owner</p>
-              <p sx={{ variant: 'text.display' }}>{project.owner.name}</p>
+              <p sx={{ variant: 'text.small' }}>Owner</p>
+              <p sx={{ variant: 'text.large' }}>{project.owner.name}</p>
             </Box>
           </Grid>
         </Grid>
@@ -227,19 +293,22 @@ const Project = ({ location }) => {
               <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
                 Active Challenge
               </Styled.h5>
+              <Box>
+                <p sx={{ variant: 'text.small' }}>Description</p>
+                <Styled.p>Blah blah - challenge copy</Styled.p>
+              </Box>
+
               <Grid columns={3} gap={3} sx={{ my: 4 }}>
                 <Box>
-                  <p sx={{ variant: 'text.displaySmall' }}>Challenge ends</p>
-                  <p sx={{ variant: 'text.displayBig' }}>3d 6h</p>
+                  <p sx={{ variant: 'text.small' }}>Challenge ends</p>
+                  <p sx={{ variant: 'text.huge' }}>3d 6h</p>
                 </Box>
                 <Box>
-                  <p sx={{ variant: 'text.displaySmall' }}>Voters</p>
-                  <p sx={{ variant: 'text.displayBig' }}>
-                    {project.totalVotes}
-                  </p>
+                  <p sx={{ variant: 'text.small' }}>Voters</p>
+                  <p sx={{ variant: 'text.huge' }}>{project.totalVotes}</p>
                 </Box>
                 <Box>
-                  <p sx={{ variant: 'text.displaySmall' }}>Challenged by</p>
+                  <p sx={{ variant: 'text.small' }}>Challenged by</p>
                   <Link to={`/profile/${project.owner.id}`}>
                     {`${project.owner.id.slice(0, 6)}-${project.owner.id.slice(
                       -6,
@@ -247,31 +316,58 @@ const Project = ({ location }) => {
                   </Link>
                 </Box>
               </Grid>
-              <Box>
-                <p sx={{ variant: 'text.displaySmall' }}>Description</p>
-                <Styled.p>Blah blah - needs copy</Styled.p>
-              </Box>
-              <Grid
-                columns={2}
-                sx={{
-                  mt: 4,
-                  mb: 6,
-                  gridTemplateColumns: 'max-content max-content',
-                }}
-              >
-                <Button
-                  variant="secondary"
-                  text="Keep"
-                  sx={{ border: '1px solid #4C66FF', maxWidth: '140px' }}
-                  icon={'thumbs-up.png'}
-                />
-                <Button
-                  variant="secondary"
-                  text="Remove"
-                  sx={{ border: '1px solid #4C66FF', maxWidth: '160px' }}
-                  icon={'thumbs-down.png'}
-                />
-              </Grid>
+              {false ? (
+                <Fragment>
+                  <Styled.h6>
+                    This challenge is over. Process this challenge to resolve it
+                    and earn a reward.
+                  </Styled.h6>
+                  <Grid
+                    columns={2}
+                    sx={{
+                      mt: 4,
+                      mb: 6,
+                      gridTemplateColumns: 'max-content max-content',
+                    }}
+                  >
+                    <Button
+                      variant="secondary"
+                      text="Process"
+                      sx={{ border: '1px solid #4C66FF' }}
+                      onClick={() => voteOnProject('yes')}
+                    />
+                  </Grid>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Styled.h6>
+                    What would you like to happen to this listing?
+                  </Styled.h6>
+                  <Grid
+                    columns={2}
+                    sx={{
+                      mt: 4,
+                      mb: 6,
+                      gridTemplateColumns: 'max-content max-content',
+                    }}
+                  >
+                    <Button
+                      variant="secondary"
+                      text="Keep"
+                      sx={{ border: '1px solid #4C66FF', maxWidth: '140px' }}
+                      icon={'thumbs-up.png'}
+                      onClick={() => voteOnProject('yes')}
+                    />
+                    <Button
+                      variant="secondary"
+                      text="Remove"
+                      sx={{ border: '1px solid #4C66FF', maxWidth: '160px' }}
+                      icon={'thumbs-down.png'}
+                      onClick={() => voteOnProject('no')}
+                    />
+                  </Grid>
+                </Fragment>
+              )}
             </Box>
           )}
           {project.image && (
@@ -292,10 +388,10 @@ const Project = ({ location }) => {
           charsCount={300}
           title="Desription"
           placeholder="Challenge Description"
-          heading={`Remove ${project.name}`}
+          heading={`Challenge ${project.name}`}
           description="lala"
           value={challengeDescription}
-          setValue={setChallengeDescription}
+          setValue={setChallengeData}
           text="Challenge"
           icon="challenge.png"
           handleClick={challengeProject}

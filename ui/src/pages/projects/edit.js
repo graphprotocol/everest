@@ -4,10 +4,19 @@ import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import fetch from 'isomorphic-fetch'
 import { useQuery } from '@apollo/react-hooks'
-import { ethers } from 'ethers'
 
 import ipfs from '../../services/ipfs'
-import { useEverestContract, useAddress, useProvider } from '../../utils/hooks'
+import { ipfsHexHash } from '../../services/ipfs'
+import {
+  useEverestContract,
+  useEthereumDIDRegistry,
+  useAddress,
+  useProvider,
+} from '../../utils/hooks'
+import {
+  OFFCHAIN_DATANAME,
+  VALIDITY_TIMESTAMP,
+} from '../../utils/helpers/metatransactions'
 import { PROJECT_QUERY } from '../../utils/queries'
 
 import Layout from '../../components/Layout'
@@ -16,6 +25,8 @@ import ProjectForm from '../../components/ProjectForm'
 const EditProject = ({ location, ...props }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
   const [everestContract] = useState(useEverestContract())
+  const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
+
   const [address] = useState(useAddress())
   const [provider] = useState(useProvider())
 
@@ -135,54 +146,12 @@ const EditProject = ({ location, ...props }) => {
       .then(async function(response) {
         const responseJSON = await response.json()
         if (responseJSON.IpfsHash) {
-          // TODO: create a random wallet, generate private/public key
-          // pass this into the contract function ??
-          // public key is the project ID
-
-          let offChainDataName =
-            '0x50726f6a65637444617461000000000000000000000000000000000000000000'
-          // unix timestamp in seconds for Jan 12, 2070
-          let offChainDataValidity = 3156895760
-          let wallet = await ethers.Wallet(provider)
-          // hash of all params and types, 2 arrays
-          let signaturePromise = await wallet.signMessage(
-            [
-              'bytes1',
-              'bytes1',
-              'address',
-              'uint256',
-              'address',
-              'string',
-              'bytes32',
-              'uint256',
-            ],
-            [
-              '0x19',
-              '0x0',
-              '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b',
-              0,
-              projectId, // project address
-              'setAttribute',
-              offChainDataName,
-              offChainDataValidity,
-            ],
+          const transaction = ethereumDIDRegistryContract(
+            project.id,
+            OFFCHAIN_DATANAME,
+            ipfsHexHash(responseJSON.IpfsHash),
+            VALIDITY_TIMESTAMP,
           )
-          signaturePromise.then(async signature => {
-            let { r, s, v } = ethers.utils.splitSignature(signature)
-            // TODO: call the correct contract function (no need to register a user)
-            // just editing the project data (new ipfs hash)
-            const transaction = await everestContract.editOffChainDataSigned(
-              projectId, // project identity (from subgraph)
-              v,
-              r,
-              s,
-              address, // this is the "owner" ?
-              offChainDataName,
-              responseJSON.IpfsHash,
-              offChainDataValidity,
-            )
-            console.log('transaction: ', transaction)
-          })
           // navigate('/project/ck3t4oggr8ylh0922vgl9dwa9')
         }
       })
@@ -238,7 +207,7 @@ const EditProject = ({ location, ...props }) => {
             search for your project.
           </p>
           <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
-          <p sx={{ variant: 'text.displayBig', color: 'white' }}>10 DAI</p>
+          <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
         </Box>
         <Box>
           <ProjectForm

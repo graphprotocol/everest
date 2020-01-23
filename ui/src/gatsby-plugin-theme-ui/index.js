@@ -46,7 +46,7 @@ export default {
       },
     },
     h2: {
-      fontSize: '2.75rem',
+      fontSize: ['2rem', '2.75', '2.75rem'],
       fontWeight: 'heading',
       letterSpacing: '-0.4px',
       lineHeight: '3.375rem',
@@ -115,6 +115,7 @@ export default {
         '0 8px 32px 0 rgba(76,102,255,0.48), 0 4px 16px 0 rgba(0,0,0,0.16)',
       fontFamily: 'body',
       fontSize: '1rem',
+      fontWeight: 'heading',
       letterSpacing: '1px',
       lineHeight: '2.5rem',
       height: '48px',
@@ -147,12 +148,14 @@ export default {
       px: 6,
       width: 'fit-content',
       cursor: 'pointer',
+      transition: 'all 0.3s ease',
       '&:focus': {
         outline: 'none',
       },
       '&:hover': {
-        border: '1px solid',
-        borderColor: '#3925E5',
+        boxShadow:
+          '0 4px 32px 0 rgba(76,102,255,0.24), 0 12px 56px 0 rgba(30,37,44,0.32)',
+        transition: 'all 0.3s ease',
       },
     },
   },
@@ -177,28 +180,15 @@ export default {
       lineHeight: '1.75rem',
       letterSpacing: '-0.4px',
     },
-    display: {
-      fontSize: '1.125rem',
-      lineHeight: '1.5rem',
-      fontWeight: 'heading',
-      color: 'secondary',
-    },
-    displaySmall: {
-      fontSize: '0.875rem',
-      lineHeight: '1.25rem',
-      letterSpacing: '-0.4px',
-      color: 'blackFaded',
-    },
-    displaySmaller: {
+    smaller: {
       fontSize: '0.75rem',
       lineHeight: '1.25rem',
       letterSpacing: '-0.4px',
       color: 'blackFaded',
     },
-    displayBig: {
-      fontSize: '1.375rem',
-      lineHeight: '1.75rem',
-      letterSpacing: '-0.2px',
+    huge: {
+      fontSize: '1.5rem',
+      lineHeight: '2rem',
       color: 'black',
     },
     field: {
