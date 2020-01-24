@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
@@ -8,20 +8,34 @@ import categories from '../../data/categories.json'
 import Button from '../Button'
 import Row from './Row'
 import Divider from '../Divider'
-import Close from '../../images/close.svg'
 
 const Filters = ({
   title,
   subtitle,
   setValue,
-  children,
   type,
   items,
   variant,
+  children,
+  setOpen,
+  styles,
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState([])
   const [searchText, setSearchText] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleClick = () => {
+    setIsOpen(false)
+    setOpen && setOpen(false)
+  }
+
+  useEffect(() => {
+    window.addEventListener('click', handleClick)
+
+    return () => {
+      window.removeEventListener('click', handleClick)
+    }
+  }, [handleClick])
 
   const allCategories = () => {
     let allCats = categories.reduce((acc, current) => {
@@ -58,45 +72,25 @@ const Filters = ({
             cursor: 'pointer',
             borderBottom: '1px solid rgba(255,255,255,0.32)',
             pb: 2,
+            ...styles,
           }}
           gap={1}
-          onClick={() => {
+          onClick={e => {
+            if (styles && styles.pointerEvents === 'none') {
+              return
+            }
+            e.stopPropagation()
+            setOpen && setOpen(!isOpen)
             setIsOpen(!isOpen)
             setSearchText('')
           }}
         >
           {children}
-          {type === 'categories' && (
-            <p
-              sx={{
-                color: 'white',
-                opacity: 0.64,
-                variant: 'text.large',
-              }}
-            >
-              {selected.length > 0 ? (
-                <span>Pick more categories</span>
-              ) : (
-                <span>Pick categories</span>
-              )}
-            </p>
-          )}
-          <Box
-            sx={{
-              justifySelf: 'end',
-              height: '9px',
-              width: '9px',
-              borderTop: '2px solid',
-              borderRight: '2px solid',
-              borderColor: 'white',
-              transform: isOpen ? 'rotate(-45deg)' : 'rotate(135deg)',
-            }}
-          />
         </Grid>
         {isOpen && (
           <Box
             sx={{
-              maxWidth: '560px',
+              maxWidth: type === 'categories' ? '560px' : '468px',
               marginLeft: -5,
               position: 'absolute',
               background: 'white',
@@ -104,21 +98,12 @@ const Filters = ({
               height: 'fit-content',
               overflowY: 'scroll',
               zIndex: 5,
-              marginTop: '-96px',
+              mt: type === 'categories' ? '-96px' : '-8px',
               boxShadow: '0 4px 24px 0 rgba(30,37,44,0.16)',
               padding: 5,
             }}
+            onClick={e => e.stopPropagation()}
           >
-            <Close
-              onClick={() => setIsOpen(false)}
-              sx={{
-                position: 'absolute',
-                right: 5,
-                top: 5,
-                fill: '#bebebe',
-                cursor: 'pointer',
-              }}
-            />
             <Box>
               {type === 'categories' ? (
                 <p
@@ -191,7 +176,6 @@ const Filters = ({
                 </Grid>
               )}
             </Box>
-
             <Box sx={{ position: 'relative' }}>
               {allItems.map((category, index) => (
                 <Row
@@ -212,6 +196,7 @@ const Filters = ({
                   onClick={e => {
                     e.preventDefault()
                     setIsOpen(false)
+                    setOpen && setOpen(false)
                     setValue(selected)
                   }}
                   text={`Vote (${selected.length})`}

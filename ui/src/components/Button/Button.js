@@ -29,10 +29,10 @@ const Button = ({
         alignItems: 'center',
         justifyContent: 'center',
       }}
-      onClick={e => (onClick ? onClick(e) : navigate(to))}
+      onClick={e => (onClick ? onClick(e) : to ? navigate(to) : '')}
       {...props}
     >
-      {icon && <img sx={iconStyles} src={`../${icon}`} alt={'icon'} />}
+      {icon && <img sx={iconStyles} src={`/${icon}`} alt={'icon'} />}
       {text}
       {loading && (
         <img

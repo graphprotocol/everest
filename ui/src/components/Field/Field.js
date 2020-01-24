@@ -73,7 +73,28 @@ const Field = ({
           />
         ) : type === 'filters' ? (
           multiselect === true ? (
-            <MultiSelect setValue={setValue} title={title} type="categories" />
+            <MultiSelect setValue={setValue} title={title} type="categories">
+              <p
+                sx={{
+                  color: 'white',
+                  opacity: 0.64,
+                  variant: 'text.large',
+                }}
+              >
+                <span>Pick categories</span>
+              </p>
+              <Box
+                sx={{
+                  justifySelf: 'end',
+                  height: '9px',
+                  width: '9px',
+                  borderTop: '2px solid',
+                  borderRight: '2px solid',
+                  borderColor: 'white',
+                  transform: 'rotate(135deg)',
+                }}
+              />
+            </MultiSelect>
           ) : (
             <Select items={items} />
           )

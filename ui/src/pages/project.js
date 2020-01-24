@@ -38,10 +38,9 @@ const Project = ({ location }) => {
   const [delegateAddress, setDelegateAddress] = useState('')
   const [everestContract] = useState(useEverestContract())
   const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
+  const [isKeepOpen, setIsKeepOpen] = useState(false)
+  const [isRemoveOpen, setIsRemoveOpen] = useState(false)
   const [address] = useAddress()
-  const [showModal, setShowModal] = useState(false)
-  const closeModal = () => setShowModal(true)
-
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const challengeProject = () => {
@@ -92,13 +91,11 @@ const Project = ({ location }) => {
     })
   }
 
-  const voteOnProject = choice => {
-    setShowModal(true)
-
+  const voteOnProject = (projects, choice) => {
+    // choice: 'keep' or 'remove'
     // TODO: get this from the subgraph
     // let challengeId = ''
-    // // TODO: get this from the projects dropdown (Multiselect)
-    // let projectIds = []
+    // projectIds = projects.map(proj => proj.id)
     // let voteChoice = new Array(projectIds.length)
     // // yes: [1,1,1] -> depending how many projects you have selected
     // // no: [2,2,2]
@@ -110,10 +107,6 @@ const Project = ({ location }) => {
     //   voteChoices,
     //   projectIds,
     // )
-  }
-
-  const setValue = value => {
-    console.log('value: ', value)
   }
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
@@ -360,27 +353,57 @@ const Project = ({ location }) => {
                     }}
                   >
                     <MultiSelect
-                      setValue={setValue}
+                      setValue={projects => voteOnProject(projects, 'keep')}
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
                       items={userData ? userData.user.projects : []}
                       variant="round"
+                      setOpen={value => {
+                        setIsKeepOpen(value)
+                      }}
+                      styles={{
+                        pointerEvents: isRemoveOpen ? 'none' : 'all',
+                        cursor: isRemoveOpen ? 'auto' : 'pointer',
+                      }}
                     >
                       <Button
                         variant="secondary"
                         text="Keep"
-                        sx={buttonStyles}
-                        icon={'thumbs-up.png'}
-                        onClick={() => voteOnProject('yes')}
+                        sx={{
+                          ...buttonStyles,
+                          backgroundColor: isKeepOpen ? 'secondary' : 'white',
+                          color: isKeepOpen ? 'white' : 'secondary',
+                          opacity: isRemoveOpen ? 0.48 : 1,
+                        }}
+                        icon={isKeepOpen ? `keep-white.png` : `keep.png`}
                       />
                     </MultiSelect>
-                    <Button
-                      variant="secondary"
-                      text="Remove"
-                      sx={buttonStyles}
-                      icon={'thumbs-down.png'}
-                      onClick={() => voteOnProject('no')}
-                    />
+                    <MultiSelect
+                      setValue={projects => voteOnProject(projects, 'remove')}
+                      title="Vote on behalf of"
+                      subtitle="You can select multiple projects"
+                      items={userData ? userData.user.projects : []}
+                      variant="round"
+                      setOpen={value => {
+                        setIsRemoveOpen(value)
+                      }}
+                      styles={{
+                        pointerEvents: isKeepOpen && 'none',
+                        cursor: isKeepOpen && 'auto',
+                      }}
+                    >
+                      <Button
+                        variant="secondary"
+                        text="Remove"
+                        sx={{
+                          ...buttonStyles,
+                          backgroundColor: isRemoveOpen ? 'secondary' : 'white',
+                          color: isRemoveOpen ? 'white' : 'secondary',
+                          opacity: isKeepOpen ? 0.48 : 1,
+                        }}
+                        icon={isRemoveOpen ? `remove-white.png` : `remove.png`}
+                      />
+                    </MultiSelect>
                   </Grid>
                 </Fragment>
               )}
@@ -466,6 +489,11 @@ const buttonStyles = {
   border: '1px solid',
   borderColor: 'secondary',
   maxWidth: '140px',
+  transition: 'all 0.3s ease',
+  '& img': {
+    width: '16px',
+    height: '16px',
+  },
 }
 
 export default Project

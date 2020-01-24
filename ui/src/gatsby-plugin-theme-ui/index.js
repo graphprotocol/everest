@@ -137,7 +137,6 @@ export default {
     secondary: {
       color: 'secondary',
       bg: 'white',
-      boxShadow: '0 4px 16px 0 rgba(12,10,29,0.08)',
       border: 'none',
       fontFamily: 'body',
       fontSize: '1rem',

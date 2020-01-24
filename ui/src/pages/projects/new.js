@@ -144,8 +144,6 @@ const NewProject = ({ data, ...props }) => {
     }
   }
 
-  console.log('project: ', project)
-
   return (
     <Layout
       mainStyles={{
