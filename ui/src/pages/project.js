@@ -23,6 +23,7 @@ import DataRow from '../components/DataRow'
 import Button from '../components/Button'
 import TabView from '../components/TabView'
 import Link from '../components/Link'
+import MultiSelect from '../components/Filters/MultiSelect'
 
 import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
@@ -38,6 +39,8 @@ const Project = ({ location }) => {
   const [everestContract] = useState(useEverestContract())
   const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
   const [address] = useAddress()
+  const [showModal, setShowModal] = useState(false)
+  const closeModal = () => setShowModal(true)
 
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
@@ -90,24 +93,28 @@ const Project = ({ location }) => {
   }
 
   const voteOnProject = choice => {
+    setShowModal(true)
+
     // TODO: get this from the subgraph
-    let challengeId = ''
-    // TODO: get this from the projects dropdown (Multiselect)
-    let projectIds = []
-    let voteChoice = new Array(projectIds.length)
-    // yes: [1,1,1] -> depending how many projects you have selected
-    // no: [2,2,2]
-    const voteChoices = voteChoice.map(vc =>
-      choice === 'yes' ? (vc = 1) : (vc = 2),
-    )
-    const transaction = everestContract.submitVotes(
-      challengeId,
-      voteChoices,
-      projectIds,
-    )
+    // let challengeId = ''
+    // // TODO: get this from the projects dropdown (Multiselect)
+    // let projectIds = []
+    // let voteChoice = new Array(projectIds.length)
+    // // yes: [1,1,1] -> depending how many projects you have selected
+    // // no: [2,2,2]
+    // const voteChoices = voteChoice.map(vc =>
+    //   choice === 'yes' ? (vc = 1) : (vc = 2),
+    // )
+    // const transaction = everestContract.submitVotes(
+    //   challengeId,
+    //   voteChoices,
+    //   projectIds,
+    // )
   }
 
-  const removeProject = () => {}
+  const setValue = value => {
+    console.log('value: ', value)
+  }
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -316,6 +323,7 @@ const Project = ({ location }) => {
                   </Link>
                 </Box>
               </Grid>
+
               {false ? (
                 <Fragment>
                   <Styled.h6>
@@ -351,17 +359,25 @@ const Project = ({ location }) => {
                       gridTemplateColumns: 'max-content max-content',
                     }}
                   >
-                    <Button
-                      variant="secondary"
-                      text="Keep"
-                      sx={{ border: '1px solid #4C66FF', maxWidth: '140px' }}
-                      icon={'thumbs-up.png'}
-                      onClick={() => voteOnProject('yes')}
-                    />
+                    <MultiSelect
+                      setValue={setValue}
+                      title="Vote on behalf of"
+                      subtitle="You can select multiple projects"
+                      items={userData ? userData.user.projects : []}
+                      variant="round"
+                    >
+                      <Button
+                        variant="secondary"
+                        text="Keep"
+                        sx={buttonStyles}
+                        icon={'thumbs-up.png'}
+                        onClick={() => voteOnProject('yes')}
+                      />
+                    </MultiSelect>
                     <Button
                       variant="secondary"
                       text="Remove"
-                      sx={{ border: '1px solid #4C66FF', maxWidth: '160px' }}
+                      sx={buttonStyles}
                       icon={'thumbs-down.png'}
                       onClick={() => voteOnProject('no')}
                     />
@@ -383,21 +399,23 @@ const Project = ({ location }) => {
       </Grid>
 
       {showChallenge && (
-        <TabView
-          fieldType="textarea"
-          charsCount={300}
-          title="Desription"
-          placeholder="Challenge Description"
-          heading={`Challenge ${project.name}`}
-          description="lala"
-          value={challengeDescription}
-          setValue={setChallengeData}
-          text="Challenge"
-          icon="challenge.png"
-          handleClick={challengeProject}
-          showFilters={true}
-          items={userData ? userData.user.projects : []}
-        />
+        <Fragment>
+          <TabView
+            fieldType="textarea"
+            charsCount={300}
+            title="Desription"
+            placeholder="Challenge Description"
+            heading={`Challenge ${project.name}`}
+            description="lala"
+            value={challengeDescription}
+            setValue={setChallengeData}
+            text="Challenge"
+            icon="challenge.png"
+            handleClick={challengeProject}
+            showFilters={true}
+            items={userData ? userData.user.projects : []}
+          />
+        </Fragment>
       )}
       {showTransfer && (
         <TabView
@@ -442,6 +460,12 @@ const imageStyles = {
   width: '100%',
   maxWidth: ['540px', '540px', '612px'],
   height: ['280px', '318px'],
+}
+
+const buttonStyles = {
+  border: '1px solid',
+  borderColor: 'secondary',
+  maxWidth: '140px',
 }
 
 export default Project

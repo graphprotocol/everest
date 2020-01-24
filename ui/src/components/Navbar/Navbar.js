@@ -62,8 +62,6 @@ const Navbar = ({ path, ...props }) => {
     },
   })
 
-  console.log('ADDRESS: ', address)
-
   return (
     <Header {...props} sx={{ height: '96px' }}>
       {isMobile ? (

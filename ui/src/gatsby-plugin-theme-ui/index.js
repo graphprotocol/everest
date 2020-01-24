@@ -82,7 +82,7 @@ export default {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       fontFamily: 'body',
-      letterSpacing: '-0.4px',
+      letterSpacing: '-0.5px',
       color: 'text',
     },
     a: {
@@ -120,6 +120,7 @@ export default {
       lineHeight: '2.5rem',
       height: '48px',
       boxSizing: 'content-box',
+      border: 'none',
       px: 6,
       width: 'fit-content',
       cursor: 'pointer',

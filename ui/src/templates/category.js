@@ -29,9 +29,9 @@ const Category = ({ pageContext, data }) => {
             sx={imageStyles}
           />
         </Box>
-        <Box sx={boxStyles}>
+        <Box sx={{ ...boxStyles, mt: [7, 0, 0] }}>
           <Styled.h2>{pageContext.name}</Styled.h2>
-          <Styled.p sx={{ maxWidth: '70%' }}>
+          <Styled.p sx={{ maxWidth: ['100%', '70%', '70%'] }}>
             That's why you always leave a note! Army had half a day. Bad news.
             Andy Griffith turned us down. He didn't like his nice trailer.
             That's why you always leave a note! Lala another one blurb
@@ -90,7 +90,7 @@ const topStyles = {
 }
 
 const imageStyles = {
-  width: '286px',
+  width: ['100%', '286px', '286px'],
   height: '178px',
   objectFit: 'cover',
   filter: 'drop-shadow(8px 24px 24px rgba(9,6,16,0.4))',

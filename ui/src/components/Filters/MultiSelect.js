@@ -7,8 +7,18 @@ import categories from '../../data/categories.json'
 
 import Button from '../Button'
 import Row from './Row'
+import Divider from '../Divider'
+import Close from '../../images/close.svg'
 
-const Filters = ({ title, setValue }) => {
+const Filters = ({
+  title,
+  subtitle,
+  setValue,
+  children,
+  type,
+  items,
+  variant,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState([])
   const [searchText, setSearchText] = useState('')
@@ -36,6 +46,8 @@ const Filters = ({ title, setValue }) => {
     return allCats
   }
 
+  let allItems = type === 'categories' ? allCategories() : items
+
   return (
     <Box>
       <Fragment>
@@ -53,19 +65,22 @@ const Filters = ({ title, setValue }) => {
             setSearchText('')
           }}
         >
-          <p
-            sx={{
-              color: 'white',
-              opacity: 0.64,
-              variant: 'text.large',
-            }}
-          >
-            {selected.length > 0 ? (
-              <span>Pick more categories</span>
-            ) : (
-              <span>Pick categories</span>
-            )}
-          </p>
+          {children}
+          {type === 'categories' && (
+            <p
+              sx={{
+                color: 'white',
+                opacity: 0.64,
+                variant: 'text.large',
+              }}
+            >
+              {selected.length > 0 ? (
+                <span>Pick more categories</span>
+              ) : (
+                <span>Pick categories</span>
+              )}
+            </p>
+          )}
           <Box
             sx={{
               justifySelf: 'end',
@@ -86,74 +101,99 @@ const Filters = ({ title, setValue }) => {
               position: 'absolute',
               background: 'white',
               width: '100%',
-              height: '512px',
+              height: 'fit-content',
               overflowY: 'scroll',
               zIndex: 5,
               marginTop: '-96px',
+              boxShadow: '0 4px 24px 0 rgba(30,37,44,0.16)',
+              padding: 5,
             }}
           >
+            <Close
+              onClick={() => setIsOpen(false)}
+              sx={{
+                position: 'absolute',
+                right: 5,
+                top: 5,
+                fill: '#bebebe',
+                cursor: 'pointer',
+              }}
+            />
             <Box>
-              <p
-                sx={{
-                  variant: 'text.field',
-                  color: 'blackFaded',
-                  pt: 5,
-                  pl: 5,
-                }}
-              >
-                {title}
-              </p>
-              <Grid
-                sx={{
-                  gridTemplateColumns: '1fr max-content',
-                  alignItems: 'center',
-                  px: 5,
-                  pt: 4,
-                  position: 'relative',
-                }}
-              >
-                <input
+              {type === 'categories' ? (
+                <p
                   sx={{
-                    color: 'rgba(9,6,16,0.64) !important',
-                    borderBottom: '1px solid rgba(9,6,16,0.34)',
-                    '&::placeholder': {
-                      color: 'rgba(9,6,16,0.34) !important',
-                      fontSize: '18px !important',
-                    },
+                    variant: 'text.field',
+                    color: 'blackFaded',
+                    pt: 5,
+                    pl: 5,
                   }}
-                  autoFocus="autofocus"
-                  placeholder="Search category"
-                  onChange={e => {
-                    setSearchText(
-                      e.target.value ? e.target.value.toLowerCase() : '',
-                    )
-                  }}
-                  value={searchText}
-                />
-                <Button
-                  onClick={e => {
-                    e.preventDefault()
-                    setIsOpen(false)
-                    setSearchText('')
-                    setValue(selected)
-                  }}
-                  text={`Select (${selected.length})`}
-                  variant="primary"
+                >
+                  {title}
+                </p>
+              ) : (
+                <Box sx={{ ml: 5, mt: 5 }}>
+                  <p
+                    sx={{ variant: 'text.large', fontWeight: 'heading', mb: 2 }}
+                  >
+                    {title}
+                  </p>
+                  <p>{subtitle}</p>
+                </Box>
+              )}
+              {type == 'categories' && (
+                <Grid
                   sx={{
-                    m: 0,
-                    px: 4,
-                    right: '24px',
-                    fontSize: '1rem',
-                    position: 'absolute',
-                    boxSizing: 'border-box',
-                    opacity: selected && selected.length > 0 ? 1 : 0.64,
+                    gridTemplateColumns: '1fr max-content',
+                    alignItems: 'center',
+                    px: 5,
+                    pt: 4,
+                    position: 'relative',
                   }}
-                />
-              </Grid>
+                >
+                  <input
+                    sx={{
+                      color: 'rgba(9,6,16,0.64) !important',
+                      borderBottom: '1px solid rgba(9,6,16,0.34)',
+                      '&::placeholder': {
+                        color: 'rgba(9,6,16,0.34) !important',
+                        fontSize: '18px !important',
+                      },
+                    }}
+                    autoFocus="autofocus"
+                    placeholder="Search category"
+                    onChange={e => {
+                      setSearchText(
+                        e.target.value ? e.target.value.toLowerCase() : '',
+                      )
+                    }}
+                    value={searchText}
+                  />
+                  <Button
+                    onClick={e => {
+                      e.preventDefault()
+                      setIsOpen(false)
+                      setSearchText('')
+                      setValue(selected)
+                    }}
+                    text={`Select (${selected.length})`}
+                    variant="primary"
+                    sx={{
+                      m: 0,
+                      px: 4,
+                      right: '24px',
+                      fontSize: '1rem',
+                      position: 'absolute',
+                      boxSizing: 'border-box',
+                      opacity: selected && selected.length > 0 ? 1 : 0.64,
+                    }}
+                  />
+                </Grid>
+              )}
             </Box>
 
             <Box sx={{ position: 'relative' }}>
-              {allCategories().map((category, index) => (
+              {allItems.map((category, index) => (
                 <Row
                   key={`${category.name}${index}`}
                   item={category}
@@ -161,23 +201,46 @@ const Filters = ({ title, setValue }) => {
                   selected={selected}
                   setSelected={setSelected}
                   multiselect={true}
+                  variant={variant}
                 />
               ))}
             </Box>
+            {type !== 'categories' && (
+              <Box sx={{ mx: 5 }}>
+                <Divider mt={5} mb={5} />
+                <Button
+                  onClick={e => {
+                    e.preventDefault()
+                    setIsOpen(false)
+                    setValue(selected)
+                  }}
+                  text={`Vote (${selected.length})`}
+                  variant="primary"
+                  sx={{
+                    m: 0,
+                    px: 4,
+                    fontSize: '1rem',
+                    boxSizing: 'border-box',
+                    opacity: selected && selected.length > 0 ? 1 : 0.64,
+                  }}
+                />
+              </Box>
+            )}
           </Box>
         )}
-        {selected.map(item => (
-          <Row
-            key={item.name}
-            item={item}
-            parent={item.parent}
-            selected={selected}
-            setSelected={setSelected}
-            sx={{ background: 'white', mx: 0, my: 3 }}
-            close={true}
-            multiselect={true}
-          />
-        ))}
+        {type === 'categories' &&
+          selected.map(item => (
+            <Row
+              key={item.name}
+              item={item}
+              parent={item.parent}
+              selected={selected}
+              setSelected={setSelected}
+              sx={{ background: 'white', mx: 0, my: 3 }}
+              close={true}
+              multiselect={true}
+            />
+          ))}
       </Fragment>
     </Box>
   )

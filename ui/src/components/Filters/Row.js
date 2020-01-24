@@ -11,6 +11,7 @@ const Row = ({
   setSelected,
   close,
   multiselect,
+  variant,
   ...props
 }) => {
   return (
@@ -32,9 +33,13 @@ const Row = ({
       onClick={() => {
         if (close) return
         if (multiselect) {
-          if (selected.includes(item.name)) {
-            const index = selected.find(sel => sel.name === item.name)
-            delete selected[index]
+          const sel = selected.find(sel => sel.name === item.name)
+          if (sel) {
+            selected.find((sel, index) => {
+              if (sel.name === item.name) {
+                delete selected[index]
+              }
+            })
             setSelected(selected.flat())
           } else {
             setSelected(selected.concat(item))
@@ -48,7 +53,18 @@ const Row = ({
       <img
         src={item.image}
         alt={item.slug}
-        sx={{ height: '48px', width: '64px', opacity: 0.8 }}
+        sx={
+          variant === 'round'
+            ? {
+                height: '44px',
+                width: '44px',
+                opacity: 0.8,
+                borderRadius: '50%',
+                my: 2,
+                ml: 2,
+              }
+            : { height: '48px', width: '64px', opacity: 0.8 }
+        }
       />
       <Box>
         {parent && <p sx={{ variant: 'text.smaller' }}>{parent.name} ></p>}

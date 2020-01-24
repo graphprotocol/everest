@@ -73,7 +73,7 @@ const Field = ({
           />
         ) : type === 'filters' ? (
           multiselect === true ? (
-            <MultiSelect setValue={setValue} title={title} />
+            <MultiSelect setValue={setValue} title={title} type="categories" />
           ) : (
             <Select items={items} />
           )

@@ -39,6 +39,7 @@ export const USER_PROJECTS_QUERY = gql`
         id
         name
         image
+        categories
       }
     }
   }
