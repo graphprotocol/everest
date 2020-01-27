@@ -76,6 +76,7 @@ const Index = ({ data }) => {
             )}
           </Grid>
         </Box>
+        <Divider sx={{ display: ['block', 'none', 'none'], mb: 0 }} />
         <Box
           sx={{
             ...imageStyles,
@@ -207,6 +208,7 @@ const imageStyles = {
   position: 'relative',
   filter: 'drop-shadow(24px 24px 24px rgba(9,6,16,0.5))',
   boxShadow: '24px 24px 24px rgba(76,102,255,0.12)',
+  display: ['none', 'block', 'block'],
 }
 
 Index.propTypes = {

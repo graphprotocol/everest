@@ -23,10 +23,12 @@ import DataRow from '../components/DataRow'
 import Button from '../components/Button'
 import TabView from '../components/TabView'
 import Link from '../components/Link'
+import Menu from '../components/Menu'
 import MultiSelect from '../components/Filters/MultiSelect'
 
 import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
+import Close from '../images/close.svg'
 
 const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
@@ -161,14 +163,16 @@ const Project = ({ location }) => {
             <Styled.h2>{project.name}</Styled.h2>
           </Box>
         </Grid>
-        <Grid columns={[1, 2, 2]} mt={[5, 5, 0]}>
+        <Grid columns={[1, 2, 2]} mt={[5, 5, 0]} sx={{ alignItems: 'center' }}>
           <Box>
             <p sx={{ variant: 'text.small' }}>Date Added</p>
             <p sx={{ variant: 'text.huge' }}>
               {convertDate(project.createdAt)}
             </p>
           </Box>
-          <Grid sx={{ gridTemplateColumns: '50px 1fr' }}>
+          <Grid
+            sx={{ gridTemplateColumns: '50px 1fr 30px', alignItems: 'center' }}
+          >
             <Box>
               {project.owner.image ? '' : <UserImage sx={userImageStyle} />}
             </Box>
@@ -176,9 +180,81 @@ const Project = ({ location }) => {
               <p sx={{ variant: 'text.small' }}>Owner</p>
               <p sx={{ variant: 'text.large' }}>{project.owner.name}</p>
             </Box>
+            <Menu
+              items={[
+                {
+                  text: 'Challenge',
+                  handleSelect: value => {
+                    setShowChallenge(true)
+                    if (!showChallenge) {
+                      setShowDelegate(false)
+                      setShowTransfer(false)
+                    }
+                  },
+                  icon: '/challenge.png',
+                },
+                {
+                  text: 'Share',
+                  handleSelect: value => console.log('value: ', value),
+                  icon: '/share.png',
+                },
+              ]}
+            >
+              {showChallenge ? (
+                <Close
+                  onClick={async () => {
+                    await setShowChallenge(false)
+                    const $el = document.querySelector('[alt="dots icon"]')
+                    if ($el) {
+                      $el.click()
+                    }
+                  }}
+                  sx={{
+                    fill: 'white',
+                    cursor: 'pointer',
+                    backgroundColor: 'secondary',
+                    borderRadius: '50%',
+                    p: 4,
+                    width: '22px',
+                    height: '22px',
+                    transition: 'all 0.3s ease',
+                  }}
+                />
+              ) : (
+                <img
+                  src="/dots.png"
+                  sx={{
+                    pt: 1,
+                    pl: 2,
+                    width: '24px',
+                    transform: 'rotate(90deg)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                  alt="dots icon"
+                />
+              )}
+            </Menu>
           </Grid>
         </Grid>
       </Grid>
+      {showChallenge && (
+        <TabView
+          fieldType="textarea"
+          charsCount={300}
+          title="Desription"
+          placeholder="Challenge Description"
+          heading={`Challenge ${project.name}`}
+          description="lala"
+          value={challengeDescription}
+          setValue={setChallengeData}
+          text="Challenge"
+          icon="challenge.png"
+          handleClick={challengeProject}
+          showFilters={true}
+          items={userData ? userData.user.projects : []}
+        />
+      )}
       <Divider />
       <Grid columns={[1, 1, 2]} gap={3}>
         <Box sx={{ margin: ['auto', 'auto', 0], position: 'relative' }}>
@@ -209,83 +285,6 @@ const Project = ({ location }) => {
               />
             )}
           </Box>
-          <Grid
-            sx={{
-              gridTemplateColumns: 'min-content min-content min-content',
-              mt: 6,
-              position: project.image ? 'absolute' : 'static',
-              bottom: 0,
-            }}
-            gap={0}
-          >
-            {/* <Box
-              sx={{
-                textAlign: ['center', 'center', 'left'],
-                mr: 4,
-              }}
-            >
-              <Button
-                disabled={false}
-                variant={'secondary'}
-                to={`/edit/${projectId}`}
-                text="Edit"
-                icon={'edit-icon.svg'}
-                sx={{ margin: ['auto', 'auto', 0] }}
-              />
-            </Box> */}
-            <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
-              <Button
-                disabled={false}
-                variant={showChallenge ? 'primary' : 'secondary'}
-                onClick={e => {
-                  setShowChallenge(!showChallenge)
-                  if (!showChallenge) {
-                    setShowDelegate(false)
-                    setShowTransfer(false)
-                  }
-                }}
-                text="Challenge"
-                icon={showChallenge ? 'challenging.png' : 'challenge.png'}
-                sx={{ margin: ['auto', 'auto', 0] }}
-              />
-            </Box>
-            <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
-              <Button
-                disabled={false}
-                variant={showTransfer ? 'primary' : 'secondary'}
-                onClick={e => {
-                  setShowTransfer(!showTransfer)
-                  if (!showTransfer) {
-                    setShowChallenge(false)
-                    setShowDelegate(false)
-                  }
-                }}
-                text="Transfer"
-                icon={
-                  showTransfer ? 'transferring-icon.svg' : 'transfer-icon.svg'
-                }
-                sx={{ margin: ['auto', 'auto', 0] }}
-              />
-            </Box>
-            <Box sx={{ mr: 4, textAlign: ['center', 'center', 'left'] }}>
-              <Button
-                disabled={false}
-                variant={showDelegate ? 'primary' : 'secondary'}
-                onClick={e => {
-                  setShowDelegate(!showDelegate)
-                  if (!showDelegate) {
-                    setShowChallenge(false)
-                    setShowTransfer(false)
-                  }
-                }}
-                text="Delegate"
-                icon={
-                  showDelegate ? 'delegating-icon.svg' : 'delegate-icon.svg'
-                }
-                sx={{ margin: ['auto', 'auto', 0] }}
-              />
-            </Box>
-          </Grid>
         </Box>
         <Box sx={{ margin: ['32px auto', '32px auto', 0] }}>
           {project.isChallenged && (
@@ -421,25 +420,6 @@ const Project = ({ location }) => {
         </Box>
       </Grid>
 
-      {showChallenge && (
-        <Fragment>
-          <TabView
-            fieldType="textarea"
-            charsCount={300}
-            title="Desription"
-            placeholder="Challenge Description"
-            heading={`Challenge ${project.name}`}
-            description="lala"
-            value={challengeDescription}
-            setValue={setChallengeData}
-            text="Challenge"
-            icon="challenge.png"
-            handleClick={challengeProject}
-            showFilters={true}
-            items={userData ? userData.user.projects : []}
-          />
-        </Fragment>
-      )}
       {showTransfer && (
         <TabView
           fieldType="input"

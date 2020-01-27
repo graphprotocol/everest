@@ -29,7 +29,8 @@ const TabView = ({
         zIndex: 10,
         left: 0,
         width: '100%',
-        marginTop: '-1px',
+        mt: 7,
+        height: 'calc(100vh + 120px)',
       }}
     >
       <Grid
@@ -40,7 +41,7 @@ const TabView = ({
           padding: '0 20px',
           margin: '0 auto',
           width: '100%',
-          my: 7,
+          my: 8,
         }}
         gap={[1, 8]}
       >

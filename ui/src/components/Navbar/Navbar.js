@@ -16,6 +16,7 @@ import Modal from '../../components/Modal'
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
+import Placeholder from '../../images/profile-placeholder.svg'
 
 const PROFILE_QUERY = gql`
   query everestProfile($id: ID!) {
@@ -33,13 +34,24 @@ const Navbar = ({ path, ...props }) => {
   const [userAccount, setUserAccount] = useState('')
   const openModal = () => setShowModal(true)
 
-  const { account } = useWeb3React()
+  const { account, connector } = useWeb3React()
 
   const closeModal = () => {
     if (account) {
       setUserAccount(account)
     }
     setShowModal(false)
+  }
+
+  const handleSignOut = () => {
+    if (connector) {
+      connector.deactivate()
+      if (typeof window !== undefined) {
+        window.localStorage.removeItem(
+          '__WalletLink__:https://www.walletlink.org:Addresses',
+        )
+      }
+    }
   }
 
   useEffect(() => {
@@ -110,7 +122,27 @@ const Navbar = ({ path, ...props }) => {
           />
         </Link>
         {(data && data.user) || userAccount || address ? (
-          <Menu accountId={userAccount ? userAccount : address} />
+          <Menu
+            accountId={userAccount ? userAccount : address}
+            items={[
+              {
+                text: 'Profile',
+                handleSelect: () =>
+                  navigate(`/profile/${userAccount ? userAccount : address}`),
+              },
+              { text: 'Sign Out', handleSelect: handleSignOut },
+            ]}
+          >
+            <Placeholder
+              sx={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '1px solid',
+                borderColor: 'secondary',
+              }}
+            />
+          </Menu>
         ) : (
           <Modal showModal={showModal} closeModal={closeModal}>
             <Button
