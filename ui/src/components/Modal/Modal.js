@@ -45,7 +45,6 @@ const Modal = ({ children, showModal, closeModal }) => {
   }, [])
 
   const handleWalletActivation = async wallet => {
-    console.log('handleWalletActivation: ', wallet)
     setSelectedWallet(wallet)
     if (wallet.name === 'MetaMask') {
       if (walletExists() && account) {

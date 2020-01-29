@@ -28,9 +28,6 @@ import Close from '../images/close.svg'
 
 const Project = ({ location }) => {
   const { active, account, connector } = useWeb3React()
-  console.log('ACTIVE: ', active)
-  console.log('ACCOUNT: ', account)
-  console.log('CONNECTOR: ', connector)
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
