@@ -9,7 +9,6 @@ import { useWeb3React } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
 import categories from '../data/categories.json'
 
-import Layout from '../components/Layout'
 import Stats from '../components/Stats'
 import Button from '../components/Button'
 import Section from '../components/Section'
@@ -37,7 +36,7 @@ const Index = ({ data }) => {
   )
 
   return (
-    <Layout>
+    <Grid>
       <Grid gap={[2, 2, 6]} columns={[1, null, 2]} mt={[5, 5, 0]}>
         <Box>
           <Styled.h1>
@@ -195,7 +194,7 @@ const Index = ({ data }) => {
           </Grid>
         </Box>
       </Grid>
-    </Layout>
+    </Grid>
   )
 }
 

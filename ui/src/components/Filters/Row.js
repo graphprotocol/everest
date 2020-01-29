@@ -14,6 +14,7 @@ const Row = ({
   variant,
   ...props
 }) => {
+  const isSelected = multiselect && selected.find(sel => sel.name === item.name)
   return (
     <Grid
       key={item.name}
@@ -23,12 +24,10 @@ const Row = ({
         gridTemplateColumns: 'min-content 1fr max-content',
         my: 4,
         mx: 5,
+        height: '60px',
         cursor: close ? 'auto' : 'pointer',
         alignItems: 'center',
-        border:
-          multiselect && selected.find(sel => sel.name === item.name)
-            ? '1px solid #4C66FF'
-            : 'none',
+        border: isSelected ? '1px solid #4C66FF' : 'none',
       }}
       onClick={() => {
         if (close) return
@@ -39,6 +38,7 @@ const Row = ({
               if (sel.name === item.name) {
                 delete selected[index]
               }
+              return null
             })
             setSelected(selected.flat())
           } else {
@@ -60,10 +60,13 @@ const Row = ({
                 width: '44px',
                 opacity: 0.8,
                 borderRadius: '50%',
-                my: 2,
-                ml: 2,
+                ml: isSelected ? '7px' : 2,
               }
-            : { height: '48px', width: '64px', opacity: 0.8 }
+            : {
+                height: isSelected ? '58px' : '60px',
+                width: isSelected ? '63px' : '64px',
+                opacity: 0.8,
+              }
         }
       />
       <Box>

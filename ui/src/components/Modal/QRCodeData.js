@@ -5,7 +5,6 @@ import { Grid } from '@theme-ui/components'
 import QRCode from 'qrcode.react'
 
 import Divider from '../Divider'
-import Link from '../Link'
 import Arrow from '../../images/arrow.svg'
 
 const QRCodeData = ({ size, uri = '' }) => {
@@ -16,7 +15,11 @@ const QRCodeData = ({ size, uri = '' }) => {
         Launch a compatible wallet app on your mobile or tablet and scan the QR
         icon.
       </Styled.h6>
-      <a href="https://walletconnect.org/" target="_blank">
+      <a
+        href="https://walletconnect.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Help with signing in <Arrow sx={{ ml: 1, fill: 'secondary' }} />
       </a>
       <Divider mt={0} mb={6} />

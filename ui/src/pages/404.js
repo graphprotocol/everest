@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { Styled, jsx } from 'theme-ui'
-import Layout from '../components/Layout'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -12,11 +11,9 @@ const Container = styled.div`
 
 const Error = ({ data }) => {
   return (
-    <Layout>
-      <Container>
-        <Styled.p>Page not found.</Styled.p>
-      </Container>
-    </Layout>
+    <Container>
+      <Styled.p>Page not found.</Styled.p>
+    </Container>
   )
 }
 

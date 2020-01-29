@@ -21,19 +21,19 @@ const Modal = ({ children, showModal, closeModal }) => {
 
   // TODO: refactor this logic
   const [walletError, setWalletError] = useState(false)
-  const [walletConnector, setWalletConnector] = useState(null)
+  const [selectedWallet, setSelectedWallet] = useState(null)
   const [showAccountView, setShowAccountView] = useState(false)
   const [showPendingView, setShowPendingView] = useState(false)
   const [showWalletsView, setShowWalletsView] = useState(true)
   const [uri, setUri] = useState('')
-  const [walletEnabled, setWalletEnabled] = useState(false)
+  const [isWalletEnabled, setIsWalletEnabled] = useState(false)
 
   // TODO: reset the view to the main wallet selection view
 
   // set up uri listener for walletconnect
   useEffect(() => {
     if (walletExists()) {
-      setWalletEnabled(true)
+      setIsWalletEnabled(true)
     }
     const activateWalletConnect = uri => {
       setUri(uri)
@@ -45,12 +45,13 @@ const Modal = ({ children, showModal, closeModal }) => {
   }, [])
 
   const handleWalletActivation = async wallet => {
-    setWalletConnector(wallet.connector)
+    console.log('handleWalletActivation: ', wallet)
+    setSelectedWallet(wallet)
     if (wallet.name === 'MetaMask') {
-      if (walletExists()) {
-        if (getAddress()) {
-          // make a contract call to add a user, and update navigation (refresh the page)
-        }
+      if (walletExists() && account) {
+        setShowWalletsView(false)
+        setShowAccountView(true)
+        return
       } else {
         return window.open('https://metamask.io/', '_blank')
       }
@@ -69,11 +70,8 @@ const Modal = ({ children, showModal, closeModal }) => {
         }
       })
       .then(async () => {
-        // TODO: make a call to the smart contract to add a user - check with Dave
-        await setShowAccountView(true)
-        if (wallet.connector !== walletconnect) {
-          closeModal()
-        }
+        setShowWalletsView(false)
+        setShowAccountView(true)
       })
   }
 
@@ -121,12 +119,10 @@ const Modal = ({ children, showModal, closeModal }) => {
             cursor: 'pointer',
           }}
         />
-        {!walletError &&
-        walletConnector === walletconnect &&
-        !showWalletsView ? (
+        {!showWalletsView ? (
           account && showAccountView ? (
             <Grid>
-              <Styled.p>You are logged in</Styled.p>
+              <Styled.p>You are logged in with {selectedWallet.name}</Styled.p>
               <Styled.p>{account}</Styled.p>
             </Grid>
           ) : (
@@ -145,7 +141,9 @@ const Modal = ({ children, showModal, closeModal }) => {
                   columns={2}
                   gap={2}
                   sx={gridStyles}
-                  onClick={() => handleWalletActivation(wallet)}
+                  onClick={e => {
+                    handleWalletActivation(wallet)
+                  }}
                 >
                   <Box>
                     <img
@@ -156,10 +154,9 @@ const Modal = ({ children, showModal, closeModal }) => {
                   </Box>
                   <Box>
                     <Styled.h5 sx={{ color: 'secondary' }}>
-                      {!walletEnabled && wallet.name === 'MetaMask'
+                      {!isWalletEnabled && wallet.name === 'MetaMask'
                         ? 'Install MetaMask '
                         : wallet.name}
-
                       <Arrow sx={{ ml: 1, fill: 'secondary' }} />
                     </Styled.h5>
                     <p sx={{ variant: 'text.small' }}>{wallet.description}</p>

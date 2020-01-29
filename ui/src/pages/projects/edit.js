@@ -7,28 +7,19 @@ import { useQuery } from '@apollo/react-hooks'
 
 import ipfs from '../../services/ipfs'
 import { ipfsHexHash } from '../../services/ipfs'
-import {
-  useEverestContract,
-  useEthereumDIDRegistry,
-  useAddress,
-  useProvider,
-} from '../../utils/hooks'
+import { useEverestContract, useEthereumDIDRegistry } from '../../utils/hooks'
 import {
   OFFCHAIN_DATANAME,
   VALIDITY_TIMESTAMP,
 } from '../../utils/helpers/metatransactions'
 import { PROJECT_QUERY } from '../../utils/queries'
 
-import Layout from '../../components/Layout'
 import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location, ...props }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
   const [everestContract] = useState(useEverestContract())
   const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
-
-  const [address] = useState(useAddress())
-  const [provider] = useState(useProvider())
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -84,19 +75,11 @@ const EditProject = ({ location, ...props }) => {
   }, [data])
 
   if (loading && !error) {
-    return (
-      <Layout>
-        <Styled.p>Loading</Styled.p>
-      </Layout>
-    )
+    return <Styled.p>Loading</Styled.p>
   }
 
   if (error) {
-    return (
-      <Layout>
-        <Styled.h3>Something went wrong - can't find a project </Styled.h3>
-      </Layout>
-    )
+    return <Styled.h3>Something went wrong - can't find a project </Styled.h3>
   }
 
   const uploadImage = async (e, field) => {
@@ -189,39 +172,37 @@ const EditProject = ({ location, ...props }) => {
   }
 
   return (
-    <Layout sx={{ backgroundColor: 'secondary' }} {...props}>
-      <Grid
-        sx={{ gridTemplateColumns: ['1fr', '312px 1fr'], position: 'relative' }}
-        gap={[1, 4, 8]}
-      >
-        <Box>
-          <Styled.h1 sx={{ color: 'white', mb: 3 }}>Edit Project</Styled.h1>
-          <p sx={{ variant: 'text.field' }}>
-            Edit your project in the Everest registry, a universally shared list
-            of projects in Web3. <br />
-            <br />
-            A project can be a dApp, DAO, protocol, NGO, research group service
-            provider and more! <br />
-            <br />
-            Make sure to tag your project's categories to allow other users to
-            search for your project.
-          </p>
-          <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
-          <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
-        </Box>
-        <Box>
-          <ProjectForm
-            project={project}
-            uploadImage={uploadImage}
-            isDisabled={isDisabled}
-            handleSubmit={handleSubmit}
-            setValue={setValue}
-            setDisabled={setDisabled}
-            buttonText="Update project"
-          />
-        </Box>
-      </Grid>
-    </Layout>
+    <Grid
+      sx={{ gridTemplateColumns: ['1fr', '312px 1fr'], position: 'relative' }}
+      gap={[1, 4, 8]}
+    >
+      <Box>
+        <Styled.h1 sx={{ color: 'white', mb: 3 }}>Edit Project</Styled.h1>
+        <p sx={{ variant: 'text.field' }}>
+          Edit your project in the Everest registry, a universally shared list
+          of projects in Web3. <br />
+          <br />
+          A project can be a dApp, DAO, protocol, NGO, research group service
+          provider and more! <br />
+          <br />
+          Make sure to tag your project's categories to allow other users to
+          search for your project.
+        </p>
+        <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
+        <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
+      </Box>
+      <Box>
+        <ProjectForm
+          project={project}
+          uploadImage={uploadImage}
+          isDisabled={isDisabled}
+          handleSubmit={handleSubmit}
+          setValue={setValue}
+          setDisabled={setDisabled}
+          buttonText="Update project"
+        />
+      </Box>
+    </Grid>
   )
 }
 

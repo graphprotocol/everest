@@ -7,7 +7,7 @@ import { gql } from 'apollo-boost'
 import { useWeb3React } from '@web3-react/core'
 import { navigate } from 'gatsby'
 
-import { getAddress, metamaskAccountChange } from '../../services/ethers'
+import { metamaskAccountChange } from '../../services/ethers'
 
 import Link from '../../components/Link'
 import Menu from '../../components/Menu'
@@ -27,14 +27,13 @@ const PROFILE_QUERY = gql`
 `
 
 const Navbar = ({ path, ...props }) => {
+  const { account, connector } = useWeb3React()
+
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState()
-  const [address, setAddress] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [userAccount, setUserAccount] = useState('')
+  const [userAccount, setUserAccount] = useState(account)
   const openModal = () => setShowModal(true)
-
-  const { account, connector } = useWeb3React()
 
   const closeModal = () => {
     if (account) {
@@ -43,34 +42,29 @@ const Navbar = ({ path, ...props }) => {
     setShowModal(false)
   }
 
-  const handleSignOut = () => {
-    if (connector) {
-      connector.deactivate()
-      if (typeof window !== undefined) {
-        window.localStorage.removeItem(
-          '__WalletLink__:https://www.walletlink.org:Addresses',
-        )
-      }
-    }
-  }
+  // const handleSignOut = () => {
+  //   if (connector) {
+  //     connector.deactivate()
+  //     if (typeof window !== undefined) {
+  //       window.localStorage.removeItem(
+  //         '__WalletLink__:https://www.walletlink.org:Addresses',
+  //       )
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     if (account) {
       setUserAccount(account)
     }
-    metamaskAccountChange(accounts => setAddress(accounts[0]))
+    metamaskAccountChange(accounts => setUserAccount(accounts[0]))
     setIsMobile(window.innerWidth < 640)
-    async function fetchAddress() {
-      const ethAddress = await getAddress()
-      setAddress(ethAddress)
-    }
-    fetchAddress()
   }, [account])
 
   const isNewProjectPage = path && path.includes('new')
   const { data } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: address || '',
+      id: userAccount || '',
     },
   })
 
@@ -101,7 +95,9 @@ const Navbar = ({ path, ...props }) => {
       >
         <Link
           to=""
-          onClick={() => (address ? navigate('/projects/new') : openModal())}
+          onClick={() =>
+            userAccount ? navigate('/projects/new') : openModal()
+          }
           sx={{
             backgroundColor: isNewProjectPage ? 'secondary' : 'white',
             padding: '12px 22px',
@@ -121,17 +117,10 @@ const Navbar = ({ path, ...props }) => {
             }}
           />
         </Link>
-        {(data && data.user) || userAccount || address ? (
-          <Menu
-            accountId={userAccount ? userAccount : address}
-            items={[
-              {
-                text: 'Profile',
-                handleSelect: () =>
-                  navigate(`/profile/${userAccount ? userAccount : address}`),
-              },
-              { text: 'Sign Out', handleSelect: handleSignOut },
-            ]}
+        {userAccount ? (
+          <Link
+            to={`/profile/${userAccount}`}
+            sx={{ '&:hover': { svg: { marginLeft: 0 } } }}
           >
             <Placeholder
               sx={{
@@ -140,9 +129,10 @@ const Navbar = ({ path, ...props }) => {
                 borderRadius: '50%',
                 border: '1px solid',
                 borderColor: 'secondary',
+                verticalAlign: 'middle',
               }}
             />
-          </Menu>
+          </Link>
         ) : (
           <Modal showModal={showModal} closeModal={closeModal}>
             <Button

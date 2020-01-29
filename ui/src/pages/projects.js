@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 
-import Layout from '../components/Layout'
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 
@@ -22,7 +21,7 @@ const Projects = ({ data }) => {
   )
 
   return (
-    <Layout>
+    <Grid>
       <Grid columns={[1, 2, 2]} mb={6}>
         <Box>
           <Styled.h2>Projects</Styled.h2>
@@ -48,7 +47,7 @@ const Projects = ({ data }) => {
         variant="project"
         selected={selected}
       />
-    </Layout>
+    </Grid>
   )
 }
 

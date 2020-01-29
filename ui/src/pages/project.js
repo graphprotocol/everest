@@ -3,12 +3,9 @@ import { useState, Fragment } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import { useWeb3React } from '@web3-react/core'
 
-import {
-  useAddress,
-  useEverestContract,
-  useEthereumDIDRegistry,
-} from '../utils/hooks'
+import { useEverestContract, useEthereumDIDRegistry } from '../utils/hooks'
 import { convertDate } from '../utils/helpers/date'
 import { ipfsHexHash } from '../services/ipfs'
 import {
@@ -17,7 +14,6 @@ import {
 } from '../utils/helpers/metatransactions'
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
 
-import Layout from '../components/Layout'
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
 import Button from '../components/Button'
@@ -31,6 +27,10 @@ import UserImage from '../images/profile-placeholder.svg'
 import Close from '../images/close.svg'
 
 const Project = ({ location }) => {
+  const { active, account, connector } = useWeb3React()
+  console.log('ACTIVE: ', active)
+  console.log('ACCOUNT: ', account)
+  console.log('CONNECTOR: ', connector)
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
@@ -42,7 +42,6 @@ const Project = ({ location }) => {
   const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
   const [isKeepOpen, setIsKeepOpen] = useState(false)
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
-  const [address] = useAddress()
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const challengeProject = () => {
@@ -124,25 +123,17 @@ const Project = ({ location }) => {
   })
 
   if (loading && !error) {
-    return (
-      <Layout>
-        <Styled.p>Loading</Styled.p>
-      </Layout>
-    )
+    return <Styled.p>Loading</Styled.p>
   }
 
   if (error) {
-    return (
-      <Layout>
-        <Styled.h3>Something went wrong - can't find a project </Styled.h3>
-      </Layout>
-    )
+    return <Styled.h3>Something went wrong - can't find a project </Styled.h3>
   }
 
   let project = data && data.project
 
   return (
-    <Layout>
+    <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
         <Grid sx={{ gridTemplateColumns: [1, '120px 1fr'] }}>
           <Box>
@@ -450,7 +441,7 @@ const Project = ({ location }) => {
           handleClick={delegateProject}
         />
       )}
-    </Layout>
+    </Grid>
   )
 }
 

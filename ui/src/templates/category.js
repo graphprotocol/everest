@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-import Layout from '../components/Layout'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
@@ -20,7 +19,7 @@ const Category = ({ pageContext, data }) => {
   )
 
   return (
-    <Layout>
+    <Grid>
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={boxStyles}>
           <img
@@ -80,7 +79,7 @@ const Category = ({ pageContext, data }) => {
         variant="project"
         selected={selected}
       />
-    </Layout>
+    </Grid>
   )
 }
 

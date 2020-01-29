@@ -4,18 +4,21 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import { useWeb3React } from '@web3-react/core'
 import ThreeBox from '3box'
 
 import { getAddress, metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 
-import Layout from '../components/Layout'
 import Divider from '../components/Divider'
 import Button from '../components/Button'
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 import DataRow from '../components/DataRow'
+import Menu from '../components/Menu'
+import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
+import { navigate } from 'gatsby'
 
 const PROFILE_QUERY = gql`
   query everestProfile($id: ID!) {
@@ -44,6 +47,10 @@ const Profile = ({ location }) => {
   const [selectedChallenges, setSelectedChallenges] = useState('cards')
   const [profile, setProfile] = useState(null)
   const [address, setAddress] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const openModal = () => setShowModal(true)
+  const closeModal = () => setShowModal(false)
+  const { active, account, connector } = useWeb3React()
 
   useEffect(() => {
     async function getProfile() {
@@ -87,17 +94,13 @@ const Profile = ({ location }) => {
   })
 
   if (loading && !error) {
-    return (
-      <Layout>
-        <Styled.p>Loading</Styled.p>
-      </Layout>
-    )
+    return <Styled.p>Loading</Styled.p>
   }
 
   const user = data.user
 
   return (
-    <Layout>
+    <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
         <Grid
           sx={{
@@ -113,7 +116,11 @@ const Profile = ({ location }) => {
         </Grid>
         <Grid
           sx={{
-            gridTemplateColumns: ['1fr 1fr', '1fr max-content'],
+            gridTemplateColumns:
+              user && user.createdAt
+                ? ['1fr 1fr', '1fr max-content']
+                : ['max-content'],
+            justifyContent: 'flex-end',
             textAlign: ['left', profile ? 'center' : 'right'],
           }}
           mt={[5, 5, 0]}
@@ -126,16 +133,52 @@ const Profile = ({ location }) => {
               </p>
             </Box>
           )}
-          {profile && (
-            <Button
-              variant="primary"
-              text="Edit profile"
-              sx={{ maxWidth: '194px' }}
-              onClick={e => {
-                handleClick(e, `https://3box.io/${address}`)
+          <Menu
+            items={[
+              {
+                text: 'Edit',
+                handleSelect: () => {
+                  window.open(`https://3box.io/${account}`, '_blank')
+                },
+                icon: '/challenge.png',
+              },
+              {
+                text: (
+                  <Fragment>
+                    <Box
+                      onClick={e => {
+                        e.preventDefault()
+                        openModal()
+                      }}
+                    >
+                      Change wallet
+                    </Box>
+                    {showModal && (
+                      <Modal
+                        showModal={showModal}
+                        closeModal={closeModal}
+                      ></Modal>
+                    )}
+                  </Fragment>
+                ),
+                icon: '/share.png',
+              },
+            ]}
+          >
+            <img
+              src="/dots.png"
+              sx={{
+                pt: 1,
+                pl: 2,
+                width: '24px',
+                transform: 'rotate(90deg)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
               }}
+              alt="dots icon"
+              onClick={() => closeModal()}
             />
-          )}
+          </Menu>
         </Grid>
       </Grid>
       <Divider />
@@ -252,7 +295,7 @@ const Profile = ({ location }) => {
           selected={selectedChallenges}
         />
       )}
-    </Layout>
+    </Grid>
   )
 }
 

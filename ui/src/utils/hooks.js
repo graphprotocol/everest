@@ -2,6 +2,7 @@ import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { useMemo, useEffect, useState } from 'react'
 
 import { getContract, getAddress, getProvider } from '../services/ethers'
+import { injected } from '../connectors'
 import addresses from '../../constants/addresses.json'
 import EVEREST_ABI from '../../constants/abis/Everest.json'
 import ETHEREUM_DID_REGISTRY_ABI from '../../constants/abis/EthereumDIDRegistry.json'
@@ -75,4 +76,71 @@ export function useProvider() {
     web3Provider()
   }, [library])
   return [provider, setProvider]
+}
+
+export function useEagerConnect() {
+  const { activate, active } = useWeb3ReactCore()
+
+  const [tried, setTried] = useState(false)
+
+  useEffect(() => {
+    injected.isAuthorized().then(isAuthorized => {
+      if (isAuthorized) {
+        activate(injected, undefined, true).catch(() => {
+          setTried(true)
+        })
+      } else {
+        setTried(true)
+      }
+    })
+  }, [activate]) // intentionally only running on mount (make sure it's only mounted once :))
+
+  // if the connection worked, wait until we get confirmation of that to flip the flag
+  useEffect(() => {
+    if (!tried && active) {
+      setTried(true)
+    }
+  }, [tried, active])
+
+  return tried
+}
+
+export function useInactiveListener(suppress = false) {
+  const { active, error, activate } = useWeb3ReactCore()
+
+  useEffect(() => {
+    const { ethereum } = window
+    if (ethereum && ethereum.on && !active && !error && !suppress) {
+      const handleChainChanged = chainId => {
+        console.log('chainChanged', chainId)
+        activate(injected)
+      }
+
+      const handleAccountsChanged = accounts => {
+        console.log('accountsChanged', accounts)
+        if (accounts.length > 0) {
+          activate(injected)
+        }
+      }
+
+      const handleNetworkChanged = networkId => {
+        console.log('networkChanged', networkId)
+        activate(injected)
+      }
+
+      ethereum.on('chainChanged', handleChainChanged)
+      ethereum.on('accountsChanged', handleAccountsChanged)
+      ethereum.on('networkChanged', handleNetworkChanged)
+
+      return () => {
+        if (ethereum.removeListener) {
+          ethereum.removeListener('chainChanged', handleChainChanged)
+          ethereum.removeListener('accountsChanged', handleAccountsChanged)
+          ethereum.removeListener('networkChanged', handleNetworkChanged)
+        }
+      }
+    }
+
+    return () => {}
+  }, [active, error, suppress, activate])
 }

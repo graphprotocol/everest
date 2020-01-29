@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
-import { navigate } from 'gatsby'
+// import { navigate } from 'gatsby'
 import fetch from 'isomorphic-fetch'
 import { ethers, utils } from 'ethers'
 
@@ -15,7 +15,6 @@ import {
   VALIDITY_TIMESTAMP,
 } from '../../utils/helpers/metatransactions'
 
-import Layout from '../../components/Layout'
 import ProjectForm from '../../components/ProjectForm'
 
 const NewProject = ({ data, ...props }) => {
@@ -145,49 +144,41 @@ const NewProject = ({ data, ...props }) => {
   }
 
   return (
-    <Layout
-      mainStyles={{
-        backgroundColor: 'secondary',
-        marginTop: '-18px',
+    <Grid
+      sx={{
+        gridTemplateColumns: ['1fr', '312px 1fr'],
+        position: 'relative',
+        pt: 8,
       }}
-      {...props}
+      gap={[1, 4, 8]}
     >
-      <Grid
-        sx={{
-          gridTemplateColumns: ['1fr', '312px 1fr'],
-          position: 'relative',
-          pt: 8,
-        }}
-        gap={[1, 4, 8]}
-      >
-        <Box>
-          <Styled.h1 sx={{ color: 'white', mb: 3 }}>Add Project</Styled.h1>
-          <p sx={{ variant: 'text.field' }}>
-            Add a project to the Everest registry, a universally shared list of
-            projects in Web3. <br />
-            <br />
-            A project can be a dApp, DAO, protocol, NGO, research group service
-            provider and more! <br />
-            <br />
-            Make sure to tag your project's categories to allow other users to
-            search for your project.
-          </p>
-          <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
-          <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
-        </Box>
-        <Box>
-          <ProjectForm
-            project={project}
-            isDisabled={isDisabled}
-            handleSubmit={handleSubmit}
-            setValue={setValue}
-            setDisabled={setDisabled}
-            buttonText="Add project"
-            setImage={setImage}
-          />
-        </Box>
-      </Grid>
-    </Layout>
+      <Box>
+        <Styled.h1 sx={{ color: 'white', mb: 3 }}>Add Project</Styled.h1>
+        <p sx={{ variant: 'text.field' }}>
+          Add a project to the Everest registry, a universally shared list of
+          projects in Web3. <br />
+          <br />
+          A project can be a dApp, DAO, protocol, NGO, research group service
+          provider and more! <br />
+          <br />
+          Make sure to tag your project's categories to allow other users to
+          search for your project.
+        </p>
+        <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
+        <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
+      </Box>
+      <Box>
+        <ProjectForm
+          project={project}
+          isDisabled={isDisabled}
+          handleSubmit={handleSubmit}
+          setValue={setValue}
+          setDisabled={setDisabled}
+          buttonText="Add project"
+          setImage={setImage}
+        />
+      </Box>
+    </Grid>
   )
 }
 

@@ -24,18 +24,17 @@ const Filters = ({
   const [searchText, setSearchText] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleClick = () => {
-    setIsOpen(false)
-    setOpen && setOpen(false)
-  }
-
   useEffect(() => {
+    const handleClick = () => {
+      setIsOpen(false)
+      setOpen && setOpen(false)
+    }
     window.addEventListener('click', handleClick)
 
     return () => {
       window.removeEventListener('click', handleClick)
     }
-  }, [handleClick])
+  }, [setOpen])
 
   const allCategories = () => {
     let allCats = categories.reduce((acc, current) => {
@@ -126,7 +125,7 @@ const Filters = ({
                   <p>{subtitle}</p>
                 </Box>
               )}
-              {type == 'categories' && (
+              {type === 'categories' && (
                 <Grid
                   sx={{
                     gridTemplateColumns: '1fr max-content',
