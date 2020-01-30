@@ -3,7 +3,7 @@ type Project @entity {
   # From IPFS / off chain storage
   # None of these are required, since first the event DIDOwnerChanged creates the project first
   # Then DIDAttributeChanged gets emitted, where we will see theses values filled in
-  # Note - someone could not upload any data here (blank IPFS file, or never calling 
+  # Note - someone could not upload any data here (blank IPFS file, or never calling
   # DIDAttributeChanged). But this is okay, because that project should get challenged
   name: String
   description: String
@@ -19,15 +19,12 @@ type Project @entity {
   owner: User
   currentChallenge: Challenge
   pastChallenges: [Challenge!]
-  # If now > memberShipStartTime , this project is a member. 
+  # If now > memberShipStartTime , this project is a member.
   # reputation = now - membershipStartTime. if negative, then reputation is just 0
   membershipStartTime: Int!
   delegates: [Bytes!] # Null if no delegate is set. There can be many delegates
   delegateValidities: [Int!] # Time delegate is valid
   ipfsHash: String # aka DIDAttribute
-
-
-
   # Derived from smart contract events
   totalVotes: Int!
 
@@ -90,8 +87,9 @@ type Vote @entity {
 }
 
 enum Choice {
-  RemoveProject
-  KeepProject
+  Null
+  Yes
+  No
 }
 
 type User @entity {

@@ -8,18 +8,8 @@
         "name": "identity",
         "type": "address"
       },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "name",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes",
-        "name": "value",
-        "type": "bytes"
-      },
+      { "indexed": false, "internalType": "bytes32", "name": "name", "type": "bytes32" },
+      { "indexed": false, "internalType": "bytes", "name": "value", "type": "bytes" },
       {
         "indexed": false,
         "internalType": "uint256",
@@ -82,12 +72,7 @@
         "name": "identity",
         "type": "address"
       },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
+      { "indexed": false, "internalType": "address", "name": "owner", "type": "address" },
       {
         "indexed": false,
         "internalType": "uint256",
@@ -180,9 +165,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "address", "name": "identity", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "identity", "type": "address" }],
     "name": "identityOwner",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "payable": false,

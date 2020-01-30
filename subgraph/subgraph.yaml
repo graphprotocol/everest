@@ -8,7 +8,7 @@ dataSources:
     name: Everest
     network: ropsten
     source:
-      address: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b' # TODO Add address (THIS IS NOT THE RIGHT ADDR)
+      address: '0xC487a615e0A9C69De4c795a45c33A965aBFa3673'
       abi: Everest
     mapping:
       kind: ethereum/events
@@ -24,7 +24,7 @@ dataSources:
         - User
       abis:
         - name: Everest
-          file: ../contracts/build/contracts/Everest.json
+          file: ./abis/Everest.json
       eventHandlers:
         - event: ApplicationMade(address,uint256)
           handler: handleApplicationMade
@@ -60,7 +60,7 @@ dataSources:
         - User
       abis:
         - name: EthereumDIDRegistry
-          file: ../contracts/build/contracts/EthereumDIDRegistry.json
+          file: ./abis/EthereumDIDRegistry.json
       eventHandlers:
         # TODO - figure out how to make this only track the data we NEED
         # not all eth did registry data

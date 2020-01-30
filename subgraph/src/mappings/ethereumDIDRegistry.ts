@@ -36,7 +36,7 @@ export function handleDIDDelegateChanged(event: DIDDelegateChanged): void {
     project.delegates = delegates
 
     let delegateValidities = project.delegateValidities
-    delegateValidities.push(event.params.validTo)
+    delegateValidities.push(event.params.validTo.toI32())
     project.delegateValidities = delegateValidities
 
     project.save()
@@ -98,9 +98,9 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           ? null
           : data.get('avatar').toString()
         project.image = data.get('image').isNull() ? null : data.get('image').toString()
-        project.isRepresentative = data.get('isRepresentative').isNull()
-          ? null
-          : data.get('isRepresentative').toBool()
+        // project.isRepresentative = data.get('isRepresentative').isNull()
+        //   ? null
+        //   : data.get('isRepresentative').toBool()
 
         let categories = data.get('categories')
         if (categories != null) {

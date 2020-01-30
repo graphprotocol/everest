@@ -2,26 +2,10 @@
   {
     "inputs": [
       { "internalType": "address", "name": "_owner", "type": "address" },
-      {
-        "internalType": "address",
-        "name": "_approvedToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_votingPeriodDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_challengeDeposit",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_applicationFee",
-        "type": "uint256"
-      },
+      { "internalType": "address", "name": "_approvedToken", "type": "address" },
+      { "internalType": "uint256", "name": "_votingPeriodDuration", "type": "uint256" },
+      { "internalType": "uint256", "name": "_challengeDeposit", "type": "uint256" },
+      { "internalType": "uint256", "name": "_applicationFee", "type": "uint256" },
       { "internalType": "bytes32", "name": "_charter", "type": "bytes32" }
     ],
     "payable": false,
@@ -50,12 +34,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "member",
-        "type": "address"
-      },
+      { "indexed": true, "internalType": "address", "name": "member", "type": "address" },
       {
         "indexed": true,
         "internalType": "uint256",
@@ -81,12 +60,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "member",
-        "type": "address"
-      },
+      { "indexed": true, "internalType": "address", "name": "member", "type": "address" },
       {
         "indexed": true,
         "internalType": "uint256",
@@ -112,12 +86,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "data",
-        "type": "bytes32"
-      }
+      { "indexed": true, "internalType": "bytes32", "name": "data", "type": "bytes32" }
     ],
     "name": "CharterUpdated",
     "type": "event"
@@ -125,12 +94,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
+      { "indexed": false, "internalType": "address", "name": "owner", "type": "address" },
       {
         "indexed": false,
         "internalType": "address",
@@ -180,12 +144,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "member",
-        "type": "address"
-      },
+      { "indexed": true, "internalType": "address", "name": "member", "type": "address" },
       {
         "indexed": true,
         "internalType": "uint256",
@@ -217,12 +176,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "member",
-        "type": "address"
-      }
+      { "indexed": true, "internalType": "address", "name": "member", "type": "address" }
     ],
     "name": "MemberExited",
     "type": "event"
@@ -292,12 +246,7 @@
         "name": "receiver",
         "type": "address"
       },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "Withdrawal",
     "type": "event"
@@ -310,11 +259,7 @@
       { "internalType": "bytes32", "name": "_sigR", "type": "bytes32" },
       { "internalType": "bytes32", "name": "_sigS", "type": "bytes32" },
       { "internalType": "address", "name": "_newDelegate", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "_delegateValidity",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "_delegateValidity", "type": "uint256" }
     ],
     "name": "addDelegateSigned",
     "outputs": [],
@@ -355,31 +300,11 @@
       { "internalType": "bytes32[2]", "name": "_sigS", "type": "bytes32[2]" },
       { "internalType": "address", "name": "_owner", "type": "address" },
       { "internalType": "uint8", "name": "_attributeSigV", "type": "uint8" },
-      {
-        "internalType": "bytes32",
-        "name": "_attributeSigR",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_attributeSigS",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_offChainDataName",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_offChainDataValue",
-        "type": "bytes"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_offChainDataValidity",
-        "type": "uint256"
-      }
+      { "internalType": "bytes32", "name": "_attributeSigR", "type": "bytes32" },
+      { "internalType": "bytes32", "name": "_attributeSigS", "type": "bytes32" },
+      { "internalType": "bytes32", "name": "_offChainDataName", "type": "bytes32" },
+      { "internalType": "bytes", "name": "_offChainDataValue", "type": "bytes" },
+      { "internalType": "uint256", "name": "_offChainDataValidity", "type": "uint256" }
     ],
     "name": "applySignedWithAttribute",
     "outputs": [],
@@ -391,9 +316,7 @@
     "constant": true,
     "inputs": [],
     "name": "approvedToken",
-    "outputs": [
-      { "internalType": "contract Dai", "name": "", "type": "address" }
-    ],
+    "outputs": [{ "internalType": "contract Dai", "name": "", "type": "address" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -401,31 +324,19 @@
   {
     "constant": false,
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_challengingMember",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_challengedMember",
-        "type": "address"
-      },
+      { "internalType": "address", "name": "_challengingMember", "type": "address" },
+      { "internalType": "address", "name": "_challengedMember", "type": "address" },
       { "internalType": "bytes32", "name": "_details", "type": "bytes32" }
     ],
     "name": "challenge",
-    "outputs": [
-      { "internalType": "uint256", "name": "challengeID", "type": "uint256" }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "challengeID", "type": "uint256" }],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "uint256", "name": "_challengeID", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_challengeID", "type": "uint256" }],
     "name": "challengeCanBeResolved",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "payable": false,
@@ -463,21 +374,9 @@
       { "internalType": "uint8", "name": "_sigV", "type": "uint8" },
       { "internalType": "bytes32", "name": "_sigR", "type": "bytes32" },
       { "internalType": "bytes32", "name": "_sigS", "type": "bytes32" },
-      {
-        "internalType": "bytes32",
-        "name": "_offChainDataName",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_offChainDataValue",
-        "type": "bytes"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_offChainDataValidity",
-        "type": "uint256"
-      }
+      { "internalType": "bytes32", "name": "_offChainDataName", "type": "bytes32" },
+      { "internalType": "bytes", "name": "_offChainDataValue", "type": "bytes" },
+      { "internalType": "uint256", "name": "_offChainDataValidity", "type": "uint256" }
     ],
     "name": "editOffChainDataSigned",
     "outputs": [],
@@ -490,11 +389,7 @@
     "inputs": [],
     "name": "erc1056Registry",
     "outputs": [
-      {
-        "internalType": "contract EthereumDIDRegistry",
-        "name": "",
-        "type": "address"
-      }
+      { "internalType": "contract EthereumDIDRegistry", "name": "", "type": "address" }
     ],
     "payable": false,
     "stateMutability": "view",
@@ -502,9 +397,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "uint256", "name": "_endTime", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_endTime", "type": "uint256" }],
     "name": "hasVotingPeriodExpired",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "payable": false,
@@ -513,9 +406,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "address", "name": "_member", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_member", "type": "address" }],
     "name": "isMember",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "payable": false,
@@ -533,9 +424,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "address", "name": "_member", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_member", "type": "address" }],
     "name": "memberChallengeExists",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "payable": false,
@@ -544,9 +433,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "address", "name": "_member", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_member", "type": "address" }],
     "name": "memberExit",
     "outputs": [],
     "payable": false,
@@ -557,9 +444,7 @@
     "constant": true,
     "inputs": [],
     "name": "memberRegistry",
-    "outputs": [
-      { "internalType": "contract Registry", "name": "", "type": "address" }
-    ],
+    "outputs": [{ "internalType": "contract Registry", "name": "", "type": "address" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -595,9 +480,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "_challengeID", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_challengeID", "type": "uint256" }],
     "name": "resolveChallenge",
     "outputs": [],
     "payable": false,
@@ -655,9 +538,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
     "name": "transferOwnership",
     "outputs": [],
     "payable": false,
@@ -666,9 +547,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "bytes32", "name": "_newCharter", "type": "bytes32" }
-    ],
+    "inputs": [{ "internalType": "bytes32", "name": "_newCharter", "type": "bytes32" }],
     "name": "updateCharter",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "payable": false,

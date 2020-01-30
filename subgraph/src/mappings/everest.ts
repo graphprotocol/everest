@@ -22,7 +22,7 @@ export function handleApplicationMade(event: ApplicationMade): void {
   let id = event.params.member.toHexString()
   let project = new Project(id)
   project.totalVotes = 0
-  project.membershipStartTime = event.params.applicationTime
+  project.membershipStartTime = event.params.applicationTime.toI32()
   project.save()
 }
 
@@ -47,7 +47,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   let everest = new Everest('1')
   everest.owner = event.params.owner
   everest.approvedToken = event.params.approvedToken
-  everest.votingPeriodDuration = event.params.votingPeriodDuration
+  everest.votingPeriodDuration = event.params.votingPeriodDuration.toI32()
   everest.challengeDeposit = event.params.challengeDeposit
   everest.applicationFee = event.params.applicationFee
   everest.reserveBankAddress = event.params.reserveBank
@@ -60,7 +60,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
 export function handleMemberChallenged(event: MemberChallenged): void {
   let id = event.params.challengeID.toString()
   let challenge = new Challenge(id)
-  challenge.endTime = event.params.challengeEndTime
+  challenge.endTime = event.params.challengeEndTime.toI32()
   challenge.votesFor = 0 // Don't need to record one here, since a SubmitVote event will be emitted
   challenge.votesAgainst = 0
   challenge.project = event.params.member.toHexString()
@@ -95,18 +95,20 @@ export function handleSubmitVote(event: SubmitVote): void {
     .concat('-')
     .concat(event.params.memberOwner.toHexString())
   let vote = new Vote(id)
-  vote.choice = event.params.voteChoice
-  vote.weight = event.params.voteWeight
+  let voteChoice = getVoteChoice(event.params.voteChoice)
+  vote.choice = voteChoice
+  vote.weight = event.params.voteWeight.toI32()
   vote.challenge = event.params.challengeID.toString()
   vote.voter = event.params.memberOwner.toHexString()
   vote.save()
 
   let challenge = Challenge.load(event.params.challengeID.toString())
-  if (event.params.voteChoice == 'KeepProject') {
+  if (voteChoice == 'Yes') {
     challenge.votesFor = challenge.votesFor + vote.weight
-  } else {
+  } else if (voteChoice == 'No') {
     challenge.votesAgainst = challenge.votesAgainst + vote.weight
   }
+
   challenge.save()
 }
 
@@ -139,4 +141,14 @@ export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   challenge.save()
 
   store.remove('Project', event.params.member.toHexString())
+}
+
+function getVoteChoice(voteChoice: number): string {
+  let value = 'Null'
+  if (voteChoice == 1) {
+    value = 'Yes'
+  } else if (voteChoice == 2) {
+    value = 'No'
+  }
+  return value
 }
