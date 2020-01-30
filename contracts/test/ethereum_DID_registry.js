@@ -4,9 +4,8 @@ IMPORTANT
 - Note we had to update the ETH did registry to work with v0.5.8 solidity, which changed
 the contracts
 - In the future we plan to replace these tests with tests using ethers.js
-
-
 */
+
 var ethutil = require('ethereumjs-util')
 var sha3 = require('js-sha3').keccak_256
 var EthereumDIDRegistry = artifacts.require('./EthereumDIDRegistry.sol')

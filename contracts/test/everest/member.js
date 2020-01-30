@@ -46,12 +46,16 @@ contract('Everest', accounts => {
         it('should allow a member to apply, pass time, and get whitelisted', async () => {
             // let applicantWallet = utils.ethersWallet(utils.walletPaths.zero)
 
-            const projectWallet = new ethers.Wallet(
-                '0x3141592653589793238462643383279502884197169399375105820974944592'
-            )
+            const newMember = utils.ethersWallet(utils.walletPaths.zero)
+            const newMemberAddress = newMember.signingKey.address
+            const owner = utils.ethersWallet(utils.walletPaths.one)
+
             // await utils.applySignedWithAttribute(applicant, delegate, applicantWallet)
-            await utils.applySigned(firstOwner, projectWallet)
-            let everest = await Everest.deployed()
+            await utils.applySigned(newMember, owner)
+
+            await utils.setAttribute(newMemberAddress, owner)
+            await utils.daiPermit(newMember, owner)
+            // let everest = await Everest.deployed()
             // console.log(await everest.isMember(newMember))
             // console.log(await everest.memberChallengeExists(owner))
         })
