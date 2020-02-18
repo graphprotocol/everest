@@ -15,7 +15,6 @@ contract Registry {
     }
 
     mapping(address => Member) public members;
-    bytes32 public charter;
 
     // --------------------
     // GETTER FUNCTIONS
@@ -34,10 +33,6 @@ contract Registry {
     // --------------------
     // SETTER FUNCTIONS
     // --------------------
-
-    function updateCharter(bytes32 _newCharter) internal {
-        charter = _newCharter;
-    }
 
     function setMember(address _member, uint256 _membershipStartTime) internal {
         // Create the member struct

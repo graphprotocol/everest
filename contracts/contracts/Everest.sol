@@ -28,10 +28,13 @@ contract Everest is Registry, Ownable {
     uint256 public challengeDeposit;
     // Application fee to become a member
     uint256 public applicationFee;
+    // IPFS hash for charter, which dicates how token data should be posted
+    bytes32 public charter;
+
 
     // Approved token contract reference (this version = DAI)
     Dai public approvedToken;
-    // Guild bank contract reference
+    // Reserve bank contract reference
     ReserveBank public reserveBank;
     // ERC-1056 contract reference
     EthereumDIDRegistry public erc1056Registry;
@@ -47,19 +50,18 @@ contract Everest is Registry, Ownable {
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
     // We rely on NewMember and MemberExited to distingushing between identities on
     // ERC-1056 that are part of everest and aren't
-    event NewMember(address member, uint256 applicationTime);
+    event NewMember(address indexed member, uint256 applicationTime, uint256 fee);
     event MemberExited(address indexed member);
     event CharterUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
 
     event EverestDeployed(
+        address indexed reserveBank,
         address owner,
         address approvedToken,
         uint256 votingPeriodDuration,
         uint256 challengeDeposit,
         uint256 applicationFee,
-        address reserveBank,
-        // address registry
         bytes32 charter
     );
 
@@ -73,7 +75,7 @@ contract Everest is Registry, Ownable {
 
     event SubmitVote(
         uint256 indexed challengeID,
-        address indexed submitter, // Same as memberAddress if member voted themselves
+        address indexed submitter, // msg.sender
         address indexed memberOwner,
         VoteChoice voteChoice,
         uint256 voteWeight
@@ -83,13 +85,15 @@ contract Everest is Registry, Ownable {
         address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
-        uint256 noVotes
+        uint256 noVotes,
+        uint256 voteCount
     );
     event ChallengeSucceeded(
         address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
-        uint256 noVotes
+        uint256 noVotes,
+        uint256 voteCount
     );
 
     /****
@@ -105,12 +109,12 @@ contract Everest is Registry, Ownable {
     // Note that challenge deposit and token held constant in global variable
     struct Challenge {
         address challenger;         // The member who submitted the challenge
-        address member;             // The member
+        address challengee;         // The member being challenged
         uint256 yesVotes;           // The total number of YES votes for this challenge
         uint256 noVotes;            // The total number of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
         uint256 endTime;            // Ending time of the challenge
-        bytes32 details;            // Challenge details - an IPFS hash, without Qm
+        bytes32 details;            // Challenge details - an IPFS hash, without Qm, to make bytes32
         mapping (address => VoteChoice) voteChoiceByMember;     // The choice by each member
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
@@ -188,7 +192,8 @@ contract Everest is Registry, Ownable {
         applicationFee = _applicationFee;
 
         emit EverestDeployed(
-            _owner,
+            address(reserveBank),
+            msg.sender, // owner
             _approvedToken,
             _votingPeriodDuration,
             _challengeDeposit,
@@ -203,107 +208,175 @@ contract Everest is Registry, Ownable {
     *******************/
 
     /**
-    @dev                            Allows a user to apply to add a member to the Registry
+    @dev                            Allows a user to apply to add a member to the Registry and
+                                    add off chain data to the DID registry. The sig for
+                                    changeOwner() and setAttribute are from _newMember (the browser
+                                    created private key) and for permit() it is the _owner
     @param _newMember               The address of the new member
-    @param _sigV                    V piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _sigR                    R piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _sigS                    S piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigV                    V of sigs
+    @param _sigR                    R of sigs
+    @param _sigS                    S of sigs
     @param _owner                   Owner of the member application
+    @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
+                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
+                                    with zeros appended to make it 32 bytes
+    @param _offChainDataValue       Attribute data stored offchain (IPFS)
+    @param _offChainDataValidity    Length of time attribute data is valid
     */
-    function applySignedInternal(
+    function applySignedWithAttributeAndPermitInternal(
         address _newMember,
-        uint8[2] memory _sigV,
-        bytes32[2] memory _sigR,
-        bytes32[2] memory _sigS,
-        address _owner
-    ) public {
+        uint8[3] memory _sigV,
+        bytes32[3] memory _sigR,
+        bytes32[3] memory _sigS,
+        address _owner,
+        bytes32 _offChainDataName,
+        bytes memory _offChainDataValue,
+        uint256 _offChainDataValidity
+    ) internal {
         require(
             getMembershipStartTime(_newMember) == 0,
-            "Everest::applySignedInternal - This member already exists"
+            "applySignedInternal - This member already exists"
         );
         /* solium-disable-next-line security/no-block-members*/
         uint256 membershipTime = now;
         setMember(_newMember, membershipTime);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
-        // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
+        // in TokenRegistry, and from that point on, ethereumDIDRegistry events are relevant to this
         // identity
         emit NewMember(
             _newMember,
-            membershipTime
+            membershipTime,
+            applicationFee
         );
 
-        erc1056Registry.changeOwnerSigned(_newMember, _sigV[0], _sigR[0], _sigS[0], _owner);
+        erc1056Registry.setAttributeSigned(
+            _newMember,
+            _sigV[0],
+            _sigR[0],
+            _sigS[0],
+            _offChainDataName,
+            _offChainDataValue,
+            _offChainDataValidity
+        );
 
-        // Nonce starts at 1. Expiry = 0 is infinite. true is unlimited allowance
-        approvedToken.permit(_newMember, _owner, 1, 0, true, _sigV[1], _sigR[1], _sigS[1]);
+        erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _owner);
 
-        // Transfers tokens from user to the Reserve Bank
+        // Approve the TokenRegistry to transfer on the owners behalf
+        // Expiry = 0 is infinite. true is unlimited allowance
+        uint256 nonce = approvedToken.nonces(_owner);
+        approvedToken.permit(_owner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
+
+        // Transfers tokens from owner to the reserve bank
         require(
-            approvedToken.transferFrom(msg.sender, address(reserveBank), applicationFee),
-            "Everest::applySignedInternal - Token transfer failed"
+            approvedToken.transferFrom(_owner, address(reserveBank), applicationFee),
+            "applySignedInternal - Token transfer failed"
         );
-    }
-
-    /**
-    @dev                            Allows a user to apply to add a member to the Registry
-    @param _newMember               The address of the new member
-    @param _sigV                    V piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _sigR                    R piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _sigS                    S piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _owner                   Owner of the member application
-    */
-    function applySigned(
-        address _newMember,
-        uint8[2] calldata _sigV,
-        bytes32[2] calldata _sigR,
-        bytes32[2] calldata _sigS,
-        address _owner
-    ) external {
-        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
     }
 
     /**
     @dev                            Allows a user to apply to add a member to the Registry and
-                                    add off chain data to the DID registry
+                                    add off chain data to the DID registry. The sig for
+                                    changeOwner() and setAttribute are from _newMember (the browser
+                                    created private key) and for permit() it is the _owner
     @param _newMember               The address of the new member
-    @param _sigV                    V piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _sigR                    R piece of the apply and permit() signature : [0] = apply, [1] = permit
-    @param _sigS                    S piece of the apply and permit() signature : [0] = apply, [1] = permit
+    @param _sigV                    V of sigs
+    @param _sigR                    R of sigs
+    @param _sigS                    S of sigs
     @param _owner                   Owner of the member application
-    @param _attributeSigV           V piece of the attribute signature
-    @param _attributeSigR           R piece of the attribute signature
-    @param _attributeSigS           S piece of the attribute signature
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
-                                    with zeros appended to make it 32 bytes. (add 42 zeros)
-    @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
+                                    with zeros appended to make it 32 bytes
+    @param _offChainDataValue       Attribute data stored offchain (IPFS)
     @param _offChainDataValidity    Length of time attribute data is valid
     */
-    function applySignedWithAttribute(
+    function applySignedWithAttributeAndPermit(
         address _newMember,
-        uint8[2] calldata _sigV,
-        bytes32[2] calldata _sigR,
-        bytes32[2] calldata _sigS,
+        uint8[3] calldata _sigV,
+        bytes32[3] calldata _sigR,
+        bytes32[3] calldata _sigS,
         address _owner,
-        uint8 _attributeSigV,
-        bytes32 _attributeSigR,
-        bytes32 _attributeSigS,
         bytes32 _offChainDataName,
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        applySignedInternal(_newMember, _sigV, _sigR, _sigS, _owner);
-        editOffChainDataSigned(
+        applySignedWithAttributeAndPermitInternal(
             _newMember,
-            _attributeSigV,
-            _attributeSigR,
-            _attributeSigS,
+            _sigV,
+            _sigR,
+            _sigS,
+            _owner,
             _offChainDataName,
             _offChainDataValue,
             _offChainDataValidity
         );
     }
+
+    /**
+    @dev                            Allows a user to apply to add a member to the Registry and
+                                    add off chain data to the DID registry. The sig for
+                                    changeOwner() and setAttribute are from _newMember (the browser
+                                    created private key). This is called when the _owner has already
+                                    called permit()
+    @param _newMember               The address of the new member
+    @param _sigV                    V of sigs
+    @param _sigR                    R of sigs
+    @param _sigS                    S of sigs
+    @param _owner                   Owner of the member application
+    @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
+                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
+                                    with zeros appended to make it 32 bytes
+    @param _offChainDataValue       Attribute data stored offchain (IPFS)
+    @param _offChainDataValidity    Length of time attribute data is valid
+    */
+    function applySignedWithAttribute(
+        address _newMember,
+        uint8[2] memory _sigV,
+        bytes32[2] memory _sigR,
+        bytes32[2] memory _sigS,
+        address _owner,
+        bytes32 _offChainDataName,
+        bytes memory _offChainDataValue,
+        uint256 _offChainDataValidity
+    ) external {
+        require(
+            getMembershipStartTime(_newMember) == 0,
+            "applySignedInternal - This member already exists"
+        );
+        /* solium-disable-next-line security/no-block-members*/
+        uint256 membershipTime = now;
+        setMember(_newMember, membershipTime);
+
+        // This event must be emitted before changeOwnerSigned() is called. This creates an identity
+        // in TokenRegistry, and from that point on, ethereumDIDRegistry events are relevant to this
+        // identity
+        emit NewMember(
+            _newMember,
+            membershipTime,
+            applicationFee
+        );
+
+        erc1056Registry.setAttributeSigned(
+            _newMember,
+            _sigV[0],
+            _sigR[0],
+            _sigS[0],
+            _offChainDataName,
+            _offChainDataValue,
+            _offChainDataValidity
+        );
+
+        erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _owner);
+
+        // Transfers tokens from owner to the reserve bank
+        require(
+            approvedToken.transferFrom(_owner, address(reserveBank), applicationFee),
+            "applySignedInternal - Token transfer failed"
+        );
+    }
+
+
+
 
     /**
     @dev                Allow a member to voluntarily leave. Note that this does not
@@ -326,107 +399,7 @@ contract Everest is Registry, Ownable {
     EDIT MEMBER FUNCTIONS
     ******************/
 
-    /**
-    @dev                Allows a member owner to be edited. Only owner can call
-    @param _newOwner    The new owner of the membership
-    @param _member      The address of the member
-    @param _sigV        V piece of the member signature
-    @param _sigR        R piece of the member signature
-    @param _sigS        S piece of the member signature
-     */
-    function changeOwnerSigned(
-        address _member,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
-        address _newOwner
-    ) public onlyMemberOwner(_member) {
-        erc1056Registry.changeOwnerSigned(_member, _sigV, _sigR, _sigS, _newOwner);
-    }
-
-    /**
-    @dev                            Allows offChainData to be edited by the owner or delegate.
-                                    To revoke an attribute, just pass a validity of 0. There is no
-                                    need to wrap the revokeAttribute function in ERC-1056.
-    @param _member                  The address of the member
-    @param _sigV                    V piece of the member signature
-    @param _sigR                    R piece of the member signature
-    @param _sigS                    S piece of the member signature
-    @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
-                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461
-                                    with zeros appended to make it 32 bytes
-    @param _offChainDataValue       Attribute data stored offchain (such as IPFS)
-    @param _offChainDataValidity    Length of time attribute data is valid
-     */
-    function editOffChainDataSigned(
-        address _member,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
-        bytes32 _offChainDataName,
-        bytes memory _offChainDataValue,
-        uint256 _offChainDataValidity
-    ) public onlyMemberOwner(_member) {
-        erc1056Registry.setAttributeSigned(
-            _member,
-            _sigV,
-            _sigR,
-            _sigS,
-            _offChainDataName,
-            _offChainDataValue,
-            _offChainDataValidity
-        );
-    }
-
-    /**
-    @dev                        Allows a delegate to be added (there can be multiple delegates)
-    @param _member              The address of the member
-    @param _newDelegate         The new delegate
-    @param _delegateValidity    The time the new delegate is valid
-     */
-    function addDelegateSigned(
-        address _member,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS,
-        address _newDelegate,
-        uint256 _delegateValidity
-    ) public onlyMemberOwner(_member) {
-        erc1056Registry.addDelegateSigned(
-            _member,
-            _sigV,
-            _sigR,
-            _sigS,
-            delegateType,
-            _newDelegate,
-            _delegateValidity
-        );
-    }
-
-    /**
-    @dev                Allows a member delegate to be revoked
-    @param _member      The address of the member
-    @param _sigV        V piece of the member signature
-    @param _sigR        R piece of the member signature
-    @param _sigS        S piece of the member signature
-    @param _delegate    The delegate being removed
-     */
-    function revokeDelegateSigned(
-        address _delegate,
-        address _member,
-        uint8 _sigV,
-        bytes32 _sigR,
-        bytes32 _sigS
-    ) external onlyMemberOwner(_member) {
-        erc1056Registry.revokeDelegateSigned(
-            _member,
-            _sigV,
-            _sigR,
-            _sigS,
-            delegateType,
-            _delegate
-        );
-    }
+    // To edit members, call EthereumDIDRegistry.sol directly
 
     /******************
     CHALLENGE FUNCTIONS
@@ -445,11 +418,13 @@ contract Everest is Registry, Ownable {
     ) external onlyMemberOwnerOrDelegate(_challengingMember) returns (uint256 challengeID) {
         uint256 challengeeMemberTime = getMembershipStartTime(_challengedMember);
         require (challengeeMemberTime > 0, "Everest::challenge - Challengee must exist");
-        uint256 challengerMemberTime = getMembershipStartTime(_challengingMember);
-        require(
-            !memberChallengeExists(_challengedMember),
-            "Everest::challenge - Member can't be challenged multiple times at once"
-        );
+        uint256 currentChallengeID = getChallengeID(_challengedMember);
+        if(currentChallengeID > 0){
+            // Doing this allows us to never get stuck in a state with unresolved challenges
+            // Also, the challenge rewards the deposit fee to winner or loser, so they are
+            // financially motivated too
+            resolveChallenge(currentChallengeID);
+        }
 
         require(
             _challengingMember != _challengedMember,
@@ -459,11 +434,12 @@ contract Everest is Registry, Ownable {
         uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
             challenger: _challengingMember,
-            member: _challengingMember,
-            /* solium-disable-next-line security/no-block-members*/
-            yesVotes: now - challengerMemberTime,
+            challengee: _challengedMember,
+            // starts at 0 since the submitVote() will add this
+            yesVotes: 0,
             noVotes: 0,
-            voterCount: 1,
+            // starts at 0 since submitVote() will add this
+            voterCount: 0,
             /* solium-disable-next-line security/no-block-members*/
             endTime: now + votingPeriodDuration,
             details: _details
@@ -491,8 +467,8 @@ contract Everest is Registry, Ownable {
         );
 
         // Insert challengers vote into the challenge
-        submitVote(challengeID, VoteChoice.Yes, _challengingMember);
-        return challengeID;
+        submitVote(newChallengeID, VoteChoice.Yes, _challengingMember);
+        return newChallengeID;
     }
 
     /**
@@ -526,7 +502,7 @@ contract Everest is Registry, Ownable {
         );
 
         require(
-            storedChallenge.member != _voter,
+            storedChallenge.challengee != _votingMember,
             "Everest::submitVote - Member can't vote on their own challenge"
         );
 
@@ -582,33 +558,37 @@ contract Everest is Registry, Ownable {
         bool didPass = storedChallenge.yesVotes > storedChallenge.noVotes;
         bool moreThanOneVote = storedChallenge.voterCount > 1;
         if (didPass && moreThanOneVote) {
+            address challengerOwner = erc1056Registry.identityOwner(storedChallenge.challenger);
 
-            // Transfer challenge deposit to challenger for winning challenge
+            // Transfer challenge deposit and losers application fee
+            // to challenger for winning challenge
             require(
-                withdraw(storedChallenge.challenger, challengeDeposit),
+                withdraw(challengerOwner, challengeDeposit + applicationFee),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
-            deleteMember(storedChallenge.member);
+            deleteMember(storedChallenge.challengee);
             emit ChallengeSucceeded(
-                storedChallenge.member,
+                storedChallenge.challengee,
                 _challengeID,
                 storedChallenge.yesVotes,
-                storedChallenge.noVotes
+                storedChallenge.noVotes,
+                storedChallenge.voterCount
             );
         } else {
-            // Transfer challenge deposit to challengee. This keeps the token balance the same
-            // whether or not the challenge fails.
+            address challengeeOwner = erc1056Registry.identityOwner(storedChallenge.challengee);
+            // Transfer challenge deposit to challengee
             require(
-                withdraw(storedChallenge.challenger, challengeDeposit),
+                withdraw(challengeeOwner, challengeDeposit),
                 "Everest::resolveChallenge - Rewarding challenger failed"
             );
             // Remove challenge ID from registry
-            editChallengeID(storedChallenge.member, 0);
+            editChallengeID(storedChallenge.challengee, 0);
             emit ChallengeFailed(
-                storedChallenge.member,
+                storedChallenge.challengee,
                 _challengeID,
                 storedChallenge.yesVotes,
-                storedChallenge.noVotes
+                storedChallenge.noVotes,
+                storedChallenge.voterCount
             );
         }
 
@@ -630,6 +610,15 @@ contract Everest is Registry, Ownable {
     function withdraw(address _receiver, uint256 _amount) public onlyOwner returns (bool) {
         emit Withdrawal(_receiver, _amount);
         return reserveBank.withdraw(_receiver, _amount);
+    }
+
+    /**
+    @dev                Updates the charter for the TokenRegistry
+    @param _newCharter  The data that point to the new charter
+    */
+    function updateCharter(bytes32 _newCharter) public onlyOwner {
+        charter = _newCharter;
+        emit CharterUpdated(charter);
     }
 
     /***************
