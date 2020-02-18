@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
+import { graphql } from 'gatsby'
 
 import Section from '../components/Section'
 import Divider from '../components/Divider'

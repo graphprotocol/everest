@@ -1,7 +1,8 @@
 export default {
   colors: {
-    text: '#4A4A4A',
-    primary: '#1E252C',
+    background: '#ffffff',
+    primary: '#090610',
+    text: '#090610',
     secondary: '#4C66FF',
     tertiary: '#7D7D7D',
     column: '#8A8A8A',
@@ -39,7 +40,6 @@ export default {
       fontSize: '3.25rem',
       lineHeight: '4rem',
       letterSpacing: '-0.46px',
-      margin: 0,
       '@media (max-width: 640px)': {
         fontSize: '2.75rem',
         lineHeight: '3.25rem',

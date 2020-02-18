@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import { jsx, Header } from 'theme-ui'
+import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
@@ -10,7 +10,6 @@ import { navigate } from 'gatsby'
 import { metamaskAccountChange } from '../../services/ethers'
 
 import Link from '../../components/Link'
-import Menu from '../../components/Menu'
 import Button from '../../components/Button'
 import Modal from '../../components/Modal'
 import MobileNavbar from './MobileNavbar'
@@ -69,7 +68,7 @@ const Navbar = ({ path, ...props }) => {
   })
 
   return (
-    <Header {...props} sx={{ height: '96px' }}>
+    <Grid {...props} sx={{ height: '96px' }}>
       {isMobile ? (
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       ) : (
@@ -144,7 +143,7 @@ const Navbar = ({ path, ...props }) => {
           </Modal>
         )}
       </Grid>
-    </Header>
+    </Grid>
   )
 }
 
