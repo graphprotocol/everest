@@ -13,7 +13,7 @@ pragma solidity ^0.5.8;
 import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./lib/EthereumDIDRegistry.sol";
-import "./lib/dai.sol";
+import "./lib/Dai.sol";
 import "./lib/Ownable.sol";
 
 contract Everest is Registry, Ownable {
@@ -168,7 +168,6 @@ contract Everest is Registry, Ownable {
     FUNCTIONS
     ********/
     constructor(
-        address _owner,
         address _approvedToken,
         uint256 _votingPeriodDuration,
         uint256 _challengeDeposit,
@@ -176,7 +175,6 @@ contract Everest is Registry, Ownable {
         bytes32 _charter,
         address _DIDregistry
     ) public {
-        require(_owner != address(0), "Everest::constructor - owner cannot be 0");
         require(_approvedToken != address(0), "Everest::constructor - _approvedToken cannot be 0");
         require(
             _votingPeriodDuration > 0,
@@ -198,7 +196,6 @@ contract Everest is Registry, Ownable {
             _votingPeriodDuration,
             _challengeDeposit,
             _applicationFee,
-            address(reserveBank),
             _charter
         );
     }
@@ -242,7 +239,7 @@ contract Everest is Registry, Ownable {
         setMember(_newMember, membershipTime);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
-        // in TokenRegistry, and from that point on, ethereumDIDRegistry events are relevant to this
+        // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
         // identity
         emit NewMember(
             _newMember,
@@ -262,7 +259,7 @@ contract Everest is Registry, Ownable {
 
         erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _owner);
 
-        // Approve the TokenRegistry to transfer on the owners behalf
+        // Approve the Everest to transfer on the owners behalf
         // Expiry = 0 is infinite. true is unlimited allowance
         uint256 nonce = approvedToken.nonces(_owner);
         approvedToken.permit(_owner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
@@ -331,12 +328,12 @@ contract Everest is Registry, Ownable {
     */
     function applySignedWithAttribute(
         address _newMember,
-        uint8[2] memory _sigV,
-        bytes32[2] memory _sigR,
-        bytes32[2] memory _sigS,
+        uint8[2] calldata _sigV,
+        bytes32[2] calldata _sigR,
+        bytes32[2] calldata _sigS,
         address _owner,
         bytes32 _offChainDataName,
-        bytes memory _offChainDataValue,
+        bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
         require(
@@ -348,7 +345,7 @@ contract Everest is Registry, Ownable {
         setMember(_newMember, membershipTime);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
-        // in TokenRegistry, and from that point on, ethereumDIDRegistry events are relevant to this
+        // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
         // identity
         emit NewMember(
             _newMember,
@@ -415,7 +412,7 @@ contract Everest is Registry, Ownable {
         address _challengingMember,
         address _challengedMember,
         bytes32 _details
-    ) external onlyMemberOwnerOrDelegate(_challengingMember) returns (uint256 challengeID) {
+    ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
         uint256 challengeeMemberTime = getMembershipStartTime(_challengedMember);
         require (challengeeMemberTime > 0, "Everest::challenge - Challengee must exist");
         uint256 currentChallengeID = getChallengeID(_challengedMember);
@@ -502,7 +499,7 @@ contract Everest is Registry, Ownable {
         );
 
         require(
-            storedChallenge.challengee != _votingMember,
+            storedChallenge.challengee != _voter,
             "Everest::submitVote - Member can't vote on their own challenge"
         );
 
@@ -540,7 +537,7 @@ contract Everest is Registry, Ownable {
     ) public {
         require(
             _voteChoices.length == _voters.length,
-            "Everest::SubmitVotes - Arrays must be equal"
+            "Everest::submitVotes - Arrays must be equal"
         );
         for (uint256 i; i < _voteChoices.length; i++){
             submitVote(_challengeID, _voteChoices[i], _voters[i]);
@@ -613,7 +610,7 @@ contract Everest is Registry, Ownable {
     }
 
     /**
-    @dev                Updates the charter for the TokenRegistry
+    @dev                Updates the charter for the Everest
     @param _newCharter  The data that point to the new charter
     */
     function updateCharter(bytes32 _newCharter) public onlyOwner {
@@ -669,7 +666,7 @@ contract Everest is Registry, Ownable {
         );
         require(
             hasVotingPeriodExpired(storedChallenge.endTime),
-            "Everest::challengeCanBeResolved - Challenge is not ready to be resolved"
+            "Everest::challengeCanBeResolved - Current challenge is not ready to be resolved"
         );
         return true;
     }

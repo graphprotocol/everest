@@ -31,7 +31,7 @@ const wallets = {
     ten: () => ethers.Wallet.fromMnemonic(ganacheMneumonic, walletPaths.ten)
 }
 const config = {
-    tokenRegistryParams: {
+    everestParams: {
         owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
         votingPeriodDuration: 432000, // 5 days, in seconds
         challengeDeposit: '10000000000000000000', // $1 DAI challenge fee

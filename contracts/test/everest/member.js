@@ -1,79 +1,51 @@
-/* Tests all member functionality, which is:
-- apply
-    - applySignedInternal()
-        - confirm it is an internal function
-    - applySigned()
-        - Confirm it works
-        - Test applySignedInternal() here
-    - applySignedWithDelegate()
-        - just test it does what it is supposed to, because it is two wrapped funcs
-    - applySignedWithAttribute()
-        - just test it does what it is supposed to, because it is two wrapped funcs
-    - applySignedWithAttributeAndDelegate()
-        - just test it does what it is supposed to, because it is three wrapped funcs
-
-    - What should it do?
-        - Apply, wait, be implicitly approve
-        - Apply, get challenged, lose voting ability, pass challenge, gain voting
-        - Apply, get challenged, lose ability
-        - Member exit in application or in 
-        - notes
-            - a member can challengee or vote, that is all to note for testing
-- memberExit()
-- edit member functions
-    - changeOwnerSigned()
-    - editOffChainDataSigned()
-    - addDelegateSigned()
-    - revokeDelegateSigned()
-- getters
-    - isMember()
-    -   make sure it works
-*/
-
 const Everest = artifacts.require('Everest.sol')
-const fs = require('fs')
-const config = require('../../conf/config.js')
-const paramConfig = config.everestParams
+const helpers = require('../helpers.js')
 const utils = require('../utils.js')
-const ethers = require('ethers')
-// const BN = require('bn.js') can get from utils
 
-contract('Everest', accounts => {
-    let [everestOwner, firstOwner] = accounts
-    const memberName = 'The Graph'
-    // firstOwner = "0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd"
-    describe('Member joining and leaving. Functions: applyMember(), whitelist(), memberExit(), isWhiteListed()', () => {
-        it('should allow a member to apply, pass time, and get whitelisted', async () => {
-            // let applicantWallet = utils.ethersWallet(utils.walletPaths.zero)
+contract('Everest', () => {
+    const newMemberWallet = utils.wallets.nine() // throw away wallet
+    const newMemberAddress = newMemberWallet.signingKey.address
+    const ownerWallet1 = utils.wallets.one()
+    const ownerAddress1 = ownerWallet1.signingKey.address
+    const ownerWallet2 = utils.wallets.two()
+    const ownerAddress2 = ownerWallet2.signingKey.address
 
-            const newMember = utils.ethersWallet(utils.walletPaths.zero)
-            const newMemberAddress = newMember.signingKey.address
-            const owner = utils.ethersWallet(utils.walletPaths.one)
+    describe('Member joining and leaving. Functions: applySignedWithAttribute(), memberExit()', () => {
+        // Allows a member to permit the Everest to transfer DAI, apply to be on the
+        // Everest, and update the token information, while using ERC-1056 for each
+        it('Should allow member to join the registry', async () => {
+            await helpers.applySignedWithAttribute(newMemberWallet, ownerWallet1)
+        })
 
-            // await utils.applySignedWithAttribute(applicant, delegate, applicantWallet)
-            await utils.applySigned(newMember, owner)
-
-            await utils.setAttribute(newMemberAddress, owner)
-            await utils.daiPermit(newMember, owner)
-            // let everest = await Everest.deployed()
-            // console.log(await everest.isMember(newMember))
-            // console.log(await everest.memberChallengeExists(owner))
+        it('Should prevent a member from double joining', async () => {
+            // Should fail when trying to apply again
+            await utils.expectRevert(
+                helpers.applySignedWithAttribute(newMemberWallet, ownerWallet1),
+                'applySignedInternal - This member already exists'
+            )
         })
 
         it('should allow a member to exit', async () => {
-            // const everest = await Everest.deployed()
-            // await everest.memberExit(memberName, { from: applicant })
-            // const isWhitelisted = await everest.isWhitelisted(memberName)
-            // assert(!isWhitelisted, 'Project was removed from whitelist')
+            // Get previous member start time
+            const everest = await Everest.deployed()
+            const membershipStartTime = Number(
+                (await everest.getMembershipStartTime(newMemberAddress)).toString()
+            )
+            assert(membershipStartTime > 0, 'Membership start time not updated')
+
+            // Get updated member start time (should be 0)
+            await everest.memberExit(newMemberAddress, { from: ownerAddress1 })
+            const membershipStartTimeUpdated = Number(
+                (await everest.getMembershipStartTime(newMemberAddress)).toString()
+            )
+            assert(membershipStartTimeUpdated == 0, 'Membership start time should be reset to 0')
         })
     })
-    describe('Member editing. Functions: editMemberOwner(), editOffchainData(), editDelegate()', () => {
-        it('should allow only owner (not delegate) to editMemberOwner()', async () => {})
-
-        it('should allow  owner and delegate to call editOffChainData()', async () => {})
-
-        it('should allow owner and delegate to call editDelegate()', async () => {})
-
-        it('should allow only owner (not delegate) to edit owner', async () => {})
+    describe('Member editing. Functions: setAttribute()', () => {
+        it('should allow an updated owner to set attribute', async () => {
+            await helpers.setAttribute(newMemberAddress, ownerWallet1)
+        })
     })
 })
+
+// TODO - add in delegates (note delegates can only vote)

@@ -1,8 +1,8 @@
-const TokenRegistry = artifacts.require('TokenRegistry.sol')
+const Everest = artifacts.require('Everest.sol')
 const Token = artifacts.require('./lib/Dai.sol')
 const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const config = require('../conf/config.js')
-const params = config.tokenRegistryParams
+const params = config.everestParams
 
 module.exports = async (deployer, network, accounts) => {
     let owner
@@ -21,7 +21,7 @@ module.exports = async (deployer, network, accounts) => {
     let daiAddress = (await Token.deployed()).address
 
     await deployer.deploy(
-        TokenRegistry,
+        Everest,
         daiAddress,
         params.votingPeriodDuration,
         params.challengeDeposit,
@@ -30,10 +30,10 @@ module.exports = async (deployer, network, accounts) => {
         didAddress,
         { from: owner }
     )
-    const tokenRegistry = await TokenRegistry.deployed()
-    const reserveBankAddr = await tokenRegistry.reserveBank()
+    const everest = await Everest.deployed()
+    const reserveBankAddr = await everest.reserveBank()
     console.log(`Mock DAI Address: ${daiAddress}`)
     console.log(`Ethr DID Address: ${didAddress}`)
-    console.log(`Token Registry Address: ${tokenRegistry.address}`)
+    console.log(`Token Registry Address: ${everest.address}`)
     console.log(`Reserve Bank Address: ${reserveBankAddr.toString()}`)
 }
