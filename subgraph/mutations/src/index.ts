@@ -21,8 +21,6 @@ import {
 } from './utils'
 import { editProjectArgs, removeProjectArgs, addProjectArgs } from "./types"
 
-// State Payloads + Events + StateBuilder
-// TODO: Which custom events/reducers will we use? Will we use them at all?
 interface CustomEvent extends EventPayload {
   myValue: string
 }
@@ -114,8 +112,63 @@ async function sendTx(tx: Transaction, description: string, state: StateUpdater<
   }
 }
 
-// TODO: Best way to get ABIs?
-async function getContract(context: Context) { }
+// const abis = {
+//   Context: require('token-registry-contracts/build/contracts/Context.json').abi,
+//   dai: require('token-registry-contracts/build/contracts/dai.json').abi,
+//   EthereumDIDRegistry: require('token-registry-contracts/build/contracts/EthereumDIDRegistry.json').abi,
+//   LibNote: require('token-registry-contracts/build/contracts/LibNote.json').abi,
+//   Ownable: require('token-registry-contracts/build/contracts/Ownable.json').abi,
+//   Registry: require('token-registry-contracts/build/contracts/Registry.json').abi,
+//   ReserveBank: require('token-registry-contracts/build/contracts/ReserveBank.json').abi,
+//   SafeMath: require('token-registry-contracts/build/contracts/SafeMath.json').abi,
+//   Everest: require('token-registry-contracts/build/contracts/Everest.json').abi,
+//   MemberStruct: require('token-registry-contracts/build/contracts/MemberStruct.json').abi,
+// }
+
+// const addresses = require('token-registry-contracts/addresses.json')
+
+// const addressMap = {
+//   Dai: 'mockDAI',
+//   EthereumDIDRegistry: 'ethereumDIDRegistry',
+//   ReserveBank: 'reserveBank',
+//   TokenRegistry: 'tokenRegistry',
+// }
+
+async function getContract(context: Context, contract: string) {
+  const { ethereum } = context.graph.config
+
+  const abi = abis[contract]
+
+  if (!abi) {
+    throw new Error(`Missing the ABI for '${contract}'`)
+  }
+
+  const network = await ethereum.getNetwork()
+  let networkName = network.name
+
+  if (networkName === 'dev' || networkName === 'unknown') {
+    networkName = 'ganache'
+  }
+
+  const networkAddresses = addresses[networkName]
+
+  if (!networkAddresses) {
+    throw new Error(`Missing addresses for network '${networkName}'`)
+  }
+
+  const address = networkAddresses[addressMap[contract]]
+
+  if (!address) {
+    throw new Error(
+      `Missing contract address for '${contract}' on network '${networkName}'`,
+    )
+  }
+
+  const instance = new ethers.Contract(address, abi, ethereum.getSigner())
+  instance.connect(ethereum)
+
+  return instance
+}
 
 const uploadImage = async (_, { image }: any, context: Context) => {
   const { ipfs } = context.graph.config
@@ -150,8 +203,6 @@ const editProject = async (_, args: editProjectArgs, context: Context) => {
   const metadata = Buffer.from( JSON.stringify( args ) )
 
   const metadataHash = await uploadToIpfs(ipfs, metadata)
-
-  //TODO: are we sending metadata hash through state.dispatch?
 
   // const everest = await getContract(context)
   // sendTx(everest.editOffChainDataSigned( ... ))
