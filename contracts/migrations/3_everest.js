@@ -34,6 +34,6 @@ module.exports = async (deployer, network, accounts) => {
     const reserveBankAddr = await everest.reserveBank()
     console.log(`Mock DAI Address: ${daiAddress}`)
     console.log(`Ethr DID Address: ${didAddress}`)
-    console.log(`Token Registry Address: ${everest.address}`)
+    console.log(`Everest Address: ${everest.address}`)
     console.log(`Reserve Bank Address: ${reserveBankAddr.toString()}`)
 }

@@ -11,8 +11,7 @@
     "prettier-sol": "prettier -c '**/*.sol'",
     "prettier-write-js": "prettier --write '**/*.js'",
     "prettier-write-sol": "prettier --write '**/*.sol'",
-    "flatten": "truffle-flattener ./contracts",
-    "abis": "docker run -v  /Users/davidkajpust/coding-no-icloud-backup/thegraph/dave/everest/contracts:/abis-vol ethereum/solc:0.5.8 -o /abis-vol/abis --overwrite --abi /abis-vol/contracts/Everest.sol"
+    "flatten": "truffle-flattener ./contracts"
   },
   "dependencies": {
     "@truffle/hdwallet-provider": "1.0.28",

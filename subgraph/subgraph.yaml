@@ -8,7 +8,7 @@ dataSources:
     name: Everest
     network: ropsten
     source:
-      address: '0xC487a615e0A9C69De4c795a45c33A965aBFa3673'
+      address: '0xEB3Fb1A23cf6b527923e88E400aEDD75D69ffaBF'
       abi: Everest
     mapping:
       kind: ethereum/events
@@ -24,25 +24,25 @@ dataSources:
         - User
       abis:
         - name: Everest
-          file: ./abis/Everest.json
+          file: ../contracts/build/contracts/Everest.json
       eventHandlers:
-        - event: ApplicationMade(address,uint256)
-          handler: handleApplicationMade
+        - event: NewMember(indexed address,uint256,uint256)
+          handler: handleNewMember
         - event: MemberExited(indexed address)
           handler: handleMemberExited
         - event: CharterUpdated(indexed bytes32)
           handler: handleCharterUpdated
         - event: Withdrawal(indexed address,uint256)
           handler: handleWithdrawal
-        - event: EverestDeployed(address,address,uint256,uint256,uint256,address,address,bytes32)
+        - event: EverestDeployed(indexed address,address,address,uint256,uint256,uint256,bytes32)
           handler: handleEverestDeployed
         - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
           handler: handleMemberChallenged
         - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
           handler: handleSubmitVote
-        - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256)
+        - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256,uint256)
           handler: handleChallengeFailed
-        - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256)
+        - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256)
           handler: handleChallengeSucceeded
   - kind: ethereum/contract
     name: EthereumDIDRegistry
@@ -60,10 +60,8 @@ dataSources:
         - User
       abis:
         - name: EthereumDIDRegistry
-          file: ./abis/EthereumDIDRegistry.json
+          file: ../contracts/build/contracts/EthereumDIDRegistry.json
       eventHandlers:
-        # TODO - figure out how to make this only track the data we NEED
-        # not all eth did registry data
         - event: DIDOwnerChanged(indexed address,address,uint256)
           handler: handleDIDOwnerChanged
         - event: DIDDelegateChanged(indexed address,bytes32,address,uint256,uint256)
