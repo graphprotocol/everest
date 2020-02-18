@@ -37,7 +37,7 @@ const Index = ({ data }) => {
 
   return (
     <Grid>
-      <Grid gap={[2, 2, 6]} columns={[1, null, 2]} mt={[5, 5, 0]}>
+      <Grid gap={[2, 2, 6]} columns={[1, null, 2]}>
         <Box>
           <Styled.h1>
             Universally <br />
@@ -86,7 +86,7 @@ const Index = ({ data }) => {
       <Grid sx={{ maxWidth: '1100px' }} mx="auto" my={8}>
         <Stats stats={stats} />
       </Grid>
-      <Divider />
+      <Divider sx={{ my: 4 }} />
       <Section
         title="Categories"
         description="All projects belong to at least one category. Categories are also

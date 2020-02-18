@@ -11,8 +11,14 @@ require('dotenv').config({
 module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-theme-ui',
-    'gatsby-plugin-styled-components',
+    {
+      resolve: 'gatsby-plugin-theme-ui',
+      options: {
+        stylesProvider: {
+          injectFirst: true,
+        },
+      },
+    },
     {
       resolve: 'gatsby-source-graphql',
       options: {

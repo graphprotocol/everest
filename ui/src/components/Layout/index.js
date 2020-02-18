@@ -1,22 +1,12 @@
 /** @jsx jsx */
 import { jsx, Box } from 'theme-ui'
-import { Fragment } from 'react'
-import { createGlobalStyle } from 'styled-components'
-import { reset } from 'styled-reset'
-import { Main } from 'theme-ui'
+import { Global } from '@emotion/core'
 
 import Footer from '../Footer'
 import Navbar from '../Navbar'
 import Seo from '../Seo'
 
 const LayoutTemplate = ({ children, mainStyles, ...props }) => {
-  const GlobalStyle = createGlobalStyle`
-  ${reset}
-  body {
-    color: #1E252C;
-    font-family: 'Space Mono', monospace;
-  }
-`
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
@@ -30,16 +20,29 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
       ? { backgroundColor: 'secondary', marginTop: '-18px' }
       : {}
   return (
-    <Fragment>
-      <GlobalStyle />
-      <Box {...props}>
-        <Seo />
-        <Box sx={{ background: 'white' }}>
-          <Navbar sx={styles} path={props && props.path} />
-        </Box>
+    <div>
+      <Global
+        styles={theme => {
+          return {
+            '*, *::after, *::before': {
+              boxSizing: 'border-box',
+              margin: 0,
+              padding: 0,
+            },
+            body: {
+              fontFamily: 'Space Mono, monospace',
+              transition: 'all 0.3s ease',
+            },
+          }
+        }}
+      />
+      <Seo />
+      <section {...props}>
+        <Navbar sx={styles} path={props && props.path} />
         <Box
           sx={{
             ...mStyles,
+            py: [5, 5, 9],
             '@keyframes fadein': {
               from: { opacity: 0 },
               to: { opacity: 1 },
@@ -47,7 +50,7 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
             animation: 'fadein 0.5s',
           }}
         >
-          <Main
+          <main
             sx={{
               ...styles,
               mt: [5, 5, 0],
@@ -56,11 +59,11 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
             }}
           >
             {children}
-          </Main>
+          </main>
         </Box>
         <Footer sx={styles} />
-      </Box>
-    </Fragment>
+      </section>
+    </div>
   )
 }
 

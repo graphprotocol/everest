@@ -1,12 +1,12 @@
 /** @jsx jsx */
-import { jsx, Footer as GatsbyFooter, Styled } from 'theme-ui'
+import { jsx, Styled } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
 import Link from '../../components/Link'
 
 const Footer = ({ ...props }) => {
   return (
-    <GatsbyFooter sx={rootStyles} {...props}>
+    <div sx={rootStyles} {...props}>
       <Styled.p sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
         <Link to="https://thegraph.com" sx={{ display: 'inline-block' }}>
@@ -25,7 +25,7 @@ const Footer = ({ ...props }) => {
         <img src={'/ipfs.svg'} alt="IPFS" title="IPFS" />
         <img src={'/eth.svg'} alt="Ethereum" title="Ethereum" />
       </Grid>
-    </GatsbyFooter>
+    </div>
   )
 }
 

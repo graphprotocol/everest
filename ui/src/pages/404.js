@@ -1,19 +1,11 @@
 /** @jsx jsx */
-import { Styled, jsx } from 'theme-ui'
-import styled from 'styled-components'
-
-const Container = styled.div`
-  display: grid;
-  justify-content: center;
-  align-iterms: center;
-  min-height: 100vh;
-`
+import { Styled, jsx, Box } from 'theme-ui'
 
 const Error = ({ data }) => {
   return (
-    <Container>
+    <Box>
       <Styled.p>Page not found.</Styled.p>
-    </Container>
+    </Box>
   )
 }
 
