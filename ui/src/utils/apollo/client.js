@@ -6,7 +6,6 @@ import { split } from 'apollo-link'
 import tokenRegistryMutations from 'token-registry-mutations'
 import { createMutations, createMutationsLink } from '@graphprotocol/mutations'
 
-//TODO: URIs?
 const networkURI = process.env.GATSBY_NETWORK_URI
 const ipfsURI = process.env.GATSBY_IPFS_HTTP_URI
 
@@ -20,13 +19,7 @@ const mutations = createMutations({
   node: ipfsURI,
   config: {
     ethereum: async () => {
-      const { ethereum } = window
-
-      if (!ethereum) {
-        throw Error('Please install metamask')
-      }
-
-      await ethereum.enable()
+      //TODO: support multiple wallets
       return window.web3.currentProvider
     },
     ipfs: ipfsURI,
