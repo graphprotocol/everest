@@ -112,27 +112,27 @@ async function sendTx(tx: Transaction, description: string, state: StateUpdater<
   }
 }
 
-// const abis = {
-//   Context: require('token-registry-contracts/build/contracts/Context.json').abi,
-//   dai: require('token-registry-contracts/build/contracts/dai.json').abi,
-//   EthereumDIDRegistry: require('token-registry-contracts/build/contracts/EthereumDIDRegistry.json').abi,
-//   LibNote: require('token-registry-contracts/build/contracts/LibNote.json').abi,
-//   Ownable: require('token-registry-contracts/build/contracts/Ownable.json').abi,
-//   Registry: require('token-registry-contracts/build/contracts/Registry.json').abi,
-//   ReserveBank: require('token-registry-contracts/build/contracts/ReserveBank.json').abi,
-//   SafeMath: require('token-registry-contracts/build/contracts/SafeMath.json').abi,
-//   Everest: require('token-registry-contracts/build/contracts/Everest.json').abi,
-//   MemberStruct: require('token-registry-contracts/build/contracts/MemberStruct.json').abi,
-// }
+const abis = {
+  Context: require('../../../contracts/build/contracts/Context.json').abi,
+  Dai: require('../../../contracts/build/contracts/Dai.json').abi,
+  EthereumDIDRegistry: require('../../../contracts/build/contracts/EthereumDIDRegistry.json').abi,
+  LibNote: require('../../../contracts/build/contracts/LibNote.json').abi,
+  Ownable: require('../../../contracts/build/contracts/Ownable.json').abi,
+  Registry: require('../../../contracts/build/contracts/Registry.json').abi,
+  ReserveBank: require('../../../contracts/build/contracts/ReserveBank.json').abi,
+  SafeMath: require('../../../contracts/build/contracts/SafeMath.json').abi,
+  Everest: require('../../../contracts/build/contracts/Everest.json').abi,
+  MemberStruct: require('../../../contracts/build/contracts/MemberStruct.json').abi,
+}
 
-// const addresses = require('token-registry-contracts/addresses.json')
+const addresses = require('../../../contracts/addresses.json')
 
-// const addressMap = {
-//   Dai: 'mockDAI',
-//   EthereumDIDRegistry: 'ethereumDIDRegistry',
-//   ReserveBank: 'reserveBank',
-//   TokenRegistry: 'tokenRegistry',
-// }
+const addressMap = {
+  Dai: 'mockDAI',
+  EthereumDIDRegistry: 'ethereumDIDRegistry',
+  ReserveBank: 'reserveBank',
+  Everest: 'everest',
+}
 
 async function getContract(context: Context, contract: string) {
   const { ethereum } = context.graph.config
