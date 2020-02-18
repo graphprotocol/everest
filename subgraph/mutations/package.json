@@ -1,0 +1,33 @@
+{
+  "name": "example-mutations",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "yarn build:package && yarn build:bundle",
+    "build:bundle": "rimraf ./bundle && webpack",
+    "build:package": "tsc --outDir ./dist && rimraf ./package && mkdir ./package && cp -r ./dist ./package/dist && cp package.json ./package && cp -r ./src ./package/src",
+    "es5:check": "es-check es5 ./bundle/index.js"
+  },
+  "dependencies": {
+    "@graphprotocol/mutations": "^0.0.0-alpha.0",
+    "@types/node": "^13.7.1",
+    "ethers": "^4.0.40",
+    "graphql-tag": "^2.10.1",
+    "ipfs-http-client": "^42.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "es-check": "^5.1.0",
+    "rimraf": "3.0.0",
+    "ts-loader": "6.2.1",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}

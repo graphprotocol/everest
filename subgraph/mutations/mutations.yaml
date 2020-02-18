@@ -1,0 +1,8 @@
+specVersion: 0.0.1
+repository: ...
+schema:
+  file: ./schema.graphql
+resolvers:
+  kind: javascript
+  file: ./bundle/index.js
+  types: ./bundle/index.d.ts
