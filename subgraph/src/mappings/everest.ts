@@ -24,6 +24,12 @@ export function handleApplicationMade(event: ApplicationMade): void {
   project.totalVotes = 0
   project.membershipStartTime = event.params.applicationTime.toI32()
   project.save()
+
+  let everest = Everest.load('1')
+  everest.reserveBankBalance = everest.reserveBankBalance.plus(
+    event.params.fee,
+  )
+  everest.save()
 }
 
 export function handleMemberExited(event: MemberExited): void {
@@ -52,7 +58,6 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.applicationFee = event.params.applicationFee
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
-  everest.registry = event.params.registry
   everest.charter = event.params.charter
   everest.save()
 }
@@ -76,7 +81,6 @@ export function handleMemberChallenged(event: MemberChallenged): void {
       ? null
       : data.get('description').toString()
   }
-
   challenge.save()
 
   let project = Project.load(event.params.member.toHexString())

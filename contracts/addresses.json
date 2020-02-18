@@ -1,20 +1,16 @@
 {
-    "updated-on": "December 23rd 2019",
-    "ropsten": {
-      "everest": "0xC487a615e0A9C69De4c795a45c33A965aBFa3673",
-      "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
-      "mockToken": "0xE8fEac2d2cF46b90b8E83EAC90a02dCeF49b4b4f",
-      "migrations": "0xff59Eb6c6C5E66C8f0e749a58FeB20b5aef0f4C6",
-      "registry": "0x864bade51e4bc39d1822fbc5b7fc2730c4c31787",
-      "reserveBank": "0xbc0acd8ea4d39ff0a1957c51bd20b5998c21e9a6"
-    },
-    "ganache": {
-        "everest": "",
-        "ethereumDIDRegistry": "",
-        "mockToken": "",
-        "registry": "",
-        "reserveBank": ""
-    },
-    "mainnet": {}
-  }
-  
+  "updated-on": "February 18th 2020",
+  "ropsten": {
+    "everest": "0xEB3Fb1A23cf6b527923e88E400aEDD75D69ffaBF",
+    "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
+    "mockDAI": "0x5d872Ed684eA873FfdF6276B7DF84844b73Cd27b",
+    "reserveBank": "0xC8DB707fC13Cf2A77fcFb7fc4828c2FF567997DD"
+  },
+  "ganache": {
+      "everest": "0x9b1f7F645351AF3631a656421eD2e40f2802E6c0",
+      "ethereumDIDRegistry": "0x0290FB167208Af455bB137780163b7B7a9a10C16",
+      "mockDAI": "0xCfEB869F69431e42cdB54A4F4f105C19C080A601",
+      "reserveBank": "0x4C65804f4b00a50e0750293973D7EAf32602587E"
+  },
+  "mainnet": {}
+}

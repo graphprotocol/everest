@@ -2,7 +2,7 @@ pragma solidity ^0.5.8;
 
 import "./lib/Ownable.sol";
 import "./lib/SafeMath.sol";
-import "./lib/dai.sol";
+import "./lib/Dai.sol";
 
 contract ReserveBank is Ownable {
     using SafeMath for uint256;

@@ -1,6 +1,0 @@
-test every require statement
-
-use try catch for expected reverts
-
-do expectEvents
-- actually probably won't do this, the subgraph can see this

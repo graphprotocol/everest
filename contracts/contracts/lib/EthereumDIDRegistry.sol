@@ -94,7 +94,7 @@ contract EthereumDIDRegistry {
         address newOwner
     ) public {
         bytes32 hash = keccak256(
-            abi.encode(
+            abi.encodePacked(
                 bytes1(0x19),
                 bytes1(0),
                 this,
@@ -143,7 +143,7 @@ contract EthereumDIDRegistry {
         uint256 validity
     ) public {
         bytes32 hash = keccak256(
-            abi.encode(
+            abi.encodePacked(
                 bytes1(0x19),
                 bytes1(0),
                 this,
@@ -188,7 +188,7 @@ contract EthereumDIDRegistry {
         address delegate
     ) public {
         bytes32 hash = keccak256(
-            abi.encode(
+            abi.encodePacked(
                 bytes1(0x19),
                 bytes1(0),
                 this,
@@ -235,7 +235,7 @@ contract EthereumDIDRegistry {
         uint256 validity
     ) public {
         bytes32 hash = keccak256(
-            abi.encode(
+            abi.encodePacked(
                 bytes1(0x19),
                 bytes1(0),
                 this,
@@ -277,7 +277,7 @@ contract EthereumDIDRegistry {
         bytes memory value
     ) public {
         bytes32 hash = keccak256(
-            abi.encode(
+            abi.encodePacked(
                 bytes1(0x19),
                 bytes1(0),
                 this,
