@@ -1,0 +1,36 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "./contracts",
+      "./subgraph",
+      "./subgraph/mutations",
+      "./ui"
+    ],
+    "nohoist": [
+      "**/graph-ts"
+    ]
+  },
+  "scripts": {
+    "build": "yarn build:contracts && yarn build:mutations && yarn build:subgraph",
+    "build:contracts": "lerna exec --scope everest-contracts -- yarn build",
+    "build:mutations": "lerna exec --scope everest-mutations -- yarn build",
+    "build:subgraph": "lerna exec --scope everest -- 'yarn codegen && yarn build'",
+    "build:ui": "lerna exec --scope Everest -- yarn build",
+    "start": "concurrently \"yarn:start:ui\" \"yarn:start:env\"",
+    "start:ui": "lerna exec --scope Everest -- yarn start",
+    "start:env": "concurrently \"yarn:start:subgraph\" \"yarn:deploy\"",
+    "start:subgraph": "lerna exec --scope everest -- yarn start:env",
+    "deploy": "wait-on tcp:8020 && sleep 5 && yarn create:subgraph && yarn deploy:subgraph",
+    "deploy:subgraph": "lerna exec --scope everest -- yarn deploy:local",
+    "create:subgraph": "lerna exec --scope everest -- yarn create:local",
+    "stop:env": "lerna exec --scope everest -- yarn stop",
+    "reset:env": "lerna exec --scope everest -- yarn reset:env"
+  },
+  "devDependencies": {
+    "concurrently": "5.1.0",
+    "lerna": "3.20.2",
+    "wait-on": "4.0.0"
+  }
+}

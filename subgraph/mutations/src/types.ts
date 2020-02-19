@@ -1,6 +1,6 @@
 //TODO: Args are any by default in graphQL, do we really need these interfaces?
 
-export interface editProjectArgs{
+export interface EditProjectArgs {
   id: string
   name: string
   description: string
@@ -13,7 +13,7 @@ export interface editProjectArgs{
   categories: Array<any>
 }
 
-export interface addProjectArgs{
+export interface AddProjectArgs {
   id: string
   name: string
   description: string
@@ -26,7 +26,7 @@ export interface addProjectArgs{
   categories: Array<Category>
 }
 
-export interface removeProjectArgs{
+export interface RemoveProjectArgs {
   projectId: string
 }
 
@@ -92,5 +92,5 @@ interface Vote {
 enum Choice {
   Null,
   Yes,
-  No
+  No,
 }

@@ -13,7 +13,7 @@ pragma solidity ^0.5.8;
 import "./ReserveBank.sol";
 import "./Registry.sol";
 import "./lib/EthereumDIDRegistry.sol";
-import "./lib/Dai.sol";
+import "./lib/dai.sol";
 import "./lib/Ownable.sol";
 
 contract Everest is Registry, Ownable {

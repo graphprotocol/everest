@@ -1,7 +1,7 @@
 import { BigInt, store, ipfs, json, Bytes } from '@graphprotocol/graph-ts'
 
 import {
-  ApplicationMade,
+  //ApplicationMade,
   MemberExited,
   EverestDeployed,
   CharterUpdated,
@@ -18,7 +18,7 @@ import { addQm } from './helpers'
 
 // This runs before any ethereumDIDRegistry events run, and once an applicaiton is made, the
 // identity is then part of Everest
-export function handleApplicationMade(event: ApplicationMade): void {
+/*export function handleApplicationMade(event: ApplicationMade): void {
   let id = event.params.member.toHexString()
   let project = new Project(id)
   project.totalVotes = 0
@@ -30,7 +30,7 @@ export function handleApplicationMade(event: ApplicationMade): void {
     event.params.fee,
   )
   everest.save()
-}
+}*/
 
 export function handleMemberExited(event: MemberExited): void {
   let id = event.params.member.toHexString()
