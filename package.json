@@ -22,7 +22,7 @@
     "start:ui": "lerna exec --scope Everest -- yarn start",
     "start:env": "concurrently \"yarn:start:subgraph\" \"yarn:deploy\"",
     "start:subgraph": "lerna exec --scope everest -- yarn start:env",
-    "deploy": "wait-on tcp:8020 && sleep 15 && yarn create:subgraph && yarn deploy:subgraph",
+    "deploy": "wait-on tcp:8020 && sleep 20 && yarn create:subgraph && sleep 10 && yarn deploy:subgraph",
     "deploy:subgraph": "lerna exec --scope everest -- yarn deploy:local",
     "create:subgraph": "lerna exec --scope everest -- yarn create:local",
     "stop:env": "lerna exec --scope everest -- yarn stop",

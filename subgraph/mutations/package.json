@@ -12,14 +12,24 @@
   },
   "dependencies": {
     "@graphprotocol/mutations": "^0.0.0-alpha.0",
-    "@types/node": "^13.7.1",
+    "apollo-cache-inmemory": "^1.6.5",
+    "apollo-client": "^2.6.8",
+    "everest-contracts": "^0.0.1",
+    "apollo-link": "^1.2.13",
+    "apollo-link-http": "^1.5.16",
+    "apollo-link-state": "^0.4.2",
+    "ethereumjs-util": "^6.2.0",
     "ethers": "^4.0.40",
     "graphql-tag": "^2.10.1",
-    "ipfs-http-client": "^42.0.0"
+    "graphql": "^14.6.0",
+    "ipfs-http-client": "^42.0.0",
+    "js-sha3": "^0.8.0",
+    "rxjs": "^6.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.6",
+    "@types/node": "^13.7.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-loader": "^7.1.5",
     "babel-plugin-add-module-exports": "^1.0.2",
