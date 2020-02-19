@@ -72,21 +72,6 @@ const Project = ({ location }) => {
 
   const setChallengeData = value => {
     setChallengeDescription(value)
-    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        pinata_api_key: process.env.GATSBY_PINATA_API_KEY,
-        pinata_secret_api_key: process.env.GATSBY_PINATA_API_SECRET_KEY,
-      },
-      body: JSON.stringify(project),
-    }).then(async function(response) {
-      const responseJSON = await response.json()
-      if (responseJSON.IpfsHash) {
-        setChallengeIPFShash(responseJSON.IpfsHash)
-      }
-    })
   }
 
   const voteOnProject = (projects, choice) => {

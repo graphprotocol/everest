@@ -6,7 +6,7 @@ import { NetworkConnector } from '@web3-react/network-connector'
 const POLLING_INTERVAL = 10000
 
 export const network = new NetworkConnector({
-  urls: { 1: process.env.GATSBY_NETWORK_URI },
+  urls: { 1: process.env.GATSBY_NETWORK_CONNECTOR_URI },
   pollingInterval: POLLING_INTERVAL,
 })
 
@@ -16,7 +16,7 @@ export const injected = new InjectedConnector({
 
 export const walletconnect = new WalletConnectConnector({
   rpc: {
-    1: process.env.GATSBY_NETWORK_URI,
+    1: process.env.GATSBY_NETWORK_CONNECTOR_URI,
   },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: false,
@@ -25,7 +25,7 @@ export const walletconnect = new WalletConnectConnector({
 
 // Coinbase wallet
 export const walletlink = new WalletLinkConnector({
-  url: process.env.GATSBY_NETWORK_URI,
+  url: process.env.GATSBY_NETWORK_CONNECTOR_URI,
   appName: 'Everest',
   appLogoUrl: '',
 })

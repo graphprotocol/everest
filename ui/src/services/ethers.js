@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 
 export const walletExists = () => {
   if (typeof window !== undefined) {
@@ -60,4 +60,9 @@ export function getContract(address, ABI, library, account) {
     library.getSigner(account)
   }
   return new ethers.Contract(address, ABI, signer)
+}
+
+export const overrides = {
+  gasLimit: 1000000,
+  gasPrice: utils.parseUnits('1.0', 'gwei'),
 }

@@ -2,23 +2,47 @@
 import { useState } from 'react'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
+import { useQuery } from '@apollo/react-hooks'
+import { gql } from 'apollo-boost'
 
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 
-const Projects = ({ data }) => {
+const PROJECTS_QUERY = gql`
+  query projects {
+    projects {
+      id
+      name
+      description
+      avatar
+    }
+  }
+`
+
+const Projects = () => {
   const [selected, setSelected] = useState('cards')
 
-  const allProjects = data.everest.projects.map(project => {
-    return {
-      ...project,
-      description: project.description.slice(0, 20) + '...',
-    }
-  })
+  const { loading, error, data } = useQuery(PROJECTS_QUERY)
 
-  const challengedProjects = data.everest.projects.filter(
-    p => p.isChallenged === true,
-  )
+  if (loading) {
+    return <div />
+  }
+
+  if (error) {
+    console.error('Error with GraphQL query: ', error)
+    return <div />
+  }
+
+  const allProjects =
+    data &&
+    data.projects.map(project => {
+      return {
+        ...project,
+        description: project.description.slice(0, 20) + '...',
+      }
+    })
+
+  const challengedProjects = data.projects.filter(p => p.isChallenged === true)
 
   return (
     <Grid>
@@ -52,23 +76,3 @@ const Projects = ({ data }) => {
 }
 
 export default Projects
-
-export const query = graphql`
-  query everestProjects {
-    everest {
-      projects {
-        id
-        name
-        description
-        categories
-        createdAt
-        reputation
-        isChallenged
-        owner {
-          id
-          name
-        }
-      }
-    }
-  }
-`
