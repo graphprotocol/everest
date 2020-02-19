@@ -47,10 +47,12 @@ const Modal = ({ children, showModal, closeModal }) => {
   const handleWalletActivation = async wallet => {
     setSelectedWallet(wallet)
     if (wallet.name === 'MetaMask') {
-      if (walletExists() && account) {
-        setShowWalletsView(false)
-        setShowAccountView(true)
-        return
+      if (await walletExists()) {
+        if (account) {
+          setShowWalletsView(false)
+          setShowAccountView(true)
+          return
+        }
       } else {
         return window.open('https://metamask.io/', '_blank')
       }

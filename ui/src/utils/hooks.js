@@ -3,6 +3,7 @@ import { useMemo, useEffect, useState } from 'react'
 
 import { getContract, getAddress, getProvider } from '../services/ethers'
 import { injected } from '../connectors'
+// TODO: UPDATE address and ABIs
 import addresses from '../../constants/addresses.json'
 import EVEREST_ABI from '../../constants/abis/Everest.json'
 import ETHEREUM_DID_REGISTRY_ABI from '../../constants/abis/EthereumDIDRegistry.json'

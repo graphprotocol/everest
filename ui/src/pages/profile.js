@@ -93,11 +93,16 @@ const Profile = ({ location }) => {
     },
   })
 
-  if (loading && !error) {
+  if (loading) {
     return <Styled.p>Loading</Styled.p>
   }
 
-  const user = data.user
+  if (error) {
+    console.error('Error with Profile query: ', error)
+    return <div />
+  }
+
+  const user = data && data.user
 
   return (
     <Grid>

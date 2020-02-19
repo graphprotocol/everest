@@ -2,12 +2,11 @@
 import { useState, useEffect } from 'react'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
-import fetch from 'isomorphic-fetch'
 import { useQuery } from '@apollo/react-hooks'
 
 import ipfs from '../../services/ipfs'
 import { ipfsHexHash } from '../../services/ipfs'
-import { useEverestContract, useEthereumDIDRegistry } from '../../utils/hooks'
+import { useEthereumDIDRegistry } from '../../utils/hooks'
 import {
   OFFCHAIN_DATANAME,
   VALIDITY_TIMESTAMP,
@@ -18,7 +17,6 @@ import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location, ...props }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
-  const [everestContract] = useState(useEverestContract())
   const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
@@ -116,32 +114,32 @@ const EditProject = ({ location, ...props }) => {
 
   const handleSubmit = async project => {
     setIsDisabled(true)
-    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        pinata_api_key: process.env.GATSBY_PINATA_API_KEY,
-        pinata_secret_api_key: process.env.GATSBY_PINATA_API_SECRET_KEY,
-      },
-      body: JSON.stringify(project),
+    const projectData = Buffer.from(JSON.stringify(project))
+
+    console.log('projectData: ', projectData)
+
+    await ipfs.add(projectData, async (err, response) => {
+      if (err) {
+        console.error('Error saving doc to IPFS: ', err)
+      }
+
+      if (response && response[0].hash) {
+        const ipfsHash = response[0].hash
+        console.log('IPFS HASH: ', response[0].hash)
+
+        const transaction = ethereumDIDRegistryContract(
+          project.id,
+          OFFCHAIN_DATANAME,
+          ipfsHexHash(ipfsHash),
+          VALIDITY_TIMESTAMP,
+        )
+
+        transaction
+          .wait()
+          .then(() => console.log('SUUCCESSFULE'))
+          .catch(err => console.error('TRansaction error: ', err))
+      }
     })
-      .then(async function(response) {
-        const responseJSON = await response.json()
-        if (responseJSON.IpfsHash) {
-          const transaction = ethereumDIDRegistryContract(
-            project.id,
-            OFFCHAIN_DATANAME,
-            ipfsHexHash(responseJSON.IpfsHash),
-            VALIDITY_TIMESTAMP,
-          )
-          // navigate('/project/ck3t4oggr8ylh0922vgl9dwa9')
-        }
-      })
-      .catch(function(error) {
-        setIsDisabled(false)
-        console.error('Error uploading data to Pinata IPFS: ', error)
-      })
   }
 
   const setValue = async (field, value) => {

@@ -1,3 +1,8 @@
+let env = process.env.CI ? 'development' : process.env.NODE_ENV
+require('dotenv').config({
+  path: `.env.${env}`,
+})
+
 const categories = require('./src/data/categories.json')
 
 exports.createPages = ({ page, actions }) => {

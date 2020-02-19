@@ -1,13 +1,15 @@
 import base from 'base-x'
 const ipfsClient = require('ipfs-http-client')
 
-// const clientObj = {
-//   host: process.env.GATSBY_IPFS_HOST,
-//   port: process.env.GATSBY_IPFS_PORT || '',
-//   protocol: process.env.GATSBY_IPFS_PROTOCOL
-// }
+const client = {
+  host: process.env.GATSBY_IPFS_HOST,
+  port: process.env.GATSBY_IPFS_PORT || '',
+  protocol: process.env.GATSBY_IPFS_PROTOCOL,
+}
 
-const ipfs = new ipfsClient('https://ipfs.infura.io:5001/')
+const ipfs = new ipfsClient(client)
+
+console.log('IPFS: ', ipfs)
 
 // convert from ipfsHash to Hex string
 export const ipfsHexHash = ipfsHash => {
