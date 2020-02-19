@@ -38,6 +38,11 @@ contract('everest', () => {
     }
     const fakeDetails = '0x5555555555555555555555555555555555555555555555555555555555554444'
 
+    let everest
+    before(async () => {
+        everest = await Everest.deployed()
+    })
+
     describe(
         'Challenges. Functions: challenge(), submitVote(), submitVotes() resolveChallenge(), ' +
             'memberChallengeExists(), challengeCanBeResolved(), isMember()',
@@ -52,8 +57,6 @@ contract('everest', () => {
             })
 
             it('should allow a member to be challenged, lose, and be removed, and then reapply successfully. Also tests chalengee cannot vote on their own challenge', async () => {
-                const everest = await Everest.deployed()
-
                 const challengeID = await helpers.challenge(
                     member1Address,
                     member5Address,
@@ -89,7 +92,6 @@ contract('everest', () => {
             })
 
             it('should allow a member to be challenged, win, and stay', async () => {
-                const everest = await Everest.deployed()
                 // Check member exists
                 assert(await everest.isMember(member4Address), 'Member was not added')
 
@@ -123,7 +125,6 @@ contract('everest', () => {
             })
 
             it('challenge should fail when no one votes except the challenger', async () => {
-                const everest = await Everest.deployed()
                 // Check member exists
                 assert(await everest.isMember(member4Address), 'Member was not added')
 
@@ -149,7 +150,6 @@ contract('everest', () => {
                 )
             })
             it('challenger cant challenge self. challenger must exist. challengee must exist', async () => {
-                const everest = await Everest.deployed()
                 // Check member exists
                 assert(await everest.isMember(member4Address), 'Member was not added')
 
@@ -178,7 +178,6 @@ contract('everest', () => {
                 )
             })
             it('challengee cannot have two challenges against them. and challengee cannot exit during ongoing challenge', async () => {
-                const everest = await Everest.deployed()
                 // Check member exists
                 assert(await everest.isMember(member4Address), 'Member was not added')
 

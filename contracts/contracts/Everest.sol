@@ -135,13 +135,13 @@ contract Everest is Registry, Ownable {
     modifier onlyMemberOwnerOrDelegate(address _member) {
         require(
             isMember(_member),
-            "Everest::onlyMemberOwnerOrDelegate - Address is not a Member"
+            "onlyMemberOwnerOrDelegate - Address is not a Member"
         );
         address owner = erc1056Registry.identityOwner(_member);
         bool validDelegate = erc1056Registry.validDelegate(_member, delegateType, msg.sender);
         require(
             validDelegate || owner == msg.sender,
-            "Everest::onlyMemberOwnerOrDelegate - Caller must be delegate or owner"
+            "onlyMemberOwnerOrDelegate - Caller must be delegate or owner"
         );
         _;
     }
@@ -154,12 +154,12 @@ contract Everest is Registry, Ownable {
     modifier onlyMemberOwner(address _member) {
         require(
             isMember(_member),
-            "Everest::onlyMemberOwner - Address is not a member"
+            "onlyMemberOwner - Address is not a member"
         );
         address owner = erc1056Registry.identityOwner(_member);
         require(
             owner == msg.sender,
-            "Everest::onlyMemberOwner - Caller must be the delegate or owner"
+            "onlyMemberOwner - Caller must be the delegate or owner"
         );
         _;
     }
@@ -175,10 +175,10 @@ contract Everest is Registry, Ownable {
         bytes32 _charter,
         address _DIDregistry
     ) public {
-        require(_approvedToken != address(0), "Everest::constructor - _approvedToken cannot be 0");
+        require(_approvedToken != address(0), "constructor - _approvedToken cannot be 0");
         require(
             _votingPeriodDuration > 0,
-            "Everest::constructor - _votingPeriodDuration cant be 0"
+            "constructor - _votingPeriodDuration cant be 0"
         );
 
         approvedToken = Dai(_approvedToken);
@@ -386,7 +386,7 @@ contract Everest is Registry, Ownable {
     ) external onlyMemberOwner(_member) {
         require(
             !memberChallengeExists(_member),
-            "Everest::memberExit - Can't exit during ongoing challenge"
+            "memberExit - Can't exit during ongoing challenge"
         );
         deleteMember(_member);
         emit MemberExited(_member);
@@ -414,7 +414,7 @@ contract Everest is Registry, Ownable {
         bytes32 _details
     ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
         uint256 challengeeMemberTime = getMembershipStartTime(_challengedMember);
-        require (challengeeMemberTime > 0, "Everest::challenge - Challengee must exist");
+        require (challengeeMemberTime > 0, "challenge - Challengee must exist");
         uint256 currentChallengeID = getChallengeID(_challengedMember);
         if(currentChallengeID > 0){
             // Doing this allows us to never get stuck in a state with unresolved challenges
@@ -425,7 +425,7 @@ contract Everest is Registry, Ownable {
 
         require(
             _challengingMember != _challengedMember,
-            "Everest::challenge - Can't challenge self"
+            "challenge - Can't challenge self"
         );
 
         uint256 newChallengeID = challengeCounter;
@@ -451,7 +451,7 @@ contract Everest is Registry, Ownable {
         // Takes tokens from challenger
         require(
             approvedToken.transferFrom(msg.sender, address(reserveBank), challengeDeposit),
-            "Everest::challenge - Token transfer failed"
+            "challenge - Token transfer failed"
         );
 
         emit MemberChallenged(
@@ -481,26 +481,26 @@ contract Everest is Registry, Ownable {
     ) public onlyMemberOwnerOrDelegate(_voter) {
         require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
-            "Everest::submitVote - Vote must be either Yes or No"
+            "submitVote - Vote must be either Yes or No"
         );
 
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
             storedChallenge.endTime > 0,
-            "Everest::submitVote - Challenge does not exist"
+            "submitVote - Challenge does not exist"
         );
         require(
             !hasVotingPeriodExpired(storedChallenge.endTime),
-            "Everest::submitVote - Challenge voting period has expired"
+            "submitVote - Challenge voting period has expired"
         );
         require(
             storedChallenge.voteChoiceByMember[_voter] == VoteChoice.Null,
-            "Everest::submitVote - Member has already voted on this challenge"
+            "submitVote - Member has already voted on this challenge"
         );
 
         require(
             storedChallenge.challengee != _voter,
-            "Everest::submitVote - Member can't vote on their own challenge"
+            "submitVote - Member can't vote on their own challenge"
         );
 
         uint256 memberStartTime = getMembershipStartTime(_voter);
@@ -537,7 +537,7 @@ contract Everest is Registry, Ownable {
     ) public {
         require(
             _voteChoices.length == _voters.length,
-            "Everest::submitVotes - Arrays must be equal"
+            "submitVotes - Arrays must be equal"
         );
         for (uint256 i; i < _voteChoices.length; i++){
             submitVote(_challengeID, _voteChoices[i], _voters[i]);
@@ -561,7 +561,7 @@ contract Everest is Registry, Ownable {
             // to challenger for winning challenge
             require(
                 withdraw(challengerOwner, challengeDeposit + applicationFee),
-                "Everest::resolveChallenge - Rewarding challenger failed"
+                "resolveChallenge - Rewarding challenger failed"
             );
             deleteMember(storedChallenge.challengee);
             emit ChallengeSucceeded(
@@ -576,7 +576,7 @@ contract Everest is Registry, Ownable {
             // Transfer challenge deposit to challengee
             require(
                 withdraw(challengeeOwner, challengeDeposit),
-                "Everest::resolveChallenge - Rewarding challenger failed"
+                "resolveChallenge - Rewarding challenger failed"
             );
             // Remove challenge ID from registry
             editChallengeID(storedChallenge.challengee, 0);
@@ -662,11 +662,11 @@ contract Everest is Registry, Ownable {
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
             challenges[_challengeID].endTime > 0,
-            "Everest::challengeCanBeResolved - Challenge does not exist or was completed"
+            "challengeCanBeResolved - Challenge does not exist or was completed"
         );
         require(
             hasVotingPeriodExpired(storedChallenge.endTime),
-            "Everest::challengeCanBeResolved - Current challenge is not ready to be resolved"
+            "challengeCanBeResolved - Current challenge is not ready to be resolved"
         );
         return true;
     }

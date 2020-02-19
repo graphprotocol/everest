@@ -9,13 +9,6 @@ const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const Token = artifacts.require('Dai.sol')
 const utils = require('./utils.js')
 
-////////////// CONSTANTS //////////////
-const offChainDataName = 'ProjectData'
-// Setting validity to max uint256 value, since we don't plan to use validity
-const maxValidity = 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-// DAI_PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
-const DAI_PERMIT_TYPEHASH = 'ea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb'
-
 const helpers = {
     applySignedWithAttribute: async (newMemberWallet, ownerWallet) => {
         const ownerAddress = ownerWallet.signingKey.address
@@ -25,9 +18,9 @@ const helpers = {
 
         const setAttributeData =
             Buffer.from('setAttribute').toString('hex') +
-            utils.stringToBytes32(offChainDataName) +
+            utils.stringToBytes32(utils.offChainDataName) +
             utils.stripHexPrefix(utils.mockIPFSData) +
-            maxValidity
+            utils.maxValidity
 
         // Get the signature for setting the attribute (i.e. Token data) on ERC-1056
         const setAttributeSignedSig = await module.exports.setAttributeSigned(
@@ -39,7 +32,6 @@ const helpers = {
         const applySignedSig = await module.exports.applySigned(newMemberWallet, ownerWallet)
         // Get the signature for permitting Everest to transfer DAI on users behalf
         const permitSig = await module.exports.daiPermit(ownerWallet, everest.address)
-
         const reserveBankAddress = await everest.reserveBank()
         const reserveBankBalanceStart = await token.balanceOf(reserveBankAddress)
         const ownerBalanceStart = await token.balanceOf(ownerAddress)
@@ -51,9 +43,9 @@ const helpers = {
             [setAttributeSignedSig.r, applySignedSig.r, permitSig.r],
             [setAttributeSignedSig.s, applySignedSig.s, permitSig.s],
             ownerAddress,
-            '0x' + utils.stringToBytes32(offChainDataName),
+            '0x' + utils.stringToBytes32(utils.offChainDataName),
             utils.mockIPFSData,
-            '0x' + maxValidity,
+            '0x' + utils.maxValidity,
             { from: ownerAddress }
         )
 
@@ -132,15 +124,15 @@ const helpers = {
         const ownerAddress = ownerWallet.signingKey.address
         const tx = await didReg.setAttribute(
             memberAddress,
-            '0x' + utils.stringToBytes32(offChainDataName),
+            '0x' + utils.stringToBytes32(utils.offChainDataName),
             utils.mockIPFSData,
-            '0x' + maxValidity,
+            '0x' + utils.maxValidity,
             { from: ownerAddress }
         )
         const event = tx.logs[0]
         assert.equal(event.event, 'DIDAttributeChanged')
         assert.equal(event.args.identity, memberAddress)
-        assert.equal(event.args.name, '0x' + utils.stringToBytes32(offChainDataName))
+        assert.equal(event.args.name, '0x' + utils.stringToBytes32(utils.offChainDataName))
         assert.equal(event.args.value, utils.mockIPFSData)
     },
 
@@ -200,7 +192,8 @@ const helpers = {
         }
     },
 
-    // TODO - refactor all of the DAI helpers to be like the ones in mutations
+    // Sadly, ganache-cli doese not support the clean eth_signTypedDatav3
+    // So we must do all this manual building and signing for permit()
 
     createDaiDomainSeparator: async () => {
         const domain = keccak256(
@@ -246,7 +239,7 @@ const helpers = {
             0000000000000000000000000000000000000000000000000000000000000001 
         */
         const structEncoded =
-            DAI_PERMIT_TYPEHASH +
+            utils.DAI_PERMIT_TYPEHASH +
             // abi.encode in solidity automatically removes the checksum, so we must use toLowerCase
             utils.leftPad(utils.stripHexPrefix(holderAddress.toLowerCase())) +
             utils.leftPad(utils.stripHexPrefix(spenderAddress.toLowerCase())) +

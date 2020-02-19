@@ -8,7 +8,11 @@ contract('Everest', () => {
     const ownerWallet1 = utils.wallets.one()
     const ownerAddress1 = ownerWallet1.signingKey.address
     const ownerWallet2 = utils.wallets.two()
-    const ownerAddress2 = ownerWallet2.signingKey.address
+
+    let everest
+    before(async () => {
+        everest = await Everest.deployed()
+    })
 
     describe('Member joining and leaving. Functions: applySignedWithAttribute(), memberExit()', () => {
         // Allows a member to permit the Everest to transfer DAI, apply to be on the
@@ -27,7 +31,6 @@ contract('Everest', () => {
 
         it('should allow a member to exit', async () => {
             // Get previous member start time
-            const everest = await Everest.deployed()
             const membershipStartTime = Number(
                 (await everest.getMembershipStartTime(newMemberAddress)).toString()
             )

@@ -3,7 +3,6 @@ IMPORTANT
 - These test are taken directly from https://github.com/uport-project/ethr-did-registry
 - Note we had to update the ETH did registry to work with v0.5.8 solidity, which changed
 the contracts
-- In the future we plan to replace these tests with tests using ethers.js
 */
 
 var ethutil = require('ethereumjs-util')

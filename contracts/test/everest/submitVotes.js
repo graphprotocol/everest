@@ -40,6 +40,11 @@ contract('everest', () => {
     }
     const fakeDetails = '0x5555555555555555555555555555555555555555555555555555555555554444'
 
+    let everest
+    before(async () => {
+        everest = await Everest.deployed()
+    })
+
     describe('Test voting require statements and functionality', () => {
         // Set up 5 Tokens
         before(async () => {
@@ -51,8 +56,6 @@ contract('everest', () => {
             await helpers.applySignedWithAttribute(member5Wallet, owner5Wallet)
         })
         it('submitVotes() works. and tests passing unequal arrays will fail', async () => {
-            const everest = await Everest.deployed()
-
             // Member 4 challenges Member 5
             // We will then get owner1, who owns three token members, to vote 3 times
             const challengeID = await helpers.challenge(
