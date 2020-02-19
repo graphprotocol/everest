@@ -3,9 +3,9 @@
  *
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
-
+let env = process.env.CI ? 'development' : process.env.NODE_ENV
 require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: `.env.${env}`,
 })
 
 module.exports = {

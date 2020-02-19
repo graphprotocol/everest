@@ -5,8 +5,8 @@ This dApp is built on top of the Gatsby framework.
 ## Local development
 
 1. Once you clone the repo, run `yarn`
-2. Run `yarn develop` and access the UI on `http://localhost:8000`
-3. You can access the GraphQL playground here `http://localhost:8000/___graphql`
+2. Run `yarn develop` and access the UI on `http://localhost:4000`
+3. You can access the GraphQL playground here `http://localhost:4000/___graphql`
 
 ## Build
 

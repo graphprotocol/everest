@@ -17,7 +17,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      ethereum: 'ropsten:https://api.infura.io/v1/jsonrpc/ropsten'
+      ethereum: 'ropsten:https://ropsten.infura.io/v3/859d787f4ca9498aaa9f738b9bb0650f'
       RUST_LOG: info
       RUST_BACKTRACE: 1
   ipfs:
