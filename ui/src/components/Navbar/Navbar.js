@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
@@ -26,7 +27,7 @@ const PROFILE_QUERY = gql`
 `
 
 const Navbar = ({ path, ...props }) => {
-  const { account, connector } = useWeb3React()
+  const { account } = useWeb3React()
 
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState()
@@ -95,7 +96,6 @@ const Navbar = ({ path, ...props }) => {
         }}
       >
         <Link
-          to=""
           onClick={() =>
             userAccount ? navigate('/projects/new') : openModal()
           }
@@ -156,6 +156,8 @@ const navStyles = {
   alignItems: 'center',
 }
 
-Navbar.propTypes = {}
+Navbar.propTypes = {
+  path: PropTypes.string,
+}
 
 export default Navbar

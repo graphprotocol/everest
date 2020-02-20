@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { useState, Fragment, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { Dialog } from '@reach/dialog'
@@ -7,7 +8,7 @@ import '@reach/dialog/styles.css'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import { URI_AVAILABLE } from '@web3-react/walletconnect-connector'
 
-import { walletExists, getAddress } from '../../services/ethers'
+import { walletExists } from '../../services/ethers'
 import wallets from '../../connectors/wallets'
 import { walletconnect } from '../../connectors'
 
@@ -27,6 +28,8 @@ const Modal = ({ children, showModal, closeModal }) => {
   const [showWalletsView, setShowWalletsView] = useState(true)
   const [uri, setUri] = useState('')
   const [isWalletEnabled, setIsWalletEnabled] = useState(false)
+
+  console.log('walletError', walletError)
 
   // TODO: reset the view to the main wallet selection view
 
@@ -142,7 +145,7 @@ const Modal = ({ children, showModal, closeModal }) => {
                   columns={2}
                   gap={2}
                   sx={gridStyles}
-                  onClick={e => {
+                  onClick={() => {
                     handleWalletActivation(wallet)
                   }}
                 >
@@ -199,6 +202,12 @@ const iconStyles = {
   width: '44px',
   objectFit: 'contain',
   mr: 3,
+}
+
+Modal.propTypes = {
+  children: PropTypes.any,
+  showModal: PropTypes.bool,
+  closeModal: PropTypes.func,
 }
 
 export default Modal

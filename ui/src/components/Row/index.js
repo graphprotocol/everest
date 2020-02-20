@@ -38,7 +38,7 @@ const Row = ({ item }) => {
       <Box sx={boxStyles}>
         <Styled.p sx={{ color: 'secondary', fontWeight: 'heading' }}>
           {item.categories.map(cat => (
-            <span>{cat}</span>
+            <span key={cat}>{cat}</span>
           ))}
         </Styled.p>
       </Box>
@@ -85,12 +85,19 @@ const imageStyles = {
 
 Row.propTypes = {
   item: PropTypes.shape({
+    id: PropTypes.any,
     name: PropTypes.string,
     description: PropTypes.string,
     category: PropTypes.string,
     createdAt: PropTypes.string,
+    image: PropTypes.string,
     reputation: PropTypes.string,
     isChallenged: PropTypes.bool,
+    categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.any,
+      }),
+    ),
   }),
 }
 

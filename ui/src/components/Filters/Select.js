@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import PropTypes from 'prop-types'
 import { Fragment, useState } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
@@ -92,6 +93,15 @@ const FiltersProjects = ({ items }) => {
       </Fragment>
     </Box>
   )
+}
+
+FiltersProjects.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      parent: PropTypes.any,
+    }),
+  ),
 }
 
 export default FiltersProjects

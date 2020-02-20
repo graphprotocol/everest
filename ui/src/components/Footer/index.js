@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
+import { navigate } from 'gatsby'
 
 import Link from '../../components/Link'
 
@@ -9,7 +10,10 @@ const Footer = ({ ...props }) => {
     <div sx={rootStyles} {...props}>
       <Styled.p sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
-        <Link to="https://thegraph.com" sx={{ display: 'inline-block' }}>
+        <Link
+          onClick={() => navigate('https://thegraph.com')}
+          sx={{ display: 'inline-block' }}
+        >
           The Graph
         </Link>
       </Styled.p>

@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Global } from '@emotion/core'
 
@@ -6,8 +7,7 @@ import Footer from '../Footer'
 import Navbar from '../Navbar'
 import Seo from '../Seo'
 
-const LayoutTemplate = ({ children, mainStyles, ...props }) => {
-  console.log('layoug props: ', props)
+const LayoutTemplate = ({ children, ...props }) => {
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
@@ -20,10 +20,11 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
     props.path.includes('new') || props.path.includes('edit')
       ? { backgroundColor: 'secondary', marginTop: '-18px' }
       : {}
+
   return (
     <div>
       <Global
-        styles={theme => {
+        styles={() => {
           return {
             '*, *::after, *::before': {
               boxSizing: 'border-box',
@@ -40,7 +41,7 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
         }}
       />
       <Seo />
-      <section {...props}>
+      <section>
         <Navbar sx={styles} path={props && props.path} />
         <Box
           sx={{
@@ -68,6 +69,12 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
       </section>
     </div>
   )
+}
+
+LayoutTemplate.propTypes = {
+  children: PropTypes.any,
+  path: PropTypes.any,
+  closeModal: PropTypes.func,
 }
 
 export default LayoutTemplate

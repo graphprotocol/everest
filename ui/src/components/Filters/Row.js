@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
@@ -11,7 +12,6 @@ const Row = ({
   setSelected,
   close,
   multiselect,
-  key,
   variant,
   ...props
 }) => {
@@ -71,7 +71,7 @@ const Row = ({
         }
       />
       <Box>
-        {parent && <p sx={{ variant: 'text.smaller' }}>{parent.name} ></p>}
+        {parent && <p sx={{ variant: 'text.smaller' }}>{parent.name}</p>}
         <p sx={{ variant: 'text.emphasis' }}>{item.name}</p>
       </Box>
       {close && (
@@ -96,6 +96,21 @@ const Row = ({
       )}
     </Grid>
   )
+}
+
+Row.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.any,
+    name: PropTypes.string,
+    image: PropTypes.string,
+    slug: PropTypes.string,
+  }),
+  parent: PropTypes.any,
+  selected: PropTypes.string,
+  setSelected: PropTypes.func,
+  close: PropTypes.func,
+  multiselect: PropTypes.bool,
+  variant: PropTypes.string,
 }
 
 export default Row

@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { Fragment, useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
@@ -228,6 +229,23 @@ const Filters = ({
       </Fragment>
     </Box>
   )
+}
+
+Filters.propTypes = {
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  type: PropTypes.string,
+  variant: PropTypes.number,
+  setValue: PropTypes.func,
+  children: PropTypes.any,
+  setOpen: PropTypes.func,
+  styles: PropTypes.any,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      parent: PropTypes.any,
+    }),
+  ),
 }
 
 export default Filters
