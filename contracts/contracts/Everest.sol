@@ -522,7 +522,6 @@ contract Everest is Registry, Ownable {
         emit SubmitVote(_challengeID, msg.sender, _voter, _voteChoice, voteWeight);
     }
 
-    // TODO - test gas limit for this, and maybe hard code in the array size
     /**
     @dev                    Submit many votes from owner or delegate with multiple members they own
                             or are delegates of

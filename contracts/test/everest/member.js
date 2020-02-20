@@ -50,5 +50,3 @@ contract('Everest', () => {
         })
     })
 })
-
-// TODO - add in delegates (note delegates can only vote)

@@ -1,7 +1,7 @@
 import { BigInt, store, ipfs, json, Bytes } from '@graphprotocol/graph-ts'
 
 import {
-  //ApplicationMade,
+  NewMember,
   MemberExited,
   EverestDeployed,
   CharterUpdated,
@@ -12,13 +12,13 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote } from '../types/schema'
+import { Project, Everest, Challenge, Vote, Charter } from '../types/schema'
 
 import { addQm } from './helpers'
 
 // This runs before any ethereumDIDRegistry events run, and once an applicaiton is made, the
 // identity is then part of Everest
-/*export function handleApplicationMade(event: ApplicationMade): void {
+export function handleNewMember(event: NewMember): void {
   let id = event.params.member.toHexString()
   let project = new Project(id)
   project.totalVotes = 0
@@ -26,11 +26,9 @@ import { addQm } from './helpers'
   project.save()
 
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.plus(
-    event.params.fee,
-  )
+  everest.reserveBankBalance = everest.reserveBankBalance.plus(event.params.fee)
   everest.save()
-}*/
+}
 
 export function handleMemberExited(event: MemberExited): void {
   let id = event.params.member.toHexString()
@@ -39,8 +37,10 @@ export function handleMemberExited(event: MemberExited): void {
 
 export function handleCharterUpdated(event: CharterUpdated): void {
   let everest = Everest.load('1')
-  everest.charter = event.params.data
+  everest.charter = event.params.data.toHexString()
   everest.save()
+
+  parseProjectDetails(event.params.data)
 }
 
 export function handleWithdrawal(event: Withdrawal): void {
@@ -58,8 +58,10 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.applicationFee = event.params.applicationFee
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
-  everest.charter = event.params.charter
+  everest.charter = event.params.charter.toHexString()
   everest.save()
+
+  parseProjectDetails(event.params.charter)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {
@@ -155,4 +157,36 @@ function getVoteChoice(voteChoice: number): string {
     value = 'No'
   }
   return value
+}
+
+function parseProjectDetails(ipfsHash: Bytes): void {
+  let charter = Charter.load(ipfsHash.toHexString())
+  if (charter == null) {
+    charter = new Charter(ipfsHash.toHexString())
+  }
+  let hexHash = addQm(ipfsHash) as Bytes
+  let base58Hash = hexHash.toBase58()
+  let ipfsData = ipfs.cat(base58Hash)
+
+  if (ipfsData != null) {
+    let data = json.fromBytes(ipfsData as Bytes).toObject()
+    charter.charterDescription = data.get('charterDescription').isNull()
+      ? null
+      : data.get('charterDescription').toString()
+    charter.name = data.get('name').isNull() ? null : data.get('name').toString()
+    charter.description = data.get('description').isNull()
+      ? null
+      : data.get('description').toString()
+    charter.website = data.get('website').isNull() ? null : data.get('website').toString()
+    charter.twitter = data.get('twitter').isNull() ? null : data.get('twitter').toString()
+    charter.avatar = data.get('avatar').isNull() ? null : data.get('avatar').toString()
+    charter.image = data.get('image').isNull() ? null : data.get('image').toString()
+    charter.categories = data.get('categories').isNull()
+      ? null
+      : data.get('categories').toString()
+    charter.isRepresentative = data.get('isRepresentative').isNull()
+      ? null
+      : data.get('isRepresentative').toString()
+  }
+  charter.save()
 }

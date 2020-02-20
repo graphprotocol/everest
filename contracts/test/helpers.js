@@ -159,7 +159,8 @@ const helpers = {
         const didReg = await EthereumDIDRegistry.deployed()
         let nonce = await didReg.nonce(signingAddress)
         if (functionName == 'changeOwner') {
-            nonce = 1 // TODO - Change this so it isn't just 1, should be nonce + 1
+            // Add one, because we know this is being called second in the metatx
+            nonce = Number(nonce.toString()) + 1
         }
         const paddedNonce = utils.leftPad(Buffer.from([nonce], 64).toString('hex'))
         let dataToSign

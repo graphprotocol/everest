@@ -1,0 +1,11 @@
+{
+  "charterDescription": "The charter describes the details on each project field that must be uploaded with an Everest project. This is done to keep the Project information consistent across all Projects. If the Project details uploaded are deemed inaccurate, the Project should be challenged, so that a vote can be made to removed the Project if desired, and then upload the correct data for the Project after the challenge succeeds.",
+  "name": "The name must be provided for the project",
+  "description": "The description of the project should be very similar to what is portrayed on their website",
+  "website": "The projects main website URL (OPTIONAL)",
+  "twitter": "The main twitter account of the project (OPTIONAL)",
+  "avatar": "The main avatar of the project, which will likely be its own IPFS hash (OPTIONAL)",
+  "image": "The main image of the project, which will likely be its own IPFS hash (OPTIONAL)",
+  "categories": "An array of the categories that this project is part of, including all categories and subcategories",
+  "isRepresentative": "This is set to true if the project was applied to by a real representative of the project. If it is false, and handed over to a real reprersentative in the future, then the project details should be updated to reflect that."
+}

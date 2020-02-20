@@ -2,8 +2,6 @@ const Everest = artifacts.require('Everest.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
 
-// TODO - add in delegates
-
 contract('everest', () => {
     const member1Wallet = utils.wallets.nine() // throw away wallet
     const member1Address = member1Wallet.signingKey.address
