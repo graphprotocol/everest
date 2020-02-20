@@ -10,6 +10,7 @@ dataSources:
     source:
       address: '0xEB3Fb1A23cf6b527923e88E400aEDD75D69ffaBF'
       abi: Everest
+      startBlock: 7300000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -50,6 +51,7 @@ dataSources:
     source:
       address: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
       abi: EthereumDIDRegistry
+      startBlock: 7300000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3

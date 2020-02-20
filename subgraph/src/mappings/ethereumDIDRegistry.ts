@@ -20,6 +20,7 @@ export function handleDIDOwnerChanged(event: DIDOwnerChanged): void {
   let project = Project.load(id)
   if (project != null) {
     project.owner = event.params.owner.toHexString()
+    project.updatedAt = event.block.timestamp.toI32()
     project.save()
   }
 }
@@ -38,7 +39,7 @@ export function handleDIDDelegateChanged(event: DIDDelegateChanged): void {
     let delegateValidities = project.delegateValidities
     delegateValidities.push(event.params.validTo.toI32())
     project.delegateValidities = delegateValidities
-
+    project.updatedAt = event.block.timestamp.toI32()
     project.save()
   }
 }
@@ -114,6 +115,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         }
       }
     }
+    project.updatedAt = event.block.timestamp.toI32()
     project.save()
   }
 }
