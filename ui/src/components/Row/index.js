@@ -10,7 +10,7 @@ import Challenged from '../../images/challenged.svg'
 const Row = ({ item }) => {
   return (
     <Grid
-      gap={1}
+      gap={0}
       sx={rootStyles}
       onClick={() => navigate(`/project/${item.id}`)}
     >
@@ -60,7 +60,7 @@ const rootStyles = {
   background: '#FFF',
   height: '96px',
   alignItems: 'center',
-  margin: '16px 0',
+  my: 0,
   gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr',
   cursor: 'pointer',
   transition: 'all 0.3s ease',

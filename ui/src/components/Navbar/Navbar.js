@@ -67,6 +67,8 @@ const Navbar = ({ path, ...props }) => {
     },
   })
 
+  console.log('DATA: ', data)
+
   return (
     <Grid {...props} sx={{ height: '96px' }}>
       {isMobile ? (

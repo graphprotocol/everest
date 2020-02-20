@@ -9,6 +9,7 @@ import { useWeb3React } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
 import categories from '../data/categories.json'
 
+import Link from '../components/Link'
 import Stats from '../components/Stats'
 import Button from '../components/Button'
 import Section from '../components/Section'
@@ -41,7 +42,17 @@ const Index = ({ data }) => {
         <Box>
           <Styled.h1>
             Universally <br />
-            shared <span sx={{ color: 'secondary' }}>projects</span> registry
+            shared{' '}
+            <Link
+              to="/projects"
+              sx={{
+                fontSize: 'inherit',
+                display: 'inline',
+              }}
+            >
+              projects
+            </Link>{' '}
+            registry
           </Styled.h1>
           <Styled.h6 sx={{ marginTop: 4 }}>
             Every project starts with a mission. Our mission is to catalyze the
@@ -83,7 +94,7 @@ const Index = ({ data }) => {
           }}
         />
       </Grid>
-      <Grid sx={{ maxWidth: '1100px' }} mx="auto" my={8}>
+      <Grid sx={{ maxWidth: '1100px', width: '100%' }} mx="auto" my={8}>
         <Stats stats={stats} />
       </Grid>
       <Divider sx={{ my: 4 }} />
@@ -120,10 +131,11 @@ const Index = ({ data }) => {
         linkText="View all Projects"
         variant="project"
       />
+      <Divider />
       <Grid
         columns={[1, 2, 2]}
         gap={[1, 2, 6]}
-        sx={{ alignItems: 'center', mb: [5, 7, 7], mt: [5, 10, 10] }}
+        sx={{ alignItems: 'center', mb: [5, 7, 7], mt: [5, 7, 7] }}
       >
         <Box
           sx={{
@@ -146,7 +158,7 @@ const Index = ({ data }) => {
             <br />
             <br />
             To add a project to the registry you must submit a $10 listing fee
-            paid in ETH. The listing fee helps ensure the list's quality.
+            paid in ETH. The listing fee helps ensure the list&apos;s quality.
             <br />
             <br /> Anyone can challenge a listing by putting ETH at stake. With
             these tools we can build consensus on a shared registry without
@@ -168,6 +180,7 @@ const Index = ({ data }) => {
             image: project.image,
             category:
               project.categories.length > 0 ? project.categories[0] : '',
+            isChallenged: project.isChallenged,
           }
         })}
         linkTo="/projects"
@@ -175,12 +188,12 @@ const Index = ({ data }) => {
         variant="project"
       />
       <Divider />
-      <Grid gap={[2, 6, 8]} columns={[1, 2, 2]} mt={7}>
+      <Grid gap={[2, 6, 10]} columns={[1, 2, 2]} mt={7}>
         <Box
           sx={{
             ...imageStyles,
             backgroundImage: 'url(./bottom.png)',
-            order: [2, 1, 1],
+            order: 0,
           }}
         />
         <Box sx={{ maxWidth: '396px' }}>

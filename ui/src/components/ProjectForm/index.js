@@ -129,6 +129,8 @@ ProjectForm.propTypes = {
   handleSubmit: PropTypes.func,
   setValue: PropTypes.func,
   setDisabled: PropTypes.func,
+  buttonText: PropTypes.string,
+  setImage: PropTypes.func,
 }
 
 export default ProjectForm

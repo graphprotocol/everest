@@ -4,7 +4,7 @@ import { Grid } from '@theme-ui/components'
 import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
 
-import Challenged from '../../images/challenged.svg'
+import Challenged from '../../images/challenge.svg'
 
 const Card = ({
   title,
@@ -21,11 +21,18 @@ const Card = ({
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
       onClick={() => navigate(to)}
+      gap={0}
     >
       <Grid
-        p={variant === 'project' ? 4 : 0}
+        gap={0}
+        pt={variant === 'project' ? 5 : 0}
         pb={4}
-        sx={{ justifyContent: 'center' }}
+        sx={{
+          justifyContent: 'center',
+          pb: 4,
+          pt: variant === 'project' ? 6 : 0,
+          px: variant === 'project' ? 4 : 0,
+        }}
       >
         {variant === 'project' ? (
           <Box sx={{ margin: 'auto' }}>
@@ -50,15 +57,33 @@ const Card = ({
             />
           </Box>
         )}
-        <Box p={3} sx={{ textAlign: 'center' }}>
+        <Box
+          sx={{
+            textAlign: 'center',
+            padding: title && title.length > 16 ? 0 : 3,
+          }}
+        >
           {variant === 'project' && (
             <p sx={{ variant: 'text.tag' }}>{category}</p>
           )}
           <Styled.p sx={styles.title}>{title}</Styled.p>
-          <Styled.p sx={{ fontSize: '0.75rem', lineHeight: '0.875rem', py: 1 }}>
-            {description}
-          </Styled.p>
-          {isChallenged && <Challenged sx={{ paddingTop: 2 }} />}
+
+          {isChallenged ? (
+            <Challenged sx={{ paddingTop: 1, height: '30px', width: 'auto' }} />
+          ) : variant === 'project' ? (
+            <Styled.p
+              sx={{
+                fontSize: '0.75rem',
+                lineHeight: '0.875rem',
+                color: 'blackFaded',
+                pt: 1,
+              }}
+            >
+              {description}
+            </Styled.p>
+          ) : (
+            <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
+          )}
         </Box>
       </Grid>
     </Grid>

@@ -3,10 +3,11 @@
   "rules": {
     "camelcase": "warn",
     "no-unused-vars": "warn",
-    "no-undef": "warn",
-    "no-constant-condition": "warn"
+    "no-undef": "off",
+    "no-constant-condition": "warn",
+    "react/prop-types": "warn"
   },
-  "extends": ["eslint:recommended"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "plugins": ["react"],
   "settings": {
     "react": {

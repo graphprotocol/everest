@@ -11,6 +11,7 @@ const Row = ({
   setSelected,
   close,
   multiselect,
+  key,
   variant,
   ...props
 }) => {

@@ -7,6 +7,7 @@ import Navbar from '../Navbar'
 import Seo from '../Seo'
 
 const LayoutTemplate = ({ children, mainStyles, ...props }) => {
+  console.log('layoug props: ', props)
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
@@ -32,6 +33,8 @@ const LayoutTemplate = ({ children, mainStyles, ...props }) => {
             body: {
               fontFamily: 'Space Mono, monospace',
               transition: 'all 0.3s ease',
+              WebkitFontSmoothing: 'antialiased',
+              fontSmoothing: 'antialiased',
             },
           }
         }}

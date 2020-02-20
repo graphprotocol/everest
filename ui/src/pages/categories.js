@@ -5,7 +5,7 @@ import categories from '../data/categories.json'
 
 import Section from '../components/Section'
 
-const Categories = ({ data }) => {
+const Categories = () => {
   return (
     <Box>
       <Box>
@@ -19,8 +19,8 @@ const Categories = ({ data }) => {
           return {
             name: cat.name,
             description: cat.subcategories
-              ? `${cat.subcategories.length} projects`
-              : '0 projects',
+              ? `${cat.subcategories.length} PROJECTS`
+              : '0 PROJECTS',
             image: `/categories/${cat.slug}.png`,
             to: `/category/${cat.slug}`,
           }

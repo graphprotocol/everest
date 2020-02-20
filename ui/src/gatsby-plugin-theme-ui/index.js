@@ -19,7 +19,7 @@ export default {
   },
   fontWeights: {
     body: 400,
-    heading: 600,
+    heading: 900,
   },
   space: [0, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 154],
   styles: {
@@ -82,7 +82,7 @@ export default {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       fontFamily: 'body',
-      letterSpacing: '-0.5px',
+      letterSpacing: '-0.4px',
       color: 'text',
     },
     a: {
@@ -162,7 +162,7 @@ export default {
   text: {
     tag: {
       fontSize: '9px',
-      lineHeight: '1.5rem',
+      lineHeight: '0.75rem',
       letterSpacing: '1.5px',
       textTransform: 'uppercase',
       fontWeight: 'heading',

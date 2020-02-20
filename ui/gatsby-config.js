@@ -46,7 +46,7 @@ module.exports = {
         fonts: [
           {
             family: 'Space Mono',
-            variants: ['400', '400i', '700', '700i'],
+            variants: ['400', '400i', '700', '900', '900i'],
           },
         ],
       },

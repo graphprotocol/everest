@@ -1,17 +1,12 @@
 /** @jsx jsx */
 import { useState, Fragment } from 'react'
+import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import { useWeb3React } from '@web3-react/core'
 
-import { useEverestContract, useEthereumDIDRegistry } from '../utils/hooks'
 import { convertDate } from '../utils/helpers/date'
-import { ipfsHexHash } from '../services/ipfs'
-import {
-  DELEGATE_TYPE,
-  VALIDITY_TIMESTAMP,
-} from '../utils/helpers/metatransactions'
+
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
 
 import Divider from '../components/Divider'
@@ -27,69 +22,37 @@ import UserImage from '../images/profile-placeholder.svg'
 import Close from '../images/close.svg'
 
 const Project = ({ location }) => {
-  const { active, account, connector } = useWeb3React()
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
   const [challengeDescription, setChallengeDescription] = useState('')
-  const [challengeIPFShash, setChallengeIPFShash] = useState('')
   const [transferAddress, setTransferAddress] = useState('')
   const [delegateAddress, setDelegateAddress] = useState('')
-  const [everestContract] = useState(useEverestContract())
-  const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
   const [isKeepOpen, setIsKeepOpen] = useState(false)
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const challengeProject = () => {
     console.log('CHALLENGE PROJECT')
-    // TODO: get this from the projects dropdown, what ever is selected
-    let challengerProjectId = ''
-    const transaction = everestContract.challenge(
-      challengerProjectId,
-      projectId,
-      ipfsHexHash(challengeIPFShash),
-    )
+    // TODO: call mutations
   }
 
   const delegateProject = async () => {
     console.log('DELEGATE PROJECT')
-    const transaction = ethereumDIDRegistryContract.addDelegate(
-      projectId,
-      DELEGATE_TYPE,
-      delegateAddress,
-      VALIDITY_TIMESTAMP,
-    )
+    // TODO: call mutations
   }
 
   const transferOwnership = async () => {
     console.log('TRANSFER OWNERSHIP')
-    const transaction = await ethereumDIDRegistryContract.changeOwner(
-      projectId,
-      transferAddress,
-    )
+    // TODO: call mutations
   }
 
   const setChallengeData = value => {
     setChallengeDescription(value)
   }
 
-  const voteOnProject = (projects, choice) => {
-    // choice: 'keep' or 'remove'
-    // TODO: get this from the subgraph
-    // let challengeId = ''
-    // projectIds = projects.map(proj => proj.id)
-    // let voteChoice = new Array(projectIds.length)
-    // // yes: [1,1,1] -> depending how many projects you have selected
-    // // no: [2,2,2]
-    // const voteChoices = voteChoice.map(vc =>
-    //   choice === 'yes' ? (vc = 1) : (vc = 2),
-    // )
-    // const transaction = everestContract.submitVotes(
-    //   challengeId,
-    //   voteChoices,
-    //   projectIds,
-    // )
+  const voteOnProject = () => {
+    // TODO: call mutatioins
   }
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
@@ -109,7 +72,9 @@ const Project = ({ location }) => {
   }
 
   if (error) {
-    return <Styled.h3>Something went wrong - can't find a project </Styled.h3>
+    return (
+      <Styled.h3>Something went wrong - can&apos;t find a project </Styled.h3>
+    )
   }
 
   let project = data && data.project
@@ -157,7 +122,7 @@ const Project = ({ location }) => {
               items={[
                 {
                   text: 'Challenge',
-                  handleSelect: value => {
+                  handleSelect: () => {
                     setShowChallenge(true)
                     if (!showChallenge) {
                       setShowDelegate(false)
@@ -288,8 +253,7 @@ const Project = ({ location }) => {
                   </Link>
                 </Box>
               </Grid>
-
-              {false ? (
+              {!project.isChallenged ? (
                 <Fragment>
                   <Styled.h6>
                     This challenge is over. Process this challenge to resolve it
@@ -447,6 +411,11 @@ const buttonStyles = {
     width: '16px',
     height: '16px',
   },
+}
+
+Project.propTypes = {
+  pageContext: PropTypes.any,
+  location: PropTypes.any,
 }
 
 export default Project

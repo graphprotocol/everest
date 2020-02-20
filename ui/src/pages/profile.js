@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { Fragment, useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
@@ -7,7 +8,7 @@ import { gql } from 'apollo-boost'
 import { useWeb3React } from '@web3-react/core'
 import ThreeBox from '3box'
 
-import { getAddress, metamaskAccountChange } from '../services/ethers'
+import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 
 import Divider from '../components/Divider'
@@ -18,22 +19,23 @@ import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
-import { navigate } from 'gatsby'
 
 const PROFILE_QUERY = gql`
-  query everestProfile($id: ID!) {
-    user(where: { id: $id }) {
+  query profile($id: ID!) {
+    user(id: $id) {
       id
-      createdAt
       projects {
         id
         name
         description
-        categories
         avatar
-        createdAt
-        reputation
-        isChallenged
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          description
+        }
       }
       challenges {
         id
@@ -46,17 +48,16 @@ const Profile = ({ location }) => {
   const [selectedProjects, setSelectedProjects] = useState('cards')
   const [selectedChallenges, setSelectedChallenges] = useState('cards')
   const [profile, setProfile] = useState(null)
-  const [address, setAddress] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
-  const { active, account, connector } = useWeb3React()
+  const { account } = useWeb3React()
+
+  const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   useEffect(() => {
     async function getProfile() {
-      const address = await getAddress()
-      setAddress(address)
-      const threeBoxProfile = await ThreeBox.getProfile(address)
+      const threeBoxProfile = await ThreeBox.getProfile(profileId)
 
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
@@ -78,14 +79,14 @@ const Profile = ({ location }) => {
     getProfile()
   }, [])
 
-  const handleClick = (e, to) => {
-    e.preventDefault()
-    if (typeof window !== 'undefined') {
-      window.open(to, '_blank')
-    }
-  }
+  // const handleClick = (e, to) => {
+  //   e.preventDefault()
+  //   if (typeof window !== 'undefined') {
+  //     window.open(to, '_blank')
+  //   }
+  // }
 
-  const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
+  console.log('LOCATION: ', location.pathname.split('/').slice(-1)[0])
 
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
@@ -104,6 +105,8 @@ const Profile = ({ location }) => {
 
   const user = data && data.user
 
+  console.log('PROFILE: ', profile)
+
   return (
     <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
@@ -113,11 +116,35 @@ const Profile = ({ location }) => {
             alignItems: 'center',
           }}
         >
-          <Box>{false ? '' : <ProfileImage sx={projectLogoStyle} />}</Box>
-          <Box sx={{ color: 'secondary', fontWeight: 'heading' }}>
-            <Styled.h2>{profile ? profile.name : ''}</Styled.h2>
-            <p sx={{ fontSize: ['0.85rem', '0.85rem', '1rem'] }}>{profileId}</p>
+          <Box>
+            <ProfileImage
+              sx={{ height: '96px', width: '96px', borderRadius: '50%' }}
+            />
           </Box>
+          {profile ? (
+            <Box>
+              <Styled.h2>{profile.name}</Styled.h2>
+              <p
+                sx={{
+                  fontSize: ['0.85rem', '0.85rem', '1rem'],
+                  fontWeight: 'heading',
+                  color: 'secondary',
+                  mt: 1,
+                }}
+              >
+                {profileId}
+              </p>
+            </Box>
+          ) : (
+            <Box>
+              <Styled.h5>{profileId}</Styled.h5>
+              <Styled.p
+                sx={{ fontWeight: 'heading', color: 'secondary', mt: 3 }}
+              >
+                Edit/Create profile (3Box)
+              </Styled.p>
+            </Box>
+          )}
         </Grid>
         <Grid
           sx={{
@@ -186,16 +213,14 @@ const Profile = ({ location }) => {
           </Menu>
         </Grid>
       </Grid>
-      <Divider />
+      {profile && <Divider />}
       <Grid columns={[1, 1, 2]} gap={5}>
         <Box>
-          {profile && profile.description ? (
+          {profile && profile.description && (
             <Styled.p>{profile.description}</Styled.p>
-          ) : (
-            <Styled.p>Create a profile on 3Box - PLACEHOLDER</Styled.p>
           )}
         </Box>
-        {profile ? (
+        {profile && (
           <Box>
             {profile && profile.website && (
               <DataRow
@@ -223,87 +248,101 @@ const Profile = ({ location }) => {
               </Fragment>
             )}
           </Box>
-        ) : (
-          <Box sx={{ justifySelf: 'flex-end' }}>
-            <Button
-              variant="primary"
-              text="Create profile"
-              sx={{ maxWidth: '194px' }}
-              onClick={e => {
-                handleClick(e, `https://3box.io/hub`)
-              }}
-            />
-          </Box>
         )}
       </Grid>
-      <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-        <Box>
-          <Styled.h5>Your Projects</Styled.h5>
-          <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+      {user && user.projects && user.projects.length > 0 ? (
+        <Fragment>
+          <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+            <Box>
+              <Styled.h5>Your Projects</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+                {user && user.projects && user.projects.length > 0 && (
+                  <span>{user.projects.length} Projects</span>
+                )}
+              </Styled.p>
+            </Box>
             {user && user.projects && user.projects.length > 0 && (
-              <span>{user.projects.length} Projects</span>
+              <Switcher
+                selected={selectedProjects}
+                setSelected={setSelectedProjects}
+              />
             )}
-          </Styled.p>
-        </Box>
-        {user && user.projects && user.projects.length > 0 && (
-          <Switcher
-            selected={selectedProjects}
-            setSelected={setSelectedProjects}
+          </Grid>
+          {user && user.projects.length > 0 && (
+            <Section
+              items={user.projects.map(project => {
+                return {
+                  ...project,
+                  description: project.description.slice(0, 30) + '...',
+                  to: `/project/${project.id}`,
+                  image: project.avatar,
+                }
+              })}
+              variant="project"
+              selected={selectedProjects}
+            />
+          )}
+          {/* TODO: Replace with challenges  */}
+          <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+            <Box>
+              <Styled.h5>Your Challenges</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+                {user && user.projects && (
+                  <span>{user.projects.length} Projects - </span>
+                )}
+                {user && user.projects && (
+                  <span>{user.projects.length} Initiated</span>
+                )}
+              </Styled.p>
+            </Box>
+            {user && user.projects.length > 0 && (
+              <Switcher
+                selected={selectedChallenges}
+                setSelected={setSelectedChallenges}
+              />
+            )}
+          </Grid>
+          {user && user.projects.length > 0 && (
+            <Section
+              items={user.projects.map(project => {
+                return {
+                  ...project,
+                  description: project.description.slice(0, 30) + '...',
+                  to: `/project/${project.id}`,
+                  image: project.avatar,
+                }
+              })}
+              variant="project"
+              selected={selectedChallenges}
+            />
+          )}
+        </Fragment>
+      ) : (
+        <Box sx={{ textAlign: 'center', mt: 8 }}>
+          <img
+            src="/mountain-empty.png"
+            sx={{ height: '190px', width: 'auto' }}
           />
-        )}
-      </Grid>
-      {user && user.projects.length > 0 && (
-        <Section
-          items={user.projects.map(project => {
-            return {
-              ...project,
-              description: project.description.slice(0, 30) + '...',
-              to: `/project/${project.id}`,
-              image: project.avatar,
-            }
-          })}
-          variant="project"
-          selected={selectedProjects}
-        />
-      )}
-      {/* TODO: Replace with challenges  */}
-      <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-        <Box>
-          <Styled.h5>Your Challenges</Styled.h5>
-          <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {user && user.projects && (
-              <span>{user.projects.length} Projects - </span>
-            )}
-            {user && user.projects && (
-              <span>{user.projects.length} Initiated</span>
-            )}
+          <Divider sx={{ mt: '-6px !important' }} />
+          <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
+          <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+            This is where you&apos;ll see projects you created
           </Styled.p>
-        </Box>
-        {user && user.projects.length > 0 && (
-          <Switcher
-            selected={selectedChallenges}
-            setSelected={setSelectedChallenges}
+          <Button
+            text="Add a Project"
+            to="/projects/new"
+            variant="primary"
+            sx={{ m: '0 auto', mt: 7 }}
           />
-        )}
-      </Grid>
-      {user && user.projects.length > 0 && (
-        <Section
-          items={user.projects.map(project => {
-            return {
-              ...project,
-              description: project.description.slice(0, 30) + '...',
-              to: `/project/${project.id}`,
-              image: project.avatar,
-            }
-          })}
-          variant="project"
-          selected={selectedChallenges}
-        />
+        </Box>
       )}
     </Grid>
   )
 }
 
-const projectLogoStyle = { height: '96px', width: '96px', borderRadius: '50%' }
+Profile.propTypes = {
+  pageContext: PropTypes.any,
+  location: PropTypes.any,
+}
 
 export default Profile
