@@ -42,7 +42,7 @@ export function handleCharterUpdated(event: CharterUpdated): void {
   everest.charter = event.params.data.toHexString()
   everest.save()
 
-  parseProjectDetails(event.params.data, event.block.timestamp)
+  parseCharterDetails(event.params.data, event.block.timestamp)
 }
 
 export function handleWithdrawal(event: Withdrawal): void {
@@ -64,7 +64,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.createdAt = event.block.timestamp.toI32()
   everest.save()
 
-  parseProjectDetails(event.params.charter, event.block.timestamp)
+  parseCharterDetails(event.params.charter, event.block.timestamp)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {
@@ -166,7 +166,7 @@ function getVoteChoice(voteChoice: number): string {
   return value
 }
 
-function parseProjectDetails(ipfsHash: Bytes, timestamp: BigInt): void {
+function parseCharterDetails(ipfsHash: Bytes, timestamp: BigInt): void {
   let charter = Charter.load(ipfsHash.toHexString())
   if (charter == null) {
     charter = new Charter(ipfsHash.toHexString())
