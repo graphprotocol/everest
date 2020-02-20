@@ -3,9 +3,9 @@
  *
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
-
+let env = process.env.CI ? 'development' : process.env.NODE_ENV
 require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: `.env.${env}`,
 })
 
 module.exports = {
@@ -49,6 +49,25 @@ module.exports = {
             variants: ['400', '400i', '700', '700i'],
           },
         ],
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-eslint',
+      options: {
+        test: /\.js$|\.jsx$/,
+        exclude: /(node_modules|.cache|public|dist)/,
+        stages: ['develop'],
+        options: {
+          emitWarning: true,
+          failOnError: false,
+          failOnWarning: false,
+        },
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+            modules: true,
+          },
+        },
       },
     },
   ],

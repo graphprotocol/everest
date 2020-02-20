@@ -1,7 +1,8 @@
 {
-  "name": "everest",
+  "name": "everest-contracts",
   "version": "0.0.1",
   "scripts": {
+    "build": "truffle compile",
     "fix-js": "eslint ./ --fix",
     "fix-sol": "solium -d contracts/ --fix",
     "lint-js": "eslint ./",
@@ -20,7 +21,8 @@
     "ethereumjs-util": "^6.2.0",
     "ethers": "4.0.39",
     "js-sha3": "^0.8.0",
-    "openzeppelin-test-helpers": "0.5.1"
+    "openzeppelin-test-helpers": "0.5.1",
+    "truffle": "^5.0.4"
   },
   "devDependencies": {
     "eslint": "4.15.0",
