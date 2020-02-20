@@ -51,6 +51,25 @@ module.exports = {
         ],
       },
     },
+    {
+      resolve: 'gatsby-plugin-eslint',
+      options: {
+        test: /\.js$|\.jsx$/,
+        exclude: /(node_modules|.cache|public|dist)/,
+        stages: ['develop'],
+        options: {
+          emitWarning: true,
+          failOnError: false,
+          failOnWarning: false,
+        },
+        parserOptions: {
+          ecmaFeatures: {
+            jsx: true,
+            modules: true,
+          },
+        },
+      },
+    },
   ],
   siteMetadata: {
     title: 'Everest',

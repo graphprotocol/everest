@@ -59,4 +59,8 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
       },
     })
   }
+
+  actions.setWebpackConfig({
+    node: { fs: 'empty', net: 'empty', child_process: 'empty' },
+  })
 }
