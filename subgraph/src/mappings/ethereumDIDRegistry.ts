@@ -1,4 +1,4 @@
-import { json, ipfs, Bytes } from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValue, BigInt } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -6,7 +6,7 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project } from '../types/schema'
+import { Project, Category } from '../types/schema'
 import { addQm } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
@@ -19,7 +19,8 @@ export function handleDIDOwnerChanged(event: DIDOwnerChanged): void {
   let id = event.params.identity.toHexString()
   let project = Project.load(id)
   if (project != null) {
-    project.owner = event.params.owner.toHexString()
+    project.owner = event.params.owner.toHexString() // TODO owner not getting set
+    project.updatedAt = event.block.timestamp.toI32()
     project.save()
   }
 }
@@ -38,7 +39,7 @@ export function handleDIDDelegateChanged(event: DIDDelegateChanged): void {
     let delegateValidities = project.delegateValidities
     delegateValidities.push(event.params.validTo.toI32())
     project.delegateValidities = delegateValidities
-
+    project.updatedAt = event.block.timestamp.toI32()
     project.save()
   }
 }
@@ -69,7 +70,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
   if (project != null) {
     if (
       event.params.name.toHexString() ==
-      '0x70726f6a656374496e666f000000000000000000000000000000000000000000'
+      '0x50726f6a65637444617461000000000000000000000000000000000000000000'
     ) {
       // TODO - ponential for crashing? Because value is not forced to be 32 bytes. This is an
       // edge case because it has to be an identity, then it has to be called outside of the
@@ -100,20 +101,70 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         project.image = data.get('image').isNull() ? null : data.get('image').toString()
         // project.isRepresentative = data.get('isRepresentative').isNull()
         //   ? null
-        //   : data.get('isRepresentative').toBool()
+        //   : data.get('isRepresentative').toBool() // TODO this is not getting set
 
         let categories = data.get('categories')
+        let parsedArray: Array<string>
         if (categories != null) {
-          let parsedArray: Array<string>
           let categoriesArray = categories.toArray()
           for (let i = 0; i < categoriesArray.length; i++) {
-            let category = categoriesArray[i].toString()
-            parsedArray.push(category)
+            createCategory(categoriesArray[i], event.block.timestamp)
+            let category = categoriesArray[i].toObject()
+            let name: string = category.get('name').isNull()
+              ? null
+              : category.get('name').toString()
+            parsedArray.push(name)
           }
-          project.categories = parsedArray
+          project.categories = parsedArray // TODO this is not getting set
         }
       }
     }
+    project.updatedAt = event.block.timestamp.toI32()
     project.save()
+  }
+}
+
+function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
+  let categoryData = categoryJSON.toObject()
+  let name: string = categoryData.get('name').isNull()
+    ? null
+    : categoryData.get('name').toString()
+
+  let category = Category.load(name)
+  if (category == null) {
+    category = new Category(name)
+    category.slug = categoryData.get('slug').isNull()
+      ? null
+      : categoryData.get('slug').toString()
+    category.description = categoryData.get('description').isNull()
+      ? null
+      : categoryData.get('description').toString()
+    category.createdAt = timestamp.toI32()
+
+    let subcategories = categoryData.get('subcategories')
+    if (subcategories != null) {
+      let subCategoriesArray = subcategories.toArray()
+      for (let i = 0; i < subCategoriesArray.length; i++) {
+        let subCategoryData = subCategoriesArray[i].toObject()
+        let subName: string = subCategoryData.get('name').isNull()
+          ? null
+          : subCategoryData.get('name').toString()
+
+        let subCategory = Category.load(subName)
+        if (subCategory == null) {
+          subCategory = new Category(subName)
+          subCategory.slug = subCategoryData.get('slug').isNull()
+            ? null
+            : subCategoryData.get('slug').toString()
+          subCategory.description = subCategoryData.get('description').isNull()
+            ? null
+            : subCategoryData.get('description').toString()
+          subCategory.createdAt = timestamp.toI32()
+          subCategory.parentCategory = name
+          subCategory.save()
+        }
+      }
+    }
+    category.save()
   }
 }

@@ -15,6 +15,12 @@ const utils = {
 
     mockIPFSData: '0xbabbabb9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9',
 
+    offChainDataName: 'ProjectData',
+    // Setting validity to max uint256 value, since we don't plan to use validity
+    maxValidity: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+    // DAI_PERMIT_TYPEHASH = keccak256("Permit(address holder,address spender,uint256 nonce,uint256 expiry,bool allowed)");
+    DAI_PERMIT_TYPEHASH: 'ea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb',
+
     getReceiptValue: (receipt, arg) => receipt.logs[0].args[arg],
 
     /****** Open Zeppelin Test Helpers ******/

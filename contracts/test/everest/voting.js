@@ -2,9 +2,7 @@ const Everest = artifacts.require('Everest.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
 
-// TODO - add in delegates
-
-contract('everest', () => {
+contract('Everest', () => {
     const member1Wallet = utils.wallets.nine() // throw away wallet
     const member1Address = member1Wallet.signingKey.address
     const owner1Wallet = utils.wallets.zero()
@@ -40,6 +38,11 @@ contract('everest', () => {
     }
     const fakeDetails = '0x5555555555555555555555555555555555555555555555555555555555554444'
 
+    let everest
+    before(async () => {
+        everest = await Everest.deployed()
+    })
+
     describe('Test voting require statements and functionality', () => {
         // Set up 5 Tokens
         before(async () => {
@@ -50,7 +53,6 @@ contract('everest', () => {
             await helpers.applySignedWithAttribute(member5Wallet, owner5Wallet)
         })
         it('Voting on a challenge that does not exist fails', async () => {
-            const everest = await Everest.deployed()
             const fakeChallengeID = 500
             await utils.expectRevert(
                 everest.submitVote(fakeChallengeID, voteChoice.Yes, member1Address, {
@@ -60,7 +62,6 @@ contract('everest', () => {
             )
         })
         it('Voting must be yes or no, any other choice fails', async () => {
-            const everest = await Everest.deployed()
             const challengeID = await helpers.challenge(
                 member1Address,
                 member5Address,
@@ -85,7 +86,6 @@ contract('everest', () => {
         })
 
         it('Double voting on a challenge fails', async () => {
-            const everest = await Everest.deployed()
             const challengeID = await everest.getChallengeID(member5Address)
 
             await everest.submitVote(challengeID, 1, member2Address, {
@@ -100,7 +100,6 @@ contract('everest', () => {
         })
 
         it('Voting by a non-member fails', async () => {
-            const everest = await Everest.deployed()
             const challengeID = await everest.getChallengeID(member5Address)
             await utils.expectRevert(
                 everest.submitVote(challengeID, 1, nonMemberAddress, {
@@ -110,7 +109,6 @@ contract('everest', () => {
             )
         })
         it('Voting on an expired challenge fails', async () => {
-            const everest = await Everest.deployed()
             const challengeID = await everest.getChallengeID(member5Address)
 
             // Increase time, but do not resolve challenge yet
