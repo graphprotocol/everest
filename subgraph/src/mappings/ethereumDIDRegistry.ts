@@ -1,4 +1,4 @@
-import { json, ipfs, Bytes } from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValue, BigInt } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -6,7 +6,7 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project } from '../types/schema'
+import { Project, Category } from '../types/schema'
 import { addQm } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
@@ -70,7 +70,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
   if (project != null) {
     if (
       event.params.name.toHexString() ==
-      '0x70726f6a656374496e666f000000000000000000000000000000000000000000'
+      '0x50726f6a65637444617461000000000000000000000000000000000000000000'
     ) {
       // TODO - ponential for crashing? Because value is not forced to be 32 bytes. This is an
       // edge case because it has to be an identity, then it has to be called outside of the
@@ -108,8 +108,12 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           let parsedArray: Array<string>
           let categoriesArray = categories.toArray()
           for (let i = 0; i < categoriesArray.length; i++) {
-            let category = categoriesArray[i].toString()
-            parsedArray.push(category)
+            createCategory(categoriesArray[i], event.block.timestamp)
+            let category = categoriesArray[i].toObject()
+            const name: string = category.get('name').isNull()
+              ? null
+              : category.get('name').toString()
+            parsedArray.push(name)
           }
           project.categories = parsedArray
         }
@@ -117,5 +121,25 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
     }
     project.updatedAt = event.block.timestamp.toI32()
     project.save()
+  }
+}
+
+function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
+  let categoryData = categoryJSON.toObject()
+  let name: string = categoryData.get('name').isNull()
+    ? null
+    : categoryData.get('name').toString()
+
+  let category = Category.load(name)
+  if (category == null) {
+    category = new Category(name)
+    category.slug = categoryData.get('slug').isNull()
+      ? null
+      : categoryData.get('slug').toString()
+    category.description = categoryData.get('description').isNull()
+      ? null
+      : categoryData.get('description').toString()
+    category.createdAt = timestamp.toI32()
+    category.save()
   }
 }
