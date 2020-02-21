@@ -48,7 +48,7 @@ const Filters = ({
         }))
         acc.push(cat)
       }
-      return acc.flat()
+      return acc
     }, [])
 
     if (searchText) {
