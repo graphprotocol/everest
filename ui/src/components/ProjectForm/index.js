@@ -6,7 +6,6 @@ import Button from '../Button'
 
 const ProjectForm = ({
   project,
-  uploadImage,
   isDisabled,
   handleSubmit,
   setValue,
@@ -60,8 +59,7 @@ const ProjectForm = ({
         imageName={project.logoName}
         imageUrl={project.logoUrl}
         project={project}
-        uploadImage={e => uploadImage(e, 'logo')}
-        setImage={data => setImage('logo', data)}
+        setImage={data => setImage('avatar', data)}
       />
       <Field
         title="Project image"
@@ -70,7 +68,6 @@ const ProjectForm = ({
         imageName={project.imageName}
         imageUrl={project.imageUrl}
         project={project}
-        uploadImage={e => uploadImage(e, 'image')}
         setImage={data => setImage('image', data)}
       />
       <Field

@@ -28,14 +28,7 @@ const PROJECTS_QUERY = gql`
 
 const Category = ({ pageContext, location }) => {
   // const category = location ? location.pathname.split('/').slice(-1)[0] : ''
-  const [selected, setSelected] = useState(
-    param && param.show && ['table', 'cards'].includes(param.show)
-      ? param.show
-      : 'cards',
-  )
   const { loading, error, data } = useQuery(PROJECTS_QUERY)
-
-  console.log('DATA: ', data)
 
   if (loading) {
     return <div />
@@ -50,6 +43,12 @@ const Category = ({ pageContext, location }) => {
   if (location && location.search) {
     param = queryString.parse(location.search)
   }
+
+  const [selected, setSelected] = useState(
+    param && param.show && ['table', 'cards'].includes(param.show)
+      ? param.show
+      : 'cards',
+  )
 
   const setSelectedView = value => {
     setSelected(value)

@@ -13,8 +13,6 @@ const Field = ({
   title,
   type,
   text,
-  imageName,
-  imageUrl,
   placeholder,
   charsCount,
   value,
@@ -99,11 +97,7 @@ const Field = ({
             <Select items={items} />
           )
         ) : type === 'upload' ? (
-          <UploadImage
-            imageName={imageName}
-            imageUrl={imageUrl}
-            setImage={setImage}
-          />
+          <UploadImage setParentImage={setImage} />
         ) : (
           <label sx={styles.toggle}>
             <input

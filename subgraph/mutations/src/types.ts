@@ -14,7 +14,6 @@ export interface EditProjectArgs {
 }
 
 export interface AddProjectArgs {
-  id: string
   name: string
   description: string
   avatar: string
@@ -28,6 +27,32 @@ export interface AddProjectArgs {
 
 export interface RemoveProjectArgs {
   projectId: string
+}
+
+export interface TransferOwnershipArgs {
+  projectId: string
+  newOwnerAddress: string
+}
+
+export interface DelegateOwnershipArgs {
+  projectId: string
+  newOwnerAddress: string
+}
+
+export interface ChallengeProjectArgs {
+  challengingTokenAddress: string
+  challengedTokenAddress: string
+  details: string
+}
+
+export interface VoteChallengeArgs {
+  challengeId: string
+  voteChoice: Array<string>
+  voters: Array<string>
+}
+
+export interface ResolveChallengeArgs {
+  challengeId: string
 }
 
 interface Category {

@@ -86,8 +86,6 @@ const Profile = ({ location }) => {
   //   }
   // }
 
-  console.log('LOCATION: ', location.pathname.split('/').slice(-1)[0])
-
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: profileId,

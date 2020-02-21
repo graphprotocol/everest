@@ -63,7 +63,7 @@ const Project = ({ location }) => {
 
   const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
     variables: {
-      id: 'ck3t926929y7w0922q88lnsww',
+      id: projectId,
     },
   })
 
@@ -72,6 +72,7 @@ const Project = ({ location }) => {
   }
 
   if (error) {
+    console.error('Error getting the project: ', error)
     return (
       <Styled.h3>Something went wrong - can&apos;t find a project </Styled.h3>
     )
@@ -86,7 +87,7 @@ const Project = ({ location }) => {
           <Box>
             {project.avatar ? (
               <img
-                src={project.avatar}
+                src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`}
                 alt="Project avatar"
                 sx={projectLogoStyle}
               />
@@ -112,11 +113,13 @@ const Project = ({ location }) => {
             sx={{ gridTemplateColumns: '50px 1fr 30px', alignItems: 'center' }}
           >
             <Box>
-              {project.owner.image ? '' : <UserImage sx={userImageStyle} />}
+              <UserImage sx={userImageStyle} />
             </Box>
             <Box>
               <p sx={{ variant: 'text.small' }}>Owner</p>
-              <p sx={{ variant: 'text.large' }}>{project.owner.name}</p>
+              <p sx={{ variant: 'text.large' }}>
+                {project.owner && project.owner.name}
+              </p>
             </Box>
             <Menu
               items={[
@@ -391,7 +394,12 @@ const Project = ({ location }) => {
   )
 }
 
-const projectLogoStyle = { height: '96px', width: '96px', borderRadius: '50%' }
+const projectLogoStyle = {
+  height: '96px',
+  width: '96px',
+  borderRadius: '50%',
+  objectFit: 'contain',
+}
 const userImageStyle = { height: '43px', width: '43px', borderRadius: '50%' }
 const imageStyles = {
   backgroundRepeat: 'no-repeat',

@@ -1,54 +1,50 @@
 /** @jsx jsx */
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Styled, jsx } from 'theme-ui'
+import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-
-import ipfs from '../../services/ipfs'
+import { useMutation } from '@apollo/react-hooks'
+import { gql } from 'apollo-boost'
 
 import Close from '../../images/close.svg'
 
-// TODO: move all the functionality here
-const UploadImage = ({ setImage }) => {
-  const [uploadingImage, setUploadingImage] = useState(false)
-  const [imageUrl, setImageUrl] = useState('')
-  const [imageName, setImageName] = useState('')
+const UPLOAD_IMAGE = gql`
+  mutation uploadImage($image: File!) {
+    uploadImage(image: $image) @client
+  }
+`
 
-  const uploadImage = async e => {
+const UploadImage = ({ setParentImage }) => {
+  const [image, setImage] = useState('')
+
+  const [uploadImage, { loading: loadingImage }] = useMutation(UPLOAD_IMAGE, {
+    onError: error => {
+      console.error('Error uploading image to IPFS: ', error)
+    },
+    onCompleted: data => {
+      if (data) {
+        setImage(data.uploadImage)
+        setParentImage(data.uploadImage)
+      }
+    },
+  })
+
+  const handleUpload = async e => {
     const image = e.target.files[0]
     if (image) {
-      setUploadingImage(true)
-      const reader = new window.FileReader()
-      reader.readAsArrayBuffer(image)
-      reader.onloadend = async () => {
-        const buffer = await Buffer.from(reader.result)
-        await ipfs.add(buffer, async (err, res) => {
-          if (err) {
-            console.error('Error saving doc to IPFS: ', err)
-          }
-          if (res) {
-            const url = `https://ipfs.infura.io:5001/api/v0/cat?arg=${res[0].hash}`
-            setUploadingImage(false)
-            setImageUrl(url)
-            setImageName(image.name)
-            setImage({ url: url, name: image.name })
-          }
-        })
-      }
+      uploadImage({ variables: { image } })
     }
   }
 
   const removeImage = e => {
     e.preventDefault()
     e.stopPropagation()
-    setImageUrl('')
-    setImageName('')
   }
 
   return (
     <label
       sx={
-        imageName && imageUrl
+        image
           ? {
               ...styles.label,
               border: 'none',
@@ -73,16 +69,21 @@ const UploadImage = ({ setImage }) => {
         name="upload-image"
         type="file"
         accept="image/*"
-        onChange={uploadImage}
+        onChange={handleUpload}
       />
-      {imageUrl && imageName ? (
+      {image ? (
         <Grid sx={styles.grid} gap={0}>
           <img
-            src={imageUrl}
-            sx={{ height: '60px', width: '60px', position: 'relative' }}
-            alt={imageName}
+            src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${image}`}
+            sx={{
+              height: '60px',
+              width: '60px',
+              position: 'relative',
+              objectFit: 'contain',
+            }}
+            alt={image}
           />
-          <Styled.p>{imageName}</Styled.p>
+          <p sx={{ variant: 'text.small' }}>{image}</p>
           <Close
             sx={{
               transform: 'rotate(90deg)',
@@ -110,7 +111,7 @@ const UploadImage = ({ setImage }) => {
           gap={2}
         >
           <span>Upload image</span>
-          {uploadingImage && (
+          {loadingImage && (
             <img
               src="/loading-dots-white.gif"
               alt="Uploading"
@@ -164,10 +165,7 @@ const styles = {
 }
 
 UploadImage.propTypes = {
-  imageName: PropTypes.string,
-  imageUrl: PropTypes.string,
-  uploadImage: PropTypes.func,
-  setImage: PropTypes.func,
+  setParentImage: PropTypes.func,
 }
 
 export default UploadImage
