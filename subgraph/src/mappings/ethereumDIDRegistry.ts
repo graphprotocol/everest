@@ -19,7 +19,7 @@ export function handleDIDOwnerChanged(event: DIDOwnerChanged): void {
   let id = event.params.identity.toHexString()
   let project = Project.load(id)
   if (project != null) {
-    project.owner = event.params.owner.toHexString()
+    project.owner = event.params.owner.toHexString() // TODO owner not getting set
     project.updatedAt = event.block.timestamp.toI32()
     project.save()
   }
@@ -101,21 +101,21 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         project.image = data.get('image').isNull() ? null : data.get('image').toString()
         // project.isRepresentative = data.get('isRepresentative').isNull()
         //   ? null
-        //   : data.get('isRepresentative').toBool()
+        //   : data.get('isRepresentative').toBool() // TODO this is not getting set
 
         let categories = data.get('categories')
+        let parsedArray: Array<string>
         if (categories != null) {
-          let parsedArray: Array<string>
           let categoriesArray = categories.toArray()
           for (let i = 0; i < categoriesArray.length; i++) {
             createCategory(categoriesArray[i], event.block.timestamp)
             let category = categoriesArray[i].toObject()
-            const name: string = category.get('name').isNull()
+            let name: string = category.get('name').isNull()
               ? null
               : category.get('name').toString()
             parsedArray.push(name)
           }
-          project.categories = parsedArray
+          project.categories = parsedArray // TODO this is not getting set
         }
       }
     }
@@ -140,6 +140,31 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
       ? null
       : categoryData.get('description').toString()
     category.createdAt = timestamp.toI32()
+
+    let subcategories = categoryData.get('subcategories')
+    if (subcategories != null) {
+      let subCategoriesArray = subcategories.toArray()
+      for (let i = 0; i < subCategoriesArray.length; i++) {
+        let subCategoryData = subCategoriesArray[i].toObject()
+        let subName: string = subCategoryData.get('name').isNull()
+          ? null
+          : subCategoryData.get('name').toString()
+
+        let subCategory = Category.load(subName)
+        if (subCategory == null) {
+          subCategory = new Category(subName)
+          subCategory.slug = subCategoryData.get('slug').isNull()
+            ? null
+            : subCategoryData.get('slug').toString()
+          subCategory.description = subCategoryData.get('description').isNull()
+            ? null
+            : subCategoryData.get('description').toString()
+          subCategory.createdAt = timestamp.toI32()
+          subCategory.parentCategory = name
+          subCategory.save()
+        }
+      }
+    }
     category.save()
   }
 }
