@@ -35,8 +35,6 @@ const Category = ({ pageContext, location }) => {
   )
   const { loading, error, data } = useQuery(PROJECTS_QUERY)
 
-  console.log('DATA: ', data)
-
   if (loading) {
     return <div />
   }

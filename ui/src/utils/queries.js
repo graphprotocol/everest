@@ -7,14 +7,12 @@ import { gql } from 'apollo-boost'
 // }
 export const PROJECT_QUERY = gql`
   query everestProject($id: ID!) {
-    project(where: { id: $id }) {
+    project(id: $id) {
       id
       name
       description
       categories
       createdAt
-      reputation
-      isChallenged
       website
       twitter
       github

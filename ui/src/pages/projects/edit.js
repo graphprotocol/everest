@@ -119,8 +119,6 @@ const EditProject = ({ location }) => {
     setIsDisabled(true)
     const projectData = Buffer.from(JSON.stringify(project))
 
-    console.log('projectData: ', projectData)
-
     await ipfs.add(projectData, async (err, response) => {
       if (err) {
         console.error('Error saving doc to IPFS: ', err)
@@ -128,7 +126,6 @@ const EditProject = ({ location }) => {
 
       if (response && response[0].hash) {
         const ipfsHash = response[0].hash
-        console.log('IPFS HASH: ', response[0].hash)
 
         const transaction = ethereumDIDRegistryContract(
           project.id,

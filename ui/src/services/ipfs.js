@@ -9,8 +9,6 @@ const client = {
 
 const ipfs = new ipfsClient(client)
 
-console.log('IPFS: ', ipfs)
-
 // convert from ipfsHash to Hex string
 export const ipfsHexHash = ipfsHash => {
   const base58 = base(

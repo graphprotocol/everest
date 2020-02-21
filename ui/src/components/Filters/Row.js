@@ -106,9 +106,9 @@ Row.propTypes = {
     slug: PropTypes.string,
   }),
   parent: PropTypes.any,
-  selected: PropTypes.string,
+  selected: PropTypes.any,
   setSelected: PropTypes.func,
-  close: PropTypes.func,
+  close: PropTypes.bool,
   multiselect: PropTypes.bool,
   variant: PropTypes.string,
 }

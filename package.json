@@ -13,6 +13,7 @@
     ]
   },
   "scripts": {
+    "start:dev": "yarn build:mutations && yarn start:ui",
     "build": "yarn build:contracts && yarn build:mutations && yarn build:subgraph",
     "build:contracts": "lerna exec --scope everest-contracts -- yarn build",
     "build:mutations": "lerna exec --scope everest-mutations -- yarn build",

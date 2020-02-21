@@ -6,13 +6,26 @@ import {
   StateBuilder,
   StateUpdater,
 } from '@graphprotocol/mutations'
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { Transaction } from 'ethers/utils'
 import { AsyncSendable, Web3Provider } from 'ethers/providers'
 import ipfsHttpClient from 'ipfs-http-client'
 import gql from 'graphql-tag'
+import { URL } from 'url'
 
-import { EditProjectArgs, RemoveProjectArgs, AddProjectArgs } from './types'
+import { sleep, uploadToIpfs, PROJECT_QUERY } from './utils'
+import {
+  EditProjectArgs,
+  RemoveProjectArgs,
+  AddProjectArgs,
+  ChallengeProjectArgs,
+  TransferOwnershipArgs,
+  DelegateOwnershipArgs,
+  VoteChallengeArgs,
+  ResolveChallengeArgs,
+} from './types'
+
+import { applySignedWithAttribute } from './contract-helpers/metatransactions'
 
 interface CustomEvent extends EventPayload {
   myValue: string
@@ -50,55 +63,11 @@ const config = {
     return new Web3Provider(provider)
   },
   ipfs: (endpoint: string) => {
-    const url = new URL(endpoint)
-    return ipfsHttpClient({
-      protocol: url.protocol.replace(/[:]+$/, ''),
-      host: url.hostname,
-      port: url.port,
-      'api-path': url.pathname.replace(/\/$/, '') + '/api/v0/',
-    })
+    return ipfsHttpClient(endpoint)
   },
 }
 
 type Context = MutationContext<Config, State, EventMap>
-
-const uploadToIpfs = async (ipfs: any, data: any): Promise<string> => {
-  let result
-
-  for await (const returnedValue of ipfs.add(data)) {
-    result = returnedValue
-  }
-
-  return result.path
-}
-
-const PROJECT_QUERY = gql`
-  query everestProject($id: ID!) {
-    project(where: { id: $id }) {
-      id
-      name
-      description
-      categories
-      createdAt
-      reputation
-      isChallenged
-      website
-      twitter
-      github
-      image
-      avatar
-      totalVotes
-      owner {
-        id
-        name
-      }
-    }
-  }
-`
-
-const sleep = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 async function queryProject(context: Context, projectId: string) {
   const { client } = context
@@ -178,8 +147,8 @@ async function getContract(context: Context, contract: string) {
   }
 
   const network = await ethereum.getNetwork()
-  let networkName = network.name
 
+  let networkName = network.name
   if (networkName === 'dev' || networkName === 'unknown') {
     networkName = 'ganache'
   }
@@ -211,8 +180,41 @@ const uploadImage = async (_, { image }: any, context: Context) => {
 }
 
 const addProject = async (_, args: AddProjectArgs, context: Context) => {
-  // const everest = await getContract(context)
-  // Dave's code goes here...
+  const { ethereum, ipfs } = context.graph.config
+
+  const metadata = Buffer.from(JSON.stringify(args))
+  const ipfsHash = await uploadToIpfs(ipfs, metadata)
+
+  const owner = await ethereum.getSigner().getAddress()
+  const member = await ethers.Wallet.createRandom().connect(ethereum)
+
+  const memberSigningKey = new utils.SigningKey(member.privateKey)
+
+  const everestContract = await getContract(context, 'Everest')
+  const ethereumDIDRegistryContract = await getContract(context, 'EthereumDIDRegistry')
+  const daiContract = await getContract(context, 'Dai')
+
+  let transaction
+  try {
+    transaction = await applySignedWithAttribute(
+      member,
+      memberSigningKey,
+      owner,
+      ipfsHash,
+      everestContract,
+      ethereumDIDRegistryContract,
+      daiContract,
+      ethereum,
+    )
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+
+  transaction
+    .wait()
+    .then(() => console.log('SUCCESSFUL ADD PROJECT'))
+    .catch(err => console.error('TRansaction error: ', err))
 }
 
 const removeProject = async (_, args: RemoveProjectArgs, context: Context) => {
@@ -239,12 +241,27 @@ const editProject = async (_, args: EditProjectArgs, context: Context) => {
   return await queryProject(context, id)
 }
 
+const transferOwnership = async (_, args: TransferOwnershipArgs, context: Context) => {}
+
+const delegateOwnership = async (_, args: DelegateOwnershipArgs, context: Context) => {}
+
+const challengeProject = async (_, args: ChallengeProjectArgs, context: Context) => {}
+
+const voteChallenge = async (_, args: VoteChallengeArgs, context: Context) => {}
+
+const resolveChallenge = async (_, args: ResolveChallengeArgs, context: Context) => {}
+
 const resolvers: MutationResolvers<Config, State, EventMap> = {
   Mutation: {
     uploadImage,
     addProject,
     removeProject,
     editProject,
+    transferOwnership,
+    delegateOwnership,
+    challengeProject,
+    voteChallenge,
+    resolveChallenge,
   },
 }
 

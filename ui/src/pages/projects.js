@@ -24,8 +24,6 @@ const Projects = () => {
 
   const { loading, error, data } = useQuery(PROJECTS_QUERY)
 
-  console.log('LOADING, ERROR, DATA: ', loading, error, data)
-
   if (loading) {
     return <div />
   }

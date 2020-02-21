@@ -16,7 +16,6 @@ const mutations = createMutations({
     stateBuilder: everestMutations.stateBuilder,
   },
   subgraph: 'everest',
-  node: ipfsURI,
   config: {
     ethereum: async () => {
       const { ethereum } = window
