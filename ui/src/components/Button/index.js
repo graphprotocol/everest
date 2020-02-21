@@ -58,6 +58,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   icon: PropTypes.string,
+  loading: PropTypes.bool,
 }
 
 export default Button

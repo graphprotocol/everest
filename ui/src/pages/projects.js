@@ -24,6 +24,8 @@ const Projects = () => {
 
   const { loading, error, data } = useQuery(PROJECTS_QUERY)
 
+  console.log('LOADING, ERROR, DATA: ', loading, error, data)
+
   if (loading) {
     return <div />
   }
@@ -38,7 +40,9 @@ const Projects = () => {
     data.projects.map(project => {
       return {
         ...project,
-        description: project.description.slice(0, 20) + '...',
+        description: project.description
+          ? project.description.slice(0, 20) + '...'
+          : '',
       }
     })
 
@@ -64,7 +68,7 @@ const Projects = () => {
         items={allProjects.map(project => {
           return {
             ...project,
-            description: project.description.slice(0, 40) + '...',
+            description: project.description,
             to: `/project/${project.id}`,
           }
         })}

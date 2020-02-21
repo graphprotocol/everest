@@ -218,6 +218,19 @@ Field.propTypes = {
   type: PropTypes.string,
   charsCount: PropTypes.number,
   multiselect: PropTypes.bool,
+  text: PropTypes.string,
+  imageName: PropTypes.string,
+  imageUrl: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+  setImage: PropTypes.func,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      parent: PropTypes.any,
+    }),
+  ),
 }
 
 export default Field

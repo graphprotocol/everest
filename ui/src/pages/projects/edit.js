@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useQuery } from '@apollo/react-hooks'
@@ -15,7 +16,7 @@ import { PROJECT_QUERY } from '../../utils/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
-const EditProject = ({ location, ...props }) => {
+const EditProject = ({ location }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
   const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
 
@@ -77,7 +78,9 @@ const EditProject = ({ location, ...props }) => {
   }
 
   if (error) {
-    return <Styled.h3>Something went wrong - can't find a project </Styled.h3>
+    return (
+      <Styled.h3>Something went wrong - can&apos;t find a project </Styled.h3>
+    )
   }
 
   const uploadImage = async (e, field) => {
@@ -183,8 +186,8 @@ const EditProject = ({ location, ...props }) => {
           A project can be a dApp, DAO, protocol, NGO, research group service
           provider and more! <br />
           <br />
-          Make sure to tag your project's categories to allow other users to
-          search for your project.
+          Make sure to tag your project&apos;s categories to allow other users
+          to search for your project.
         </p>
         <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
         <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
@@ -202,6 +205,11 @@ const EditProject = ({ location, ...props }) => {
       </Box>
     </Grid>
   )
+}
+
+EditProject.propTypes = {
+  pageContext: PropTypes.any,
+  location: PropTypes.any,
 }
 
 export default EditProject

@@ -14,7 +14,7 @@ const UploadImage = ({ setImage }) => {
   const [imageUrl, setImageUrl] = useState('')
   const [imageName, setImageName] = useState('')
 
-  const uploadImage = async (e, field) => {
+  const uploadImage = async e => {
     const image = e.target.files[0]
     if (image) {
       setUploadingImage(true)
@@ -167,6 +167,7 @@ UploadImage.propTypes = {
   imageName: PropTypes.string,
   imageUrl: PropTypes.string,
   uploadImage: PropTypes.func,
+  setImage: PropTypes.func,
 }
 
 export default UploadImage

@@ -17,7 +17,7 @@ import {
 
 import ProjectForm from '../../components/ProjectForm'
 
-const NewProject = ({ data, ...props }) => {
+const NewProject = () => {
   const [isDisabled, setIsDisabled] = useState(true)
   const [project, setProject] = useState({
     name: '',
@@ -161,8 +161,8 @@ const NewProject = ({ data, ...props }) => {
           A project can be a dApp, DAO, protocol, NGO, research group service
           provider and more! <br />
           <br />
-          Make sure to tag your project's categories to allow other users to
-          search for your project.
+          Make sure to tag your project&apos;s categories to allow other users
+          to search for your project.
         </p>
         <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
         <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>

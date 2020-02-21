@@ -35,12 +35,13 @@ const Section = ({
         {items.length > 0 && (
           <Grid
             gap={1}
-            mt={8}
+            mt={7}
             sx={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr' }}
           >
             {['Name', 'Category', 'Date Added', 'Reputation', 'Challenged'].map(
-              entry => (
+              (entry, index) => (
                 <p
+                  key={index}
                   sx={{
                     textAlign: 'left',
                     color: 'column',
@@ -57,8 +58,10 @@ const Section = ({
             )}
           </Grid>
         )}
-        {items.map(item => (
-          <Row item={item} />
+        {items.map((item, index) => (
+          <Box key={index}>
+            <Row item={item} />
+          </Box>
         ))}
       </Fragment>
     )
@@ -85,6 +88,7 @@ const Section = ({
               image={item.image}
               to={item.to}
               category={item.category}
+              isChallenged={item.isChallenged}
             />
           ))}
         </Grid>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 63.1 (101010) - https://sketch.com -->
+    <title>FA9398F0-754F-47E9-A506-F3543D5ACBCE</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Everest" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.64">
+        <g id="Landing-page-/-not-signed-in" transform="translate(-385.000000, -3070.000000)" fill="#4C66FF">
+            <g id="Table-list-Copy-3" transform="translate(306.000000, 2892.000000)">
+                <g id="Challenged?" transform="translate(0.000000, 165.000000)">
+                    <g id="Challanged" transform="translate(73.000000, 7.000000)">
+                        <g id="Icon-/-Challanged-/-Remove" transform="translate(10.000000, 10.000000)">
+                            <polygon id="Fill-5-Copy" transform="translate(12.000000, 10.000000) rotate(-180.000000) translate(-12.000000, -10.000000) " points="18 6 8 6 6 8 6 14 15 14 18 11"></polygon>
+                            <polygon id="Fill-6-Copy" transform="translate(14.000000, 12.000000) rotate(-180.000000) translate(-14.000000, -12.000000) " points="18 6 16 6 10 12 10 18 18 18"></polygon>
+                        </g>
+                        <g id="Icon-/-Challanged-/-Keep">
+                            <polygon id="Fill-5" points="18 10 8 10 6 12 6 18 15 18 18 15"></polygon>
+                            <polygon id="Fill-6" points="14 6 12 6 6 12 6 18 14 18"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

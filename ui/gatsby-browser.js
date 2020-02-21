@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ethers } from 'ethers'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { Web3ReactProvider } from '@web3-react/core'
@@ -20,10 +21,19 @@ const wrapRootElement = ({ element }) => {
   )
 }
 
+wrapRootElement.propTypes = {
+  element: PropTypes.any,
+}
+
 const wrapPageElement = ({ element, props }) => (
   <Layout {...props}>
     <Web3ReactConnect>{element}</Web3ReactConnect>
   </Layout>
 )
+
+wrapPageElement.propTypes = {
+  element: PropTypes.any,
+  props: PropTypes.any,
+}
 
 export { wrapRootElement, wrapPageElement }

@@ -10,7 +10,7 @@ import Challenged from '../../images/challenged.svg'
 const Row = ({ item }) => {
   return (
     <Grid
-      gap={1}
+      gap={0}
       sx={rootStyles}
       onClick={() => navigate(`/project/${item.id}`)}
     >
@@ -38,7 +38,7 @@ const Row = ({ item }) => {
       <Box sx={boxStyles}>
         <Styled.p sx={{ color: 'secondary', fontWeight: 'heading' }}>
           {item.categories.map(cat => (
-            <span>{cat}</span>
+            <span key={cat}>{cat}</span>
           ))}
         </Styled.p>
       </Box>
@@ -60,7 +60,7 @@ const rootStyles = {
   background: '#FFF',
   height: '96px',
   alignItems: 'center',
-  margin: '16px 0',
+  my: 0,
   gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
@@ -85,12 +85,19 @@ const imageStyles = {
 
 Row.propTypes = {
   item: PropTypes.shape({
+    id: PropTypes.any,
     name: PropTypes.string,
     description: PropTypes.string,
     category: PropTypes.string,
     createdAt: PropTypes.string,
+    image: PropTypes.string,
     reputation: PropTypes.string,
     isChallenged: PropTypes.bool,
+    categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.any,
+      }),
+    ),
   }),
 }
 

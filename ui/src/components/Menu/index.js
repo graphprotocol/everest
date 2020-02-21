@@ -4,14 +4,6 @@ import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-import {
-  Menu as MenuUI,
-  MenuList,
-  MenuButton,
-  MenuItem,
-} from '@reach/menu-button'
-import '@reach/menu-button/styles.css'
-
 const Menu = ({ children, items }) => {
   const [isOpen, setIsOpen] = useState(false)
 

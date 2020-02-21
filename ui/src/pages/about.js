@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Styled, jsx, Box } from 'theme-ui'
 
-const About = ({ data }) => {
+const About = () => {
   return (
     <Box>
       <Styled.p>Everest is the greatest project ever.</Styled.p>
