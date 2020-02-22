@@ -56,8 +56,6 @@ const stateBuilder: StateBuilder<State, EventMap> = {
   },
 }
 
-type Config = typeof config
-
 const config = {
   ethereum: (provider: AsyncSendable): Web3Provider => {
     return new Web3Provider(provider)
@@ -66,6 +64,8 @@ const config = {
     return ipfsHttpClient(endpoint)
   },
 }
+
+type Config = typeof config
 
 type Context = MutationContext<Config, State, EventMap>
 
@@ -220,10 +220,27 @@ const addProject = async (_, args: AddProjectArgs, context: Context) => {
 const removeProject = async (_, args: RemoveProjectArgs, context: Context) => {
   const { projectId } = args
 
-  // const everest = await getContract(context)
-  // sendTx(everest.memberExit( ... ))
+  const everest = await getContract(context, "Everest")
 
-  return true
+  let transaction
+  try{
+    transaction = await everest.memberExit(projectId, {
+      gasLimit: 1000000,
+      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
+    })
+  }catch(err){
+    console.log(err)
+    throw err
+  }
+
+  return transaction
+    .wait()
+    .then(() => true)
+    .catch(err => {
+      console.error('TRansaction error: ', err)
+      return false
+    })
+
 }
 
 const editProject = async (_, args: EditProjectArgs, context: Context) => {
