@@ -258,7 +258,30 @@ const editProject = async (_, args: EditProjectArgs, context: Context) => {
   return await queryProject(context, id)
 }
 
-const transferOwnership = async (_, args: TransferOwnershipArgs, context: Context) => {}
+const transferOwnership = async (_, args: TransferOwnershipArgs, context: Context) => {
+  const { projectId, newOwnerAddress } = args
+
+  const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
+
+  let transaction
+  try{
+    transaction = await ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, {
+      gasLimit: 1000000,
+      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
+    })
+  }catch(err){
+    console.log(err)
+    throw err
+  }
+
+  return transaction
+    .wait()
+    .then(() => true)
+    .catch(err => {
+      console.error('TRansaction error: ', err)
+      return false
+    })
+}
 
 const delegateOwnership = async (_, args: DelegateOwnershipArgs, context: Context) => {}
 
