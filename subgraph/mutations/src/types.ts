@@ -40,8 +40,8 @@ export interface DelegateOwnershipArgs {
 }
 
 export interface ChallengeProjectArgs {
-  challengingTokenAddress: string
-  challengedTokenAddress: string
+  challengingProjectAddress: string
+  challengedProjectAddress: string
   details: string
 }
 

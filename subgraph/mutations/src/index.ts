@@ -22,10 +22,10 @@ import {
   TransferOwnershipArgs,
   DelegateOwnershipArgs,
   VoteChallengeArgs,
-  ResolveChallengeArgs,
+  ResolveChallengeArgs
 } from './types'
 
-import { applySignedWithAttribute } from './contract-helpers/metatransactions'
+import { applySignedWithAttribute, overrides } from './contract-helpers/metatransactions'
 
 interface CustomEvent extends EventPayload {
   myValue: string
@@ -173,13 +173,13 @@ async function getContract(context: Context, contract: string) {
   return instance
 }
 
-const uploadImage = async (_, { image }: any, context: Context) => {
+const uploadImage = async (_: any, { image }: any, context: Context) => {
   const { ipfs } = context.graph.config
 
   return await uploadToIpfs(ipfs, image)
 }
 
-const addProject = async (_, args: AddProjectArgs, context: Context) => {
+const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const { ethereum, ipfs } = context.graph.config
 
   const metadata = Buffer.from(JSON.stringify(args))
@@ -214,20 +214,17 @@ const addProject = async (_, args: AddProjectArgs, context: Context) => {
   transaction
     .wait()
     .then(() => console.log('SUCCESSFUL ADD PROJECT'))
-    .catch(err => console.error('TRansaction error: ', err))
+    .catch(err => console.error('Transaction error: ', err))
 }
 
-const removeProject = async (_, args: RemoveProjectArgs, context: Context) => {
+const removeProject = async (_: any, args: RemoveProjectArgs, context: Context) => {
   const { projectId } = args
 
   const everest = await getContract(context, "Everest")
 
   let transaction
   try{
-    transaction = await everest.memberExit(projectId, {
-      gasLimit: 1000000,
-      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
-    })
+    transaction = await everest.memberExit(projectId, overrides)
   }catch(err){
     console.log(err)
     throw err
@@ -237,13 +234,13 @@ const removeProject = async (_, args: RemoveProjectArgs, context: Context) => {
     .wait()
     .then(() => true)
     .catch(err => {
-      console.error('TRansaction error: ', err)
+      console.error('Transaction error: ', err)
       return false
     })
 
 }
 
-const editProject = async (_, args: EditProjectArgs, context: Context) => {
+const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   const { ipfs } = context.graph.config
 
   const { id } = args
@@ -258,17 +255,14 @@ const editProject = async (_, args: EditProjectArgs, context: Context) => {
   return await queryProject(context, id)
 }
 
-const transferOwnership = async (_, args: TransferOwnershipArgs, context: Context) => {
+const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: Context) => {
   const { projectId, newOwnerAddress } = args
 
   const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
 
   let transaction
   try{
-    transaction = await ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, {
-      gasLimit: 1000000,
-      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
-    })
+    transaction = await ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, overrides)
   }catch(err){
     console.log(err)
     throw err
@@ -278,18 +272,80 @@ const transferOwnership = async (_, args: TransferOwnershipArgs, context: Contex
     .wait()
     .then(() => true)
     .catch(err => {
-      console.error('TRansaction error: ', err)
+      console.error('Transaction error: ', err)
       return false
     })
 }
 
-const delegateOwnership = async (_, args: DelegateOwnershipArgs, context: Context) => {}
+const delegateOwnership = async (_: any, args: DelegateOwnershipArgs, context: Context) => {
 
-const challengeProject = async (_, args: ChallengeProjectArgs, context: Context) => {}
+}
 
-const voteChallenge = async (_, args: VoteChallengeArgs, context: Context) => {}
+const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Context) => {
+  const { challengedProjectAddress, challengingProjectAddress, details } = args
 
-const resolveChallenge = async (_, args: ResolveChallengeArgs, context: Context) => {}
+  const ethereumDIDRegistry = await getContract(context, 'EthereumDIDRegistry')
+
+  let transaction
+  try{
+    transaction = await ethereumDIDRegistry.changeOwner(challengingProjectAddress, challengedProjectAddress, details, overrides)
+  }catch(err){
+    console.log(err)
+    throw err
+  }
+
+  return transaction
+    .wait()
+    .then(() => true)
+    .catch(err => {
+      console.error('Transaction error: ', err)
+      return false
+    })
+}
+
+const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) => {
+  const { challengeId, voteChoice, voters } = args
+
+  const everest = await getContract(context, "Everest")
+
+  let transaction
+  try{
+    transaction = await everest.submitVotes(challengeId, voteChoice, voters, overrides)
+  }catch(err){
+    console.log(err)
+    throw err
+  }
+
+  return transaction
+    .wait()
+    .then(() => true)
+    .catch(err => {
+      console.error('Transaction error: ', err)
+      return false
+    })
+}
+
+const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Context) => {
+  const { challengeId } = args
+
+  const everest = await getContract(context, "Everest")
+
+  let transaction
+  try{
+    transaction = await everest.resolveChallenge(challengeId, overrides)
+  }catch(err){
+    console.log(err)
+    throw err
+  }
+
+  return transaction
+    .wait()
+    .then(() => true)
+    .catch(err => {
+      console.error('Transaction error: ', err)
+      return false
+    })
+}
 
 const resolvers: MutationResolvers<Config, State, EventMap> = {
   Mutation: {

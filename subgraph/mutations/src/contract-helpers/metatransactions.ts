@@ -18,6 +18,11 @@ export const changeOwnerSignedData = (projectId, owner) => {
   )
 }
 
+export const overrides = {
+  gasLimit: 1000000,
+  gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
+}
+
 export const setAttributeData = (projectId, ipfsHash, offChainDataName) => {
   return utils.solidityKeccak256(
     [
