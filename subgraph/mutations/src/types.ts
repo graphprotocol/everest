@@ -1,7 +1,7 @@
 //TODO: Args are any by default in graphQL, do we really need these interfaces?
 
 export interface EditProjectArgs {
-  id: string
+  projectId: string
   name: string
   description: string
   avatar: string
@@ -10,7 +10,7 @@ export interface EditProjectArgs {
   github: string
   twitter: string
   isRepresentative: boolean
-  categories: Array<any>
+  categories: Array<Category>
 }
 
 export interface AddProjectArgs {
@@ -42,7 +42,9 @@ export interface DelegateOwnershipArgs {
 export interface ChallengeProjectArgs {
   challengingProjectAddress: string
   challengedProjectAddress: string
-  details: string
+  details: {
+    description: string
+  }
 }
 
 export interface VoteChallengeArgs {

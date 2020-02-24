@@ -3,17 +3,20 @@ import {
   MutationContext,
   MutationResolvers,
   MutationState,
-  StateBuilder,
-  StateUpdater,
+  StateBuilder
 } from '@graphprotocol/mutations'
 import { ethers, utils } from 'ethers'
+import { DocumentNode } from 'graphql'
 import { Transaction } from 'ethers/utils'
 import { AsyncSendable, Web3Provider } from 'ethers/providers'
 import ipfsHttpClient from 'ipfs-http-client'
-import gql from 'graphql-tag'
-import { URL } from 'url'
 
-import { sleep, uploadToIpfs, PROJECT_QUERY, CHALLENGE_QUERY } from './utils'
+import { sleep,
+  uploadToIpfs,
+  PROJECT_QUERY,
+  CHALLENGE_QUERY
+} from './utils'
+
 import {
   EditProjectArgs,
   RemoveProjectArgs,
@@ -25,8 +28,14 @@ import {
   ResolveChallengeArgs
 } from './types'
 
-import { applySignedWithAttribute, overrides, stringToBytes32 } from './contract-helpers/metatransactions'
-import { DocumentNode } from 'graphql'
+import {
+  applySignedWithAttribute,
+  overrides,
+  OFFCHAIN_DATANAME,
+  VALIDITY_TIMESTAMP
+} from './contract-helpers/metatransactions'
+
+import { ipfsHexHash } from './contract-helpers/ipfs'
 
 interface CustomEvent extends EventPayload {
   myValue: string
@@ -89,6 +98,16 @@ const queryGraphNode = async (context: Context, query: DocumentNode, variables: 
   }
 
   return null
+}
+
+const sendTransaction = async (tx: Promise<Transaction>) => {
+  try{
+    const result = await tx
+    return result as any
+  } catch(error){
+    console.log(error)
+    throw error
+  }
 }
 
 const abis = {
@@ -170,9 +189,7 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const ethereumDIDRegistryContract = await getContract(context, 'EthereumDIDRegistry')
   const daiContract = await getContract(context, 'Dai')
 
-  let transaction
-  try {
-    transaction = await applySignedWithAttribute(
+  const transaction = await sendTransaction(applySignedWithAttribute(
       member,
       memberSigningKey,
       owner,
@@ -182,10 +199,7 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
       daiContract,
       ethereum,
     )
-  } catch (err) {
-    console.log(err)
-    throw err
-  }
+  )
 
   return transaction
     .wait()
@@ -198,13 +212,9 @@ const removeProject = async (_: any, args: RemoveProjectArgs, context: Context) 
 
   const everest = await getContract(context, "Everest")
 
-  let transaction
-  try{
-    transaction = await everest.memberExit(projectId, overrides)
-  }catch(err){
-    console.log(err)
-    throw err
-  }
+  const transaction = await sendTransaction(
+    await everest.memberExit(projectId, overrides)
+  )
 
   return transaction
     .wait()
@@ -219,17 +229,29 @@ const removeProject = async (_: any, args: RemoveProjectArgs, context: Context) 
 const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   const { ipfs } = context.graph.config
 
-  const { id } = args
+  const { projectId } = args
 
   const metadata = Buffer.from(JSON.stringify(args))
 
   const metadataHash = await uploadToIpfs(ipfs, metadata)
+  const hexIpfsHash = ipfsHexHash(metadataHash)
 
-  // const everest = await getContract(context)
-  // sendTx(everest.editOffChainDataSigned( ... ))
+  const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
+  
+  const transaction = await sendTransaction(
+    await ethereumDIDRegistry.setAttribute(projectId, OFFCHAIN_DATANAME, hexIpfsHash, VALIDITY_TIMESTAMP, overrides)
+  )
 
-  const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId: id })
-  return project
+  return transaction
+    .wait()
+    .then(async () => {
+      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId })
+      return project
+    })
+    .catch(err => {
+      console.error('Transaction error: ', err)
+      return false
+    })
 }
 
 const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: Context) => {
@@ -237,13 +259,9 @@ const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: C
 
   const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
 
-  let transaction
-  try{
-    transaction = await ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, overrides)
-  }catch(err){
-    console.log(err)
-    throw err
-  }
+  const transaction = await sendTransaction(
+    ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, overrides)
+  )
 
   return transaction
     .wait()
@@ -262,19 +280,18 @@ const delegateOwnership = async (_: any, args: DelegateOwnershipArgs, context: C
 }
 
 const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Context) => {
+  const { ipfs } = context.graph.config
   const { challengedProjectAddress, challengingProjectAddress, details } = args
 
-  console.log(args)
+  const metadata = Buffer.from(JSON.stringify({ details }))
+  const ipfsHash = await uploadToIpfs(ipfs, metadata)
+  const hexIpfsHash = ipfsHexHash(ipfsHash)
 
   const everest = await getContract(context, 'Everest')
 
-  let transaction
-  try{
-    transaction = await everest.challenge(challengingProjectAddress, challengedProjectAddress, stringToBytes32(details), overrides)
-  }catch(err){
-    console.log(err)
-    throw err
-  }
+  const transaction = await sendTransaction(
+    await everest.challenge(challengingProjectAddress, challengedProjectAddress, hexIpfsHash, overrides)
+  )
 
   return transaction
     .wait()
@@ -290,13 +307,9 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
 
   const everest = await getContract(context, "Everest")
 
-  let transaction
-  try{
-    transaction = await everest.submitVotes(challengeId, voteChoice, voters, overrides)
-  }catch(err){
-    console.log(err)
-    throw err
-  }
+  const transaction = await sendTransaction(
+    everest.submitVotes(challengeId, voteChoice, voters, overrides)
+  )
 
   return transaction
     .wait()
@@ -315,13 +328,9 @@ const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Con
 
   const everest = await getContract(context, "Everest")
 
-  let transaction
-  try{
-    transaction = await everest.resolveChallenge(challengeId, overrides)
-  }catch(err){
-    console.log(err)
-    throw err
-  }
+  const transaction = await sendTransaction(
+    await everest.resolveChallenge(challengeId, overrides)
+  )
 
   return transaction
     .wait()
