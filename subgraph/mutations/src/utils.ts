@@ -17,8 +17,8 @@ export const sleep = (ms: number): Promise<void> => {
 }
 
 export const PROJECT_QUERY = gql`
-  query everestProject($id: ID!) {
-    project(where: { id: $id }) {
+  query everestProject($projectId: ID!) {
+    project(where: { id: $projectId }) {
       id
       name
       description
@@ -36,6 +36,24 @@ export const PROJECT_QUERY = gql`
         id
         name
       }
+    }
+  }
+`
+
+export const CHALLENGE_QUERY = gql`
+  query everestChallenge($challengeId: ID!) {
+    challenge(where: { id: $challengeId }) {
+      id
+      ipfsHash
+      description
+      endTime
+      votesFor
+      votesAgainst
+      project
+      owner
+      votes
+      resolved
+      createdAt
     }
   }
 `

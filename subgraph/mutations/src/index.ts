@@ -13,7 +13,7 @@ import ipfsHttpClient from 'ipfs-http-client'
 import gql from 'graphql-tag'
 import { URL } from 'url'
 
-import { sleep, uploadToIpfs, PROJECT_QUERY } from './utils'
+import { sleep, uploadToIpfs, PROJECT_QUERY, CHALLENGE_QUERY } from './utils'
 import {
   EditProjectArgs,
   RemoveProjectArgs,
@@ -26,6 +26,7 @@ import {
 } from './types'
 
 import { applySignedWithAttribute, overrides } from './contract-helpers/metatransactions'
+import { DocumentNode } from 'graphql'
 
 interface CustomEvent extends EventPayload {
   myValue: string
@@ -69,50 +70,25 @@ type Config = typeof config
 
 type Context = MutationContext<Config, State, EventMap>
 
-async function queryProject(context: Context, projectId: string) {
+const queryGraphNode = async (context: Context, query: DocumentNode, variables: any) => {
   const { client } = context
 
   if (client) {
     for (let i = 0; i < 20; ++i) {
       const { data } = await client.query({
-        query: PROJECT_QUERY,
-        variables: {
-          id: projectId,
-        },
+        query,
+        variables,
       })
 
       if (data === null) {
         await sleep(500)
       } else {
-        return data.project
+        return data
       }
     }
   }
 
   return null
-}
-
-async function sendTx(
-  tx: Transaction,
-  description: string,
-  state: StateUpdater<State, EventMap>,
-) {
-  try {
-    await state.dispatch('TRANSACTION_CREATED', {
-      id: tx.hash,
-      to: tx.to,
-      from: tx.from,
-      data: tx.data,
-      amount: tx.value.toString(),
-      network: `ethereum-${tx.chainId}`,
-      description,
-    })
-    tx = await tx
-    await state.dispatch('TRANSACTION_COMPLETED', { id: tx.hash, description: tx.data })
-    return tx
-  } catch (error) {
-    await state.dispatch('TRANSACTION_ERROR', error)
-  }
 }
 
 const abis = {
@@ -211,9 +187,9 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
     throw err
   }
 
-  transaction
+  return transaction
     .wait()
-    .then(() => console.log('SUCCESSFUL ADD PROJECT'))
+    .then(() => args)
     .catch(err => console.error('Transaction error: ', err))
 }
 
@@ -252,7 +228,8 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   // const everest = await getContract(context)
   // sendTx(everest.editOffChainDataSigned( ... ))
 
-  return await queryProject(context, id)
+  const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId: id })
+  return project
 }
 
 const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: Context) => {
@@ -270,7 +247,10 @@ const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: C
 
   return transaction
     .wait()
-    .then(() => true)
+    .then(async () => {
+      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId })
+      return project
+    })
     .catch(err => {
       console.error('Transaction error: ', err)
       return false
@@ -296,7 +276,7 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
 
   return transaction
     .wait()
-    .then(() => true)
+    .then(() => args)
     .catch(err => {
       console.error('Transaction error: ', err)
       return false
@@ -318,7 +298,10 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
 
   return transaction
     .wait()
-    .then(() => true)
+    .then(async () => {
+      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId })
+      return challenge
+    })
     .catch(err => {
       console.error('Transaction error: ', err)
       return false
@@ -340,7 +323,10 @@ const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Con
 
   return transaction
     .wait()
-    .then(() => true)
+    .then(async () => {
+      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId })
+      return challenge
+    })
     .catch(err => {
       console.error('Transaction error: ', err)
       return false
