@@ -25,7 +25,7 @@ import {
   ResolveChallengeArgs
 } from './types'
 
-import { applySignedWithAttribute, overrides } from './contract-helpers/metatransactions'
+import { applySignedWithAttribute, overrides, stringToBytes32 } from './contract-helpers/metatransactions'
 import { DocumentNode } from 'graphql'
 
 interface CustomEvent extends EventPayload {
@@ -264,11 +264,13 @@ const delegateOwnership = async (_: any, args: DelegateOwnershipArgs, context: C
 const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Context) => {
   const { challengedProjectAddress, challengingProjectAddress, details } = args
 
-  const ethereumDIDRegistry = await getContract(context, 'EthereumDIDRegistry')
+  console.log(args)
+
+  const everest = await getContract(context, 'Everest')
 
   let transaction
   try{
-    transaction = await ethereumDIDRegistry.changeOwner(challengingProjectAddress, challengedProjectAddress, details, overrides)
+    transaction = await everest.challenge(challengingProjectAddress, challengedProjectAddress, stringToBytes32(details), overrides)
   }catch(err){
     console.log(err)
     throw err
