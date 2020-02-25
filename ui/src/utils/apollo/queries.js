@@ -30,7 +30,7 @@ export const PROJECT_QUERY = gql`
 //ck3t926929y7w0922q88lnsww
 export const USER_PROJECTS_QUERY = gql`
   query everestUserProjects($id: ID!) {
-    user(id: $id) {
+    user(where: { id: $id }) {
       id
       name
       projects {
@@ -58,23 +58,35 @@ export const PROJECTS_QUERY = gql`
     projects {
       id
       name
+      image
       description
       avatar
       categories {
         id
+        description
       }
     }
   }
 `
 
-export const CHALLENGED_PROJECTS_QUERY = gql`
-  query projects {
-    projects {
+export const PROFILE_QUERY = gql`
+  query profile($id: ID!) {
+    user(id: $id) {
       id
-      name
-      description
-      avatar
-      categories {
+      projects {
+        id
+        name
+        description
+        avatar
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          description
+        }
+      }
+      challenges {
         id
       }
     }

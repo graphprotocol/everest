@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Styled, Box } from 'theme-ui'
+import { jsx, Styled } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 

@@ -3,21 +3,10 @@ import { useState } from 'react'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
 
+import { PROJECTS_QUERY } from '../utils/apollo/queries'
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
-
-const PROJECTS_QUERY = gql`
-  query projects {
-    projects {
-      id
-      name
-      description
-      avatar
-    }
-  }
-`
 
 const Projects = () => {
   const [selected, setSelected] = useState('cards')
@@ -68,6 +57,7 @@ const Projects = () => {
             ...project,
             description: project.description,
             to: `/project/${project.id}`,
+            image: `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`,
           }
         })}
         variant="project"

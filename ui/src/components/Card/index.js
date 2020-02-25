@@ -42,7 +42,12 @@ const Card = ({
                 'https://storage.googleapis.com/graph-web/the-graph-livepeer.jpg'
               }
               alt={title}
-              sx={{ height: '80px', width: '80px', borderRadius: '50%' }}
+              sx={{
+                height: '80px',
+                width: '80px',
+                borderRadius: '50%',
+                objectFit: 'contain',
+              }}
             />
           </Box>
         ) : (

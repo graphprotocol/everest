@@ -1,43 +1,18 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { graphql, navigate } from 'gatsby'
 import queryString from 'query-string'
-import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
 
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
 
-const PROJECTS_QUERY = gql`
-  query projects {
-    projects {
-      id
-      name
-      description
-      avatar
-      categories {
-        id
-      }
-    }
-  }
-`
-
 const Category = ({ pageContext, location }) => {
-  // const category = location ? location.pathname.split('/').slice(-1)[0] : ''
-  const { loading, error, data } = useQuery(PROJECTS_QUERY)
-
-  if (loading) {
-    return <div />
-  }
-
-  if (error) {
-    console.error('Error with GraphQL query: ', error)
-    return <div />
-  }
+  const category = location ? location.pathname.split('/').slice(-2)[0] : ''
+  const [imagePrefix, setImagePrefix] = useState('')
 
   let param
   if (location && location.search) {
@@ -61,12 +36,18 @@ const Category = ({ pageContext, location }) => {
     p => p.isChallenged === true,
   )
 
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__)
+    }
+  })
+
   return (
     <Grid>
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
           <img
-            src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/categories/${pageContext.slug}.png`}
+            src={`${imagePrefix || ''}/categories/${pageContext.slug}.png`}
             alt={pageContext.slug}
             sx={imageStyles}
           />

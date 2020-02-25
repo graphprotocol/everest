@@ -42,7 +42,9 @@ const Menu = ({ children, items }) => {
               >
                 {item.icon && (
                   <img
-                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/${item.icon}`}
+                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}${
+                      item.icon
+                    }`}
                     alt={`${item.text} icon`}
                     sx={iconStyles}
                   />

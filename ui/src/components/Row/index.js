@@ -19,7 +19,7 @@ const Row = ({ item }) => {
           src={
             item.image
               ? `${window.__GATSBY_IPFS_PATH_PREFIX__}/item.image`
-              : `${window.__GATSBY_IPFS_PATH_PREFIX__}/profiles/placeholder1.png`
+              : `${window.__GATSBY_IPFS_PATH_PREFIX__}/profiles2/placeholder1.png`
           }
           sx={imageStyles}
           alt={item.name}

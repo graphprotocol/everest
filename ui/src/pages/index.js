@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { useWeb3React } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
-import categories from '../data/categories.json'
+import { CATEGORIES_QUERY, PROJECTS_QUERY } from '../utils/apollo/queries'
 
 import Link from '../components/Link'
 import Stats from '../components/Stats'
@@ -32,6 +32,9 @@ const Index = ({ data }) => {
     { title: 'Categories', value: '48' },
     { title: 'Registry Value (DAI)', value: '150,000' },
   ]
+
+  const { data: categories } = useQuery(CATEGORIES_QUERY)
+  const { data: projects } = useQuery(PROJECTS_QUERY)
 
   const challengedProjects = data.everest.projects.filter(
     project => project.isChallenged === true,
@@ -103,14 +106,18 @@ const Index = ({ data }) => {
         title="Categories"
         description="All projects belong to at least one category. Categories are also
       curated in a decentralized way."
-        items={categories.slice(0, 10).map(category => {
-          return {
-            name: 'Test',
-            description: '24 projects',
-            image: `/categories/${category.slug}.png`,
-            to: `/category/${category.slug}`,
-          }
-        })}
+        items={
+          categories
+            ? categories.categories.slice(0, 10).map(category => {
+                return {
+                  name: 'Test',
+                  description: '24 projects',
+                  image: `/categories/${category.slug}.png`,
+                  to: `/category/${category.slug}`,
+                }
+              })
+            : []
+        }
         linkTo="/categories"
         linkText="View all Categories"
         variant="category"
@@ -118,16 +125,20 @@ const Index = ({ data }) => {
       <Section
         title="Recent Projects"
         description="These projects were recently added by members of the community."
-        items={data.everest.projects.map(project => {
-          return {
-            name: project.name,
-            description: project.description.slice(0, 20) + '...',
-            to: `/project/${project.id}`,
-            image: project.image,
-            category:
-              project.categories.length > 0 ? project.categories[0] : '',
-          }
-        })}
+        items={
+          data.everest
+            ? data.everest.projects.map(project => {
+                return {
+                  name: project.name,
+                  description: project.description.slice(0, 20) + '...',
+                  to: `/project/${project.id}`,
+                  image: project.image,
+                  category:
+                    project.categories.length > 0 ? project.categories[0] : '',
+                }
+              })
+            : []
+        }
         linkTo="/projects"
         linkText="View all Projects"
         variant="project"

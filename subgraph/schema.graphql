@@ -37,6 +37,7 @@ type Project @entity {
 
 type Category @entity {
   id: ID! # id is the name of the category
+  name: String!
   description: String!
   slug: String!
   projects: [Project!] @derivedFrom(field: "categories") # TODO - ensure this works on the categories array
@@ -49,7 +50,7 @@ type Category @entity {
 
 type Challenge @entity {
   id: ID!
-  ipfsHash: String! 
+  ipfsHash: String!
   description: String
   endTime: Int!
   votesFor: Int!
@@ -57,10 +58,10 @@ type Challenge @entity {
   project: Project!
   owner: Bytes!
   votes: [Vote!] @derivedFrom(field: "challenge")
-    # This is when the challenge is resolved, which is different from end time. When we are past
-    # the end time, we can implicitly calculate votesFor and votesAgainst, and determine if it 
-    # passed or failed. Resolved means it is called in the smart contract, and the challenge
-    # is deleted from storage
+  # This is when the challenge is resolved, which is different from end time. When we are past
+  # the end time, we can implicitly calculate votesFor and votesAgainst, and determine if it
+  # passed or failed. Resolved means it is called in the smart contract, and the challenge
+  # is deleted from storage
   resolved: Boolean!
 
   createdAt: Int!

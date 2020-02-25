@@ -1,11 +1,25 @@
 /** @jsx jsx */
 import { Styled, jsx, Box } from 'theme-ui'
+import { useQuery } from '@apollo/react-hooks'
 
 import categories from '../data/categories.json'
 
+import { CATEGORIES_QUERY } from '../utils/apollo/queries'
 import Section from '../components/Section'
 
 const Categories = () => {
+  const { loading, data, error } = useQuery(CATEGORIES_QUERY)
+
+  if (loading) {
+    // TODO: add loading indicator
+    return <div />
+  }
+
+  if (error) {
+    console.error('Error getting categories: ', error)
+    return <div />
+  }
+
   return (
     <Box>
       <Box>
@@ -15,16 +29,19 @@ const Categories = () => {
         </Styled.p>
       </Box>
       <Section
-        items={categories.map(cat => {
-          return {
-            name: cat.name,
-            description: cat.subcategories
-              ? `${cat.subcategories.length} PROJECTS`
-              : '0 PROJECTS',
-            image: `/categories/${cat.slug}.png`,
-            to: `/category/${cat.slug}`,
-          }
-        })}
+        items={
+          data &&
+          data.categories.map(cat => {
+            return {
+              name: cat.name,
+              description: cat.subcategories
+                ? `${cat.subcategories.length} PROJECTS`
+                : '0 PROJECTS',
+              image: `/categories/${cat.slug}.png`,
+              to: `/category/${cat.slug}`,
+            }
+          })
+        }
         variant="category"
       />
     </Box>
