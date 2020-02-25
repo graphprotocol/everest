@@ -22,6 +22,7 @@ import UserImage from '../images/profile-placeholder.svg'
 import Close from '../images/close.svg'
 
 const Project = ({ location }) => {
+  console.log('location: ', location)
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
@@ -163,7 +164,7 @@ const Project = ({ location }) => {
                 />
               ) : (
                 <img
-                  src="/dots.png"
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/dots.png`}
                   sx={{
                     pt: 1,
                     pl: 2,

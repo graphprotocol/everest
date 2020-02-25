@@ -66,7 +66,7 @@ const Category = ({ pageContext, location }) => {
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
           <img
-            src={`/categories/${pageContext.slug}.png`}
+            src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/categories/${pageContext.slug}.png`}
             alt={pageContext.slug}
             sx={imageStyles}
           />

@@ -32,11 +32,17 @@ const Button = ({
       onClick={e => (onClick ? onClick(e) : to ? navigate(to) : '')}
       {...props}
     >
-      {icon && <img sx={iconStyles} src={`/${icon}`} alt={'icon'} />}
+      {icon && (
+        <img
+          sx={iconStyles}
+          src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/${icon}`}
+          alt={'icon'}
+        />
+      )}
       {text}
       {loading && (
         <img
-          src="/dots.png"
+          src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/dots.png`}
           sx={{ pt: 1, pl: 2, width: '24px' }}
           alt="dots icon"
         />

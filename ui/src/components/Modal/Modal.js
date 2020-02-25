@@ -29,8 +29,6 @@ const Modal = ({ children, showModal, closeModal }) => {
   const [uri, setUri] = useState('')
   const [isWalletEnabled, setIsWalletEnabled] = useState(false)
 
-  console.log('walletError', walletError)
-
   // TODO: reset the view to the main wallet selection view
 
   // set up uri listener for walletconnect
@@ -150,11 +148,7 @@ const Modal = ({ children, showModal, closeModal }) => {
                   }}
                 >
                   <Box>
-                    <img
-                      src={`/${wallet.icon}`}
-                      sx={iconStyles}
-                      alt="Wallet icon"
-                    />
+                    <img src={wallet.icon} sx={iconStyles} alt="Wallet icon" />
                   </Box>
                   <Box>
                     <Styled.h5 sx={{ color: 'secondary' }}>

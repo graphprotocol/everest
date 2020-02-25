@@ -56,6 +56,11 @@ const Profile = ({ location }) => {
   const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   useEffect(() => {
+    console.log('windw: ', window)
+    console.log(
+      'window.__GATSBY_IPFS_PATH_PREFIX__: ',
+      window.__GATSBY_IPFS_PATH_PREFIX__,
+    )
     async function getProfile() {
       const threeBoxProfile = await ThreeBox.getProfile(profileId)
 
@@ -196,7 +201,7 @@ const Profile = ({ location }) => {
             ]}
           >
             <img
-              src="/dots.png"
+              src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/dots.png`}
               sx={{
                 pt: 1,
                 pl: 2,
@@ -318,7 +323,7 @@ const Profile = ({ location }) => {
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
           <img
-            src="/mountain-empty.png"
+            src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/mountain-empty.png`}
             sx={{ height: '190px', width: 'auto' }}
           />
           <Divider sx={{ mt: '-6px !important' }} />

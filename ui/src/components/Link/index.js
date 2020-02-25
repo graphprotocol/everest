@@ -26,7 +26,7 @@ const Link = ({ to, children, onClick, ...props }) => {
 
 const styles = {
   textDecoration: 'none',
-  display: 'block',
+  display: 'inline-block',
   color: 'secondary',
   fontSize: '1rem',
   fontWeight: 'bold',

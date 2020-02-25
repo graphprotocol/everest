@@ -1,9 +1,12 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
+import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 
 import Link from '../../components/Link'
+import Graph from '../../images/graph.svg'
+import Ipfs from '../../images/ipfs.svg'
+import Eth from '../../images/eth.svg'
 
 const Footer = ({ ...props }) => {
   return (
@@ -25,9 +28,9 @@ const Footer = ({ ...props }) => {
         }}
         columns={3}
       >
-        <img src={'/graph.svg'} alt="The Graph" title="The Graph" />
-        <img src={'/ipfs.svg'} alt="IPFS" title="IPFS" />
-        <img src={'/eth.svg'} alt="Ethereum" title="Ethereum" />
+        <Graph alt="The Graph" />
+        <Ipfs alt="IPFS" />
+        <Eth alt="Ethereum" />
       </Grid>
     </div>
   )

@@ -4,6 +4,7 @@ import { jsx, Styled, Box } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { graphql, navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
+import { useQuery } from '@apollo/react-hooks'
 
 import { useWeb3React } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
@@ -104,7 +105,7 @@ const Index = ({ data }) => {
       curated in a decentralized way."
         items={categories.slice(0, 10).map(category => {
           return {
-            name: category.name,
+            name: 'Test',
             description: '24 projects',
             image: `/categories/${category.slug}.png`,
             to: `/category/${category.slug}`,

@@ -9,6 +9,7 @@ require('dotenv').config({
 })
 
 module.exports = {
+  pathPrefix: '__GATSBY_IPFS_PATH_PREFIX__',
   plugins: [
     'gatsby-plugin-react-helmet',
     {
@@ -70,6 +71,7 @@ module.exports = {
         },
       },
     },
+    'gatsby-plugin-ipfs',
   ],
   siteMetadata: {
     title: 'Everest',

@@ -16,7 +16,11 @@ const Row = ({ item }) => {
     >
       <Grid columns={2} gap={4} sx={{ gridTemplateColumns: 'min-content 1fr' }}>
         <img
-          src={item.image ? item.image : '/profiles/placeholder1.png'}
+          src={
+            item.image
+              ? `${window.__GATSBY_IPFS_PATH_PREFIX__}/item.image`
+              : `${window.__GATSBY_IPFS_PATH_PREFIX__}/profiles/placeholder1.png`
+          }
           sx={imageStyles}
           alt={item.name}
         />
