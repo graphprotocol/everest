@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 
 import { convertDate } from '../utils/helpers/date'
+import { defaultImage } from '../utils/helpers/utils'
 
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
 import { REMOVE_PROJECT } from '../utils/apollo/mutations'
@@ -22,13 +23,6 @@ import MultiSelect from '../components/Filters/MultiSelect'
 import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
 import Close from '../images/close.svg'
-
-const defaultAvatar = () => {
-  const baseUri = `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/profiles/profile`
-  // pick a pseudorandom number between 1 and 24
-  const num = Math.floor(Math.random() * 24 + 1)
-  return `${baseUri}${num}.png`
-}
 
 const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
@@ -122,7 +116,7 @@ const Project = ({ location }) => {
               />
             ) : (
               <img
-                src={defaultAvatar()}
+                src={defaultImage('profiles/profile')}
                 alt="Project avatar"
                 sx={projectLogoStyle}
               />

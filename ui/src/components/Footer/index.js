@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
+import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 
@@ -11,7 +11,7 @@ import Eth from '../../images/eth.svg'
 const Footer = ({ ...props }) => {
   return (
     <div sx={rootStyles} {...props}>
-      <Styled.p sx={{ textAlign: ['center', 'left', 'left'] }}>
+      <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
         <Link
           onClick={() => navigate('https://thegraph.com')}
@@ -19,7 +19,7 @@ const Footer = ({ ...props }) => {
         >
           The Graph
         </Link>
-      </Styled.p>
+      </Box>
       <Grid
         sx={{
           textAlign: 'right',

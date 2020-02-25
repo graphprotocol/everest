@@ -52,7 +52,7 @@ const Row = ({
       {...props}
     >
       <img
-        src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/${item.image}`}
+        src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${item.image}`}
         alt={item.slug}
         sx={
           variant === 'round'

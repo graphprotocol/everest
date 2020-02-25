@@ -2,8 +2,6 @@
 import { Styled, jsx, Box } from 'theme-ui'
 import { useQuery } from '@apollo/react-hooks'
 
-import categories from '../data/categories.json'
-
 import { CATEGORIES_QUERY } from '../utils/apollo/queries'
 import Section from '../components/Section'
 
@@ -25,7 +23,7 @@ const Categories = () => {
       <Box>
         <Styled.h2>Categories</Styled.h2>
         <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-          {categories.length} Categories
+          {data && data.categories.length} Categories
         </Styled.p>
       </Box>
       <Section
@@ -33,11 +31,13 @@ const Categories = () => {
           data &&
           data.categories.map(cat => {
             return {
-              name: cat.name,
+              name: cat.id,
               description: cat.subcategories
                 ? `${cat.subcategories.length} PROJECTS`
                 : '0 PROJECTS',
-              image: `/categories/${cat.slug}.png`,
+              image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/categories/${
+                cat.slug
+              }.png`,
               to: `/category/${cat.slug}`,
             }
           })

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
 
 import Challenged from '../../images/challenge.svg'
+import { defaultImage } from '../../utils/helpers/utils'
 
 const Card = ({
   title,
@@ -37,16 +38,12 @@ const Card = ({
         {variant === 'project' ? (
           <Box sx={{ margin: 'auto' }}>
             <img
-              src={
-                image ||
-                'https://storage.googleapis.com/graph-web/the-graph-livepeer.jpg'
-              }
+              src={image ? image : defaultImage('profiles/profile')}
               alt={title}
               sx={{
                 height: '80px',
                 width: '80px',
                 borderRadius: '50%',
-                objectFit: 'contain',
               }}
             />
           </Box>

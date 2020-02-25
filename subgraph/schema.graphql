@@ -37,7 +37,6 @@ type Project @entity {
 
 type Category @entity {
   id: ID! # id is the name of the category
-  name: String!
   description: String!
   slug: String!
   projects: [Project!] @derivedFrom(field: "categories") # TODO - ensure this works on the categories array
@@ -45,7 +44,6 @@ type Category @entity {
   parentCategory: Category
 
   createdAt: Int!
-
 }
 
 type Challenge @entity {
@@ -65,7 +63,6 @@ type Challenge @entity {
   resolved: Boolean!
 
   createdAt: Int!
-
 }
 
 # For global variables
@@ -89,7 +86,6 @@ type Everest @entity {
   charter: Charter!
 
   createdAt: Int
-
 }
 
 # TODO - make these non-null when we have a real charter
@@ -106,7 +102,6 @@ type Charter @entity {
   isRepresentative: String
 
   createdAt: Int!
-
 }
 
 type Vote @entity {
@@ -117,7 +112,6 @@ type Vote @entity {
   weight: Int!
 
   createdAt: Int!
-
 }
 
 enum Choice {
@@ -133,7 +127,5 @@ type User @entity {
   projects: [Project!]
   challenges: [Challenge!] # challenges you started
   votes: [Project!] # participation in other people's challenges
-
   createdAt: Int!
-
 }

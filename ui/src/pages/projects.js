@@ -5,6 +5,7 @@ import { Grid, Box } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
 import { PROJECTS_QUERY } from '../utils/apollo/queries'
+
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 
@@ -53,11 +54,14 @@ const Projects = () => {
       </Grid>
       <Section
         items={allProjects.map(project => {
+          const image = project.avatar
+            ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
+            : undefined
           return {
             ...project,
             description: project.description,
             to: `/project/${project.id}`,
-            image: `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`,
+            image: image,
           }
         })}
         variant="project"

@@ -74,10 +74,10 @@ const Navbar = ({ path, ...props }) => {
           position: 'absolute',
           right: '20px',
           alignItems: 'center',
-          gridTemplateColumns: 'max-content 1fr',
+          gridTemplateColumns: '1fr 1fr',
           height: '100%',
         }}
-        gap={5}
+        gap={3}
       >
         <Link
           onClick={() =>
@@ -87,9 +87,8 @@ const Navbar = ({ path, ...props }) => {
             backgroundColor: isNewProjectPage ? 'secondary' : 'white',
             padding: '12px 22px',
             '&:hover': {
-              color: 'linkHover',
               svg: {
-                fill: 'inherit',
+                fill: isNewProjectPage ? 'white' : 'secondary',
                 marginLeft: 'inherit',
               },
             },

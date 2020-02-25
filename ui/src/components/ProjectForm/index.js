@@ -12,6 +12,7 @@ const ProjectForm = ({
   setDisabled,
   buttonText,
   setImage,
+  categories,
 }) => {
   return (
     <form sx={{ maxWidth: '504px', width: '100%', mt: [5, 0, 0] }}>
@@ -51,6 +52,7 @@ const ProjectForm = ({
           setDisabled(value)
         }}
         multiselect={true}
+        categories={categories}
       />
       <Field
         title="Project logo"

@@ -36,9 +36,9 @@ const Index = ({ data }) => {
   const { data: categories } = useQuery(CATEGORIES_QUERY)
   const { data: projects } = useQuery(PROJECTS_QUERY)
 
-  const challengedProjects = data.everest.projects.filter(
-    project => project.isChallenged === true,
-  )
+  const challengedProjects = projects
+    ? projects.projects.filter(project => project.isChallenged === true)
+    : []
 
   return (
     <Grid>
@@ -110,7 +110,7 @@ const Index = ({ data }) => {
           categories
             ? categories.categories.slice(0, 10).map(category => {
                 return {
-                  name: 'Test',
+                  name: category.id,
                   description: '24 projects',
                   image: `/categories/${category.slug}.png`,
                   to: `/category/${category.slug}`,
@@ -126,8 +126,8 @@ const Index = ({ data }) => {
         title="Recent Projects"
         description="These projects were recently added by members of the community."
         items={
-          data.everest
-            ? data.everest.projects.map(project => {
+          projects
+            ? projects.projects.map(project => {
                 return {
                   name: project.name,
                   description: project.description.slice(0, 20) + '...',

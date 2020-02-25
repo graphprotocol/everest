@@ -17,7 +17,7 @@ const Link = ({ to, children, onClick, ...props }) => {
     )
   } else {
     return (
-      <p onClick={onClick} sx={styles}>
+      <p onClick={onClick} sx={styles} {...props}>
         {children}
       </p>
     )
@@ -27,6 +27,7 @@ const Link = ({ to, children, onClick, ...props }) => {
 const styles = {
   textDecoration: 'none',
   display: 'inline-block',
+  cursor: 'pointer',
   color: 'secondary',
   fontSize: '1rem',
   fontWeight: 'bold',

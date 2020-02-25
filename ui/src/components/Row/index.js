@@ -5,6 +5,7 @@ import { Grid } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 
 import { convertDate } from '../../utils/helpers/date'
+import { defaultImage } from '../../utils/helpers/utils'
 import Challenged from '../../images/challenged.svg'
 
 const Row = ({ item }) => {
@@ -19,7 +20,9 @@ const Row = ({ item }) => {
           src={
             item.image
               ? `${window.__GATSBY_IPFS_PATH_PREFIX__}/item.image`
-              : `${window.__GATSBY_IPFS_PATH_PREFIX__}/profiles2/placeholder1.png`
+              : `${window.__GATSBY_IPFS_PATH_PREFIX__}/${defaultImage(
+                  'profiles/profile',
+                )}`
           }
           sx={imageStyles}
           alt={item.name}
