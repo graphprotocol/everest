@@ -80,6 +80,7 @@ export function handleMemberChallenged(event: MemberChallenged): void {
 
   let hexHash = addQm(event.params.details) as Bytes
   let base58Hash = hexHash.toBase58()
+  challenge.ipfsHash = base58Hash
   let ipfsData = ipfs.cat(base58Hash)
   if (ipfsData != null) {
     let data = json.fromBytes(ipfsData as Bytes).toObject()
