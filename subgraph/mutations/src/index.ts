@@ -63,7 +63,7 @@ const stateBuilder: StateBuilder<State, EventMap> = {
         myValue: 'true',
       }
     },
-  },
+  }
 }
 
 const config = {
@@ -177,6 +177,8 @@ const uploadImage = async (_: any, { image }: any, context: Context) => {
 const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const { ethereum, ipfs } = context.graph.config
 
+  const { state } = context.graph
+
   const metadata = Buffer.from(JSON.stringify(args))
   const ipfsHash = await uploadToIpfs(ipfs, metadata)
 
@@ -276,7 +278,26 @@ const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: C
 }
 
 const delegateOwnership = async (_: any, args: DelegateOwnershipArgs, context: Context) => {
+  const { projectId, delegateAddress } = args
+  const delegateType = '0x6576657265737400000000000000000000000000000000000000000000000000' //"everest" in bytes32 + 50 zeroes
+  const validity = 4733510400 //January 1st, 2120 in unix seconds
 
+  const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
+
+  const transaction = await sendTransaction(
+    ethereumDIDRegistry.addDelegate(projectId, delegateType, delegateAddress, validity, overrides)
+  )
+
+  return transaction
+    .wait()
+    .then(async () => {
+      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId })
+      return project
+    })
+    .catch(err => {
+      console.error('Transaction error: ', err)
+      return false
+    })
 }
 
 const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Context) => {
