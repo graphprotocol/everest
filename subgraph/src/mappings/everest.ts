@@ -1,4 +1,4 @@
-import { BigInt, store, ipfs, json, Bytes } from '@graphprotocol/graph-ts'
+import { BigInt, store, ipfs, json, Bytes, JSONValue, log } from '@graphprotocol/graph-ts'
 
 import {
   NewMember,
@@ -12,7 +12,7 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote, Charter } from '../types/schema'
+import { Project, Everest, Challenge, Vote, Charter, Category } from '../types/schema'
 
 import { addQm } from './helpers'
 
@@ -88,6 +88,7 @@ export function handleMemberChallenged(event: MemberChallenged): void {
       ? null
       : data.get('description').toString()
   }
+  challenge.ipfsHash = base58Hash
   challenge.save()
 
   let project = Project.load(event.params.member.toHexString())
@@ -195,7 +196,62 @@ function parseCharterDetails(ipfsHash: Bytes, timestamp: BigInt): void {
     charter.isRepresentative = data.get('isRepresentative').isNull()
       ? null
       : data.get('isRepresentative').toString()
+
+    let categories = data.get('bootstrap-categories')
+    let parsedArray: Array<string>
+    if (categories != null) {
+      let categoriesArray = categories.toArray()
+      for (let i = 0; i < categoriesArray.length; i++) {
+        createCategory(categoriesArray[i], timestamp)
+      }
+    }
   }
+
   charter.createdAt = timestamp.toI32()
   charter.save()
+}
+
+function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
+  let categoryData = categoryJSON.toObject()
+  let slug: string = categoryData.get('slug').isNull()
+    ? null
+    : categoryData.get('slug').toString()
+
+  let category = Category.load(slug)
+  if (category == null) {
+    category = new Category(slug)
+    category.name = categoryData.get('name').isNull()
+      ? null
+      : categoryData.get('name').toString()
+    category.description = categoryData.get('description').isNull()
+      ? null
+      : categoryData.get('description').toString()
+    category.createdAt = timestamp.toI32()
+
+    let subcategories = categoryData.get('subcategories')
+    if (subcategories != null) {
+      let subCategoriesArray = subcategories.toArray()
+      for (let i = 0; i < subCategoriesArray.length; i++) {
+        let subCategoryData = subCategoriesArray[i].toObject()
+        let subSlug: string = subCategoryData.get('slug').isNull()
+          ? null
+          : subCategoryData.get('slug').toString()
+
+        let subCategory = Category.load(subSlug)
+        if (subCategory == null) {
+          subCategory = new Category(subSlug)
+          subCategory.name = subCategoryData.get('name').isNull()
+            ? null
+            : subCategoryData.get('name').toString()
+          subCategory.description = subCategoryData.get('description').isNull()
+            ? null
+            : subCategoryData.get('description').toString()
+          subCategory.createdAt = timestamp.toI32()
+          subCategory.parentCategory = slug
+          subCategory.save()
+        }
+      }
+    }
+    category.save()
+  }
 }
