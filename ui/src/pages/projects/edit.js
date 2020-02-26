@@ -35,12 +35,11 @@ const EditProject = ({ location }) => {
     },
     onCompleted: mydata => {
       if (data) {
-        console.log('COMPLETED: ', mydata.editProject)
+        // console.log('COMPLETED: ', mydata.editProject)
       }
     },
   })
 
-  console.log('mutationData: ', mutationData)
   const [isDisabled, setIsDisabled] = useState(true)
   const [project, setProject] = useState({
     name: '',
@@ -57,8 +56,6 @@ const EditProject = ({ location }) => {
   })
 
   const { data: categories } = useQuery(CATEGORIES_QUERY)
-
-  console.log('categories: ', categories)
 
   useEffect(() => {
     if (data) {

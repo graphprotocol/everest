@@ -48,6 +48,7 @@ const NewProject = () => {
   }
 
   const handleSubmit = async project => {
+    console.log('PROJECT: ', project)
     addProject({ variables: { ...project } })
   }
 

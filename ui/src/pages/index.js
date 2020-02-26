@@ -111,7 +111,9 @@ const Index = () => {
                 return {
                   name: category.id,
                   description: '24 projects',
-                  image: `/cats/${category.id}.png`,
+                  image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
+                    category.id
+                  }.png`,
                   to: `/category/${category.id}`,
                 }
               })

@@ -88,7 +88,9 @@ const Category = ({ pageContext, location }) => {
             return {
               name: subcat.name,
               description: `6 projects`,
-              image: `/cats/${subcat.id}.png`,
+              image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
+                subcat.id
+              }.png`,
               to: `/category/${subcat.id}`,
             }
           })}
