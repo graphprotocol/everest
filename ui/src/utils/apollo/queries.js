@@ -53,6 +53,21 @@ export const CATEGORIES_QUERY = gql`
   }
 `
 
+export const CATEGORY_QUERY = gql`
+  query category($id: ID!) {
+    category(id: $id) {
+      id
+      slug
+      description
+      subcategories {
+        id
+        slug
+        description
+      }
+    }
+  }
+`
+
 export const PROJECTS_QUERY = gql`
   query projects {
     projects {

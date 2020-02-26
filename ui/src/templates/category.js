@@ -5,15 +5,24 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { graphql, navigate } from 'gatsby'
 import queryString from 'query-string'
+import { useQuery } from '@apollo/react-hooks'
 
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
 
-const Category = ({ pageContext, location }) => {
-  const category = location ? location.pathname.split('/').slice(-2)[0] : ''
-  const [imagePrefix, setImagePrefix] = useState('')
+import { CATEGORY_QUERY } from '../utils/apollo/queries'
 
+const Category = ({ pageContext, location }) => {
+  const pathParams = location.pathname.split('/')
+  let categoryName
+  if (pathParams.slice(-1)[0] === '') {
+    categoryName = pathParams.slice(-2)[0]
+  } else {
+    categoryName = pathParams.slice(-1)[0]
+  }
+
+  const [imagePrefix, setImagePrefix] = useState('')
   let param
   if (location && location.search) {
     param = queryString.parse(location.search)
@@ -25,6 +34,23 @@ const Category = ({ pageContext, location }) => {
       : 'cards',
   )
 
+  const { loading, error, data } = useQuery(CATEGORY_QUERY, {
+    variables: {
+      id: categoryName,
+    },
+  })
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__)
+    }
+  })
+
+  if (loading) return <div>Loading</div>
+  if (error) {
+    console.error(`Error getting the category: ${error.message}`)
+  }
+
   const setSelectedView = value => {
     setSelected(value)
     navigate('/category', { state: { show: 'table' } })
@@ -35,12 +61,6 @@ const Category = ({ pageContext, location }) => {
   const challengedProjects = categoryProjects.filter(
     p => p.isChallenged === true,
   )
-
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__)
-    }
-  })
 
   return (
     <Grid>
@@ -68,7 +88,7 @@ const Category = ({ pageContext, location }) => {
             return {
               name: subcat.name,
               description: `6 projects`,
-              image: `/categories/${subcat.slug}.png`,
+              image: `/cats/${subcat.slug}.png`,
               to: `/category/${subcat.slug}`,
             }
           })}

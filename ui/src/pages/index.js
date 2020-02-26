@@ -1,8 +1,7 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { jsx, Styled, Box } from 'theme-ui'
-import PropTypes from 'prop-types'
-import { graphql, navigate } from 'gatsby'
+import { navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
@@ -17,7 +16,7 @@ import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Modal from '../components/Modal'
 
-const Index = ({ data }) => {
+const Index = () => {
   const { account } = useWeb3React()
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
@@ -94,7 +93,7 @@ const Index = ({ data }) => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(./mountain.png)',
+            backgroundImage: 'url(./mountain.jpg)',
           }}
         />
       </Grid>
@@ -112,7 +111,7 @@ const Index = ({ data }) => {
                 return {
                   name: category.id,
                   description: '24 projects',
-                  image: `/categories/${category.slug}.png`,
+                  image: `/cats/${category.slug}.png`,
                   to: `/category/${category.slug}`,
                 }
               })
@@ -180,26 +179,30 @@ const Index = ({ data }) => {
         </Box>
       </Grid>
       <Divider />
-      <Section
-        title="Active Challenges"
-        description="These projects were recently challanged by members of
+      {challengedProjects.length > 0 && (
+        <Fragment>
+          <Section
+            title="Active Challenges"
+            description="These projects were recently challanged by members of
         the community."
-        items={challengedProjects.map(project => {
-          return {
-            name: project.name,
-            description: project.description.slice(0, 20) + '...',
-            to: `/project/${project.id}`,
-            image: project.image,
-            category:
-              project.categories.length > 0 ? project.categories[0] : '',
-            isChallenged: project.isChallenged,
-          }
-        })}
-        linkTo="/projects"
-        linkText="View all Challenges"
-        variant="project"
-      />
-      <Divider />
+            items={challengedProjects.map(project => {
+              return {
+                name: project.name,
+                description: project.description.slice(0, 20) + '...',
+                to: `/project/${project.id}`,
+                image: project.image,
+                category:
+                  project.categories.length > 0 ? project.categories[0] : '',
+                isChallenged: project.isChallenged,
+              }
+            })}
+            linkTo="/projects"
+            linkText="View all Challenges"
+            variant="project"
+          />
+          <Divider />
+        </Fragment>
+      )}
       <Grid gap={[2, 6, 10]} columns={[1, 2, 2]} mt={7}>
         <Box
           sx={{
@@ -235,27 +238,6 @@ const imageStyles = {
   display: ['none', 'block', 'block'],
 }
 
-Index.propTypes = {
-  data: PropTypes.object.isRequired,
-}
+Index.propTypes = {}
 
 export default Index
-
-export const query = graphql`
-  query everest {
-    everest {
-      projects {
-        id
-        name
-        description
-        categories
-        isChallenged
-        image
-        owner {
-          id
-          name
-        }
-      }
-    }
-  }
-`

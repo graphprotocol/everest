@@ -41,21 +41,19 @@ const Filters = ({
     let allCats = items.reduce((acc, current) => {
       acc.push({
         ...current,
-        image: `categories/${current.slug}.png`,
+        image: `cats/${current.slug}.png`,
         name: current.id,
       })
       if (current.subcategories) {
         const cat = current.subcategories.map(subcat => ({
           ...subcat,
           parent: current,
-          image: `categories/${subcat.slug}.png`,
+          image: `cats/${subcat.slug}.png`,
         }))
         acc.concat(cat)
       }
       return acc
     }, [])
-
-    console.log('All CATS: ', allCats)
 
     if (searchText) {
       allCats = allCats.filter(

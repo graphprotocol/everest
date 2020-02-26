@@ -20,7 +20,6 @@ import Link from '../components/Link'
 import Menu from '../components/Menu'
 import MultiSelect from '../components/Filters/MultiSelect'
 
-import ProjectImage from '../images/project-placeholder.svg'
 import UserImage from '../images/profile-placeholder.svg'
 import Close from '../images/close.svg'
 
@@ -72,12 +71,12 @@ const Project = ({ location }) => {
 
   const [
     removeProject,
-    {
-      data: mutationData,
-      loading: mutationLoading,
-      error: mutationError,
-      state,
-    },
+    // {
+    //   data: mutationData,
+    //   loading: mutationLoading,
+    //   error: mutationError,
+    //   state,
+    // },
   ] = useMutation(REMOVE_PROJECT)
 
   if (loading && !error) {

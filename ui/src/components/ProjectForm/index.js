@@ -123,13 +123,13 @@ const ProjectForm = ({
 
 ProjectForm.propTypes = {
   project: PropTypes.any,
-  uploadImage: PropTypes.func,
   isDisabled: PropTypes.bool,
   handleSubmit: PropTypes.func,
   setValue: PropTypes.func,
   setDisabled: PropTypes.func,
   buttonText: PropTypes.string,
   setImage: PropTypes.func,
+  categories: PropTypes.any,
 }
 
 export default ProjectForm

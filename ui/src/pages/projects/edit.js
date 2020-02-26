@@ -5,20 +5,12 @@ import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useQuery } from '@apollo/react-hooks'
 
-import ipfs from '../../services/ipfs'
-import { ipfsHexHash } from '../../services/ipfs'
-import { useEthereumDIDRegistry } from '../../utils/hooks'
-import {
-  OFFCHAIN_DATANAME,
-  VALIDITY_TIMESTAMP,
-} from '../../utils/helpers/metatransactions'
 import { PROJECT_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
-  const [ethereumDIDRegistryContract] = useState(useEthereumDIDRegistry())
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -83,63 +75,9 @@ const EditProject = ({ location }) => {
     )
   }
 
-  const uploadImage = async (e, field) => {
-    const image = e.target.files[0]
-    if (image) {
-      const reader = new window.FileReader()
-      reader.readAsArrayBuffer(image)
-      reader.onloadend = async () => {
-        const buffer = await Buffer.from(reader.result)
-        await ipfs.add(buffer, async (err, res) => {
-          if (err) {
-            console.error('Error saving doc to IPFS: ', err)
-          }
-          if (res) {
-            const url = `https://ipfs.infura.io:5001/api/v0/cat?arg=${res[0].hash}`
-            if (field === 'logo') {
-              setProject(state => ({
-                ...state,
-                logoUrl: url,
-                logoName: image.name,
-              }))
-            } else {
-              setProject(state => ({
-                ...state,
-                imageUrl: url,
-                imageName: image.name,
-              }))
-            }
-          }
-        })
-      }
-    }
-  }
-
   const handleSubmit = async project => {
     setIsDisabled(true)
-    const projectData = Buffer.from(JSON.stringify(project))
-
-    await ipfs.add(projectData, async (err, response) => {
-      if (err) {
-        console.error('Error saving doc to IPFS: ', err)
-      }
-
-      if (response && response[0].hash) {
-        const ipfsHash = response[0].hash
-
-        const transaction = ethereumDIDRegistryContract(
-          project.id,
-          OFFCHAIN_DATANAME,
-          ipfsHexHash(ipfsHash),
-          VALIDITY_TIMESTAMP,
-        )
-
-        transaction
-          .wait()
-          .then(() => console.log('SUUCCESSFULE'))
-          .catch(err => console.error('TRansaction error: ', err))
-      }
-    })
+    // TODO: call mutations
   }
 
   const setValue = async (field, value) => {
@@ -192,7 +130,6 @@ const EditProject = ({ location }) => {
       <Box>
         <ProjectForm
           project={project}
-          uploadImage={uploadImage}
           isDisabled={isDisabled}
           handleSubmit={handleSubmit}
           setValue={setValue}
