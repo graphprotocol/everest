@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf public/ && rm -rf .cache && gatsby build",
+    "build": "rm -rf public/ && rm -rf .cache && gatsby build --prefix-paths",
     "develop": "gatsby develop -p 4000",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "yarn develop",
@@ -42,6 +42,7 @@
     "gatsby-plugin-theme-ui": "0.3.0",
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-source-graphql": "2.1.28",
+    "gatsby-plugin-ipfs": "2.0.2",
     "graphql": "^14.5.8",
     "ipfs-http-client": "^40.1.0",
     "isomorphic-fetch": "^2.2.1",

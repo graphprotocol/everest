@@ -4,10 +4,13 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import { useMutation } from '@graphprotocol/mutations-apollo-react'
 
 import { convertDate } from '../utils/helpers/date'
+import { defaultImage } from '../utils/helpers/utils'
 
-import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/queries'
+import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
+import { REMOVE_PROJECT } from '../utils/apollo/mutations'
 
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
@@ -67,6 +70,16 @@ const Project = ({ location }) => {
     },
   })
 
+  const [
+    removeProject,
+    {
+      data: mutationData,
+      loading: mutationLoading,
+      error: mutationError,
+      state,
+    },
+  ] = useMutation(REMOVE_PROJECT)
+
   if (loading && !error) {
     return <Styled.p>Loading</Styled.p>
   }
@@ -80,6 +93,16 @@ const Project = ({ location }) => {
 
   let project = data && data.project
 
+  if (project === null) {
+    // TODO: Handle this better
+    console.log("This project doesn't exist anymore")
+    return (
+      <Box>
+        <Styled.h3>This project no longer exists</Styled.h3>
+      </Box>
+    )
+  }
+
   return (
     <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
@@ -92,7 +115,11 @@ const Project = ({ location }) => {
                 sx={projectLogoStyle}
               />
             ) : (
-              <ProjectImage sx={projectLogoStyle} />
+              <img
+                src={defaultImage('profiles/profile')}
+                alt="Project avatar"
+                sx={projectLogoStyle}
+              />
             )}
           </Box>
           <Box>
@@ -139,6 +166,12 @@ const Project = ({ location }) => {
                   handleSelect: value => console.log('value: ', value),
                   icon: '/share.png',
                 },
+                {
+                  text: 'Remove',
+                  handleSelect: () => {
+                    removeProject({ variables: { projectId } })
+                  },
+                },
               ]}
             >
               {showChallenge ? (
@@ -163,7 +196,7 @@ const Project = ({ location }) => {
                 />
               ) : (
                 <img
-                  src="/dots.png"
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
                   sx={{
                     pt: 1,
                     pl: 2,
@@ -172,7 +205,7 @@ const Project = ({ location }) => {
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                   }}
-                  alt="dots icon"
+                  alt="dots"
                 />
               )}
             </Menu>

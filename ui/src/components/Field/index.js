@@ -20,6 +20,7 @@ const Field = ({
   multiselect,
   items,
   setImage,
+  categories,
 }) => {
   const charRef = useRef()
 
@@ -71,7 +72,12 @@ const Field = ({
           />
         ) : type === 'filters' ? (
           multiselect === true ? (
-            <MultiSelect setValue={setValue} title={title} type="categories">
+            <MultiSelect
+              setValue={setValue}
+              title={title}
+              type="categories"
+              items={categories}
+            >
               <p
                 sx={{
                   color: 'white',

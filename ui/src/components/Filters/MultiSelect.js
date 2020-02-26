@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-import categories from '../../data/categories.json'
-
 import Button from '../Button'
 import Row from './Row'
 import Divider from '../Divider'
@@ -37,19 +35,27 @@ const Filters = ({
     }
   }, [setOpen])
 
-  const allCategories = () => {
-    let allCats = categories.reduce((acc, current) => {
-      acc.push({ ...current, image: `/categories/${current.slug}.png` })
+  let allItems = items
+
+  if (type === 'categories') {
+    let allCats = items.reduce((acc, current) => {
+      acc.push({
+        ...current,
+        image: `categories/${current.slug}.png`,
+        name: current.id,
+      })
       if (current.subcategories) {
         const cat = current.subcategories.map(subcat => ({
           ...subcat,
           parent: current,
-          image: `/categories/${subcat.slug}.png`,
+          image: `categories/${subcat.slug}.png`,
         }))
-        acc.push(cat)
+        acc.concat(cat)
       }
       return acc
     }, [])
+
+    console.log('All CATS: ', allCats)
 
     if (searchText) {
       allCats = allCats.filter(
@@ -57,10 +63,8 @@ const Filters = ({
           allCat.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1,
       )
     }
-    return allCats
+    allItems = allCats
   }
-
-  let allItems = type === 'categories' ? allCategories() : items
 
   return (
     <Box>

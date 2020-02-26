@@ -3,35 +3,12 @@ import { useState } from 'react'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
-import { gql } from 'apollo-boost'
+import { useQuery } from '@apollo/react-hooks'
+
+import { ADD_PROJECT } from '../../utils/apollo/mutations'
+import { CATEGORIES_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
-
-export const ADD_PROJECT = gql`
-  mutation addProject(
-    $name: String!
-    $description: String!
-    $avatar: String
-    $image: String
-    $website: String
-    $github: String
-    $twitter: String
-    $isRepresentative: Boolean
-    $categories: any
-  ) {
-    addProject(
-      name: $name
-      description: $description
-      avatar: $avatar
-      image: $image
-      website: $website
-      github: $github
-      twitter: $twitter
-      isRepresentative: $isRepresentative
-      categories: $categories
-    ) @client
-  }
-`
 
 const NewProject = () => {
   const [isDisabled, setIsDisabled] = useState(true)
@@ -46,6 +23,8 @@ const NewProject = () => {
     isRepresentative: null,
     categories: [],
   })
+
+  const { data: categories } = useQuery(CATEGORIES_QUERY)
 
   const [addProject, { data, loading, error, state }] = useMutation(
     ADD_PROJECT,
@@ -132,6 +111,7 @@ const NewProject = () => {
           setDisabled={setDisabled}
           buttonText="Add project"
           setImage={setImage}
+          categories={categories ? categories.categories : []}
         />
       </Box>
     </Grid>

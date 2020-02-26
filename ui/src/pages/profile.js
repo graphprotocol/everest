@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
 import { useWeb3React } from '@web3-react/core'
 import ThreeBox from '3box'
 
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
+import { PROFILE_QUERY } from '../utils/apollo/queries'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
@@ -19,30 +19,6 @@ import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
-
-const PROFILE_QUERY = gql`
-  query profile($id: ID!) {
-    user(id: $id) {
-      id
-      projects {
-        id
-        name
-        description
-        avatar
-        currentChallenge {
-          id
-        }
-        categories {
-          id
-          description
-        }
-      }
-      challenges {
-        id
-      }
-    }
-  }
-`
 
 const Profile = ({ location }) => {
   const [selectedProjects, setSelectedProjects] = useState('cards')
@@ -102,8 +78,6 @@ const Profile = ({ location }) => {
   }
 
   const user = data && data.user
-
-  console.log('PROFILE: ', profile)
 
   return (
     <Grid>
@@ -196,7 +170,7 @@ const Profile = ({ location }) => {
             ]}
           >
             <img
-              src="/dots.png"
+              src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
               sx={{
                 pt: 1,
                 pl: 2,
@@ -205,7 +179,7 @@ const Profile = ({ location }) => {
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
               }}
-              alt="dots icon"
+              alt="dots"
               onClick={() => closeModal()}
             />
           </Menu>
@@ -318,7 +292,8 @@ const Profile = ({ location }) => {
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
           <img
-            src="/mountain-empty.png"
+            src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+              ''}/mountain-empty.png`}
             sx={{ height: '190px', width: 'auto' }}
           />
           <Divider sx={{ mt: '-6px !important' }} />

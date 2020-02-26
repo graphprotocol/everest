@@ -11057,6 +11057,15 @@ gatsby-plugin-eslint@^2.0.8:
   resolved "https://registry.npmjs.org/gatsby-plugin-eslint/-/gatsby-plugin-eslint-2.0.8.tgz#1ff7f546a427d274dc2de3932ba29822aae330c3"
   integrity sha512-vAMy37povmQJNg6ZxY78fkWR3pKwG8MNMhO3u+4vXj2MYT5avhFvHPJTAb126ZCuygf30gAWlpwbV50zP894Jw==
 
+gatsby-plugin-ipfs@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/gatsby-plugin-ipfs/-/gatsby-plugin-ipfs-2.0.2.tgz#973c53008328c77760d0c062dcb8804be2792bb8"
+  integrity sha512-Igh4K0axPzfvmP8T0w5Vvo789HTaaC0XHTkHG18jTkwW04J5TV+YPULCxVqRRCGL4cEJgpLuX9TR9iCgEu5igA==
+  dependencies:
+    globby "^8.0.1"
+    is-text-path "^1.0.1"
+    p-map "^2.0.0"
+
 gatsby-plugin-page-creator@^2.1.40:
   version "2.1.40"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-page-creator/-/gatsby-plugin-page-creator-2.1.40.tgz#96c817781dfb1f191570c69d2e9af114a3cd23df"

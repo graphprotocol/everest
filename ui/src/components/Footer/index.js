@@ -1,14 +1,17 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
+import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 
 import Link from '../../components/Link'
+import Graph from '../../images/graph.svg'
+import Ipfs from '../../images/ipfs.svg'
+import Eth from '../../images/eth.svg'
 
 const Footer = ({ ...props }) => {
   return (
     <div sx={rootStyles} {...props}>
-      <Styled.p sx={{ textAlign: ['center', 'left', 'left'] }}>
+      <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
         <Link
           onClick={() => navigate('https://thegraph.com')}
@@ -16,7 +19,7 @@ const Footer = ({ ...props }) => {
         >
           The Graph
         </Link>
-      </Styled.p>
+      </Box>
       <Grid
         sx={{
           textAlign: 'right',
@@ -25,9 +28,9 @@ const Footer = ({ ...props }) => {
         }}
         columns={3}
       >
-        <img src={'/graph.svg'} alt="The Graph" title="The Graph" />
-        <img src={'/ipfs.svg'} alt="IPFS" title="IPFS" />
-        <img src={'/eth.svg'} alt="Ethereum" title="Ethereum" />
+        <Graph alt="The Graph" />
+        <Ipfs alt="IPFS" />
+        <Eth alt="Ethereum" />
       </Grid>
     </div>
   )

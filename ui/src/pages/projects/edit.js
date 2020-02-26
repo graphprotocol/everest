@@ -12,7 +12,7 @@ import {
   OFFCHAIN_DATANAME,
   VALIDITY_TIMESTAMP,
 } from '../../utils/helpers/metatransactions'
-import { PROJECT_QUERY } from '../../utils/queries'
+import { PROJECT_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 

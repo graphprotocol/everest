@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
 import { useWeb3React } from '@web3-react/core'
 import { navigate } from 'gatsby'
 
@@ -17,14 +15,6 @@ import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
 import Placeholder from '../../images/profile-placeholder.svg'
-
-const PROFILE_QUERY = gql`
-  query everestProfile($id: ID!) {
-    user(where: { id: $id }) {
-      id
-    }
-  }
-`
 
 const Navbar = ({ path, ...props }) => {
   const { account } = useWeb3React()
@@ -62,11 +52,6 @@ const Navbar = ({ path, ...props }) => {
   }, [account])
 
   const isNewProjectPage = path && path.includes('new')
-  const { data } = useQuery(PROFILE_QUERY, {
-    variables: {
-      id: userAccount || '',
-    },
-  })
 
   return (
     <Grid {...props} sx={{ height: '96px' }}>
@@ -89,9 +74,10 @@ const Navbar = ({ path, ...props }) => {
           position: 'absolute',
           right: '20px',
           alignItems: 'center',
-          gridTemplateColumns: 'max-content 1fr',
+          gridTemplateColumns: '1fr 1fr',
           height: '100%',
         }}
+        gap={3}
       >
         <Link
           onClick={() =>
@@ -101,9 +87,8 @@ const Navbar = ({ path, ...props }) => {
             backgroundColor: isNewProjectPage ? 'secondary' : 'white',
             padding: '12px 22px',
             '&:hover': {
-              color: 'linkHover',
               svg: {
-                fill: 'inherit',
+                fill: isNewProjectPage ? 'white' : 'secondary',
                 marginLeft: 'inherit',
               },
             },
@@ -119,7 +104,10 @@ const Navbar = ({ path, ...props }) => {
         {userAccount ? (
           <Link
             to={`/profile/${userAccount}`}
-            sx={{ '&:hover': { svg: { marginLeft: 0 } } }}
+            sx={{
+              lineHeight: 'inherit',
+              '&:hover': { svg: { marginLeft: 0 } },
+            }}
           >
             <Placeholder
               sx={{
