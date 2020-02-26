@@ -35,6 +35,7 @@
     "gatsby": "^2.18.4",
     "gatsby-plugin-emotion": "^4.1.22",
     "gatsby-plugin-eslint": "^2.0.8",
+    "gatsby-plugin-ipfs": "2.0.2",
     "gatsby-plugin-prefetch-google-fonts": "^1.4.3",
     "gatsby-plugin-react-helmet": "^3.1.16",
     "gatsby-plugin-react-svg": "^2.1.2",
@@ -42,21 +43,19 @@
     "gatsby-plugin-theme-ui": "0.3.0",
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-source-graphql": "2.1.28",
-    "gatsby-plugin-ipfs": "2.0.2",
     "graphql": "^14.5.8",
-    "ipfs-http-client": "^40.1.0",
-    "isomorphic-fetch": "^2.2.1",
     "numeral": "^2.0.6",
     "qrcode.react": "^1.0.0",
+    "query-string": "6.11.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-textarea-autosize": "^7.1.2",
     "theme-ui": "^0.3.1",
-    "web3-react": "^5.0.5",
-    "query-string": "6.11.0"
+    "web3-react": "^5.0.5"
   },
   "devDependencies": {
+    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.8",
     "prettier": "^1.19.1"
   },
   "repository": {

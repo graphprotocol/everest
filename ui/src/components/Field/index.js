@@ -225,6 +225,7 @@ Field.propTypes = {
   value: PropTypes.string,
   setValue: PropTypes.func,
   setImage: PropTypes.func,
+  categories: PropTypes.any,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,

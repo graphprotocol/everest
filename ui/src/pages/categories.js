@@ -35,7 +35,7 @@ const Categories = () => {
               description: cat.subcategories
                 ? `${cat.subcategories.length} PROJECTS`
                 : '0 PROJECTS',
-              image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/categories/${
+              image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
                 cat.slug
               }.png`,
               to: `/category/${cat.slug}`,
