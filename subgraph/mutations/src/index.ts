@@ -246,8 +246,8 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
 
   return transaction
     .wait()
-    .then(async () => {
-      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, block: { hash: transaction.hash } })
+    .then(async (tx: any) => {
+      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, block: { hash: tx.blockHash } })
       return project
     })
     .catch(err => {
@@ -267,8 +267,8 @@ const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: C
 
   return transaction
     .wait()
-    .then(async () => {
-      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, block: { hash: transaction.hash } })
+    .then(async (tx: any) => {
+      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, block: { hash: tx.blockHash } })
       return project
     })
     .catch(err => {
@@ -290,8 +290,8 @@ const delegateOwnership = async (_: any, args: DelegateOwnershipArgs, context: C
 
   return transaction
     .wait()
-    .then(async () => {
-      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, block: { hash: transaction.hash } })
+    .then(async (tx: any) => {
+      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, block: { hash: tx.blockHash } })
       return project
     })
     .catch(err => {
@@ -334,8 +334,8 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
 
   return transaction
     .wait()
-    .then(async () => {
-      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId, block: { hash: transaction.hash } })
+    .then(async (tx: any) => {
+      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId, block: { hash: tx.blockHash } })
       return challenge
     })
     .catch(err => {
@@ -355,8 +355,8 @@ const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Con
 
   return transaction
     .wait()
-    .then(async () => {
-      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId, block: { hash: transaction.hash } })
+    .then(async (tx: any) => {
+      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId, block: { hash: tx.blockHash } })
       return challenge
     })
     .catch(err => {
