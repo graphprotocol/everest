@@ -36,7 +36,7 @@ export interface TransferOwnershipArgs {
 
 export interface DelegateOwnershipArgs {
   projectId: string
-  newOwnerAddress: string
+  delegateAddress: string
 }
 
 export interface ChallengeProjectArgs {

@@ -276,11 +276,6 @@ export const applySignedWithAttribute = async (
       gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
     },
   )
-  tx.wait()
-    .then(res => {
-      console.log('SUCCESS: ', res)
-    })
-    .catch(e => console.error('TRANSACTION: ', e))
 
   return tx
 }
