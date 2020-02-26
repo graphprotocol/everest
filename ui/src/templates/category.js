@@ -67,8 +67,8 @@ const Category = ({ pageContext, location }) => {
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
           <img
-            src={`${imagePrefix || ''}/categories/${pageContext.slug}.png`}
-            alt={pageContext.slug}
+            src={`${imagePrefix || ''}/categories/${pageContext.id}.png`}
+            alt={pageContext.id}
             sx={imageStyles}
           />
         </Box>
@@ -88,8 +88,8 @@ const Category = ({ pageContext, location }) => {
             return {
               name: subcat.name,
               description: `6 projects`,
-              image: `/cats/${subcat.slug}.png`,
-              to: `/category/${subcat.slug}`,
+              image: `/cats/${subcat.id}.png`,
+              to: `/category/${subcat.id}`,
             }
           })}
           variant="category"

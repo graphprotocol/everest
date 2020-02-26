@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import { useWeb3React } from '@web3-react/core'
 import ThreeBox from '3box'
 
+import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 import { PROFILE_QUERY } from '../utils/apollo/queries'
@@ -21,13 +21,14 @@ import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
 
 const Profile = ({ location }) => {
+  const { account } = useAccount()
+
   const [selectedProjects, setSelectedProjects] = useState('cards')
   const [selectedChallenges, setSelectedChallenges] = useState('cards')
   const [profile, setProfile] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
-  const { account } = useWeb3React()
 
   const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
@@ -35,6 +36,12 @@ const Profile = ({ location }) => {
     async function getProfile() {
       const threeBoxProfile = await ThreeBox.getProfile(profileId)
 
+      let image
+      if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
+        image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+      }
+
+      console.log('image: ', image)
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
       )
@@ -43,6 +50,7 @@ const Profile = ({ location }) => {
         setProfile(state => ({
           ...state,
           ...threeBoxProfile,
+          image: image,
           accounts: threeBoxAccounts,
         }))
       }
@@ -64,7 +72,7 @@ const Profile = ({ location }) => {
 
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: profileId,
+      id: profileId.toLowerCase(),
     },
   })
 
@@ -79,6 +87,15 @@ const Profile = ({ location }) => {
 
   const user = data && data.user
 
+  console.log('USR: ', user)
+
+  const challengedProjects =
+    user.projects.length > 0
+      ? user.projects.filter(p => p.currentChallenge !== null)
+      : []
+
+  console.log('challengedproj: ', challengedProjects)
+
   return (
     <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
@@ -89,9 +106,11 @@ const Profile = ({ location }) => {
           }}
         >
           <Box>
-            <ProfileImage
-              sx={{ height: '96px', width: '96px', borderRadius: '50%' }}
-            />
+            {profile && profile.image ? (
+              <img src={profile.image} alt="Profile" sx={profileImgStyles} />
+            ) : (
+              <ProfileImage sx={profileImgStyles} />
+            )}
           </Box>
           {profile ? (
             <Box>
@@ -137,52 +156,54 @@ const Profile = ({ location }) => {
               </p>
             </Box>
           )}
-          <Menu
-            items={[
-              {
-                text: 'Edit',
-                handleSelect: () => {
-                  window.open(`https://3box.io/${account}`, '_blank')
+          {account && account === profileId && (
+            <Menu
+              items={[
+                {
+                  text: 'Edit',
+                  handleSelect: () => {
+                    window.open(`https://3box.io/${account}`, '_blank')
+                  },
+                  icon: '/challenge.png',
                 },
-                icon: '/challenge.png',
-              },
-              {
-                text: (
-                  <Fragment>
-                    <Box
-                      onClick={e => {
-                        e.preventDefault()
-                        openModal()
-                      }}
-                    >
-                      Change wallet
-                    </Box>
-                    {showModal && (
-                      <Modal
-                        showModal={showModal}
-                        closeModal={closeModal}
-                      ></Modal>
-                    )}
-                  </Fragment>
-                ),
-                icon: '/share.png',
-              },
-            ]}
-          >
-            <img
-              src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
-              sx={{
-                pt: 1,
-                pl: 2,
-                width: '24px',
-                transform: 'rotate(90deg)',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              alt="dots"
-              onClick={() => closeModal()}
-            />
-          </Menu>
+                {
+                  text: (
+                    <Fragment>
+                      <Box
+                        onClick={e => {
+                          e.preventDefault()
+                          openModal()
+                        }}
+                      >
+                        Change wallet
+                      </Box>
+                      {showModal && (
+                        <Modal
+                          showModal={showModal}
+                          closeModal={closeModal}
+                        ></Modal>
+                      )}
+                    </Fragment>
+                  ),
+                  icon: '/share.png',
+                },
+              ]}
+            >
+              <img
+                src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                sx={{
+                  pt: 1,
+                  pl: 2,
+                  width: '24px',
+                  transform: 'rotate(90deg)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                alt="dots"
+                onClick={() => closeModal()}
+              />
+            </Menu>
+          )}
         </Grid>
       </Grid>
       {profile && <Divider />}
@@ -243,50 +264,51 @@ const Profile = ({ location }) => {
           {user && user.projects.length > 0 && (
             <Section
               items={user.projects.map(project => {
+                const image = project.avatar
+                  ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
+                  : undefined
                 return {
                   ...project,
                   description: project.description.slice(0, 30) + '...',
                   to: `/project/${project.id}`,
-                  image: project.avatar,
+                  image: image,
                 }
               })}
               variant="project"
               selected={selectedProjects}
             />
           )}
-          {/* TODO: Replace with challenges  */}
-          <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-            <Box>
-              <Styled.h5>Your Challenges</Styled.h5>
-              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-                {user && user.projects && (
-                  <span>{user.projects.length} Projects - </span>
-                )}
-                {user && user.projects && (
-                  <span>{user.projects.length} Initiated</span>
-                )}
-              </Styled.p>
-            </Box>
-            {user && user.projects.length > 0 && (
-              <Switcher
+          {challengedProjects.length > 0 && (
+            <Fragment>
+              <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+                <Box>
+                  <Styled.h5>Your Challenges</Styled.h5>
+                  <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+                    <span>{challengedProjects.length} Projects - </span>
+                    <span>{user.projects.length} ??? Initiated</span>
+                  </Styled.p>
+                </Box>
+                <Switcher
+                  selected={selectedChallenges}
+                  setSelected={setSelectedChallenges}
+                />
+              </Grid>
+              <Section
+                items={challengedProjects.map(project => {
+                  const image = project.avatar
+                    ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
+                    : undefined
+                  return {
+                    ...project,
+                    description: project.description.slice(0, 30) + '...',
+                    to: `/project/${project.id}`,
+                    image: image,
+                  }
+                })}
+                variant="project"
                 selected={selectedChallenges}
-                setSelected={setSelectedChallenges}
               />
-            )}
-          </Grid>
-          {user && user.projects.length > 0 && (
-            <Section
-              items={user.projects.map(project => {
-                return {
-                  ...project,
-                  description: project.description.slice(0, 30) + '...',
-                  to: `/project/${project.id}`,
-                  image: project.avatar,
-                }
-              })}
-              variant="project"
-              selected={selectedChallenges}
-            />
+            </Fragment>
           )}
         </Fragment>
       ) : (
@@ -312,6 +334,8 @@ const Profile = ({ location }) => {
     </Grid>
   )
 }
+
+const profileImgStyles = { height: '96px', width: '96px', borderRadius: '50%' }
 
 Profile.propTypes = {
   pageContext: PropTypes.any,

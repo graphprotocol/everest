@@ -3,9 +3,12 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
+import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
 
+import { EDIT_PROJECT } from '../../utils/apollo/mutations'
 import { PROJECT_QUERY } from '../../utils/apollo/queries'
+import { CATEGORIES_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
@@ -18,6 +21,26 @@ const EditProject = ({ location }) => {
     },
   })
 
+  const [
+    editProject,
+    {
+      data: mutationData,
+      loading: mutationLoading,
+      error: errorLoading,
+      state,
+    },
+  ] = useMutation(EDIT_PROJECT, {
+    onError: error => {
+      console.error('Error editing a project: ', error)
+    },
+    onCompleted: mydata => {
+      if (data) {
+        console.log('COMPLETED: ', mydata.editProject)
+      }
+    },
+  })
+
+  console.log('mutationData: ', mutationData)
   const [isDisabled, setIsDisabled] = useState(true)
   const [project, setProject] = useState({
     name: '',
@@ -32,6 +55,10 @@ const EditProject = ({ location }) => {
     isRepresentative: null,
     categories: [],
   })
+
+  const { data: categories } = useQuery(CATEGORIES_QUERY)
+
+  console.log('categories: ', categories)
 
   useEffect(() => {
     if (data) {
@@ -77,7 +104,7 @@ const EditProject = ({ location }) => {
 
   const handleSubmit = async project => {
     setIsDisabled(true)
-    // TODO: call mutations
+    editProject({ variables: { ...project, projectId: projectId } })
   }
 
   const setValue = async (field, value) => {
@@ -135,6 +162,7 @@ const EditProject = ({ location }) => {
           setValue={setValue}
           setDisabled={setDisabled}
           buttonText="Update project"
+          categories={categories ? categories.categories : []}
         />
       </Box>
     </Grid>

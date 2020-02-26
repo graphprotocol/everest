@@ -100,10 +100,9 @@ const Row = ({
 
 Row.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.any,
+    id: PropTypes.string,
     name: PropTypes.string,
     image: PropTypes.string,
-    slug: PropTypes.string,
   }),
   parent: PropTypes.any,
   selected: PropTypes.any,

@@ -9,6 +9,7 @@ import { defaultImage } from '../../utils/helpers/utils'
 import Challenged from '../../images/challenged.svg'
 
 const Row = ({ item }) => {
+  console.log('ITEM: ', item)
   return (
     <Grid
       gap={0}
@@ -19,8 +20,8 @@ const Row = ({ item }) => {
         <img
           src={
             item.image
-              ? `${window.__GATSBY_IPFS_PATH_PREFIX__}/item.image`
-              : `${window.__GATSBY_IPFS_PATH_PREFIX__}/${defaultImage(
+              ? `${item.image}`
+              : `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}${defaultImage(
                   'profiles/profile',
                 )}`
           }

@@ -57,14 +57,10 @@ export default {
       fontWeight: 'heading',
       letterSpacing: '-0.8',
       color: 'primary',
-      // '@media (max-width: 640px)': {
-      //   fontSize: '1.5rem',
-      //   lineHeight: '2.5rem',
-      // },
     },
     h4: {
-      fontSize: '2rem',
-      lineHeight: '2.75rem',
+      fontSize: '1.5rem',
+      lineHeight: '2rem',
       fontWeight: 'bold',
     },
     h5: {

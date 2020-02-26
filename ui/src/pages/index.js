@@ -111,8 +111,8 @@ const Index = () => {
                 return {
                   name: category.id,
                   description: '24 projects',
-                  image: `/cats/${category.slug}.png`,
-                  to: `/category/${category.slug}`,
+                  image: `/cats/${category.id}.png`,
+                  to: `/category/${category.id}`,
                 }
               })
             : []
@@ -129,7 +129,10 @@ const Index = () => {
             ? projects.projects.map(project => {
                 return {
                   name: project.name,
-                  description: project.description.slice(0, 20) + '...',
+                  description:
+                    project.description.length > 30
+                      ? project.description.slice(0, 26) + '...'
+                      : project.description,
                   to: `/project/${project.id}`,
                   image: project.image,
                   category:
