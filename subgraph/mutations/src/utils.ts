@@ -17,8 +17,11 @@ export const sleep = (ms: number): Promise<void> => {
 }
 
 export const PROJECT_QUERY = gql`
-  query everestProject($projectId: ID!) {
-    project(where: { id: $projectId }) {
+
+  type Block { hash: String! }
+
+  query everestProject($projectId: ID!, $block: Block!) {
+    project(id: $projectId, block: $block) {
       id
       name
       description
@@ -41,8 +44,11 @@ export const PROJECT_QUERY = gql`
 `
 
 export const CHALLENGE_QUERY = gql`
-  query everestChallenge($challengeId: ID!) {
-    challenge(where: { id: $challengeId }) {
+
+  type Block { hash: String! }
+
+  query everestChallenge($challengeId: ID!, $block: Block!) {
+    challenge(id: $challengeId, block: $block) {
       id
       ipfsHash
       description
