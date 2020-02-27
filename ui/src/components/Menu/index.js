@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-const Menu = ({ children, items }) => {
+const Menu = ({ children, items, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Menu = ({ children, items }) => {
   }, [])
 
   return (
-    <Grid sx={{ position: 'relative' }}>
+    <Grid sx={{ position: 'relative' }} {...props}>
       <Box
         onClick={e => {
           e.stopPropagation()

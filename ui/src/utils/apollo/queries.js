@@ -23,6 +23,10 @@ export const PROJECT_QUERY = gql`
         id
         name
       }
+      categories {
+        id
+        description
+      }
     }
   }
 `
@@ -47,7 +51,7 @@ export const CATEGORIES_QUERY = gql`
   query categories {
     categories {
       id
-      slug
+      name
       description
     }
   }
@@ -57,11 +61,11 @@ export const CATEGORY_QUERY = gql`
   query category($id: ID!) {
     category(id: $id) {
       id
-      slug
+      name
       description
       subcategories {
         id
-        slug
+        name
         description
       }
     }
@@ -93,6 +97,7 @@ export const PROFILE_QUERY = gql`
         name
         description
         avatar
+        createdAt
         currentChallenge {
           id
         }

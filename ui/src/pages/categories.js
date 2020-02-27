@@ -36,9 +36,9 @@ const Categories = () => {
                 ? `${cat.subcategories.length} PROJECTS`
                 : '0 PROJECTS',
               image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
-                cat.slug
+                cat.id
               }.png`,
-              to: `/category/${cat.slug}`,
+              to: `/category/${cat.id}`,
             }
           })
         }

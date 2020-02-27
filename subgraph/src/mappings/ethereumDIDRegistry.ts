@@ -112,7 +112,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         let parsedArray: Array<string>
         if (categories != null) {
           let categoriesArray = categories.toArray()
-          project.categories = parsedArray // TODO this is not getting set
+          // project.categories = categories.toArray() // TODO this is not getting set
         }
       }
       project.updatedAt = event.block.timestamp.toI32()

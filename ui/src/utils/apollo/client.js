@@ -4,6 +4,8 @@ import { createHttpLink } from 'apollo-link-http'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import everestMutations from 'everest-mutations'
+import { gql } from 'apollo-boost'
+
 import { createMutations, createMutationsLink } from '@graphprotocol/mutations'
 
 const networkURI = process.env.GATSBY_NETWORK_URI

@@ -29,7 +29,9 @@ const Projects = () => {
       return {
         ...project,
         description: project.description
-          ? project.description.slice(0, 20) + '...'
+          ? project.description.length > 30
+            ? project.description.slice(0, 26) + '...'
+            : project.description
           : '',
       }
     })

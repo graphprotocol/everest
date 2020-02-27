@@ -18,7 +18,11 @@ const Card = ({
 }) => {
   return (
     <Grid
-      sx={styles.root}
+      sx={
+        variant === 'disabled'
+          ? { ...styles.root, opacity: 0.32, pointerEvents: 'none' }
+          : styles.root
+      }
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
       onClick={() => navigate(to)}

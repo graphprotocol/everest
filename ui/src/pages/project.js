@@ -8,6 +8,7 @@ import { useMutation } from '@graphprotocol/mutations-apollo-react'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
+import { useAccount } from '../utils/hooks'
 
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
 import { REMOVE_PROJECT } from '../utils/apollo/mutations'
@@ -20,10 +21,12 @@ import Link from '../components/Link'
 import Menu from '../components/Menu'
 import MultiSelect from '../components/Filters/MultiSelect'
 
-import UserImage from '../images/profile-placeholder.svg'
 import Close from '../images/close.svg'
+import { navigate } from 'gatsby'
 
 const Project = ({ location }) => {
+  const { account } = useAccount()
+
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
@@ -102,6 +105,43 @@ const Project = ({ location }) => {
     )
   }
 
+  let items = [
+    {
+      text: 'Challenge',
+      handleSelect: () => {
+        setShowChallenge(true)
+        if (!showChallenge) {
+          setShowDelegate(false)
+          setShowTransfer(false)
+        }
+      },
+      icon: '/challenge.png',
+    },
+    {
+      text: 'Share',
+      handleSelect: value => console.log('value: ', value),
+      icon: '/share.png',
+    },
+  ]
+
+  if (account && project.owner && account.toLowerCase() === project.owner.id) {
+    items = items.concat([
+      {
+        text: 'Edit',
+        handleSelect: () => {
+          navigate(`/edit/${projectId}`)
+        },
+        icon: '/edit.png',
+      },
+      {
+        text: 'Remove',
+        handleSelect: () => {
+          removeProject({ variables: { projectId } })
+        },
+      },
+    ])
+  }
+
   return (
     <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
@@ -128,7 +168,13 @@ const Project = ({ location }) => {
             <Styled.h2>{project.name}</Styled.h2>
           </Box>
         </Grid>
-        <Grid columns={[1, 2, 2]} mt={[5, 5, 0]} sx={{ alignItems: 'center' }}>
+        <Grid
+          mt={[5, 5, 0]}
+          sx={{
+            alignItems: 'center',
+            gridTemplateColumns: '200px max-content 1fr',
+          }}
+        >
           <Box>
             <p sx={{ variant: 'text.small' }}>Date Added</p>
             <p sx={{ variant: 'text.huge' }}>
@@ -136,43 +182,34 @@ const Project = ({ location }) => {
             </p>
           </Box>
           <Grid
-            sx={{ gridTemplateColumns: '50px 1fr 30px', alignItems: 'center' }}
+            sx={{
+              gridTemplateColumns:
+                project.owner && project.owner.image ? '50px 1fr' : '1fr',
+              alignItems: 'center',
+            }}
           >
-            <Box>
-              <UserImage sx={userImageStyle} />
-            </Box>
+            {project.owner && project.owner.image && (
+              <Box>
+                <img
+                  src={project.owner.image}
+                  sx={userImageStyle}
+                  alt="profile"
+                />
+              </Box>
+            )}
             <Box>
               <p sx={{ variant: 'text.small' }}>Owner</p>
-              <p sx={{ variant: 'text.large' }}>
-                {project.owner && project.owner.name}
-              </p>
+              <Styled.h4 sx={{ color: 'secondary' }}>
+                {project.owner && project.owner.name
+                  ? project.owner.name
+                  : project.owner.id.slice(0, 6) +
+                    '...' +
+                    project.owner.id.slice(-6)}
+              </Styled.h4>
             </Box>
-            <Menu
-              items={[
-                {
-                  text: 'Challenge',
-                  handleSelect: () => {
-                    setShowChallenge(true)
-                    if (!showChallenge) {
-                      setShowDelegate(false)
-                      setShowTransfer(false)
-                    }
-                  },
-                  icon: '/challenge.png',
-                },
-                {
-                  text: 'Share',
-                  handleSelect: value => console.log('value: ', value),
-                  icon: '/share.png',
-                },
-                {
-                  text: 'Remove',
-                  handleSelect: () => {
-                    removeProject({ variables: { projectId } })
-                  },
-                },
-              ]}
-            >
+          </Grid>
+          {account && (
+            <Menu items={items} sx={{ justifySelf: 'end' }}>
               {showChallenge ? (
                 <Close
                   onClick={async () => {
@@ -199,7 +236,7 @@ const Project = ({ location }) => {
                   sx={{
                     pt: 1,
                     pl: 2,
-                    width: '24px',
+                    width: '32px',
                     transform: 'rotate(90deg)',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -208,7 +245,7 @@ const Project = ({ location }) => {
                 />
               )}
             </Menu>
-          </Grid>
+          )}
         </Grid>
       </Grid>
       {showChallenge && (

@@ -16,50 +16,53 @@ export const sleep = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export const PROJECT_QUERY = gql`
-
-  type Block { hash: String! }
-
-  query everestProject($projectId: ID!, $block: Block!) {
-    project(id: $projectId, block: $block) {
-      id
-      name
-      description
-      categories
-      createdAt
-      reputation
-      isChallenged
-      website
-      twitter
-      github
-      image
-      avatar
-      totalVotes
-      owner {
+export const queryMap = {
+  project: (projectId: string, hash: string) => gql`
+    query everestProject {
+      project(id: "${projectId}", block: { hash: "${hash}" }) {
         id
         name
+        description
+        createdAt
+        website
+        twitter
+        github
+        image
+        avatar
+        totalVotes
+        owner {
+          id
+          name
+        }
+        categories {
+          id
+          description
+        }
       }
     }
-  }
-`
-
-export const CHALLENGE_QUERY = gql`
-
-  type Block { hash: String! }
-
-  query everestChallenge($challengeId: ID!, $block: Block!) {
-    challenge(id: $challengeId, block: $block) {
-      id
-      ipfsHash
-      description
-      endTime
-      votesFor
-      votesAgainst
-      project
-      owner
-      votes
-      resolved
-      createdAt
+  `,
+  challenge: (challengeId: string, hash: string) => gql`
+    query everestChallenge {
+      challenge(id: "${challengeId}", block: { hash: "${hash}" }) {
+        id
+        name
+        description
+        createdAt
+        website
+        twitter
+        github
+        image
+        avatar
+        totalVotes
+        owner {
+          id
+          name
+        }
+        categories {
+          id
+          description
+        }
+      }
     }
-  }
-`
+  `,
+}

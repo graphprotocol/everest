@@ -11,20 +11,22 @@ export function useWeb3React() {
   return context.active ? context : contextNetwork
 }
 
-export function useAddress() {
-  const { account } = useWeb3ReactCore()
-  const [address, setAddress] = useState('')
+export function useAccount() {
+  const { account: web3Account } = useWeb3ReactCore()
+  const [account, setAccount] = useState('')
   useEffect(() => {
     async function accountAddress() {
-      if (account) {
-        setAddress(account)
+      if (web3Account) {
+        setAccount(web3Account)
       } else {
-        setAddress(await getAddress())
+        console.log('ELSE: ', await getAddress())
+        setAccount(await getAddress())
       }
     }
     accountAddress()
-  }, [account])
-  return [address, setAddress]
+  }, [web3Account, setAccount])
+
+  return { account, setAccount }
 }
 
 export function useProvider() {

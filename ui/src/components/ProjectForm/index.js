@@ -58,8 +58,7 @@ const ProjectForm = ({
         title="Project logo"
         type="upload"
         field="logo"
-        imageName={project.logoName}
-        imageUrl={project.logoUrl}
+        image={project.avatar}
         project={project}
         setImage={data => setImage('avatar', data)}
       />
@@ -67,8 +66,7 @@ const ProjectForm = ({
         title="Project image"
         type="upload"
         field="image"
-        imageName={project.imageName}
-        imageUrl={project.imageUrl}
+        image={project.image}
         project={project}
         setImage={data => setImage('image', data)}
       />

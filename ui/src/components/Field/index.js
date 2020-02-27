@@ -25,9 +25,12 @@ const Field = ({
   const charRef = useRef()
 
   if (value && value.length === charsCount) {
-    charRef.current.style = `opacity: 1; transition: all 0.3s ease;`
+    console.log('charRef: ', charRef)
+    if (charRef.current)
+      charRef.current.style = `opacity: 1; transition: all 0.3s ease;`
     setTimeout(() => {
-      charRef.current.style = 'opacity: 0.4; transition: all 0.3s ease '
+      if (charRef.current)
+        charRef.current.style = 'opacity: 0.4; transition: all 0.3s ease '
     }, 500)
   }
 
@@ -219,8 +222,6 @@ Field.propTypes = {
   charsCount: PropTypes.number,
   multiselect: PropTypes.bool,
   text: PropTypes.string,
-  imageName: PropTypes.string,
-  imageUrl: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.string,
   setValue: PropTypes.func,
