@@ -6,13 +6,16 @@ import {
   StateBuilder,
 } from '@graphprotocol/mutations'
 import { ethers, utils } from 'ethers'
-import { DocumentNode } from 'graphql'
 import { Transaction } from 'ethers/utils'
 import { AsyncSendable, Web3Provider } from 'ethers/providers'
 import ipfsHttpClient from 'ipfs-http-client'
 import gql from 'graphql-tag'
 
-import { sleep, uploadToIpfs, CHALLENGE_QUERY } from './utils'
+import {
+  sleep,
+  uploadToIpfs,
+  queryMap
+} from './utils'
 
 import {
   EditProjectArgs,
@@ -76,52 +79,31 @@ type Config = typeof config
 
 type Context = MutationContext<Config, State, EventMap>
 
-const queryGraphNode = async (context: Context, projectId: String, hash: String) => {
+const queryGraphNode = async (context: Context, entity: string, id: string, hash: string) => {
   const { client } = context
+
+  if(!queryMap[entity]){
+    throw new Error(`No query found for entity '${entity}'`)
+  }
 
   let data
 
   if (client) {
     try {
-      const response = await client.query({
-        query: gql`
-        query everestProject {
-          project(id: "${projectId}", block: { hash: "${hash}" }) {
-            id
-            name
-            description
-            createdAt
-            website
-            twitter
-            github
-            image
-            avatar
-            totalVotes
-            owner {
-              id
-              name
-            }
-            categories {
-              id
-              description
-            }
-          }
-        }
-      `,
-      })
+      const { data: resultData } = await client.query({ query: queryMap[entity](id, hash) })
 
-      data = response.data
-      console.log('RESPONSE: ', response)
+      data = resultData
+
     } catch (error) {
       console.error('Error from query node: ', error)
     }
 
-    // if (data === null) {
-    //   await sleep(500)
-    //   await queryGraphNode(context, projectId, hash)
-    // } else {
-    //   return data
-    // }
+    if (data === null) {
+      await sleep(500)
+      await queryGraphNode(context, entity, id, hash)
+    } else {
+      return data
+    }
   }
 
   return null
@@ -280,8 +262,7 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   return transaction
     .wait()
     .then(async (tx: any) => {
-      console.log('TXXXXX: ', tx)
-      const { project } = await queryGraphNode(context, projectId, tx.blockHash)
+      const { project } = await queryGraphNode(context, 'project', projectId, tx.blockHash)
       return project
     })
     .catch(err => {
@@ -306,11 +287,8 @@ const transferOwnership = async (
   return transaction
     .wait()
     .then(async (tx: any) => {
-      // const { project } = await queryGraphNode(context, PROJECT_QUERY, {
-      //   projectId,
-      //   blockHash: tx.blockHash,
-      // })
-      return {}
+      const { project } = await queryGraphNode(context, 'project', projectId, tx.blockHash)
+      return project
     })
     .catch(err => {
       console.error('Transaction error: ', err)
@@ -343,11 +321,8 @@ const delegateOwnership = async (
   return transaction
     .wait()
     .then(async (tx: any) => {
-      // const { project } = await queryGraphNode(context, PROJECT_QUERY, {
-      //   projectId,
-      //   blockHash: tx.blockHash,
-      // })
-      return {}
+      const { project } = await queryGraphNode(context, 'project', projectId, tx.blockHash)
+      return project
     })
     .catch(err => {
       console.error('Transaction error: ', err)
@@ -395,11 +370,8 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
   return transaction
     .wait()
     .then(async (tx: any) => {
-      // const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, {
-      //   challengeId,
-      //   blockHash: tx.blockHash,
-      // })
-      return {}
+      const { challenge } = await queryGraphNode(context, 'challenge', challengeId, tx.blockHash)
+      return challenge
     })
     .catch(err => {
       console.error('Transaction error: ', err)
@@ -419,11 +391,8 @@ const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Con
   return transaction
     .wait()
     .then(async (tx: any) => {
-      // const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, {
-      //   challengeId,
-      //   blockHash: tx.blockHash,
-      // })
-      return {}
+      const { challenge } = await queryGraphNode(context, 'challenge', challengeId, tx.blockHash)
+      return challenge
     })
     .catch(err => {
       console.error('Transaction error: ', err)
