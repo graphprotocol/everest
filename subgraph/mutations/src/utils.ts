@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { GraphQLObjectType, GraphQLString } from 'graphql'
 
 export const uploadToIpfs = async (ipfs: any, data: any): Promise<string> => {
   let result
@@ -16,33 +17,40 @@ export const sleep = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export const PROJECT_QUERY = gql`
+// const BlockType = new GraphQLObjectType({
+//   name: 'Block',
+//   fields: () => ({
+//     hash: { type: GraphQLString },
+//   }),
+// })
 
-  query everestProject($projectId: ID!, $blockHash: String!) {
-    project(id: $projectId, block: { hash: $blockHash }) {
-      id
-      name
-      description
-      categories
-      createdAt
-      reputation
-      isChallenged
-      website
-      twitter
-      github
-      image
-      avatar
-      totalVotes
-      owner {
-        id
-        name
-      }
-    }
-  }
-`
+// export const PROJECT_QUERY = gql`
+//   query everestProject($projectId: ID!, $blockHash: String!) {
+//     project(id: $projectId, block: { hash: $blockHash }) {
+//       id
+//       name
+//       description
+//       categories
+//       createdAt
+//       website
+//       twitter
+//       github
+//       image
+//       avatar
+//       totalVotes
+//       owner {
+//         id
+//         name
+//       }
+//       categories {
+//         id
+//         description
+//       }
+//     }
+//   }
+// `
 
 export const CHALLENGE_QUERY = gql`
-
   query everestChallenge($challengeId: ID!, $blockHash: String!) {
     challenge(id: $challengeId, block: { hash: $blockHash }) {
       id

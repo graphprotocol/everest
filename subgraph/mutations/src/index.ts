@@ -3,20 +3,16 @@ import {
   MutationContext,
   MutationResolvers,
   MutationState,
-  StateBuilder
+  StateBuilder,
 } from '@graphprotocol/mutations'
 import { ethers, utils } from 'ethers'
 import { DocumentNode } from 'graphql'
 import { Transaction } from 'ethers/utils'
 import { AsyncSendable, Web3Provider } from 'ethers/providers'
 import ipfsHttpClient from 'ipfs-http-client'
+import gql from 'graphql-tag'
 
-import {
-  sleep,
-  uploadToIpfs,
-  PROJECT_QUERY,
-  CHALLENGE_QUERY
-} from './utils'
+import { sleep, uploadToIpfs, CHALLENGE_QUERY } from './utils'
 
 import {
   EditProjectArgs,
@@ -26,14 +22,14 @@ import {
   TransferOwnershipArgs,
   DelegateOwnershipArgs,
   VoteChallengeArgs,
-  ResolveChallengeArgs
+  ResolveChallengeArgs,
 } from './types'
 
 import {
   applySignedWithAttribute,
   overrides,
   OFFCHAIN_DATANAME,
-  VALIDITY_TIMESTAMP
+  VALIDITY_TIMESTAMP,
 } from './contract-helpers/metatransactions'
 
 import { ipfsHexHash } from './contract-helpers/ipfs'
@@ -64,7 +60,7 @@ const stateBuilder: StateBuilder<State, EventMap> = {
         myValue: 'true',
       }
     },
-  }
+  },
 }
 
 const config = {
@@ -80,21 +76,52 @@ type Config = typeof config
 
 type Context = MutationContext<Config, State, EventMap>
 
-const queryGraphNode = async (context: Context, query: DocumentNode, variables: any) => {
+const queryGraphNode = async (context: Context, projectId: String, hash: String) => {
   const { client } = context
 
-  if (client) {
-    const { data } = await client.query({
-      query,
-      variables,
-    })
+  let data
 
-    if (data === null) {
-      await sleep(500)
-      await queryGraphNode(context, query, variables)
-    } else {
-      return data
+  if (client) {
+    try {
+      const response = await client.query({
+        query: gql`
+        query everestProject {
+          project(id: "${projectId}", block: { hash: "${hash}" }) {
+            id
+            name
+            description
+            createdAt
+            website
+            twitter
+            github
+            image
+            avatar
+            totalVotes
+            owner {
+              id
+              name
+            }
+            categories {
+              id
+              description
+            }
+          }
+        }
+      `,
+      })
+
+      data = response.data
+      console.log('RESPONSE: ', response)
+    } catch (error) {
+      console.error('Error from query node: ', error)
     }
+
+    // if (data === null) {
+    //   await sleep(500)
+    //   await queryGraphNode(context, projectId, hash)
+    // } else {
+    //   return data
+    // }
   }
 
   return null
@@ -191,16 +218,17 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const ethereumDIDRegistryContract = await getContract(context, 'EthereumDIDRegistry')
   const daiContract = await getContract(context, 'Dai')
 
-  const transaction = await sendTransaction(applySignedWithAttribute(
-    member,
-    memberSigningKey,
-    owner,
-    ipfsHash,
-    everestContract,
-    ethereumDIDRegistryContract,
-    daiContract,
-    ethereum,
-  )
+  const transaction = await sendTransaction(
+    applySignedWithAttribute(
+      member,
+      memberSigningKey,
+      owner,
+      ipfsHash,
+      everestContract,
+      ethereumDIDRegistryContract,
+      daiContract,
+      ethereum,
+    ),
   )
 
   return transaction
@@ -212,10 +240,10 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
 const removeProject = async (_: any, args: RemoveProjectArgs, context: Context) => {
   const { projectId } = args
 
-  const everest = await getContract(context, "Everest")
+  const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    await everest.memberExit(projectId, overrides)
+    await everest.memberExit(projectId, overrides),
   )
 
   return transaction
@@ -225,7 +253,6 @@ const removeProject = async (_: any, args: RemoveProjectArgs, context: Context) 
       console.error('Transaction error: ', err)
       return false
     })
-
 }
 
 const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
@@ -238,16 +265,23 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   const metadataHash = await uploadToIpfs(ipfs, metadata)
   const hexIpfsHash = ipfsHexHash(metadataHash)
 
-  const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
+  const ethereumDIDRegistry = await getContract(context, 'EthereumDIDRegistry')
 
   const transaction = await sendTransaction(
-    await ethereumDIDRegistry.setAttribute(projectId, OFFCHAIN_DATANAME, hexIpfsHash, VALIDITY_TIMESTAMP, overrides)
+    await ethereumDIDRegistry.setAttribute(
+      projectId,
+      OFFCHAIN_DATANAME,
+      hexIpfsHash,
+      VALIDITY_TIMESTAMP,
+      overrides,
+    ),
   )
 
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, blockHash: tx.blockHash })
+      console.log('TXXXXX: ', tx)
+      const { project } = await queryGraphNode(context, projectId, tx.blockHash)
       return project
     })
     .catch(err => {
@@ -256,20 +290,27 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
     })
 }
 
-const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: Context) => {
+const transferOwnership = async (
+  _: any,
+  args: TransferOwnershipArgs,
+  context: Context,
+) => {
   const { projectId, newOwnerAddress } = args
 
-  const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
+  const ethereumDIDRegistry = await getContract(context, 'EthereumDIDRegistry')
 
   const transaction = await sendTransaction(
-    ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, overrides)
+    ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, overrides),
   )
 
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, blockHash: tx.blockHash })
-      return project
+      // const { project } = await queryGraphNode(context, PROJECT_QUERY, {
+      //   projectId,
+      //   blockHash: tx.blockHash,
+      // })
+      return {}
     })
     .catch(err => {
       console.error('Transaction error: ', err)
@@ -277,22 +318,36 @@ const transferOwnership = async (_: any, args: TransferOwnershipArgs, context: C
     })
 }
 
-const delegateOwnership = async (_: any, args: DelegateOwnershipArgs, context: Context) => {
+const delegateOwnership = async (
+  _: any,
+  args: DelegateOwnershipArgs,
+  context: Context,
+) => {
   const { projectId, delegateAddress } = args
-  const delegateType = '0x6576657265737400000000000000000000000000000000000000000000000000' //"everest" in bytes32 + 50 zeroes
+  const delegateType =
+    '0x6576657265737400000000000000000000000000000000000000000000000000' //"everest" in bytes32 + 50 zeroes
   const validity = 4733510400 //January 1st, 2120 in unix seconds
 
-  const ethereumDIDRegistry = await getContract(context, "EthereumDIDRegistry")
+  const ethereumDIDRegistry = await getContract(context, 'EthereumDIDRegistry')
 
   const transaction = await sendTransaction(
-    ethereumDIDRegistry.addDelegate(projectId, delegateType, delegateAddress, validity, overrides)
+    ethereumDIDRegistry.addDelegate(
+      projectId,
+      delegateType,
+      delegateAddress,
+      validity,
+      overrides,
+    ),
   )
 
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { project } = await queryGraphNode(context, PROJECT_QUERY, { projectId, blockHash: tx.blockHash })
-      return project
+      // const { project } = await queryGraphNode(context, PROJECT_QUERY, {
+      //   projectId,
+      //   blockHash: tx.blockHash,
+      // })
+      return {}
     })
     .catch(err => {
       console.error('Transaction error: ', err)
@@ -311,7 +366,12 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
   const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    await everest.challenge(challengingProjectAddress, challengedProjectAddress, hexIpfsHash, overrides)
+    await everest.challenge(
+      challengingProjectAddress,
+      challengedProjectAddress,
+      hexIpfsHash,
+      overrides,
+    ),
   )
 
   return transaction
@@ -326,17 +386,20 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
 const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) => {
   const { challengeId, voteChoice, voters } = args
 
-  const everest = await getContract(context, "Everest")
+  const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    everest.submitVotes(challengeId, voteChoice, voters, overrides)
+    everest.submitVotes(challengeId, voteChoice, voters, overrides),
   )
 
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId, blockHash: tx.blockHash })
-      return challenge
+      // const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, {
+      //   challengeId,
+      //   blockHash: tx.blockHash,
+      // })
+      return {}
     })
     .catch(err => {
       console.error('Transaction error: ', err)
@@ -347,17 +410,20 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
 const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Context) => {
   const { challengeId } = args
 
-  const everest = await getContract(context, "Everest")
+  const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    await everest.resolveChallenge(challengeId, overrides)
+    await everest.resolveChallenge(challengeId, overrides),
   )
 
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, { challengeId, blockHash: tx.blockHash })
-      return challenge
+      // const { challenge } = await queryGraphNode(context, CHALLENGE_QUERY, {
+      //   challengeId,
+      //   blockHash: tx.blockHash,
+      // })
+      return {}
     })
     .catch(err => {
       console.error('Transaction error: ', err)
