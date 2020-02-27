@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import { GraphQLObjectType, GraphQLString } from 'graphql'
 
 export const uploadToIpfs = async (ipfs: any, data: any): Promise<string> => {
   let result
@@ -65,5 +64,5 @@ export const queryMap = {
         }
       }
     }
-  `
+  `,
 }
