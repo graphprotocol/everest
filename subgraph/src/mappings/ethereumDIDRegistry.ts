@@ -1,4 +1,12 @@
-import { json, ipfs, Bytes, JSONValue, BigInt, log } from '@graphprotocol/graph-ts'
+import {
+  json,
+  ipfs,
+  Bytes,
+  JSONValue,
+  BigInt,
+  log,
+  JSONValueKind,
+} from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -104,15 +112,28 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           ? null
           : data.get('avatar').toString()
         project.image = data.get('image').isNull() ? null : data.get('image').toString()
-        project.isRepresentative = data.get('isRepresentative').isNull()
-          ? null
-          : data.get('isRepresentative').toString()
+
+        if (!data.get('isRepresentative').isNull()) {
+          if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
+            project.isRepresentative = data.get('isRepresentative').toBool()
+          }
+        }
 
         let categories = data.get('categories')
-        let parsedArray: Array<string>
         if (categories != null) {
-          let categoriesArray = categories.toArray()
-          // project.categories = categories.toArray() // TODO this is not getting set
+          if (categories.kind == JSONValueKind.ARRAY) {
+            let categoriesArray = categories.toArray()
+            let parsedArray: Array<string>
+            for (let i = 0; i < categoriesArray.length; i++) {
+              if (categoriesArray[i].kind == JSONValueKind.STRING) {
+                parsedArray[i] = categoriesArray[i].toString()
+                log.info('FIND ME My value is: {}', [parsedArray[i]])
+              }
+            }
+            if (parsedArray.length != 0) {
+              project.categories = parsedArray
+            } // TODO this is not getting set
+          }
         }
       }
       project.updatedAt = event.block.timestamp.toI32()

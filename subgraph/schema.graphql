@@ -13,7 +13,7 @@ type Project @entity {
   avatar: String
   image: String
   categories: [Category!]
-  isRepresentative: String
+  isRepresentative: Boolean
 
   createdAt: Int!
   updatedAt: Int!
