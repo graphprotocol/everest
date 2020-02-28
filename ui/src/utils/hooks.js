@@ -19,7 +19,6 @@ export function useAccount() {
       if (web3Account) {
         setAccount(web3Account)
       } else {
-        console.log('ELSE: ', await getAddress())
         setAccount(await getAddress())
       }
     }

@@ -56,14 +56,11 @@ const Projects = () => {
       </Grid>
       <Section
         items={allProjects.map(project => {
-          const image = project.avatar
-            ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
-            : undefined
           return {
             ...project,
             description: project.description,
             to: `/project/${project.id}`,
-            image: image,
+            image: project.avatar,
           }
         })}
         variant="project"

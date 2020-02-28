@@ -25,7 +25,6 @@ const Field = ({
   const charRef = useRef()
 
   if (value && value.length === charsCount) {
-    console.log('charRef: ', charRef)
     if (charRef.current)
       charRef.current.style = `opacity: 1; transition: all 0.3s ease;`
     setTimeout(() => {

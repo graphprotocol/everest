@@ -6,7 +6,9 @@ import { CATEGORIES_QUERY } from '../utils/apollo/queries'
 import Section from '../components/Section'
 
 const Categories = () => {
-  const { loading, data, error } = useQuery(CATEGORIES_QUERY)
+  const { loading, data, error } = useQuery(CATEGORIES_QUERY, {
+    variables: { parentCategory: null },
+  })
 
   if (loading) {
     // TODO: add loading indicator
@@ -31,7 +33,7 @@ const Categories = () => {
           data &&
           data.categories.map(cat => {
             return {
-              name: cat.id,
+              name: cat.name,
               description: cat.subcategories
                 ? `${cat.subcategories.length} PROJECTS`
                 : '0 PROJECTS',

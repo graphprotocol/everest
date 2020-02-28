@@ -44,7 +44,7 @@ const Filters = ({
         image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}cats/${
           current.id
         }.png`,
-        name: current.id,
+        name: current.name,
       })
       if (current.subcategories) {
         const cat = current.subcategories.map(subcat => ({

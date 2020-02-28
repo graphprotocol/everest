@@ -318,7 +318,7 @@ const Project = ({ location }) => {
                 </Box>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                  <Link to={`/profile/${project.owner.id}`}>
+                  <Link to={`/profile?id=${project.owner.id}`}>
                     {`${project.owner.id.slice(0, 6)}-${project.owner.id.slice(
                       -6,
                     )}`}
