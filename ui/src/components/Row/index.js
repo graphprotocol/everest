@@ -9,10 +9,9 @@ import { defaultImage } from '../../utils/helpers/utils'
 import Challenged from '../../images/challenged.svg'
 
 const Row = ({ item }) => {
-  console.log('ITEM: ', item)
   return (
     <Grid
-      gap={0}
+      gap={1}
       sx={rootStyles}
       onClick={() => navigate(`/project/${item.id}`)}
     >
@@ -20,7 +19,7 @@ const Row = ({ item }) => {
         <img
           src={
             item.image
-              ? `${item.image}`
+              ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${item.image}`
               : `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}${defaultImage(
                   'profiles/profile',
                 )}`
@@ -44,17 +43,16 @@ const Row = ({ item }) => {
         </Box>
       </Grid>
       <Box sx={boxStyles}>
-        <Styled.p sx={{ color: 'secondary', fontWeight: 'heading' }}>
+        <Styled.p sx={{ color: 'blackFaded' }}>
           {item.categories.map(cat => (
             <span key={cat}>{cat}</span>
           ))}
         </Styled.p>
       </Box>
       <Box sx={boxStyles}>
-        <Styled.p>{convertDate(item.createdAt)}</Styled.p>
-      </Box>
-      <Box sx={boxStyles}>
-        <Styled.p>{item.reputation}</Styled.p>
+        <Styled.p sx={{ color: 'blackFaded' }}>
+          {convertDate(item.createdAt)}
+        </Styled.p>
       </Box>
       <Box sx={boxStyles}>
         <Challenged sx={{ opacity: item.isChallenged ? 1 : 0 }} />
@@ -69,7 +67,7 @@ const rootStyles = {
   height: '96px',
   alignItems: 'center',
   my: 0,
-  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr',
+  gridTemplateColumns: '400px 1fr 1fr 1fr',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
   '&:hover': {

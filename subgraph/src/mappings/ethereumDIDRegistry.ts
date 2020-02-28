@@ -108,12 +108,12 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           ? null
           : data.get('isRepresentative').toString()
 
-        let categories = data.get('categories')
-        let parsedArray: Array<string>
-        if (categories != null) {
-          let categoriesArray = categories.toArray()
-          // project.categories = categories.toArray() // TODO this is not getting set
-        }
+        // let categories = data.get('categories')
+        // let parsedArray: Array<string>
+        // if (categories != null) {
+        //   let categoriesArray = categories.toArray()
+        //   // project.categories = categories.toArray() // TODO this is not getting set
+        // }
       }
       project.updatedAt = event.block.timestamp.toI32()
       project.save()

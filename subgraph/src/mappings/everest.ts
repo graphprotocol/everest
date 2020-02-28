@@ -12,7 +12,15 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote, Charter, Category } from '../types/schema'
+import {
+  Project,
+  Everest,
+  Challenge,
+  Vote,
+  Charter,
+  Category,
+  Total,
+} from '../types/schema'
 
 import { addQm } from './helpers'
 
@@ -21,11 +29,20 @@ import { addQm } from './helpers'
 export function handleNewMember(event: NewMember): void {
   let id = event.params.member.toHexString()
   let project = new Project(id)
+  let total = Total.load('1')
   project.totalVotes = 0
   project.membershipStartTime = event.params.applicationTime.toI32()
   project.createdAt = event.block.timestamp.toI32()
   project.updatedAt = event.block.timestamp.toI32()
   project.save()
+
+  if (total != null) {
+    total.projectCount += 1
+  } else {
+    total = new Total('1')
+    total.projectCount = 1
+  }
+  total.save()
 
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(event.params.fee)

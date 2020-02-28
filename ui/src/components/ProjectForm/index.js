@@ -22,7 +22,7 @@ const ProjectForm = ({
         type="input"
         value={project.name}
         charsCount={35}
-        placeholder="Project Name"
+        placeholder="Project name"
         project={project}
         setValue={async value => {
           await setValue('name', value)
@@ -99,7 +99,7 @@ const ProjectForm = ({
       />
       <Field
         title="Project representative"
-        text="Are you a project representative"
+        text="If you contribute to the project, verify that you are a project representative."
         value={project.isRepresentative}
         field="isRepresentative"
         type="checkbox"

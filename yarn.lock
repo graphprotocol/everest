@@ -13,10 +13,10 @@
     orbit-db "^0.23.1"
     orbit-db-access-controllers "~0.2.4"
 
-"3box@^1.15.0":
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/3box/-/3box-1.17.0.tgz#a9a39e8de8c0841725e3173033698c882a5a2b24"
-  integrity sha512-rPTAtqiMrVhjFz1S+LUjUFmxZ70wm3Pd/IAf/BQlTvdxM7Du/3ui7VjhR673oMgR4W3CTJ/VbAli1BgaSQF6EQ==
+"3box@1.17.1":
+  version "1.17.1"
+  resolved "https://registry.npmjs.org/3box/-/3box-1.17.1.tgz#7060f4b81eeccb7c7308125af343f25a55df79ee"
+  integrity sha512-QDhW0V14P7auvCx+2WlPPJ6B/qji4PiVxVyVtr9sT4aRMx1AYVnCqik3u3uiVPFTTWj09eBXsE8NK+M4pCGfsQ==
   dependencies:
     "3box-orbitdb-plugins" "^1.1.0"
     "3id-blockchain-utils" "^0.3.2"

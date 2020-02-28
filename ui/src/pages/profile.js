@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import queryString from 'query-string'
 import ThreeBox from '3box'
 
 import { useAccount } from '../utils/hooks'
@@ -30,7 +31,14 @@ const Profile = ({ location }) => {
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
 
-  const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
+  let param
+  if (location && location.search) {
+    param = queryString.parse(location.search)
+  }
+
+  const profileId = param && param.id ? param.id : ''
+
+  console.log('profileID: ', profileId)
 
   useEffect(() => {
     async function getProfile() {
@@ -41,7 +49,6 @@ const Profile = ({ location }) => {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
       }
 
-      console.log('image: ', image)
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
       )
@@ -55,9 +62,9 @@ const Profile = ({ location }) => {
         }))
       }
     }
-    metamaskAccountChange(() => {
+    metamaskAccountChange(accounts => {
       if (typeof window !== 'undefined') {
-        window.location.href = '/'
+        window.location.href = `/profile?id=${accounts[0]}`
       }
     })
     getProfile()
@@ -87,14 +94,10 @@ const Profile = ({ location }) => {
 
   const user = data && data.user
 
-  console.log('USR: ', user)
-
   const challengedProjects =
-    user.projects.length > 0
+    user && user.projects && user.projects.length > 0
       ? user.projects.filter(p => p.currentChallenge !== null)
       : []
-
-  console.log('challengedproj: ', challengedProjects)
 
   return (
     <Grid>
@@ -264,14 +267,11 @@ const Profile = ({ location }) => {
           {user && user.projects.length > 0 && (
             <Section
               items={user.projects.map(project => {
-                const image = project.avatar
-                  ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
-                  : undefined
                 return {
                   ...project,
                   description: project.description.slice(0, 30) + '...',
                   to: `/project/${project.id}`,
-                  image: image,
+                  image: project.avatar,
                 }
               })}
               variant="project"

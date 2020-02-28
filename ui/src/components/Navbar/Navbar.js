@@ -5,6 +5,7 @@ import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useWeb3React } from '@web3-react/core'
 import { navigate } from 'gatsby'
+// import ThreeBox from '3box' # TODO: failing the build
 
 import { metamaskAccountChange } from '../../services/ethers'
 
@@ -23,6 +24,7 @@ const Navbar = ({ path, ...props }) => {
   const [isMobile, setIsMobile] = useState()
   const [showModal, setShowModal] = useState(false)
   const [userAccount, setUserAccount] = useState(account)
+  const [userImage, setUserImage] = useState('')
   const openModal = () => setShowModal(true)
 
   const closeModal = () => {
@@ -51,6 +53,19 @@ const Navbar = ({ path, ...props }) => {
     setIsMobile(window.innerWidth < 640)
   }, [account])
 
+  // useEffect(() => {
+  //   async function getProfile() {
+  //     const threeBoxProfile = await ThreeBox.getProfile(userAccount)
+
+  //     let image
+  //     if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
+  //       image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+  //     }
+  //     setUserImage(image)
+  //   }
+  //   getProfile()
+  // })
+
   const isNewProjectPage = path && path.includes('new')
 
   return (
@@ -74,7 +89,7 @@ const Navbar = ({ path, ...props }) => {
           position: 'absolute',
           right: '20px',
           alignItems: 'center',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: 'max-content 1fr',
           height: '100%',
         }}
         gap={3}
@@ -103,22 +118,18 @@ const Navbar = ({ path, ...props }) => {
         </Link>
         {userAccount ? (
           <Link
-            to={`/profile/${userAccount}`}
+            to={`/profile?id=${userAccount}`}
             sx={{
               lineHeight: 'inherit',
               '&:hover': { svg: { marginLeft: 0 } },
+              textAlign: 'right',
             }}
           >
-            <Placeholder
-              sx={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                border: '1px solid',
-                borderColor: 'secondary',
-                verticalAlign: 'middle',
-              }}
-            />
+            {userImage ? (
+              <img src={userImage} alt="profile" sx={imgStyles} />
+            ) : (
+              <Placeholder sx={imgStyles} />
+            )}
           </Link>
         ) : (
           <Modal showModal={showModal} closeModal={closeModal}>
@@ -140,6 +151,15 @@ const navStyles = {
   width: [0, '100%', '100%'],
   maxWidth: '380px',
   alignItems: 'center',
+}
+
+const imgStyles = {
+  width: '32px',
+  height: '32px',
+  borderRadius: '50%',
+  border: '1px solid',
+  borderColor: 'secondary',
+  verticalAlign: 'middle',
 }
 
 Navbar.propTypes = {

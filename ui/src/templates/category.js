@@ -13,7 +13,7 @@ import Switcher from '../components/Switcher'
 
 import { CATEGORY_QUERY } from '../utils/apollo/queries'
 
-const Category = ({ pageContext, location }) => {
+const Category = ({ location }) => {
   const pathParams = location.pathname.split('/')
   let categoryName
   if (pathParams.slice(-1)[0] === '') {
@@ -49,7 +49,10 @@ const Category = ({ pageContext, location }) => {
   if (loading) return <div>Loading</div>
   if (error) {
     console.error(`Error getting the category: ${error.message}`)
+    return
   }
+
+  let category = data && data.category
 
   const setSelectedView = value => {
     setSelected(value)
@@ -67,24 +70,24 @@ const Category = ({ pageContext, location }) => {
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
           <img
-            src={`${imagePrefix || ''}/categories/${pageContext.id}.png`}
-            alt={pageContext.id}
+            src={`${imagePrefix || ''}/cats/${category.id}.png`}
+            alt={category.id}
             sx={imageStyles}
           />
         </Box>
         <Box sx={{ mx: ['auto', 0], mt: [7, 0, 0] }}>
-          <Styled.h2>{pageContext.name}</Styled.h2>
+          <Styled.h2>{category.name}</Styled.h2>
           <Styled.p sx={{ maxWidth: ['100%', '70%', '70%'] }}>
-            {pageContext.description}
+            {category.description}
           </Styled.p>
         </Box>
       </Grid>
       <Divider />
-      {pageContext.subcategories && (
+      {category.subcategories && (
         <Section
           title=""
-          description={`${pageContext.subcategories.length} Subcategories`}
-          items={pageContext.subcategories.map(subcat => {
+          description={`${category.subcategories.length} Subcategories`}
+          items={category.subcategories.map(subcat => {
             return {
               name: subcat.name,
               description: `6 projects`,
@@ -144,7 +147,6 @@ const imageStyles = {
 }
 
 Category.propTypes = {
-  pageContext: PropTypes.any,
   location: PropTypes.any,
 }
 

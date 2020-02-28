@@ -6,7 +6,7 @@ import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
 
 import { ADD_PROJECT } from '../../utils/apollo/mutations'
-import { CATEGORIES_QUERY } from '../../utils/apollo/queries'
+import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
@@ -24,7 +24,7 @@ const NewProject = () => {
     categories: [],
   })
 
-  const { data: categories } = useQuery(CATEGORIES_QUERY)
+  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
 
   const [addProject, { data, loading, error, state }] = useMutation(
     ADD_PROJECT,
@@ -47,15 +47,20 @@ const NewProject = () => {
     }))
   }
 
-  const handleSubmit = async project => {
-    console.log('PROJECT: ', project)
-    addProject({ variables: { ...project } })
-  }
-
   const setValue = async (field, value) => {
+    console.log('FIELD: ', field)
+    console.log('DATA: ', value)
+    let newValue = value
+    if (field === 'categories') {
+      newValue = value.reduce((acc, current) => {
+        acc.push(current.id)
+        return acc
+      }, [])
+    }
+    console.log('newValue: ', newValue)
     await setProject(state => ({
       ...state,
-      [field]: value,
+      [field]: newValue,
     }))
   }
 
@@ -77,6 +82,11 @@ const NewProject = () => {
         ),
       )
     }
+  }
+
+  const handleSubmit = async project => {
+    console.log('PROJECT: ', project)
+    addProject({ variables: { ...project } })
   }
 
   return (

@@ -42,7 +42,11 @@ const Card = ({
         {variant === 'project' ? (
           <Box sx={{ margin: 'auto' }}>
             <img
-              src={image ? image : defaultImage('profiles/profile')}
+              src={
+                image
+                  ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${image}`
+                  : defaultImage('profiles/profile')
+              }
               alt={title}
               sx={{
                 height: '80px',

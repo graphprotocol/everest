@@ -48,11 +48,33 @@ export const USER_PROJECTS_QUERY = gql`
 `
 
 export const CATEGORIES_QUERY = gql`
+  query categories($parentCategory: String) {
+    categories(where: { parentCategory: $parentCategory }) {
+      id
+      name
+      description
+      subcategories {
+        id
+      }
+      parentCategory {
+        id
+      }
+    }
+  }
+`
+
+export const ALL_CATEGORIES_QUERY = gql`
   query categories {
     categories {
       id
       name
       description
+      subcategories {
+        id
+      }
+      parentCategory {
+        id
+      }
     }
   }
 `
@@ -73,17 +95,29 @@ export const CATEGORY_QUERY = gql`
 `
 
 export const PROJECTS_QUERY = gql`
-  query projects {
-    projects {
+  query projects($orderBy: Project_orderBy, $orderDirection: OrderDirection) {
+    projects(orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       name
       image
       description
       avatar
+      createdAt
+      currentChallenge {
+        id
+      }
       categories {
         id
         description
       }
+    }
+  }
+`
+
+export const TOTALS_QUERY = gql`
+  query totals {
+    totals {
+      projectCount
     }
   }
 `

@@ -265,8 +265,9 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { project } = await queryGraphNode(context, 'project', projectId, tx.blockHash)
-      return project
+      // const { project } = await queryGraphNode(context, 'project', projectId, tx.blockHash)
+      // return project
+      return true
     })
     .catch(err => {
       console.error('Transaction error: ', err)
