@@ -39,7 +39,7 @@ const Card = ({
           px: variant === 'project' ? 4 : 0,
         }}
       >
-        {variant === 'project' ? (
+        {variant === 'project' || variant === 'disabled' ? (
           <Box sx={{ margin: 'auto' }}>
             <img
               src={

@@ -1,10 +1,11 @@
 /** @jsx jsx */
-import { useState, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
+import ThreeBox from '3box'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
@@ -35,6 +36,7 @@ const Project = ({ location }) => {
   const [delegateAddress, setDelegateAddress] = useState('')
   const [isKeepOpen, setIsKeepOpen] = useState(false)
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
+  const [ownerName, setOwnerName] = useState('')
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const challengeProject = () => {
@@ -71,6 +73,34 @@ const Project = ({ location }) => {
       id: projectId,
     },
   })
+
+  useEffect(() => {
+    async function getProfile() {
+      if (data && data.project) {
+        const threeBoxProfile = await ThreeBox.getProfile(data.project.owner.id)
+        if (threeBoxProfile) {
+          setOwnerName(threeBoxProfile.name)
+        }
+      }
+      // let image
+      // if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
+      //   image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+      // }
+      // const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
+      //   threeBoxProfile,
+      // )
+      // if (threeBoxProfile && Object.keys(threeBoxProfile).length > 0) {
+      //   setProfile(state => ({
+      //     ...state,
+      //     ...threeBoxProfile,
+      //     image: image,
+      //     accounts: threeBoxAccounts,
+      //   }))
+      // }
+    }
+
+    getProfile()
+  }, [data])
 
   const [
     removeProject,
@@ -199,13 +229,16 @@ const Project = ({ location }) => {
             )}
             <Box>
               <p sx={{ variant: 'text.small' }}>Owner</p>
-              <Styled.h4 sx={{ color: 'secondary' }}>
-                {project.owner && project.owner.name
-                  ? project.owner.name
+              <Link
+                sx={{ color: 'secondary', fontSize: '1.5rem' }}
+                to={`/profile?id=${project.owner.id}`}
+              >
+                {ownerName
+                  ? ownerName
                   : project.owner.id.slice(0, 6) +
                     '...' +
                     project.owner.id.slice(-6)}
-              </Styled.h4>
+              </Link>
             </Box>
           </Grid>
           {account && (
@@ -271,7 +304,7 @@ const Project = ({ location }) => {
           <Styled.p sx={{ maxWidth: '504px', width: '100%' }}>
             {project.description}
           </Styled.p>
-          <Box sx={{ mt: 5 }}>
+          <Box sx={{ mt: 6 }}>
             <DataRow name="ID" value={project.id} />
             {project.website && (
               <DataRow

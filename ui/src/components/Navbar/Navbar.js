@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useWeb3React } from '@web3-react/core'
 import { navigate } from 'gatsby'
-// import ThreeBox from '3box' # TODO: failing the build
+// import ThreeBox from '3box' // TODO: failing the build
 
 import { metamaskAccountChange } from '../../services/ethers'
 

@@ -19,6 +19,7 @@ export const PROJECT_QUERY = gql`
       image
       avatar
       totalVotes
+      isRepresentative
       owner {
         id
         name
@@ -123,10 +124,14 @@ export const TOTALS_QUERY = gql`
 `
 
 export const PROFILE_QUERY = gql`
-  query profile($id: ID!) {
+  query profile(
+    $id: ID!
+    $orderBy: Project_orderBy
+    $orderDirection: OrderDirection
+  ) {
     user(id: $id) {
       id
-      projects {
+      projects(orderBy: $orderBy, orderDirection: $orderDirection) {
         id
         name
         description

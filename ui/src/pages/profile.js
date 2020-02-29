@@ -1,16 +1,19 @@
 /** @jsx jsx */
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
+import cloneDeep from 'lodash.clonedeep'
 import ThreeBox from '3box'
+import { navigate } from 'gatsby'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 import { PROFILE_QUERY } from '../utils/apollo/queries'
+import { ReactContext } from '../components/Layout'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
@@ -21,9 +24,12 @@ import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
 
-const Profile = ({ location }) => {
+const Profile = ({ location, pendingProject, ...props }) => {
+  console.log('PROFILE pendingProject: ', pendingProject)
   const { account } = useAccount()
+  const context = useContext(ReactContext)
 
+  const [allProjects, setAllProjects] = useState([])
   const [selectedProjects, setSelectedProjects] = useState('cards')
   const [selectedChallenges, setSelectedChallenges] = useState('cards')
   const [profile, setProfile] = useState(null)
@@ -38,21 +44,16 @@ const Profile = ({ location }) => {
 
   const profileId = param && param.id ? param.id : ''
 
-  console.log('profileID: ', profileId)
-
   useEffect(() => {
     async function getProfile() {
       const threeBoxProfile = await ThreeBox.getProfile(profileId)
-
       let image
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
       }
-
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
       )
-
       if (threeBoxProfile && Object.keys(threeBoxProfile).length > 0) {
         setProfile(state => ({
           ...state,
@@ -80,8 +81,25 @@ const Profile = ({ location }) => {
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: profileId.toLowerCase(),
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
     },
   })
+
+  // TODO: We are still not getting the data
+  useEffect(() => {
+    if (data && data.user && data.user.projects) {
+      let all = cloneDeep(data.user.projects)
+      if (pendingProject) {
+        // add pendingProject to projects
+        all.unshift(pendingProject)
+      } else {
+        // navigate to profile to execute the query again
+        navigate(`/profile?id=${profileId}`)
+      }
+      setAllProjects(all)
+    }
+  }, [pendingProject, data])
 
   if (loading) {
     return <Styled.p>Loading</Styled.p>
@@ -246,7 +264,7 @@ const Profile = ({ location }) => {
           </Box>
         )}
       </Grid>
-      {user && user.projects && user.projects.length > 0 ? (
+      {allProjects && allProjects.length > 0 ? (
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
@@ -257,27 +275,24 @@ const Profile = ({ location }) => {
                 )}
               </Styled.p>
             </Box>
-            {user && user.projects && user.projects.length > 0 && (
-              <Switcher
-                selected={selectedProjects}
-                setSelected={setSelectedProjects}
-              />
-            )}
-          </Grid>
-          {user && user.projects.length > 0 && (
-            <Section
-              items={user.projects.map(project => {
-                return {
-                  ...project,
-                  description: project.description.slice(0, 30) + '...',
-                  to: `/project/${project.id}`,
-                  image: project.avatar,
-                }
-              })}
-              variant="project"
+            <Switcher
               selected={selectedProjects}
+              setSelected={setSelectedProjects}
             />
-          )}
+          </Grid>
+          <Section
+            items={allProjects.map(project => {
+              return {
+                ...project,
+                description: project.description.slice(0, 30) + '...',
+                to: `/project/${project.id}`,
+                image: project.avatar,
+              }
+            })}
+            variant="project"
+            selected={selectedProjects}
+          />
+
           {challengedProjects.length > 0 && (
             <Fragment>
               <Grid columns={[1, 2, 2]} mb={1} mt={6}>
@@ -295,14 +310,11 @@ const Profile = ({ location }) => {
               </Grid>
               <Section
                 items={challengedProjects.map(project => {
-                  const image = project.avatar
-                    ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
-                    : undefined
                   return {
                     ...project,
                     description: project.description.slice(0, 30) + '...',
                     to: `/project/${project.id}`,
-                    image: image,
+                    image: project.avatar,
                   }
                 })}
                 variant="project"

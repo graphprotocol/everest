@@ -4,13 +4,20 @@ import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
+import cloneDeep from 'lodash.clonedeep'
+import { navigate } from 'gatsby'
+
+import client from '../../utils/apollo/client'
+import { useAccount } from '../../utils/hooks'
 
 import { ADD_PROJECT } from '../../utils/apollo/mutations'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
+import { PROJECTS_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
-const NewProject = () => {
+const NewProject = ({ setPendingProject }) => {
+  const { account } = useAccount()
   const [isDisabled, setIsDisabled] = useState(true)
   const [project, setProject] = useState({
     name: '',
@@ -20,22 +27,50 @@ const NewProject = () => {
     website: '',
     github: '',
     twitter: '',
-    isRepresentative: null,
+    isRepresentative: false,
     categories: [],
   })
 
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
+  const { data: projects } = useQuery(PROJECTS_QUERY)
 
   const [addProject, { data, loading, error, state }] = useMutation(
     ADD_PROJECT,
     {
+      client: client,
+      refetchQueries: [
+        {
+          query: PROJECTS_QUERY,
+        },
+      ],
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addProject: {
+          id: '123',
+          ...project,
+          __typename: 'Project',
+        },
+      },
       onError: error => {
         console.error('Error adding a project: ', error)
       },
       onCompleted: mydata => {
-        if (data) {
-          console.log('COMPLETED: ', mydata)
-        }
+        setPendingProject(null)
+        window.localStorage.removeItem('pendingProject')
+      },
+      update: (proxy, result) => {
+        const projectData = cloneDeep(
+          proxy.readQuery({
+            query: PROJECTS_QUERY,
+          }),
+        )
+
+        // TODO: this doesn't seem to be writing into the cache
+        proxy.writeQuery({
+          query: PROJECTS_QUERY,
+          data: { ...projectData },
+          projects: [...projectData.projects, result.data.addProject],
+        })
       },
     },
   )
@@ -48,8 +83,6 @@ const NewProject = () => {
   }
 
   const setValue = async (field, value) => {
-    console.log('FIELD: ', field)
-    console.log('DATA: ', value)
     let newValue = value
     if (field === 'categories') {
       newValue = value.reduce((acc, current) => {
@@ -57,7 +90,6 @@ const NewProject = () => {
         return acc
       }, [])
     }
-    console.log('newValue: ', newValue)
     await setProject(state => ({
       ...state,
       [field]: newValue,
@@ -85,8 +117,12 @@ const NewProject = () => {
   }
 
   const handleSubmit = async project => {
-    console.log('PROJECT: ', project)
     addProject({ variables: { ...project } })
+    setPendingProject(project)
+    if (typeof window !== undefined) {
+      window.localStorage.setItem('pendingProject', JSON.stringify(project))
+    }
+    navigate(`/profile?id=${account}`)
   }
 
   return (
