@@ -21,7 +21,7 @@ import Divider from '../components/Divider'
 import Modal from '../components/Modal'
 
 const Index = () => {
-  const { account, connector, library } = useWeb3React()
+  const { account } = useWeb3React()
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => {
@@ -29,8 +29,6 @@ const Index = () => {
     // navigate('/projects/new')
   }
 
-  console.log('Provider: ', connector.provider)
-  console.log('Library: ', library)
   const { data: categories } = useQuery(CATEGORIES_QUERY)
   const { data: projects } = useQuery(PROJECTS_QUERY, {
     variables: {

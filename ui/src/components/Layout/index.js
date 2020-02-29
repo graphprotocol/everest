@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import React, { useEffect, useState, createContext } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Global } from '@emotion/core'
@@ -7,7 +8,10 @@ import Footer from '../Footer'
 import Navbar from '../Navbar'
 import Seo from '../Seo'
 
+export const ReactContext = createContext()
+
 const LayoutTemplate = ({ children, ...props }) => {
+  const [pendingProject, setPendingProject] = useState(null)
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
@@ -21,8 +25,26 @@ const LayoutTemplate = ({ children, ...props }) => {
       ? { backgroundColor: 'secondary', marginTop: '-18px' }
       : {}
 
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const pp = window.localStorage.getItem('pendingProject')
+      setPendingProject(pp ? JSON.parse(pp) : pp)
+    }
+  }, [])
+
+  const childrenWithProps = React.Children.map(children, (child, i) => {
+    return React.cloneElement(child, {
+      setPendingProject: setPendingProject,
+      pendingProject: pendingProject,
+    })
+  })
+
   return (
-    <div>
+    <ReactContext.Provider
+      value={{
+        pendingProject: pendingProject,
+      }}
+    >
       <Global
         styles={() => {
           return {
@@ -62,12 +84,12 @@ const LayoutTemplate = ({ children, ...props }) => {
               position: 'static',
             }}
           >
-            {children}
+            {childrenWithProps}
           </main>
         </Box>
         <Footer sx={styles} />
       </section>
-    </div>
+    </ReactContext.Provider>
   )
 }
 

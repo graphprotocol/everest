@@ -19,6 +19,7 @@ const Field = ({
   setValue,
   multiselect,
   items,
+  image,
   setImage,
   categories,
 }) => {
@@ -105,12 +106,12 @@ const Field = ({
             <Select items={items} />
           )
         ) : type === 'upload' ? (
-          <UploadImage setParentImage={setImage} />
+          <UploadImage setParentImage={setImage} parentImage={image} />
         ) : (
           <label sx={styles.toggle}>
             <input
               type="checkbox"
-              onClick={e => {
+              onChange={e => {
                 const value = e.target.checked
                 setValue(value)
               }}
@@ -222,7 +223,7 @@ Field.propTypes = {
   multiselect: PropTypes.bool,
   text: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.any,
   setValue: PropTypes.func,
   setImage: PropTypes.func,
   categories: PropTypes.any,

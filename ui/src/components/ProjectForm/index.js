@@ -11,7 +11,6 @@ const ProjectForm = ({
   setValue,
   setDisabled,
   buttonText,
-  setImage,
   categories,
 }) => {
   return (
@@ -60,7 +59,7 @@ const ProjectForm = ({
         field="logo"
         image={project.avatar}
         project={project}
-        setImage={data => setImage('avatar', data)}
+        setImage={data => setValue('avatar', data)}
       />
       <Field
         title="Project image"
@@ -68,7 +67,7 @@ const ProjectForm = ({
         field="image"
         image={project.image}
         project={project}
-        setImage={data => setImage('image', data)}
+        setImage={data => setValue('image', data)}
       />
       <Field
         title="Website"
@@ -126,7 +125,6 @@ ProjectForm.propTypes = {
   setValue: PropTypes.func,
   setDisabled: PropTypes.func,
   buttonText: PropTypes.string,
-  setImage: PropTypes.func,
   categories: PropTypes.any,
 }
 

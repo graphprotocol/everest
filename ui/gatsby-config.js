@@ -22,6 +22,12 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(`./src/components/Layout/`),
+      },
+    },
+    {
       resolve: 'gatsby-source-graphql',
       options: {
         // This type will contain remote schema Query type
