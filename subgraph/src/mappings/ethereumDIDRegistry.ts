@@ -123,16 +123,22 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         if (categories != null) {
           if (categories.kind == JSONValueKind.ARRAY) {
             let categoriesArray = categories.toArray()
-            let parsedArray: Array<string>
+
+            // First we MUST check if it is null and if so, make it an empty array
+            let projCategories = project.categories
+            if (projCategories == null) {
+              projCategories = []
+            }
+
+            // Push all of the values into the empty array
             for (let i = 0; i < categoriesArray.length; i++) {
               if (categoriesArray[i].kind == JSONValueKind.STRING) {
-                parsedArray[i] = categoriesArray[i].toString()
-                log.info('FIND ME My value is: {}', [parsedArray[i]])
+                projCategories.push(categoriesArray[i].toString())
               }
             }
-            if (parsedArray.length != 0) {
-              project.categories = parsedArray
-            } // TODO this is not getting set
+
+            // Now deliberately set to the array
+            project.categories = projCategories
           }
         }
       }
