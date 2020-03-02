@@ -25,12 +25,12 @@ const LayoutTemplate = ({ children, ...props }) => {
       ? { backgroundColor: 'secondary', marginTop: '-18px' }
       : {}
 
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      const pp = window.localStorage.getItem('pendingProject')
-      setPendingProject(pp ? JSON.parse(pp) : pp)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (typeof window !== undefined) {
+  //     const pp = window.localStorage.getItem('pendingProject')
+  //     setPendingProject(pp ? JSON.parse(pp) : pp)
+  //   }
+  // }, [])
 
   const childrenWithProps = React.Children.map(children, (child, i) => {
     return React.cloneElement(child, {

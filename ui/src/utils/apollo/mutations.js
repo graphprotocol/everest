@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost'
 
 export const REMOVE_PROJECT = gql`
-  mutation project($projectId: ID!) {
+  mutation removeProject($projectId: ID!) {
     removeProject(projectId: $projectId) @client
   }
 `
@@ -28,7 +28,22 @@ export const ADD_PROJECT = gql`
       twitter: $twitter
       isRepresentative: $isRepresentative
       categories: $categories
-    ) @client
+    ) @client {
+      id
+      name
+      description
+      avatar
+      image
+      website
+      github
+      twitter
+      isRepresentative
+      categories {
+        id
+        name
+        description
+      }
+    }
   }
 `
 
@@ -63,6 +78,15 @@ export const EDIT_PROJECT = gql`
       avatar
       image
       categories
+    }
+  }
+`
+
+export const RESOLVE_CHALLENGE = gql`
+  mutation resolveChallenge($challengeId: ID!) {
+    resolveChallenge(challengeId: $challengeId) @client {
+      id
+      description
     }
   }
 `

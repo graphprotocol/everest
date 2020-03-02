@@ -23,7 +23,6 @@ const UploadImage = ({ parentImage, setParentImage }) => {
     },
     onCompleted: data => {
       if (data) {
-        console.log('IMAGE DATA: ', data)
         setImage(data.uploadImage)
         setParentImage(data.uploadImage)
       }

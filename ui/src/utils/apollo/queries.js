@@ -11,7 +11,6 @@ export const PROJECT_QUERY = gql`
       id
       name
       description
-      categories
       createdAt
       website
       twitter
@@ -20,29 +19,38 @@ export const PROJECT_QUERY = gql`
       avatar
       totalVotes
       isRepresentative
+      currentChallenge {
+        id
+        endTime
+        owner
+        description
+        resolved
+        votes {
+          id
+        }
+      }
       owner {
         id
         name
       }
       categories {
         id
+        name
         description
       }
     }
   }
 `
 
-//ck3t926929y7w0922q88lnsww
 export const USER_PROJECTS_QUERY = gql`
   query everestUserProjects($id: ID!) {
-    user(where: { id: $id }) {
+    user(id: $id) {
       id
       name
       projects {
         id
         name
         image
-        categories
       }
     }
   }

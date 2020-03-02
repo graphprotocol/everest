@@ -55,8 +55,8 @@ const NewProject = ({ setPendingProject }) => {
         console.error('Error adding a project: ', error)
       },
       onCompleted: mydata => {
-        setPendingProject(null)
-        window.localStorage.removeItem('pendingProject')
+        // setPendingProject(null)
+        // window.localStorage.removeItem('pendingProject')
       },
       update: (proxy, result) => {
         const projectData = cloneDeep(
@@ -65,6 +65,8 @@ const NewProject = ({ setPendingProject }) => {
           }),
         )
 
+        console.log('projectData: ', projectData)
+        console.log('Result: ', result)
         // TODO: this doesn't seem to be writing into the cache
         proxy.writeQuery({
           query: PROJECTS_QUERY,
@@ -118,10 +120,10 @@ const NewProject = ({ setPendingProject }) => {
 
   const handleSubmit = async project => {
     addProject({ variables: { ...project } })
-    setPendingProject(project)
-    if (typeof window !== undefined) {
-      window.localStorage.setItem('pendingProject', JSON.stringify(project))
-    }
+    // setPendingProject(project)
+    // if (typeof window !== undefined) {
+    //   window.localStorage.setItem('pendingProject', JSON.stringify(project))
+    // }
     navigate(`/profile?id=${account}`)
   }
 

@@ -45,6 +45,7 @@
     "gatsby-source-graphql": "2.1.28",
     "gatsby-plugin-layout": "1.1.22",
     "graphql": "^14.5.8",
+    "moment": "2.24.0",
     "numeral": "^2.0.6",
     "qrcode.react": "^1.0.0",
     "query-string": "6.11.0",
