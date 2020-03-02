@@ -12,7 +12,7 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote, Charter, Category } from '../types/schema'
+import { Project, Everest, Challenge, Vote, Category } from '../types/schema'
 
 import { addQm } from './helpers'
 
@@ -42,7 +42,7 @@ export function handleCharterUpdated(event: CharterUpdated): void {
   everest.charter = event.params.data.toHexString()
   everest.save()
 
-  parseCharterDetails(event.params.data, event.block.timestamp)
+  parseCategoryDetails(event.params.data, event.block.timestamp)
 }
 
 export function handleWithdrawal(event: Withdrawal): void {
@@ -64,7 +64,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.createdAt = event.block.timestamp.toI32()
   everest.save()
 
-  parseCharterDetails(event.params.charter, event.block.timestamp)
+  parseCategoryDetails(event.params.charter, event.block.timestamp)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {
@@ -168,37 +168,14 @@ function getVoteChoice(voteChoice: number): string {
   return value
 }
 
-function parseCharterDetails(ipfsHash: Bytes, timestamp: BigInt): void {
-  let charter = Charter.load(ipfsHash.toHexString())
-  if (charter == null) {
-    charter = new Charter(ipfsHash.toHexString())
-  }
+function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
   let hexHash = addQm(ipfsHash) as Bytes
   let base58Hash = hexHash.toBase58()
   let ipfsData = ipfs.cat(base58Hash)
 
   if (ipfsData != null) {
     let data = json.fromBytes(ipfsData as Bytes).toObject()
-    charter.charterDescription = data.get('charterDescription').isNull()
-      ? null
-      : data.get('charterDescription').toString()
-    charter.name = data.get('name').isNull() ? null : data.get('name').toString()
-    charter.description = data.get('description').isNull()
-      ? null
-      : data.get('description').toString()
-    charter.website = data.get('website').isNull() ? null : data.get('website').toString()
-    charter.twitter = data.get('twitter').isNull() ? null : data.get('twitter').toString()
-    charter.avatar = data.get('avatar').isNull() ? null : data.get('avatar').toString()
-    charter.image = data.get('image').isNull() ? null : data.get('image').toString()
-    charter.categories = data.get('categories').isNull()
-      ? null
-      : data.get('categories').toString()
-    charter.isRepresentative = data.get('isRepresentative').isNull()
-      ? null
-      : data.get('isRepresentative').toString()
-
     let categories = data.get('bootstrap-categories')
-    let parsedArray: Array<string>
     if (categories != null) {
       let categoriesArray = categories.toArray()
       for (let i = 0; i < categoriesArray.length; i++) {
@@ -206,9 +183,6 @@ function parseCharterDetails(ipfsHash: Bytes, timestamp: BigInt): void {
       }
     }
   }
-
-  charter.createdAt = timestamp.toI32()
-  charter.save()
 }
 
 function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
