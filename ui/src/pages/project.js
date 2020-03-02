@@ -6,13 +6,15 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import ThreeBox from '3box'
+import client from '../utils/apollo/client'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
 import { useAccount } from '../utils/hooks'
+import { remainingTime } from '../utils/helpers/date'
 
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
-import { REMOVE_PROJECT } from '../utils/apollo/mutations'
+import { REMOVE_PROJECT, RESOLVE_CHALLENGE } from '../utils/apollo/mutations'
 
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
@@ -28,6 +30,8 @@ import { navigate } from 'gatsby'
 const Project = ({ location }) => {
   const { account } = useAccount()
 
+  // client.resetStore()
+
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
@@ -38,29 +42,6 @@ const Project = ({ location }) => {
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
   const [ownerName, setOwnerName] = useState('')
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
-
-  const challengeProject = () => {
-    console.log('CHALLENGE PROJECT')
-    // TODO: call mutations
-  }
-
-  const delegateProject = async () => {
-    console.log('DELEGATE PROJECT')
-    // TODO: call mutations
-  }
-
-  const transferOwnership = async () => {
-    console.log('TRANSFER OWNERSHIP')
-    // TODO: call mutations
-  }
-
-  const setChallengeData = value => {
-    setChallengeDescription(value)
-  }
-
-  const voteOnProject = () => {
-    // TODO: call mutatioins
-  }
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -73,6 +54,26 @@ const Project = ({ location }) => {
       id: projectId,
     },
   })
+
+  const [
+    removeProject,
+    // {
+    //   data: mutationData,
+    //   loading: mutationLoading,
+    //   error: mutationError,
+    //   state,
+    // },
+  ] = useMutation(REMOVE_PROJECT)
+
+  const [
+    resolveChallenge,
+    // {
+    //   data: mutationData,
+    //   loading: mutationLoading,
+    //   error: mutationError,
+    //   state,
+    // },
+  ] = useMutation(RESOLVE_CHALLENGE)
 
   useEffect(() => {
     async function getProfile() {
@@ -102,16 +103,6 @@ const Project = ({ location }) => {
     getProfile()
   }, [data])
 
-  const [
-    removeProject,
-    // {
-    //   data: mutationData,
-    //   loading: mutationLoading,
-    //   error: mutationError,
-    //   state,
-    // },
-  ] = useMutation(REMOVE_PROJECT)
-
   if (loading && !error) {
     return <Styled.p>Loading</Styled.p>
   }
@@ -126,8 +117,6 @@ const Project = ({ location }) => {
   let project = data && data.project
 
   if (project === null) {
-    // TODO: Handle this better
-    console.log("This project doesn't exist anymore")
     return (
       <Box>
         <Styled.h3>This project no longer exists</Styled.h3>
@@ -135,18 +124,35 @@ const Project = ({ location }) => {
     )
   }
 
+  const challengeProject = () => {
+    console.log('CHALLENGE PROJECT')
+    // TODO: call mutations
+  }
+
+  const delegateProject = async () => {
+    console.log('DELEGATE PROJECT')
+    // TODO: call mutations
+  }
+
+  const transferOwnership = async () => {
+    console.log('TRANSFER OWNERSHIP')
+    // TODO: call mutations
+  }
+
+  const setChallengeData = value => {
+    setChallengeDescription(value)
+  }
+
+  const voteOnProject = () => {
+    // TODO: call mutatioins
+  }
+
+  const handleResolveChallenge = () => {
+    const challengeId = project.currentChallenge.id
+    resolveChallenge({ variables: { challengeId } })
+  }
+
   let items = [
-    {
-      text: 'Challenge',
-      handleSelect: () => {
-        setShowChallenge(true)
-        if (!showChallenge) {
-          setShowDelegate(false)
-          setShowTransfer(false)
-        }
-      },
-      icon: '/challenge.png',
-    },
     {
       text: 'Share',
       handleSelect: value => console.log('value: ', value),
@@ -154,23 +160,56 @@ const Project = ({ location }) => {
     },
   ]
 
-  if (account && project.owner && account.toLowerCase() === project.owner.id) {
+  if (!project.currentChallenge) {
     items = items.concat([
       {
-        text: 'Edit',
+        text: 'Challenge',
         handleSelect: () => {
-          navigate(`/edit/${projectId}`)
+          setShowChallenge(true)
+          if (!showChallenge) {
+            setShowDelegate(false)
+            setShowTransfer(false)
+          }
         },
-        icon: '/edit.png',
-      },
-      {
-        text: 'Remove',
-        handleSelect: () => {
-          removeProject({ variables: { projectId } })
-        },
+        icon: '/challenge.png',
       },
     ])
   }
+
+  if (account && project.owner && account.toLowerCase() === project.owner.id) {
+    if (project.currentChallenge) {
+      items = items.concat([
+        {
+          text: 'Edit',
+          handleSelect: () => {
+            navigate(`/edit/${projectId}`)
+          },
+          icon: '/edit.png',
+        },
+      ])
+    } else {
+      items = items.concat([
+        {
+          text: 'Edit',
+          handleSelect: () => {
+            navigate(`/edit/${projectId}`)
+          },
+          icon: '/edit.png',
+        },
+        {
+          text: 'Remove',
+          handleSelect: () => {
+            removeProject({ variables: { projectId } })
+          },
+          icon: '/trash.png',
+        },
+      ])
+    }
+  }
+
+  const categories = project.categories.reduce((acc, current) => {
+    return acc.push(current.name)
+  }, [])
 
   return (
     <Grid>
@@ -193,7 +232,7 @@ const Project = ({ location }) => {
           </Box>
           <Box>
             <p sx={{ variant: 'text.large' }}>
-              {project.categories.join(', ')}
+              {categories && categories.length > 0 ? categories.join(', ') : ''}
             </p>
             <Styled.h2>{project.name}</Styled.h2>
           </Box>
@@ -330,35 +369,41 @@ const Project = ({ location }) => {
           </Box>
         </Box>
         <Box sx={{ margin: ['32px auto', '32px auto', 0] }}>
-          {project.isChallenged && (
+          {project.currentChallenge && !project.currentChallenge.resolved && (
             <Box>
               <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
                 Active Challenge
               </Styled.h5>
               <Box>
                 <p sx={{ variant: 'text.small' }}>Description</p>
-                <Styled.p>Blah blah - challenge copy</Styled.p>
+                <Styled.p>{project.currentChallenge.description}</Styled.p>
               </Box>
 
               <Grid columns={3} gap={3} sx={{ my: 4 }}>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Challenge ends</p>
-                  <p sx={{ variant: 'text.huge' }}>3d 6h</p>
+                  <p sx={{ variant: 'text.huge' }}>
+                    {remainingTime(project.currentChallenge.endTime)}
+                  </p>
                 </Box>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Voters</p>
-                  <p sx={{ variant: 'text.huge' }}>{project.totalVotes}</p>
+                  <p sx={{ variant: 'text.huge' }}>
+                    {project.currentChallenge.votes.length}
+                  </p>
                 </Box>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                  <Link to={`/profile?id=${project.owner.id}`}>
-                    {`${project.owner.id.slice(0, 6)}-${project.owner.id.slice(
-                      -6,
-                    )}`}
+                  <Link to={`/profile?id=${project.currentChallenge.owner}`}>
+                    {`${project.currentChallenge.owner.slice(
+                      0,
+                      6,
+                    )}-${project.currentChallenge.owner.slice(-6)}`}
                   </Link>
                 </Box>
               </Grid>
-              {!project.isChallenged ? (
+              {remainingTime(project.currentChallenge.endTime) ===
+              '0d 0h 0m' ? (
                 <Fragment>
                   <Styled.h6>
                     This challenge is over. Process this challenge to resolve it
@@ -376,7 +421,7 @@ const Project = ({ location }) => {
                       variant="secondary"
                       text="Process"
                       sx={{ border: '1px solid #4C66FF' }}
-                      onClick={() => voteOnProject('yes')}
+                      onClick={handleResolveChallenge}
                     />
                   </Grid>
                 </Fragment>

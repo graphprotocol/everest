@@ -264,7 +264,7 @@ const Profile = ({ location, pendingProject, ...props }) => {
           </Box>
         )}
       </Grid>
-      {allProjects && allProjects.length > 0 ? (
+      {user.projects && user.projects.length > 0 ? (
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
@@ -300,7 +300,6 @@ const Profile = ({ location, pendingProject, ...props }) => {
                   <Styled.h5>Your Challenges</Styled.h5>
                   <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                     <span>{challengedProjects.length} Projects - </span>
-                    <span>{user.projects.length} ??? Initiated</span>
                   </Styled.p>
                 </Box>
                 <Switcher
