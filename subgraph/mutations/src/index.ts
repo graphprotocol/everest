@@ -123,16 +123,15 @@ const sendTransaction = async (tx: Promise<Transaction>) => {
 }
 
 const abis = {
-  Context: require('everest-contracts/build/contracts/Context.json').abi,
-  Dai: require('everest-contracts/build/contracts/Dai.json').abi,
-  EthereumDIDRegistry: require('everest-contracts/build/contracts/EthereumDIDRegistry.json')
-    .abi,
-  LibNote: require('everest-contracts/build/contracts/LibNote.json').abi,
-  Ownable: require('everest-contracts/build/contracts/Ownable.json').abi,
-  Registry: require('everest-contracts/build/contracts/Registry.json').abi,
-  ReserveBank: require('everest-contracts/build/contracts/ReserveBank.json').abi,
-  SafeMath: require('everest-contracts/build/contracts/SafeMath.json').abi,
-  Everest: require('everest-contracts/build/contracts/Everest.json').abi,
+  Context: require('everest-contracts/abis/Context.json').abi,
+  Dai: require('everest-contracts/abis/Dai.json').abi,
+  EthereumDIDRegistry: require('everest-contracts/abis/EthereumDIDRegistry.json').abi,
+  LibNote: require('everest-contracts/abis/LibNote.json').abi,
+  Ownable: require('everest-contracts/abis/Ownable.json').abi,
+  Registry: require('everest-contracts/abis/Registry.json').abi,
+  ReserveBank: require('everest-contracts/abis/ReserveBank.json').abi,
+  SafeMath: require('everest-contracts/abis/SafeMath.json').abi,
+  Everest: require('everest-contracts/abis/Everest.json').abi,
 }
 
 const addresses = require('everest-contracts/addresses.json')
@@ -265,7 +264,12 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const { project } = await queryGraphNode(context, 'project', projectId, tx.blockHash)
+      const { project } = await queryGraphNode(
+        context,
+        'project',
+        projectId,
+        tx.blockHash,
+      )
       return project
     })
     .catch(err => {

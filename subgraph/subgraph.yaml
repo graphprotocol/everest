@@ -25,7 +25,7 @@ dataSources:
         - User
       abis:
         - name: Everest
-          file: ../contracts/build/contracts/Everest.json
+          file: ../contracts/abis/Everest.json
       eventHandlers:
         - event: NewMember(indexed address,uint256,uint256)
           handler: handleNewMember
@@ -62,7 +62,7 @@ dataSources:
         - User
       abis:
         - name: EthereumDIDRegistry
-          file: ../contracts/build/contracts/EthereumDIDRegistry.json
+          file: ../contracts/abis/EthereumDIDRegistry.json
       eventHandlers:
         - event: DIDOwnerChanged(indexed address,address,uint256)
           handler: handleDIDOwnerChanged
