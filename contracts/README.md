@@ -7,11 +7,9 @@ vote they can be removed from the list.
 Everest is used specifically to curate a list of crypto projects. However, it is encouraged that
 this code is forked, and used to curate any list. 
 
-## Creating abis
-The `package.json` has a command `yarn abis` that will create the abis for the contract using `solc`
-. However, the docker image must be downloaded first. The instructions for that are found 
-(here)[https://solidity.readthedocs.io/en/v0.6.1/installing-solidity.html#docker]. 
-You must also update the local path of the contracts folder.
+## Building Solidity and ABIs
+The `package.json` has a command `yarn build` that will run `truffle build` and then run a script
+to extract just the abis in json files. The abis are located in `abis`.
 
 ## Testing
 1. Make sure Node 12 is installed (It might work with newer versions, but it is unconfirmed)

@@ -2,7 +2,8 @@
   "name": "everest-contracts",
   "version": "0.0.1",
   "scripts": {
-    "build": "truffle compile",
+    "abis": "rm -rf ./abis && mkdir ./abis/ && node extractAbis.js",
+    "build": "truffle compile && yarn abis",
     "fix-js": "eslint ./ --fix",
     "fix-sol": "solium -d contracts/ --fix",
     "lint-js": "eslint ./",

@@ -1,0 +1,791 @@
+{
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "reserveBank",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "applicationFee",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "members",
+      "outputs": [
+        {
+          "name": "challengeID",
+          "type": "uint256"
+        },
+        {
+          "name": "membershipStartTime",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "challengeDeposit",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "erc1056Registry",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_member",
+          "type": "address"
+        }
+      ],
+      "name": "getChallengeID",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "votingPeriodDuration",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_member",
+          "type": "address"
+        }
+      ],
+      "name": "getMembershipStartTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "approvedToken",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "charter",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_approvedToken",
+          "type": "address"
+        },
+        {
+          "name": "_votingPeriodDuration",
+          "type": "uint256"
+        },
+        {
+          "name": "_challengeDeposit",
+          "type": "uint256"
+        },
+        {
+          "name": "_applicationFee",
+          "type": "uint256"
+        },
+        {
+          "name": "_charter",
+          "type": "bytes32"
+        },
+        {
+          "name": "_DIDregistry",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "member",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "applicationTime",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "fee",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewMember",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "member",
+          "type": "address"
+        }
+      ],
+      "name": "MemberExited",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "data",
+          "type": "bytes32"
+        }
+      ],
+      "name": "CharterUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Withdrawal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "reserveBank",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "approvedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "votingPeriodDuration",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "challengeDeposit",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "applicationFee",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "charter",
+          "type": "bytes32"
+        }
+      ],
+      "name": "EverestDeployed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "member",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "challengeID",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "name": "challenger",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "challengeEndTime",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "details",
+          "type": "bytes32"
+        }
+      ],
+      "name": "MemberChallenged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "challengeID",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "name": "submitter",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "memberOwner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "voteChoice",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "voteWeight",
+          "type": "uint256"
+        }
+      ],
+      "name": "SubmitVote",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "member",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "challengeID",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "yesVotes",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "noVotes",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "voteCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ChallengeFailed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "member",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "challengeID",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "yesVotes",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "noVotes",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "voteCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ChallengeSucceeded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newMember",
+          "type": "address"
+        },
+        {
+          "name": "_sigV",
+          "type": "uint8[3]"
+        },
+        {
+          "name": "_sigR",
+          "type": "bytes32[3]"
+        },
+        {
+          "name": "_sigS",
+          "type": "bytes32[3]"
+        },
+        {
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_offChainDataName",
+          "type": "bytes32"
+        },
+        {
+          "name": "_offChainDataValue",
+          "type": "bytes"
+        },
+        {
+          "name": "_offChainDataValidity",
+          "type": "uint256"
+        }
+      ],
+      "name": "applySignedWithAttributeAndPermit",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newMember",
+          "type": "address"
+        },
+        {
+          "name": "_sigV",
+          "type": "uint8[2]"
+        },
+        {
+          "name": "_sigR",
+          "type": "bytes32[2]"
+        },
+        {
+          "name": "_sigS",
+          "type": "bytes32[2]"
+        },
+        {
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_offChainDataName",
+          "type": "bytes32"
+        },
+        {
+          "name": "_offChainDataValue",
+          "type": "bytes"
+        },
+        {
+          "name": "_offChainDataValidity",
+          "type": "uint256"
+        }
+      ],
+      "name": "applySignedWithAttribute",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_member",
+          "type": "address"
+        }
+      ],
+      "name": "memberExit",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_challengingMember",
+          "type": "address"
+        },
+        {
+          "name": "_challengedMember",
+          "type": "address"
+        },
+        {
+          "name": "_details",
+          "type": "bytes32"
+        }
+      ],
+      "name": "challenge",
+      "outputs": [
+        {
+          "name": "challengeID",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_challengeID",
+          "type": "uint256"
+        },
+        {
+          "name": "_voteChoice",
+          "type": "uint8"
+        },
+        {
+          "name": "_voter",
+          "type": "address"
+        }
+      ],
+      "name": "submitVote",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_challengeID",
+          "type": "uint256"
+        },
+        {
+          "name": "_voteChoices",
+          "type": "uint8[]"
+        },
+        {
+          "name": "_voters",
+          "type": "address[]"
+        }
+      ],
+      "name": "submitVotes",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_challengeID",
+          "type": "uint256"
+        }
+      ],
+      "name": "resolveChallenge",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_receiver",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newCharter",
+          "type": "bytes32"
+        }
+      ],
+      "name": "updateCharter",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_endTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "hasVotingPeriodExpired",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_member",
+          "type": "address"
+        }
+      ],
+      "name": "isMember",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_member",
+          "type": "address"
+        }
+      ],
+      "name": "memberChallengeExists",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_challengeID",
+          "type": "uint256"
+        }
+      ],
+      "name": "challengeCanBeResolved",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}
