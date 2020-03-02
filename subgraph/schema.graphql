@@ -83,24 +83,9 @@ type Everest @entity {
   "Balance of the reserve bank (DAI)"
   reserveBankBalance: BigInt!
   "IPFS hash pointing to the charter"
-  charter: Charter!
+  charter: String!
 
   createdAt: Int
-}
-
-type Charter @entity {
-  id: ID!
-  charterDescription: String
-  name: String
-  description: String
-  website: String
-  twitter: String
-  avatar: String
-  image: String
-  categories: String
-  isRepresentative: String
-  # Latest created at is the latest charter
-  createdAt: Int!
 }
 
 type Vote @entity {
