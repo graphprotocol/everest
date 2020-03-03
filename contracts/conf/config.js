@@ -33,15 +33,14 @@ const wallets = {
 const config = {
     everestParams: {
         owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
-        votingPeriodDuration: 432000, // 5 days, in seconds
-        challengeDeposit: '10000000000000000000', // $1 DAI challenge fee
-        applicationFee: '10000000000000000000', // $1 DAI application fee
-        // Charter is fake IPFS hash, in bytes, not base58
-        charter: '0xb94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9'
+        votingPeriodDuration: 259200, // 3 days, in seconds
+        challengeDeposit: '1000000000000000000', // $1 DAI challenge fee
+        applicationFee: '1000000000000000000', // $1 DAI application fee
+        // Currently points to a rough draft of the charter
+        charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0'
     },
     ganacheParams: {
         ethereumDIDRegistryAddress: '', // Not in use, is inserted upon creation
-        wallets: wallets,
         chainID: 9545
     },
     ropstenParams: {
@@ -64,7 +63,7 @@ const config = {
         one: '0x7F11E5B7Fe8C04c1E4Ce0dD98aC5c922ECcfA4ed',
         two: '0x140b9b9756cE3dE8c8fD296FC9D3E7B3AAa1Cb16',
         three: '0x14B98b26D82421a27608B21BaF6BdEfc181DE546',
-        four: '0xc1240aF85fFAc1Dbf826b7250db2644D62c728c8'
+        four: '0xbEb1Faa6E7e39c7d9BdaB03a7a362fE9d73D7C61'
     },
     wallets: wallets
 }

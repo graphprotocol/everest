@@ -558,10 +558,13 @@ contract Everest is Registry, Ownable {
 
             // Transfer challenge deposit and losers application fee
             // to challenger for winning challenge
+            uint256 amount = challengeDeposit + applicationFee;
             require(
-                withdraw(challengerOwner, challengeDeposit + applicationFee),
+                reserveBank.withdraw(challengerOwner, amount),
                 "resolveChallenge - Rewarding challenger failed"
             );
+            emit Withdrawal(challengerOwner, amount);
+
             deleteMember(storedChallenge.challengee);
             emit ChallengeSucceeded(
                 storedChallenge.challengee,
@@ -574,9 +577,11 @@ contract Everest is Registry, Ownable {
             address challengeeOwner = erc1056Registry.identityOwner(storedChallenge.challengee);
             // Transfer challenge deposit to challengee
             require(
-                withdraw(challengeeOwner, challengeDeposit),
+                reserveBank.withdraw(challengeeOwner, challengeDeposit),
                 "resolveChallenge - Rewarding challenger failed"
             );
+            emit Withdrawal(challengeeOwner, challengeDeposit);
+
             // Remove challenge ID from registry
             editChallengeID(storedChallenge.challengee, 0);
             emit ChallengeFailed(

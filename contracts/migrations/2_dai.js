@@ -9,13 +9,13 @@ module.exports = async (deployer, network) => {
     let chainID
     if (network === 'development') {
         tokenHolders = [
-            // config.ganacheParams.wallets.zero(), Zero is minter, starts with 100M
-            config.ganacheParams.wallets.one().signingKey.address,
-            config.ganacheParams.wallets.two().signingKey.address,
-            config.ganacheParams.wallets.three().signingKey.address,
-            config.ganacheParams.wallets.four().signingKey.address
+            // Zero is minter, starts with 100M, so skip it
+            config.wallets.one().signingKey.address,
+            config.wallets.two().signingKey.address,
+            config.wallets.three().signingKey.address,
+            config.wallets.four().signingKey.address
         ]
-        tokenMinter = config.ganacheParams.wallets.zero().signingKey.address
+        tokenMinter = config.wallets.zero().signingKey.address
         chainID = 9545
     } else {
         tokenHolders = [

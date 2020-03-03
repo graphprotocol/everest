@@ -344,7 +344,8 @@ const helpers = {
         // Increase time so challenge can be resolved
         await utils.increaseTime(utils.votePeriod + 1)
         assert(await everest.challengeCanBeResolved(challengeID), 'Challenge could not be resolved')
-        const result = await everest.resolveChallenge(challengeID, { from: challengerOwner })
+        // We call from challengeeOwner, to show that anyone can challenge
+        const result = await everest.resolveChallenge(challengeID, { from: challengeeOwner })
         const challengeResult = result.logs[1].event
 
         // Check balances
