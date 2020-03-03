@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
 
+const addresses = require('everest-contracts/addresses.json')
+
 //////////////////////////
 //////// DAI utils ///////
 //////////////////////////
@@ -8,7 +10,7 @@ export const config = {
   chainID: '3', // ROPSTEN ONLY, MUST BE CHANGED IF ON ANOTHER NETWORK
   offChainDataName: 'ProjectData',
   maxValidity: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  verifyingDAIContract: '0x5d872Ed684eA873FfdF6276B7DF84844b73Cd27b',
+  verifyingDAIContract: addresses.ropsten.mockDAI,
 }
 
 const domainSchema = [

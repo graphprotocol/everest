@@ -4,6 +4,8 @@ import { keccak_256 } from 'js-sha3'
 import { ipfsHexHash } from './ipfs'
 import { daiPermit } from './daiPermit'
 
+const addresses = require('everest-contracts/addresses.json')
+
 const ETHEREUM_DID_REGISTRY = '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
 export const DELEGATE_TYPE =
   '0x6576657265737400000000000000000000000000000000000000000000000000'
@@ -116,7 +118,7 @@ export const config = {
   chainID: '3', // ROPSTEN ONLY, MUST BE CHANGED IF ON ANOTHER NETWORK
   offChainDataName: 'ProjectData',
   maxValidity: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  verifyingDAIContract: '0x5d872Ed684eA873FfdF6276B7DF84844b73Cd27b',
+  verifyingDAIContract: addresses.ropsten.mockDAI,
 }
 
 export const setAttribute = async (
