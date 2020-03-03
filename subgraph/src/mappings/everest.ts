@@ -12,7 +12,7 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote, Category, Total } from '../types/schema'
+import { Project, Everest, Challenge, Vote, Category } from '../types/schema'
 
 import { addQm } from './helpers'
 
@@ -21,23 +21,15 @@ import { addQm } from './helpers'
 export function handleNewMember(event: NewMember): void {
   let id = event.params.member.toHexString()
   let project = new Project(id)
-  let total = Total.load('1')
   project.totalVotes = 0
   project.membershipStartTime = event.params.applicationTime.toI32()
   project.createdAt = event.block.timestamp.toI32()
   project.updatedAt = event.block.timestamp.toI32()
   project.save()
 
-  if (total != null) {
-    total.projectCount += 1
-  } else {
-    total = new Total('1')
-    total.projectCount = 1
-  }
-  total.save()
-
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(event.params.fee)
+  everest.projectCount = everest.projectCount += 1
   everest.save()
 }
 
@@ -71,6 +63,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.reserveBankBalance = BigInt.fromI32(0)
   everest.charter = event.params.charter.toHexString()
   everest.createdAt = event.block.timestamp.toI32()
+  everest.projectCount = 0
   everest.save()
 
   parseCategoryDetails(event.params.charter, event.block.timestamp)
@@ -93,9 +86,13 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   let ipfsData = ipfs.cat(base58Hash)
   if (ipfsData != null) {
     let data = json.fromBytes(ipfsData as Bytes).toObject()
-    challenge.description = data.get('description').isNull()
-      ? null
-      : data.get('description').toString()
+    let details = data.get('details')
+    if (details != null) {
+      let descriptionObj = details.toObject()
+      challenge.description = descriptionObj.get('description').isNull()
+        ? null
+        : descriptionObj.get('description').toString()
+    }
   }
   challenge.ipfsHash = base58Hash
   challenge.save()

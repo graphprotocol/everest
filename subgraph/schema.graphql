@@ -84,8 +84,8 @@ type Everest @entity {
   reserveBankBalance: BigInt!
   "IPFS hash pointing to the charter"
   charter: String!
-
   createdAt: Int
+  projectCount: Int!
 }
 
 type Vote @entity {
@@ -112,9 +112,4 @@ type User @entity {
   challenges: [Challenge!] # challenges you started
   votes: [Project!] # participation in other people's challenges
   createdAt: Int!
-}
-
-type Total @entity {
-  id: ID!
-  projectCount: Int
 }
