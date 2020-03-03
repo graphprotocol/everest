@@ -173,6 +173,7 @@ const styles = {
 
 UploadImage.propTypes = {
   setParentImage: PropTypes.func,
+  parentImage: PropTypes.string,
 }
 
 export default UploadImage

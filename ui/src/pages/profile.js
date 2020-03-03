@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Fragment, useState, useEffect, useContext } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
@@ -13,7 +13,6 @@ import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 import { PROFILE_QUERY } from '../utils/apollo/queries'
-import { ReactContext } from '../components/Layout'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
@@ -24,10 +23,8 @@ import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
 
-const Profile = ({ location, pendingProject, ...props }) => {
-  console.log('PROFILE pendingProject: ', pendingProject)
+const Profile = ({ location, pendingProject }) => {
   const { account } = useAccount()
-  const context = useContext(ReactContext)
 
   const [allProjects, setAllProjects] = useState([])
   const [selectedProjects, setSelectedProjects] = useState('cards')
@@ -63,11 +60,7 @@ const Profile = ({ location, pendingProject, ...props }) => {
         }))
       }
     }
-    metamaskAccountChange(accounts => {
-      if (typeof window !== 'undefined') {
-        window.location.href = `/profile?id=${accounts[0]}`
-      }
-    })
+    metamaskAccountChange()
     getProfile()
   }, [])
 
@@ -110,6 +103,8 @@ const Profile = ({ location, pendingProject, ...props }) => {
     return <div />
   }
 
+  const isOwner = () => account && account.toLowerCase() === profileId
+
   const user = data && data.user
 
   const challengedProjects =
@@ -150,11 +145,13 @@ const Profile = ({ location, pendingProject, ...props }) => {
           ) : (
             <Box>
               <Styled.h5>{profileId}</Styled.h5>
-              <Styled.p
-                sx={{ fontWeight: 'heading', color: 'secondary', mt: 3 }}
-              >
-                Edit/Create profile (3Box)
-              </Styled.p>
+              {isOwner() && (
+                <Styled.p
+                  sx={{ fontWeight: 'heading', color: 'secondary', mt: 3 }}
+                >
+                  Edit/Create profile (3Box)
+                </Styled.p>
+              )}
             </Box>
           )}
         </Grid>
@@ -177,7 +174,7 @@ const Profile = ({ location, pendingProject, ...props }) => {
               </p>
             </Box>
           )}
-          {account && account === profileId && (
+          {isOwner() && (
             <Menu
               items={[
                 {
@@ -252,7 +249,7 @@ const Profile = ({ location, pendingProject, ...props }) => {
                     href={`https://twitter.com/${profile.accounts.twitter.username}`}
                   />
                 )}
-                {profile.accounts.github && (
+                {profile.accounts && profile.accounts.github && (
                   <DataRow
                     name="Github"
                     value={`github.com/${profile.accounts.github.username}`}
@@ -264,11 +261,15 @@ const Profile = ({ location, pendingProject, ...props }) => {
           </Box>
         )}
       </Grid>
-      {user.projects && user.projects.length > 0 ? (
+      {user && user.projects && user.projects.length > 0 ? (
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
-              <Styled.h5>Your Projects</Styled.h5>
+              {isOwner() ? (
+                <Styled.h5>Your Projects</Styled.h5>
+              ) : (
+                <Styled.h5>Projects</Styled.h5>
+              )}
               <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                 {user && user.projects && user.projects.length > 0 && (
                   <span>{user.projects.length} Projects</span>
@@ -297,7 +298,11 @@ const Profile = ({ location, pendingProject, ...props }) => {
             <Fragment>
               <Grid columns={[1, 2, 2]} mb={1} mt={6}>
                 <Box>
-                  <Styled.h5>Your Challenges</Styled.h5>
+                  {isOwner() ? (
+                    <Styled.h5>Your Challenges</Styled.h5>
+                  ) : (
+                    <Styled.h5> Challenges</Styled.h5>
+                  )}
                   <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                     <span>{challengedProjects.length} Projects - </span>
                   </Styled.p>
@@ -330,16 +335,27 @@ const Profile = ({ location, pendingProject, ...props }) => {
             sx={{ height: '190px', width: 'auto' }}
           />
           <Divider sx={{ mt: '-6px !important' }} />
-          <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
-          <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
-            This is where you&apos;ll see projects you created
-          </Styled.p>
-          <Button
-            text="Add a Project"
-            to="/projects/new"
-            variant="primary"
-            sx={{ m: '0 auto', mt: 7 }}
-          />
+          {isOwner() ? (
+            <Fragment>
+              <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+                This is where you&apos;ll see projects you created
+              </Styled.p>
+              <Button
+                text="Add a Project"
+                to="/projects/new"
+                variant="primary"
+                sx={{ m: '0 auto', mt: 7 }}
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Styled.h5 sx={{ mt: 7 }}>Projects</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+                This user has no projects
+              </Styled.p>
+            </Fragment>
+          )}
         </Box>
       )}
     </Grid>
@@ -349,8 +365,8 @@ const Profile = ({ location, pendingProject, ...props }) => {
 const profileImgStyles = { height: '96px', width: '96px', borderRadius: '50%' }
 
 Profile.propTypes = {
-  pageContext: PropTypes.any,
   location: PropTypes.any,
+  pendingProject: PropTypes.any,
 }
 
 export default Profile

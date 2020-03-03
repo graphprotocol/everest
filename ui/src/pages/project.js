@@ -6,7 +6,7 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import ThreeBox from '3box'
-import client from '../utils/apollo/client'
+// import client from '../utils/apollo/client'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
@@ -14,7 +14,11 @@ import { useAccount } from '../utils/hooks'
 import { remainingTime } from '../utils/helpers/date'
 
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
-import { REMOVE_PROJECT, RESOLVE_CHALLENGE } from '../utils/apollo/mutations'
+import {
+  REMOVE_PROJECT,
+  RESOLVE_CHALLENGE,
+  CHALLENGE_PROJECT,
+} from '../utils/apollo/mutations'
 
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
@@ -35,7 +39,7 @@ const Project = ({ location }) => {
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
-  const [challengeDescription, setChallengeDescription] = useState('')
+  const [challenge, setChallenge] = useState({ description: '', projectId: '' })
   const [transferAddress, setTransferAddress] = useState('')
   const [delegateAddress, setDelegateAddress] = useState('')
   const [isKeepOpen, setIsKeepOpen] = useState(false)
@@ -51,7 +55,7 @@ const Project = ({ location }) => {
 
   const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
     variables: {
-      id: projectId,
+      id: account.toLowerCase(),
     },
   })
 
@@ -65,15 +69,9 @@ const Project = ({ location }) => {
     // },
   ] = useMutation(REMOVE_PROJECT)
 
-  const [
-    resolveChallenge,
-    // {
-    //   data: mutationData,
-    //   loading: mutationLoading,
-    //   error: mutationError,
-    //   state,
-    // },
-  ] = useMutation(RESOLVE_CHALLENGE)
+  const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE)
+
+  const [challengeProject] = useMutation(CHALLENGE_PROJECT)
 
   useEffect(() => {
     async function getProfile() {
@@ -124,9 +122,14 @@ const Project = ({ location }) => {
     )
   }
 
-  const challengeProject = () => {
-    console.log('CHALLENGE PROJECT')
-    // TODO: call mutations
+  const handleChallenge = () => {
+    challengeProject({
+      variables: {
+        challengingProjectAddress: challenge.projectId,
+        challengedProjectAddress: projectId,
+        description: challenge.description,
+      },
+    })
   }
 
   const delegateProject = async () => {
@@ -139,8 +142,11 @@ const Project = ({ location }) => {
     // TODO: call mutations
   }
 
-  const setChallengeData = value => {
-    setChallengeDescription(value)
+  const setChallengeData = async (field, value) => {
+    await setChallenge(state => ({
+      ...state,
+      [field]: value,
+    }))
   }
 
   const voteOnProject = () => {
@@ -159,22 +165,6 @@ const Project = ({ location }) => {
       icon: '/share.png',
     },
   ]
-
-  if (!project.currentChallenge) {
-    items = items.concat([
-      {
-        text: 'Challenge',
-        handleSelect: () => {
-          setShowChallenge(true)
-          if (!showChallenge) {
-            setShowDelegate(false)
-            setShowTransfer(false)
-          }
-        },
-        icon: '/challenge.png',
-      },
-    ])
-  }
 
   if (account && project.owner && account.toLowerCase() === project.owner.id) {
     if (project.currentChallenge) {
@@ -205,15 +195,34 @@ const Project = ({ location }) => {
         },
       ])
     }
+  } else {
+    items = items.concat([
+      {
+        text: 'Challenge',
+        handleSelect: () => {
+          setShowChallenge(true)
+          if (!showChallenge) {
+            setShowDelegate(false)
+            setShowTransfer(false)
+          }
+        },
+        icon: '/challenge.png',
+      },
+    ])
   }
 
-  const categories = project.categories.reduce((acc, current) => {
-    return acc.push(current.name)
-  }, [])
+  const isCompleted =
+    project.currentChallenge &&
+    remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
 
   return (
     <Grid>
-      <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
+      <Grid
+        columns={[1, 1, 2]}
+        gap={0}
+        sx={{ alignItems: 'center' }}
+        id="click"
+      >
         <Grid sx={{ gridTemplateColumns: [1, '120px 1fr'] }}>
           <Box>
             {project.avatar ? (
@@ -232,7 +241,16 @@ const Project = ({ location }) => {
           </Box>
           <Box>
             <p sx={{ variant: 'text.large' }}>
-              {categories && categories.length > 0 ? categories.join(', ') : ''}
+              {project.categories && project.categories.length > 0
+                ? project.categories.map((cat, index) => (
+                    <Link to={`/category/${cat.id}`} key={index}>
+                      {cat.name}
+                      {index !== project.categories.length - 1 && (
+                        <span>,&nbsp;</span>
+                      )}
+                    </Link>
+                  ))
+                : ''}
             </p>
             <Styled.h2>{project.name}</Styled.h2>
           </Box>
@@ -283,25 +301,30 @@ const Project = ({ location }) => {
           {account && (
             <Menu items={items} sx={{ justifySelf: 'end' }}>
               {showChallenge ? (
-                <Close
-                  onClick={async () => {
-                    await setShowChallenge(false)
-                    const $el = document.querySelector('[alt="dots icon"]')
-                    if ($el) {
-                      $el.click()
-                    }
-                  }}
+                <Box
                   sx={{
-                    fill: 'white',
-                    cursor: 'pointer',
-                    backgroundColor: 'secondary',
+                    p: 5,
                     borderRadius: '50%',
-                    p: 4,
-                    width: '22px',
-                    height: '22px',
-                    transition: 'all 0.3s ease',
+                    backgroundColor: 'secondary',
+                    cursor: 'pointer',
                   }}
-                />
+                >
+                  <Close
+                    onClick={async () => {
+                      await setShowChallenge(false)
+                      const $el = document.querySelector('#click  ')
+                      if ($el) {
+                        $el.click()
+                      }
+                    }}
+                    sx={{
+                      fill: 'white',
+                      width: '22px',
+                      height: '22 px',
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
+                </Box>
               ) : (
                 <img
                   src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
@@ -328,13 +351,14 @@ const Project = ({ location }) => {
           placeholder="Challenge Description"
           heading={`Challenge ${project.name}`}
           description="lala"
-          value={challengeDescription}
+          value={challenge.description}
           setValue={setChallengeData}
           text="Challenge"
           icon="challenge.png"
-          handleClick={challengeProject}
+          handleClick={handleChallenge}
           showFilters={true}
           items={userData ? userData.user.projects : []}
+          sx={{ mt: '140px' }}
         />
       )}
       <Divider />
@@ -372,7 +396,11 @@ const Project = ({ location }) => {
           {project.currentChallenge && !project.currentChallenge.resolved && (
             <Box>
               <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
-                Active Challenge
+                {isCompleted ? (
+                  <span>Completed Challenge</span>
+                ) : (
+                  <span>Active Challenge</span>
+                )}
               </Styled.h5>
               <Box>
                 <p sx={{ variant: 'text.small' }}>Description</p>
@@ -402,11 +430,17 @@ const Project = ({ location }) => {
                   </Link>
                 </Box>
               </Grid>
-              {remainingTime(project.currentChallenge.endTime) ===
-              '0d 0h 0m' ? (
+              {isCompleted ? (
                 <Fragment>
                   <Styled.h6>
-                    This challenge is over. Process this challenge to resolve it
+                    This challenge has ended and the project will be{' '}
+                    {project.currentChallenge.votesFor >
+                    project.currentChallenge.votesAgainst ? (
+                      <span>kept</span>
+                    ) : (
+                      <span>removed</span>
+                    )}
+                    . Resolve this challenge to update the registry&apos;s state
                     and earn a reward.
                   </Styled.h6>
                   <Grid
@@ -419,7 +453,7 @@ const Project = ({ location }) => {
                   >
                     <Button
                       variant="secondary"
-                      text="Process"
+                      text="Resolve"
                       sx={{ border: '1px solid #4C66FF' }}
                       onClick={handleResolveChallenge}
                     />
@@ -443,7 +477,7 @@ const Project = ({ location }) => {
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
                       items={userData ? userData.user.projects : []}
-                      variant="round"
+                      variant="project"
                       setOpen={value => {
                         setIsKeepOpen(value)
                       }}
@@ -469,7 +503,7 @@ const Project = ({ location }) => {
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
                       items={userData ? userData.user.projects : []}
-                      variant="round"
+                      variant="project"
                       setOpen={value => {
                         setIsRemoveOpen(value)
                       }}
@@ -563,7 +597,7 @@ const buttonStyles = {
   maxWidth: '140px',
   transition: 'all 0.3s ease',
   '& img': {
-    width: '16px',
+    width: 'auto',
     height: '16px',
   },
 }

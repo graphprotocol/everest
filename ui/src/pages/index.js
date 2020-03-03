@@ -148,7 +148,9 @@ const Index = () => {
                   to: `/project/${project.id}`,
                   image: project.image,
                   category:
-                    project.categories.length > 0 ? project.categories[0] : '',
+                    project.categories.length > 0
+                      ? project.categories[0].name
+                      : '',
                 }
               })
             : []

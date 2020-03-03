@@ -1,4 +1,12 @@
-import { json, ipfs, Bytes, JSONValue, BigInt, log } from '@graphprotocol/graph-ts'
+import {
+  json,
+  ipfs,
+  Bytes,
+  JSONValue,
+  BigInt,
+  log,
+  JSONValueKind,
+} from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -104,16 +112,35 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           ? null
           : data.get('avatar').toString()
         project.image = data.get('image').isNull() ? null : data.get('image').toString()
-        project.isRepresentative = data.get('isRepresentative').isNull()
-          ? null
-          : data.get('isRepresentative').toString()
 
-        // let categories = data.get('categories')
-        // let parsedArray: Array<string>
-        // if (categories != null) {
-        //   let categoriesArray = categories.toArray()
-        //   // project.categories = categories.toArray() // TODO this is not getting set
-        // }
+        if (!data.get('isRepresentative').isNull()) {
+          if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
+            project.isRepresentative = data.get('isRepresentative').toBool()
+          }
+        }
+
+        let categories = data.get('categories')
+        if (categories != null) {
+          if (categories.kind == JSONValueKind.ARRAY) {
+            let categoriesArray = categories.toArray()
+
+            // First we MUST check if it is null and if so, make it an empty array
+            let projCategories = project.categories
+            if (projCategories == null) {
+              projCategories = []
+            }
+
+            // Push all of the values into the empty array
+            for (let i = 0; i < categoriesArray.length; i++) {
+              if (categoriesArray[i].kind == JSONValueKind.STRING) {
+                projCategories.push(categoriesArray[i].toString())
+              }
+            }
+
+            // Now deliberately set to the array
+            project.categories = projCategories
+          }
+        }
       }
       project.updatedAt = event.block.timestamp.toI32()
       project.save()

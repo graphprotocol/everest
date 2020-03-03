@@ -6,7 +6,7 @@ import { Grid } from '@theme-ui/components'
 
 import Row from './Row'
 
-const FiltersProjects = ({ items }) => {
+const Select = ({ items, variant, setValue }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState(null)
 
@@ -72,8 +72,10 @@ const FiltersProjects = ({ items }) => {
                     selected={selected}
                     setSelected={item => {
                       setSelected(item)
+                      setValue(item.id)
                       setIsOpen(false)
                     }}
+                    variant={variant}
                   />
                 ))}
             </Box>
@@ -88,6 +90,7 @@ const FiltersProjects = ({ items }) => {
             setSelected={setSelected}
             sx={{ background: 'white', mx: 0, my: 3 }}
             close={true}
+            variant={variant}
           />
         )}
       </Fragment>
@@ -95,7 +98,9 @@ const FiltersProjects = ({ items }) => {
   )
 }
 
-FiltersProjects.propTypes = {
+Select.propTypes = {
+  variant: PropTypes.string,
+  setValue: PropTypes.func,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
@@ -104,4 +109,4 @@ FiltersProjects.propTypes = {
   ),
 }
 
-export default FiltersProjects
+export default Select

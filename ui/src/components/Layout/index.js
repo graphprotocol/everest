@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useEffect, useState, createContext } from 'react'
+import React, { useState, createContext } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Global } from '@emotion/core'
@@ -32,7 +32,7 @@ const LayoutTemplate = ({ children, ...props }) => {
   //   }
   // }, [])
 
-  const childrenWithProps = React.Children.map(children, (child, i) => {
+  const childrenWithProps = React.Children.map(children, child => {
     return React.cloneElement(child, {
       setPendingProject: setPendingProject,
       pendingProject: pendingProject,

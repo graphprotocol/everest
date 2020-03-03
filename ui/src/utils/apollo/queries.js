@@ -25,6 +25,8 @@ export const PROJECT_QUERY = gql`
         owner
         description
         resolved
+        votesFor
+        votesAgainst
         votes {
           id
         }
@@ -36,7 +38,6 @@ export const PROJECT_QUERY = gql`
       categories {
         id
         name
-        description
       }
     }
   }
@@ -50,7 +51,7 @@ export const USER_PROJECTS_QUERY = gql`
       projects {
         id
         name
-        image
+        avatar
       }
     }
   }
@@ -112,6 +113,7 @@ export const PROJECTS_QUERY = gql`
       description
       avatar
       createdAt
+      isRepresentative
       currentChallenge {
         id
       }

@@ -15,11 +15,11 @@ export const convertDate = date => {
 export const remainingTime = date => {
   const endTime = moment.unix(parseInt(date))
   const now = moment()
-  const diffMinutes = now.diff(endTime, 'minutes')
-  const diffHours = now.diff(endTime, 'hours')
-  const diffDays = now.diff(endTime, 'days')
+  const diffMinutes = endTime.diff(now, 'minutes')
+  const diffHours = endTime.diff(now, 'hours')
+  const diffDays = endTime.diff(now, 'days')
 
-  if (endTime - now < 0) {
+  if (endTime - now <= 0) {
     return '0d 0h 0m'
   } else {
     return `${diffDays}d ${diffHours % 24}h ${diffMinutes % 60}m`

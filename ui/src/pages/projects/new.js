@@ -65,8 +65,6 @@ const NewProject = ({ setPendingProject }) => {
           }),
         )
 
-        console.log('projectData: ', projectData)
-        console.log('Result: ', result)
         // TODO: this doesn't seem to be writing into the cache
         proxy.writeQuery({
           query: PROJECTS_QUERY,
@@ -119,7 +117,15 @@ const NewProject = ({ setPendingProject }) => {
   }
 
   const handleSubmit = async project => {
-    addProject({ variables: { ...project } })
+    const data = {
+      ...project,
+      avatar: !project.avatar
+        ? 'QmaJe9Nw47wEEFRsuEp9ox3mmGJoUoK8ruAHKa247Nfet9'
+        : project.avatar,
+    }
+    addProject({
+      variables: data,
+    })
     // setPendingProject(project)
     // if (typeof window !== undefined) {
     //   window.localStorage.setItem('pendingProject', JSON.stringify(project))
