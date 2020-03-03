@@ -1,7 +1,10 @@
 /** @jsx jsx */
+import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import PropTypes from 'prop-types'
+import { navigate } from 'gatsby'
+
+import Link from '../Link'
 
 const DataRow = ({ name, value, href }) => (
   <Grid
@@ -12,19 +15,18 @@ const DataRow = ({ name, value, href }) => (
     gap={[0, 2, 2]}
   >
     <p sx={{ variant: 'text.small' }}>{name}</p>
-    <Styled.p sx={textStyles}>
-      {href ? (
-        <Styled.a href={href} target="_blank">
-          {value}
-        </Styled.a>
-      ) : (
-        value
-      )}
-    </Styled.p>
+
+    {href ? (
+      <Link onClick={() => navigate(href)} target="_blank">
+        {value}
+      </Link>
+    ) : (
+      <Styled.p sx={{ fontWeight: 'heading', color: 'blackFaded' }}>
+        {value}
+      </Styled.p>
+    )}
   </Grid>
 )
-
-const textStyles = { color: 'secondary', fontWeight: 'heading' }
 
 DataRow.propTypes = {
   name: PropTypes.string,

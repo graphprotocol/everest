@@ -35,7 +35,7 @@ const Button = ({
       {icon && (
         <img
           sx={iconStyles}
-          src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/${icon}`}
+          src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${icon}`}
           alt={'icon'}
         />
       )}

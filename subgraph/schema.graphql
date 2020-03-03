@@ -38,7 +38,7 @@ type Project @entity {
 type Category @entity {
   id: ID! # id is equal to the slug, which is the name but used in the URL for consistency
   description: String!
-  name: String! # the name, case insensitive 
+  name: String! # the name, case insensitive
   projects: [Project!] @derivedFrom(field: "categories") # TODO - ensure this works on the categories array
   subcategories: [Category!] @derivedFrom(field: "parentCategory")
   parentCategory: Category
@@ -112,4 +112,9 @@ type User @entity {
   challenges: [Challenge!] # challenges you started
   votes: [Project!] # participation in other people's challenges
   createdAt: Int!
+}
+
+type Total @entity {
+  id: ID!
+  projectCount: Int
 }

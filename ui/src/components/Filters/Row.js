@@ -52,10 +52,14 @@ const Row = ({
       {...props}
     >
       <img
-        src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${item.image}`}
+        src={
+          variant === 'project'
+            ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${item.avatar}`
+            : `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${item.image}`
+        }
         alt={item.slug}
         sx={
-          variant === 'round'
+          variant === 'project'
             ? {
                 height: '44px',
                 width: '44px',
@@ -103,6 +107,8 @@ Row.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
     image: PropTypes.string,
+    avatar: PropTypes.string,
+    slug: PropTypes.string,
   }),
   parent: PropTypes.any,
   selected: PropTypes.any,

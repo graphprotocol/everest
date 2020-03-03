@@ -7,7 +7,11 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { useWeb3React } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
-import { CATEGORIES_QUERY, PROJECTS_QUERY } from '../utils/apollo/queries'
+import {
+  CATEGORIES_QUERY,
+  PROJECTS_QUERY,
+  TOTALS_QUERY,
+} from '../utils/apollo/queries'
 
 import Link from '../components/Link'
 import Stats from '../components/Stats'
@@ -25,15 +29,21 @@ const Index = () => {
     // navigate('/projects/new')
   }
 
+  const { data: categories } = useQuery(CATEGORIES_QUERY)
+  const { data: projects } = useQuery(PROJECTS_QUERY, {
+    variables: {
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
+    },
+  })
+  const { data: total } = useQuery(TOTALS_QUERY)
+
   // TODO: update these
   const stats = [
-    { title: 'Projects', value: '150' },
-    { title: 'Categories', value: '48' },
+    { title: 'Projects', value: total ? total.projectCount.toString() : '150' },
+    { title: 'Categories', value: '64' },
     { title: 'Registry Value (DAI)', value: '150,000' },
   ]
-
-  const { data: categories } = useQuery(CATEGORIES_QUERY)
-  const { data: projects } = useQuery(PROJECTS_QUERY)
 
   const challengedProjects = projects
     ? projects.projects.filter(project => project.isChallenged === true)
@@ -128,7 +138,7 @@ const Index = () => {
         description="These projects were recently added by members of the community."
         items={
           projects
-            ? projects.projects.map(project => {
+            ? projects.projects.slice(0, 6).map(project => {
                 return {
                   name: project.name,
                   description:
@@ -138,7 +148,9 @@ const Index = () => {
                   to: `/project/${project.id}`,
                   image: project.image,
                   category:
-                    project.categories.length > 0 ? project.categories[0] : '',
+                    project.categories.length > 0
+                      ? project.categories[0].name
+                      : '',
                 }
               })
             : []
@@ -173,10 +185,10 @@ const Index = () => {
             with neutrality.
             <br />
             <br />
-            To add a project to the registry you must submit a $10 listing fee
-            paid in ETH. The listing fee helps ensure the list&apos;s quality.
+            To add a project to the registry you must pay a 10 DAI listing fee.
+            The listing fee helps ensure the list&apos;s quality.
             <br />
-            <br /> Anyone can challenge a listing by putting ETH at stake. With
+            <br /> Anyone can challenge a listing by putting DAI at stake. With
             these tools we can build consensus on a shared registry without
             giving anyone control over the data. Let the decentralized future
             begin!

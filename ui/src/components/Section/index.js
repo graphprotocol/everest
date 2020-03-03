@@ -36,9 +36,9 @@ const Section = ({
           <Grid
             gap={1}
             mt={7}
-            sx={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr' }}
+            sx={{ gridTemplateColumns: '400px 1fr 1fr 1fr' }}
           >
-            {['Name', 'Category', 'Date Added', 'Reputation', 'Challenged'].map(
+            {['Name', 'Categories', 'Date Added', 'Challenged'].map(
               (entry, index) => (
                 <p
                   key={index}

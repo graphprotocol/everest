@@ -19,13 +19,14 @@ const Field = ({
   setValue,
   multiselect,
   items,
+  image,
   setImage,
   categories,
+  variant,
 }) => {
   const charRef = useRef()
 
   if (value && value.length === charsCount) {
-    console.log('charRef: ', charRef)
     if (charRef.current)
       charRef.current.style = `opacity: 1; transition: all 0.3s ease;`
     setTimeout(() => {
@@ -103,15 +104,15 @@ const Field = ({
               />
             </MultiSelect>
           ) : (
-            <Select items={items} />
+            <Select items={items} variant={variant} setValue={setValue} />
           )
         ) : type === 'upload' ? (
-          <UploadImage setParentImage={setImage} />
+          <UploadImage setParentImage={setImage} parentImage={image} />
         ) : (
           <label sx={styles.toggle}>
             <input
               type="checkbox"
-              onClick={e => {
+              onChange={e => {
                 const value = e.target.checked
                 setValue(value)
               }}
@@ -223,9 +224,11 @@ Field.propTypes = {
   multiselect: PropTypes.bool,
   text: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.any,
   setValue: PropTypes.func,
+  image: PropTypes.string,
   setImage: PropTypes.func,
+  variant: PropTypes.string,
   categories: PropTypes.any,
   items: PropTypes.arrayOf(
     PropTypes.shape({

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
@@ -14,8 +14,8 @@ const UPLOAD_IMAGE = gql`
   }
 `
 
-const UploadImage = ({ setParentImage }) => {
-  const [image, setImage] = useState('')
+const UploadImage = ({ parentImage, setParentImage }) => {
+  const [image, setImage] = useState(parentImage)
 
   const [uploadImage, { loading: loadingImage }] = useMutation(UPLOAD_IMAGE, {
     onError: error => {
@@ -39,7 +39,13 @@ const UploadImage = ({ setParentImage }) => {
   const removeImage = e => {
     e.preventDefault()
     e.stopPropagation()
+    setImage('')
+    setParentImage('')
   }
+
+  useEffect(() => {
+    setImage(parentImage)
+  }, [parentImage])
 
   return (
     <label
@@ -113,7 +119,8 @@ const UploadImage = ({ setParentImage }) => {
           <span>Upload image</span>
           {loadingImage && (
             <img
-              src={`${window.__GATSBY_IPFS_PATH_PREFIX__}/loading-dots-white.gif`}
+              src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+                ''}/loading-dots-white.gif`}
               alt="Uploading"
               sx={{ height: '24px', width: 'auto' }}
             />
@@ -166,6 +173,7 @@ const styles = {
 
 UploadImage.propTypes = {
   setParentImage: PropTypes.func,
+  parentImage: PropTypes.string,
 }
 
 export default UploadImage

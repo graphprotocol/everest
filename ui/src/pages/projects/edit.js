@@ -6,13 +6,13 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
 import cloneDeep from 'lodash.clonedeep'
+import { navigate } from 'gatsby'
 
 import client from '../../utils/apollo/client'
 
 import { EDIT_PROJECT } from '../../utils/apollo/mutations'
 import { PROJECT_QUERY } from '../../utils/apollo/queries'
-import { PROJECTS_QUERY } from '../../utils/apollo/queries'
-import { CATEGORIES_QUERY } from '../../utils/apollo/queries'
+import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
@@ -27,7 +27,7 @@ const EditProject = ({ location }) => {
     website: '',
     github: '',
     twitter: '',
-    isRepresentative: null,
+    isRepresentative: false,
     categories: [],
   })
 
@@ -39,58 +39,61 @@ const EditProject = ({ location }) => {
 
   const [
     editProject,
-    {
-      data: mutationData,
-      loading: mutationLoading,
-      error: errorLoading,
-      state,
-    },
+    // {
+    //   data: mutationData,
+    //   loading: mutationLoading,
+    //   error: mutationError,
+    //   state,
+    // },
   ] = useMutation(EDIT_PROJECT, {
     client: client,
-    // refetchQueries: [
-    //   {
-    //     query: PROJECT_QUERY,
-    //     variables: {
-    //       id: projectId,
-    //     },
-    //   },
-    // ],
-    // optimisticResponse: {
-    //   __typename: 'Mutation',
-    //   editProject: {
-    //     id: projectId,
-    //     ...project,
-    //     __typename: 'Project',
-    //   },
-    // },
+    refetchQueries: [
+      {
+        query: PROJECT_QUERY,
+        variables: {
+          id: projectId,
+        },
+      },
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      editProject: {
+        id: projectId,
+        ...project,
+        __typename: 'Project',
+      },
+    },
     onError: error => {
       console.error('Error editing a project: ', error)
     },
     onCompleted: mydata => {
       if (data) {
-        console.log('COMPLETED: ', mydata.editProject)
+        // TODO: Update the global state for the
+        console.log('COMPLETED: ', mydata)
       }
     },
-    // update: (proxy, result) => {
-    //   const somedata = cloneDeep(
-    //     proxy.readQuery({
-    //       query: PROJECTS_QUERY,
-    //     }),
-    //   )
+    update: (proxy, result) => {
+      const projectData = cloneDeep(
+        proxy.readQuery({
+          query: PROJECT_QUERY,
+          variables: {
+            id: projectId,
+          },
+        }),
+      )
 
-    //   if (result.data && result.data.editProject) {
-    //     console.log('RESULT.DATA ', result.data)
-    //     console.log('DATA: ', somedata)
-    //     somedata.projects.push(addProject)
-    //   }
-    //   proxy.writeQuery({
-    //     query: PROJECTS_QUERY,
-    //     somedata,
-    //   })
-    // },
+      proxy.writeQuery({
+        query: PROJECT_QUERY,
+        variables: {
+          id: projectId,
+        },
+        data: { ...projectData },
+        project: result.data.editProject,
+      })
+    },
   })
 
-  // const { data: categories } = useQuery(CATEGORIES_QUERY)
+  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
 
   useEffect(() => {
     if (data) {
@@ -105,7 +108,7 @@ const EditProject = ({ location }) => {
         github: projectObj ? projectObj.github : '',
         twitter: projectObj ? projectObj.twitter : '',
         isRepresentative: projectObj ? projectObj.isRepresentative : null,
-        // categories: projectObj ? projectObj.categories : [],
+        categories: projectObj ? projectObj.categories : [],
       }))
     }
   }, [data])
@@ -122,8 +125,8 @@ const EditProject = ({ location }) => {
 
   const handleSubmit = async project => {
     setIsDisabled(true)
-    console.log('PRJOECT: ', project)
     editProject({ variables: { ...project, projectId: projectId } })
+    navigate(`/project/${projectId}`)
   }
 
   const setValue = async (field, value) => {
@@ -134,23 +137,23 @@ const EditProject = ({ location }) => {
   }
 
   const setDisabled = value => {
-    // if (typeof value === 'string') {
-    //   setIsDisabled(
-    //     !(
-    //       value.length > 0 &&
-    //       project.categories &&
-    //       project.categories.length > 0
-    //     ),
-    //   )
-    // } else {
-    //   setIsDisabled(
-    //     !(
-    //       value.length > 0 &&
-    //       project.description !== '' &&
-    //       project.name !== ''
-    //     ),
-    //   )
-    // }
+    if (typeof value === 'string') {
+      setIsDisabled(
+        !(
+          value.length > 0 &&
+          project.categories &&
+          project.categories.length > 0
+        ),
+      )
+    } else {
+      setIsDisabled(
+        !(
+          value.length > 0 &&
+          project.description !== '' &&
+          project.name !== ''
+        ),
+      )
+    }
   }
 
   return (
@@ -181,7 +184,7 @@ const EditProject = ({ location }) => {
           setValue={setValue}
           setDisabled={setDisabled}
           buttonText="Update project"
-          categories={[]}
+          categories={categories ? categories.categories : []}
         />
       </Box>
     </Grid>

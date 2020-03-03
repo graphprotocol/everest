@@ -20,6 +20,7 @@ const TabView = ({
   handleClick,
   showFilters,
   items,
+  ...props
 }) => {
   return (
     <Grid
@@ -29,9 +30,9 @@ const TabView = ({
         zIndex: 10,
         left: 0,
         width: '100%',
-        mt: 7,
-        height: 'calc(100vh + 120px)',
+        height: 'calc(100vh - 120px)',
       }}
+      {...props}
     >
       <Grid
         sx={{
@@ -56,11 +57,10 @@ const TabView = ({
             <Field
               multiselect={false}
               title="Challenge on behalf of"
-              field="projects"
               type="filters"
+              variant="project"
               setValue={async value => {
-                // This is wrong. you need another setValue function
-                await setValue('categories', value)
+                await setValue('projectId', value)
                 // setDisabled(value)
               }}
               items={items}
@@ -73,7 +73,7 @@ const TabView = ({
             charsCount={charsCount}
             placeholder={placeholder}
             setValue={async value => {
-              setValue(value)
+              setValue('description', value)
             }}
           />
           <Button

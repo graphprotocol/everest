@@ -11,7 +11,6 @@ export const PROJECT_QUERY = gql`
       id
       name
       description
-      categories
       createdAt
       website
       twitter
@@ -19,40 +18,73 @@ export const PROJECT_QUERY = gql`
       image
       avatar
       totalVotes
+      isRepresentative
+      currentChallenge {
+        id
+        endTime
+        owner
+        description
+        resolved
+        votesFor
+        votesAgainst
+        votes {
+          id
+        }
+      }
       owner {
         id
         name
       }
       categories {
         id
-        description
+        name
       }
     }
   }
 `
 
-//ck3t926929y7w0922q88lnsww
 export const USER_PROJECTS_QUERY = gql`
   query everestUserProjects($id: ID!) {
-    user(where: { id: $id }) {
+    user(id: $id) {
       id
       name
       projects {
         id
         name
-        image
-        categories
+        avatar
       }
     }
   }
 `
 
 export const CATEGORIES_QUERY = gql`
+  query categories($parentCategory: String) {
+    categories(where: { parentCategory: $parentCategory }) {
+      id
+      name
+      description
+      subcategories {
+        id
+      }
+      parentCategory {
+        id
+      }
+    }
+  }
+`
+
+export const ALL_CATEGORIES_QUERY = gql`
   query categories {
     categories {
       id
       name
       description
+      subcategories {
+        id
+      }
+      parentCategory {
+        id
+      }
     }
   }
 `
@@ -73,13 +105,18 @@ export const CATEGORY_QUERY = gql`
 `
 
 export const PROJECTS_QUERY = gql`
-  query projects {
-    projects {
+  query projects($orderBy: Project_orderBy, $orderDirection: OrderDirection) {
+    projects(orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       name
       image
       description
       avatar
+      createdAt
+      isRepresentative
+      currentChallenge {
+        id
+      }
       categories {
         id
         description
@@ -88,11 +125,23 @@ export const PROJECTS_QUERY = gql`
   }
 `
 
+export const TOTALS_QUERY = gql`
+  query totals {
+    totals {
+      projectCount
+    }
+  }
+`
+
 export const PROFILE_QUERY = gql`
-  query profile($id: ID!) {
+  query profile(
+    $id: ID!
+    $orderBy: Project_orderBy
+    $orderDirection: OrderDirection
+  ) {
     user(id: $id) {
       id
-      projects {
+      projects(orderBy: $orderBy, orderDirection: $orderDirection) {
         id
         name
         description

@@ -1,17 +1,24 @@
 /** @jsx jsx */
-import { useState, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
+import ThreeBox from '3box'
+// import client from '../utils/apollo/client'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
 import { useAccount } from '../utils/hooks'
+import { remainingTime } from '../utils/helpers/date'
 
 import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
-import { REMOVE_PROJECT } from '../utils/apollo/mutations'
+import {
+  REMOVE_PROJECT,
+  RESOLVE_CHALLENGE,
+  CHALLENGE_PROJECT,
+} from '../utils/apollo/mutations'
 
 import Divider from '../components/Divider'
 import DataRow from '../components/DataRow'
@@ -27,38 +34,18 @@ import { navigate } from 'gatsby'
 const Project = ({ location }) => {
   const { account } = useAccount()
 
+  // client.resetStore()
+
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
-  const [challengeDescription, setChallengeDescription] = useState('')
+  const [challenge, setChallenge] = useState({ description: '', projectId: '' })
   const [transferAddress, setTransferAddress] = useState('')
   const [delegateAddress, setDelegateAddress] = useState('')
   const [isKeepOpen, setIsKeepOpen] = useState(false)
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
+  const [ownerName, setOwnerName] = useState('')
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
-
-  const challengeProject = () => {
-    console.log('CHALLENGE PROJECT')
-    // TODO: call mutations
-  }
-
-  const delegateProject = async () => {
-    console.log('DELEGATE PROJECT')
-    // TODO: call mutations
-  }
-
-  const transferOwnership = async () => {
-    console.log('TRANSFER OWNERSHIP')
-    // TODO: call mutations
-  }
-
-  const setChallengeData = value => {
-    setChallengeDescription(value)
-  }
-
-  const voteOnProject = () => {
-    // TODO: call mutatioins
-  }
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -68,7 +55,7 @@ const Project = ({ location }) => {
 
   const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
     variables: {
-      id: projectId,
+      id: account.toLowerCase(),
     },
   })
 
@@ -81,6 +68,38 @@ const Project = ({ location }) => {
     //   state,
     // },
   ] = useMutation(REMOVE_PROJECT)
+
+  const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE)
+
+  const [challengeProject] = useMutation(CHALLENGE_PROJECT)
+
+  useEffect(() => {
+    async function getProfile() {
+      if (data && data.project) {
+        const threeBoxProfile = await ThreeBox.getProfile(data.project.owner.id)
+        if (threeBoxProfile) {
+          setOwnerName(threeBoxProfile.name)
+        }
+      }
+      // let image
+      // if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
+      //   image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+      // }
+      // const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
+      //   threeBoxProfile,
+      // )
+      // if (threeBoxProfile && Object.keys(threeBoxProfile).length > 0) {
+      //   setProfile(state => ({
+      //     ...state,
+      //     ...threeBoxProfile,
+      //     image: image,
+      //     accounts: threeBoxAccounts,
+      //   }))
+      // }
+    }
+
+    getProfile()
+  }, [data])
 
   if (loading && !error) {
     return <Styled.p>Loading</Styled.p>
@@ -96,8 +115,6 @@ const Project = ({ location }) => {
   let project = data && data.project
 
   if (project === null) {
-    // TODO: Handle this better
-    console.log("This project doesn't exist anymore")
     return (
       <Box>
         <Styled.h3>This project no longer exists</Styled.h3>
@@ -105,18 +122,43 @@ const Project = ({ location }) => {
     )
   }
 
-  let items = [
-    {
-      text: 'Challenge',
-      handleSelect: () => {
-        setShowChallenge(true)
-        if (!showChallenge) {
-          setShowDelegate(false)
-          setShowTransfer(false)
-        }
+  const handleChallenge = () => {
+    challengeProject({
+      variables: {
+        challengingProjectAddress: challenge.projectId,
+        challengedProjectAddress: projectId,
+        description: challenge.description,
       },
-      icon: '/challenge.png',
-    },
+    })
+  }
+
+  const delegateProject = async () => {
+    console.log('DELEGATE PROJECT')
+    // TODO: call mutations
+  }
+
+  const transferOwnership = async () => {
+    console.log('TRANSFER OWNERSHIP')
+    // TODO: call mutations
+  }
+
+  const setChallengeData = async (field, value) => {
+    await setChallenge(state => ({
+      ...state,
+      [field]: value,
+    }))
+  }
+
+  const voteOnProject = () => {
+    // TODO: call mutatioins
+  }
+
+  const handleResolveChallenge = () => {
+    const challengeId = project.currentChallenge.id
+    resolveChallenge({ variables: { challengeId } })
+  }
+
+  let items = [
     {
       text: 'Share',
       handleSelect: value => console.log('value: ', value),
@@ -125,26 +167,62 @@ const Project = ({ location }) => {
   ]
 
   if (account && project.owner && account.toLowerCase() === project.owner.id) {
+    if (project.currentChallenge) {
+      items = items.concat([
+        {
+          text: 'Edit',
+          handleSelect: () => {
+            navigate(`/edit/${projectId}`)
+          },
+          icon: '/edit.png',
+        },
+      ])
+    } else {
+      items = items.concat([
+        {
+          text: 'Edit',
+          handleSelect: () => {
+            navigate(`/edit/${projectId}`)
+          },
+          icon: '/edit.png',
+        },
+        {
+          text: 'Remove',
+          handleSelect: () => {
+            removeProject({ variables: { projectId } })
+          },
+          icon: '/trash.png',
+        },
+      ])
+    }
+  } else {
     items = items.concat([
       {
-        text: 'Edit',
+        text: 'Challenge',
         handleSelect: () => {
-          navigate(`/edit/${projectId}`)
+          setShowChallenge(true)
+          if (!showChallenge) {
+            setShowDelegate(false)
+            setShowTransfer(false)
+          }
         },
-        icon: '/edit.png',
-      },
-      {
-        text: 'Remove',
-        handleSelect: () => {
-          removeProject({ variables: { projectId } })
-        },
+        icon: '/challenge.png',
       },
     ])
   }
 
+  const isCompleted =
+    project.currentChallenge &&
+    remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
+
   return (
     <Grid>
-      <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
+      <Grid
+        columns={[1, 1, 2]}
+        gap={0}
+        sx={{ alignItems: 'center' }}
+        id="click"
+      >
         <Grid sx={{ gridTemplateColumns: [1, '120px 1fr'] }}>
           <Box>
             {project.avatar ? (
@@ -163,7 +241,16 @@ const Project = ({ location }) => {
           </Box>
           <Box>
             <p sx={{ variant: 'text.large' }}>
-              {project.categories.join(', ')}
+              {project.categories && project.categories.length > 0
+                ? project.categories.map((cat, index) => (
+                    <Link to={`/category/${cat.id}`} key={index}>
+                      {cat.name}
+                      {index !== project.categories.length - 1 && (
+                        <span>,&nbsp;</span>
+                      )}
+                    </Link>
+                  ))
+                : ''}
             </p>
             <Styled.h2>{project.name}</Styled.h2>
           </Box>
@@ -199,37 +286,45 @@ const Project = ({ location }) => {
             )}
             <Box>
               <p sx={{ variant: 'text.small' }}>Owner</p>
-              <Styled.h4 sx={{ color: 'secondary' }}>
-                {project.owner && project.owner.name
-                  ? project.owner.name
+              <Link
+                sx={{ color: 'secondary', fontSize: '1.5rem' }}
+                to={`/profile?id=${project.owner.id}`}
+              >
+                {ownerName
+                  ? ownerName
                   : project.owner.id.slice(0, 6) +
                     '...' +
                     project.owner.id.slice(-6)}
-              </Styled.h4>
+              </Link>
             </Box>
           </Grid>
           {account && (
             <Menu items={items} sx={{ justifySelf: 'end' }}>
               {showChallenge ? (
-                <Close
-                  onClick={async () => {
-                    await setShowChallenge(false)
-                    const $el = document.querySelector('[alt="dots icon"]')
-                    if ($el) {
-                      $el.click()
-                    }
-                  }}
+                <Box
                   sx={{
-                    fill: 'white',
-                    cursor: 'pointer',
-                    backgroundColor: 'secondary',
+                    p: 5,
                     borderRadius: '50%',
-                    p: 4,
-                    width: '22px',
-                    height: '22px',
-                    transition: 'all 0.3s ease',
+                    backgroundColor: 'secondary',
+                    cursor: 'pointer',
                   }}
-                />
+                >
+                  <Close
+                    onClick={async () => {
+                      await setShowChallenge(false)
+                      const $el = document.querySelector('#click  ')
+                      if ($el) {
+                        $el.click()
+                      }
+                    }}
+                    sx={{
+                      fill: 'white',
+                      width: '22px',
+                      height: '22 px',
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
+                </Box>
               ) : (
                 <img
                   src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
@@ -256,13 +351,14 @@ const Project = ({ location }) => {
           placeholder="Challenge Description"
           heading={`Challenge ${project.name}`}
           description="lala"
-          value={challengeDescription}
+          value={challenge.description}
           setValue={setChallengeData}
           text="Challenge"
           icon="challenge.png"
-          handleClick={challengeProject}
+          handleClick={handleChallenge}
           showFilters={true}
           items={userData ? userData.user.projects : []}
+          sx={{ mt: '140px' }}
         />
       )}
       <Divider />
@@ -271,7 +367,7 @@ const Project = ({ location }) => {
           <Styled.p sx={{ maxWidth: '504px', width: '100%' }}>
             {project.description}
           </Styled.p>
-          <Box sx={{ mt: 5 }}>
+          <Box sx={{ mt: 6 }}>
             <DataRow name="ID" value={project.id} />
             {project.website && (
               <DataRow
@@ -297,38 +393,54 @@ const Project = ({ location }) => {
           </Box>
         </Box>
         <Box sx={{ margin: ['32px auto', '32px auto', 0] }}>
-          {project.isChallenged && (
+          {project.currentChallenge && !project.currentChallenge.resolved && (
             <Box>
               <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
-                Active Challenge
+                {isCompleted ? (
+                  <span>Completed Challenge</span>
+                ) : (
+                  <span>Active Challenge</span>
+                )}
               </Styled.h5>
               <Box>
                 <p sx={{ variant: 'text.small' }}>Description</p>
-                <Styled.p>Blah blah - challenge copy</Styled.p>
+                <Styled.p>{project.currentChallenge.description}</Styled.p>
               </Box>
 
               <Grid columns={3} gap={3} sx={{ my: 4 }}>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Challenge ends</p>
-                  <p sx={{ variant: 'text.huge' }}>3d 6h</p>
+                  <p sx={{ variant: 'text.huge' }}>
+                    {remainingTime(project.currentChallenge.endTime)}
+                  </p>
                 </Box>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Voters</p>
-                  <p sx={{ variant: 'text.huge' }}>{project.totalVotes}</p>
+                  <p sx={{ variant: 'text.huge' }}>
+                    {project.currentChallenge.votes.length}
+                  </p>
                 </Box>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                  <Link to={`/profile/${project.owner.id}`}>
-                    {`${project.owner.id.slice(0, 6)}-${project.owner.id.slice(
-                      -6,
-                    )}`}
+                  <Link to={`/profile?id=${project.currentChallenge.owner}`}>
+                    {`${project.currentChallenge.owner.slice(
+                      0,
+                      6,
+                    )}-${project.currentChallenge.owner.slice(-6)}`}
                   </Link>
                 </Box>
               </Grid>
-              {!project.isChallenged ? (
+              {isCompleted ? (
                 <Fragment>
                   <Styled.h6>
-                    This challenge is over. Process this challenge to resolve it
+                    This challenge has ended and the project will be{' '}
+                    {project.currentChallenge.votesFor >
+                    project.currentChallenge.votesAgainst ? (
+                      <span>kept</span>
+                    ) : (
+                      <span>removed</span>
+                    )}
+                    . Resolve this challenge to update the registry&apos;s state
                     and earn a reward.
                   </Styled.h6>
                   <Grid
@@ -341,9 +453,9 @@ const Project = ({ location }) => {
                   >
                     <Button
                       variant="secondary"
-                      text="Process"
+                      text="Resolve"
                       sx={{ border: '1px solid #4C66FF' }}
-                      onClick={() => voteOnProject('yes')}
+                      onClick={handleResolveChallenge}
                     />
                   </Grid>
                 </Fragment>
@@ -365,7 +477,7 @@ const Project = ({ location }) => {
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
                       items={userData ? userData.user.projects : []}
-                      variant="round"
+                      variant="project"
                       setOpen={value => {
                         setIsKeepOpen(value)
                       }}
@@ -391,7 +503,7 @@ const Project = ({ location }) => {
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
                       items={userData ? userData.user.projects : []}
-                      variant="round"
+                      variant="project"
                       setOpen={value => {
                         setIsRemoveOpen(value)
                       }}
@@ -485,7 +597,7 @@ const buttonStyles = {
   maxWidth: '140px',
   transition: 'all 0.3s ease',
   '& img': {
-    width: '16px',
+    width: 'auto',
     height: '16px',
   },
 }

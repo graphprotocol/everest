@@ -4,7 +4,10 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import queryString from 'query-string'
+import cloneDeep from 'lodash.clonedeep'
 import ThreeBox from '3box'
+import { navigate } from 'gatsby'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
@@ -20,9 +23,10 @@ import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
 
-const Profile = ({ location }) => {
+const Profile = ({ location, pendingProject }) => {
   const { account } = useAccount()
 
+  const [allProjects, setAllProjects] = useState([])
   const [selectedProjects, setSelectedProjects] = useState('cards')
   const [selectedChallenges, setSelectedChallenges] = useState('cards')
   const [profile, setProfile] = useState(null)
@@ -30,22 +34,23 @@ const Profile = ({ location }) => {
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
 
-  const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
+  let param
+  if (location && location.search) {
+    param = queryString.parse(location.search)
+  }
+
+  const profileId = param && param.id ? param.id : ''
 
   useEffect(() => {
     async function getProfile() {
       const threeBoxProfile = await ThreeBox.getProfile(profileId)
-
       let image
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
       }
-
-      console.log('image: ', image)
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
       )
-
       if (threeBoxProfile && Object.keys(threeBoxProfile).length > 0) {
         setProfile(state => ({
           ...state,
@@ -55,11 +60,7 @@ const Profile = ({ location }) => {
         }))
       }
     }
-    metamaskAccountChange(() => {
-      if (typeof window !== 'undefined') {
-        window.location.href = '/'
-      }
-    })
+    metamaskAccountChange()
     getProfile()
   }, [])
 
@@ -73,8 +74,25 @@ const Profile = ({ location }) => {
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: profileId.toLowerCase(),
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
     },
   })
+
+  // TODO: We are still not getting the data
+  useEffect(() => {
+    if (data && data.user && data.user.projects) {
+      let all = cloneDeep(data.user.projects)
+      if (pendingProject) {
+        // add pendingProject to projects
+        all.unshift(pendingProject)
+      } else {
+        // navigate to profile to execute the query again
+        navigate(`/profile?id=${profileId}`)
+      }
+      setAllProjects(all)
+    }
+  }, [pendingProject, data])
 
   if (loading) {
     return <Styled.p>Loading</Styled.p>
@@ -85,16 +103,14 @@ const Profile = ({ location }) => {
     return <div />
   }
 
+  const isOwner = () => account && account.toLowerCase() === profileId
+
   const user = data && data.user
 
-  console.log('USR: ', user)
-
   const challengedProjects =
-    user.projects.length > 0
+    user && user.projects && user.projects.length > 0
       ? user.projects.filter(p => p.currentChallenge !== null)
       : []
-
-  console.log('challengedproj: ', challengedProjects)
 
   return (
     <Grid>
@@ -129,11 +145,13 @@ const Profile = ({ location }) => {
           ) : (
             <Box>
               <Styled.h5>{profileId}</Styled.h5>
-              <Styled.p
-                sx={{ fontWeight: 'heading', color: 'secondary', mt: 3 }}
-              >
-                Edit/Create profile (3Box)
-              </Styled.p>
+              {isOwner() && (
+                <Styled.p
+                  sx={{ fontWeight: 'heading', color: 'secondary', mt: 3 }}
+                >
+                  Edit/Create profile (3Box)
+                </Styled.p>
+              )}
             </Box>
           )}
         </Grid>
@@ -156,7 +174,7 @@ const Profile = ({ location }) => {
               </p>
             </Box>
           )}
-          {account && account === profileId && (
+          {isOwner() && (
             <Menu
               items={[
                 {
@@ -231,7 +249,7 @@ const Profile = ({ location }) => {
                     href={`https://twitter.com/${profile.accounts.twitter.username}`}
                   />
                 )}
-                {profile.accounts.github && (
+                {profile.accounts && profile.accounts.github && (
                   <DataRow
                     name="Github"
                     value={`github.com/${profile.accounts.github.username}`}
@@ -247,45 +265,46 @@ const Profile = ({ location }) => {
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
-              <Styled.h5>Your Projects</Styled.h5>
+              {isOwner() ? (
+                <Styled.h5>Your Projects</Styled.h5>
+              ) : (
+                <Styled.h5>Projects</Styled.h5>
+              )}
               <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                 {user && user.projects && user.projects.length > 0 && (
                   <span>{user.projects.length} Projects</span>
                 )}
               </Styled.p>
             </Box>
-            {user && user.projects && user.projects.length > 0 && (
-              <Switcher
-                selected={selectedProjects}
-                setSelected={setSelectedProjects}
-              />
-            )}
-          </Grid>
-          {user && user.projects.length > 0 && (
-            <Section
-              items={user.projects.map(project => {
-                const image = project.avatar
-                  ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
-                  : undefined
-                return {
-                  ...project,
-                  description: project.description.slice(0, 30) + '...',
-                  to: `/project/${project.id}`,
-                  image: image,
-                }
-              })}
-              variant="project"
+            <Switcher
               selected={selectedProjects}
+              setSelected={setSelectedProjects}
             />
-          )}
+          </Grid>
+          <Section
+            items={allProjects.map(project => {
+              return {
+                ...project,
+                description: project.description.slice(0, 30) + '...',
+                to: `/project/${project.id}`,
+                image: project.avatar,
+              }
+            })}
+            variant="project"
+            selected={selectedProjects}
+          />
+
           {challengedProjects.length > 0 && (
             <Fragment>
               <Grid columns={[1, 2, 2]} mb={1} mt={6}>
                 <Box>
-                  <Styled.h5>Your Challenges</Styled.h5>
+                  {isOwner() ? (
+                    <Styled.h5>Your Challenges</Styled.h5>
+                  ) : (
+                    <Styled.h5> Challenges</Styled.h5>
+                  )}
                   <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                     <span>{challengedProjects.length} Projects - </span>
-                    <span>{user.projects.length} ??? Initiated</span>
                   </Styled.p>
                 </Box>
                 <Switcher
@@ -295,14 +314,11 @@ const Profile = ({ location }) => {
               </Grid>
               <Section
                 items={challengedProjects.map(project => {
-                  const image = project.avatar
-                    ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`
-                    : undefined
                   return {
                     ...project,
                     description: project.description.slice(0, 30) + '...',
                     to: `/project/${project.id}`,
-                    image: image,
+                    image: project.avatar,
                   }
                 })}
                 variant="project"
@@ -319,16 +335,27 @@ const Profile = ({ location }) => {
             sx={{ height: '190px', width: 'auto' }}
           />
           <Divider sx={{ mt: '-6px !important' }} />
-          <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
-          <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
-            This is where you&apos;ll see projects you created
-          </Styled.p>
-          <Button
-            text="Add a Project"
-            to="/projects/new"
-            variant="primary"
-            sx={{ m: '0 auto', mt: 7 }}
-          />
+          {isOwner() ? (
+            <Fragment>
+              <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+                This is where you&apos;ll see projects you created
+              </Styled.p>
+              <Button
+                text="Add a Project"
+                to="/projects/new"
+                variant="primary"
+                sx={{ m: '0 auto', mt: 7 }}
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Styled.h5 sx={{ mt: 7 }}>Projects</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+                This user has no projects
+              </Styled.p>
+            </Fragment>
+          )}
         </Box>
       )}
     </Grid>
@@ -338,8 +365,8 @@ const Profile = ({ location }) => {
 const profileImgStyles = { height: '96px', width: '96px', borderRadius: '50%' }
 
 Profile.propTypes = {
-  pageContext: PropTypes.any,
   location: PropTypes.any,
+  pendingProject: PropTypes.any,
 }
 
 export default Profile
