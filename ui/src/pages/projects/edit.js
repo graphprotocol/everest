@@ -12,7 +12,6 @@ import client from '../../utils/apollo/client'
 
 import { EDIT_PROJECT } from '../../utils/apollo/mutations'
 import { PROJECT_QUERY } from '../../utils/apollo/queries'
-import { PROJECTS_QUERY } from '../../utils/apollo/queries'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
@@ -40,12 +39,12 @@ const EditProject = ({ location }) => {
 
   const [
     editProject,
-    {
-      data: mutationData,
-      loading: mutationLoading,
-      error: mutationError,
-      state,
-    },
+    // {
+    //   data: mutationData,
+    //   loading: mutationLoading,
+    //   error: mutationError,
+    //   state,
+    // },
   ] = useMutation(EDIT_PROJECT, {
     client: client,
     refetchQueries: [
@@ -138,23 +137,23 @@ const EditProject = ({ location }) => {
   }
 
   const setDisabled = value => {
-    // if (typeof value === 'string') {
-    //   setIsDisabled(
-    //     !(
-    //       value.length > 0 &&
-    //       project.categories &&
-    //       project.categories.length > 0
-    //     ),
-    //   )
-    // } else {
-    //   setIsDisabled(
-    //     !(
-    //       value.length > 0 &&
-    //       project.description !== '' &&
-    //       project.name !== ''
-    //     ),
-    //   )
-    // }
+    if (typeof value === 'string') {
+      setIsDisabled(
+        !(
+          value.length > 0 &&
+          project.categories &&
+          project.categories.length > 0
+        ),
+      )
+    } else {
+      setIsDisabled(
+        !(
+          value.length > 0 &&
+          project.description !== '' &&
+          project.name !== ''
+        ),
+      )
+    }
   }
 
   return (

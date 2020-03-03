@@ -22,6 +22,7 @@ const Field = ({
   image,
   setImage,
   categories,
+  variant,
 }) => {
   const charRef = useRef()
 
@@ -103,7 +104,7 @@ const Field = ({
               />
             </MultiSelect>
           ) : (
-            <Select items={items} />
+            <Select items={items} variant={variant} setValue={setValue} />
           )
         ) : type === 'upload' ? (
           <UploadImage setParentImage={setImage} parentImage={image} />
@@ -225,7 +226,9 @@ Field.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.any,
   setValue: PropTypes.func,
+  image: PropTypes.string,
   setImage: PropTypes.func,
+  variant: PropTypes.string,
   categories: PropTypes.any,
   items: PropTypes.arrayOf(
     PropTypes.shape({

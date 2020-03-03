@@ -109,8 +109,6 @@ const queryGraphNode = async (
     }
   }
 
-  console.log('GRAPH NODE RESULT: ', result)
-
   return result
 }
 
@@ -222,14 +220,12 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
     .then(async (tx: any) => {
       console.log('TXXXXXX: ', tx)
       const projectId = tx.events[0].args.member
-      console.log('TX PROJECT ID: ', projectId)
       const { project } = await queryGraphNode(
         context,
         'project',
         projectId.toLowerCase(),
         tx.blockHash,
       )
-      console.log('TX PROJECT: ', project)
       return project
     })
     .catch(err => console.error('Transaction error: ', err))
@@ -382,7 +378,9 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
 
   return transaction
     .wait()
-    .then(() => args)
+    .then(async (tx: any) => {
+      return tx
+    })
     .catch(err => {
       console.error('Transaction error: ', err)
       return false

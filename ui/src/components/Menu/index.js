@@ -37,6 +37,7 @@ const Menu = ({ children, items, ...props }) => {
                 onClick={e => {
                   e.stopPropagation()
                   item.handleSelect && item.handleSelect(e)
+                  setIsOpen(false)
                 }}
                 key={item.text}
               >

@@ -82,6 +82,20 @@ export const EDIT_PROJECT = gql`
   }
 `
 
+export const CHALLENGE_PROJECT = gql`
+  mutation challengeProject(
+    $challengingProjectAddress: String!
+    $challengedProjectAddress: String!
+    $description: String!
+  ) {
+    challengeProject(
+      challengingProjectAddress: $challengingProjectAddress
+      challengedProjectAddress: $challengedProjectAddress
+      details: { description: $description }
+    ) @client
+  }
+`
+
 export const RESOLVE_CHALLENGE = gql`
   mutation resolveChallenge($challengeId: ID!) {
     resolveChallenge(challengeId: $challengeId) @client {
