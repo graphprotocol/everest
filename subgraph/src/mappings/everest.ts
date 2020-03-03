@@ -12,7 +12,7 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote, Category } from '../types/schema'
+import { Project, Everest, Challenge, Vote, Category, Total } from '../types/schema'
 
 import { addQm } from './helpers'
 
