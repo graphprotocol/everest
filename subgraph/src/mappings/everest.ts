@@ -12,7 +12,7 @@ import {
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
 
-import { Project, Everest, Challenge, Vote, Category } from '../types/schema'
+import { Project, Everest, Challenge, Vote, Category, User } from '../types/schema'
 
 import { addQm } from './helpers'
 
@@ -98,13 +98,26 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   challenge.save()
 
   let project = Project.load(event.params.member.toHexString())
-  project.currentChallenge = event.params.challengeID.toString()
+  project.currentChallenge = id
   project.updatedAt = event.block.timestamp.toI32()
   project.save()
 
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(everest.challengeDeposit)
   everest.save()
+
+  let user = User.load(event.params.challenger.toHexString())
+  if (user == null) {
+    user = new User(event.params.challenger.toHexString())
+    user.createdAt = event.block.timestamp.toI32()
+  }
+  let previousChallenges = user.challenges
+  if (previousChallenges == null) {
+    previousChallenges = []
+  }
+  previousChallenges.push(id)
+  user.challenges = previousChallenges
+  user.save()
 }
 
 // event.params.submitter is not in use, it represents a delegate vote
