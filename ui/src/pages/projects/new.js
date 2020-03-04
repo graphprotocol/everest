@@ -52,79 +52,71 @@ const NewProject = () => {
       })
   }
 
-  const [addProject, { data, loading, error, state }] = useMutation(
-    ADD_PROJECT,
-    {
-      client: client,
-      refetchQueries: [
-        {
-          query: PROFILE_QUERY,
-          variables: {
-            id: account.toLowerCase(),
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
-          },
-        },
-      ],
-      optimisticResponse: {
-        __typename: 'Mutation',
-        addProject: {
-          id: '123',
-          name: project.name,
-          description: project.description,
-          avatar: project.avatar,
-          image: project.image,
-          website: project.website,
-          github: project.github,
-          twitter: project.twitter,
-          isRepresentative: project.isRepresentative,
-          currentChallenge: null,
-          categories: selectedCategories,
-          __typename: 'Project',
+  const [addProject] = useMutation(ADD_PROJECT, {
+    client: client,
+    refetchQueries: [
+      {
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
         },
       },
-      onError: error => {
-        console.error('Error adding a project: ', error)
-      },
-      onCompleted: mydata => {},
-      update: (proxy, result) => {
-        const profileData = cloneDeep(
-          proxy.readQuery({
-            query: PROFILE_QUERY,
-            variables: {
-              id: account.toLowerCase(),
-              orderBy: 'createdAt',
-              orderDirection: 'desc',
-            },
-          }),
-        )
-
-        console.log('profileData: ', [...profileData.user.projects])
-        console.log('result: ', result.data.addProject)
-        console.log('final: ', [
-          ...profileData.user.projects,
-          result.data.addProject,
-        ])
-
-        // TODO: this doesn't seem to be writing into the cache
-        proxy.writeQuery({
-          query: PROFILE_QUERY,
-          variables: {
-            id: account.toLowerCase(),
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
-          },
-          data: {
-            user: {
-              id: account.toLowerCase(),
-              __typename: 'User',
-              projects: [...profileData.user.projects, result.data.addProject],
-            },
-          },
-        })
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      addProject: {
+        id: '123',
+        name: project.name,
+        description: project.description,
+        avatar: project.avatar,
+        image: project.image,
+        website: project.website,
+        github: project.github,
+        twitter: project.twitter,
+        isRepresentative: project.isRepresentative,
+        createdAt: new Date(),
+        currentChallenge: null,
+        categories: selectedCategories,
+        __typename: 'Project',
       },
     },
-  )
+    onError: error => {
+      console.error('Error adding a project: ', error)
+    },
+    onCompleted: mydata => {},
+    update: (proxy, result) => {
+      const profileData = cloneDeep(
+        proxy.readQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account.toLowerCase(),
+            orderBy: 'createdAt',
+            orderDirection: 'desc',
+          },
+        }),
+      )
+
+      proxy.writeQuery({
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+        data: {
+          user: {
+            id: account.toLowerCase(),
+            __typename: 'User',
+            challenges: profile.user.challenges,
+            delegatorProjects: profile.user.delegatorProjects,
+            projects: [...profileData.user.projects, result.data.addProject],
+          },
+        },
+      })
+    },
+  })
 
   const setImage = (field, data) => {
     setProject(state => ({

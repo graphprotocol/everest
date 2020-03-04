@@ -51,8 +51,6 @@ const Index = () => {
     ? projects.projects.filter(project => project.currentChallenge !== null)
     : []
 
-  console.log('challengedProjects: ', challengedProjects)
-
   return (
     <Grid>
       <Grid gap={[2, 2, 6]} columns={[1, null, 2]}>

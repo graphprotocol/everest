@@ -78,8 +78,6 @@ const Profile = ({ location }) => {
 
   const user = data && data.user
 
-  console.log('USERRRR: ', user)
-
   return (
     <Grid>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>

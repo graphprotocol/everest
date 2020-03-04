@@ -20,8 +20,6 @@ const Section = ({
 }) => {
   const [size, setSize] = useState([0, 0])
 
-  console.log('ITEMS: ', items)
-
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight])

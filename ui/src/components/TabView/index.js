@@ -61,7 +61,6 @@ const TabView = ({
               variant="project"
               setValue={async value => {
                 await setValue('projectId', value)
-                // setDisabled(value)
               }}
               items={items}
             />
