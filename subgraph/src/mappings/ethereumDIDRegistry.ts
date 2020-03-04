@@ -1,12 +1,4 @@
-import {
-  json,
-  ipfs,
-  Bytes,
-  JSONValue,
-  BigInt,
-  log,
-  JSONValueKind,
-} from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValueKind } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -14,7 +6,7 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project, Category, User } from '../types/schema'
+import { Project, User } from '../types/schema'
 import { addQm } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
@@ -50,10 +42,17 @@ export function handleDIDDelegateChanged(event: DIDDelegateChanged): void {
     if (delegates == null) {
       delegates = []
     }
-    delegates.push(event.params.delegate)
+    delegates.push(event.params.delegate.toHexString())
     project.delegates = delegates
     project.updatedAt = event.block.timestamp.toI32()
     project.save()
+  }
+
+  let user = User.load(event.params.delegate.toHexString())
+  if (user == null) {
+    user = new User(event.params.delegate.toHexString())
+    user.createdAt = event.block.timestamp.toI32()
+    user.save()
   }
 }
 
@@ -76,6 +75,9 @@ export function handleDIDDelegateChanged(event: DIDDelegateChanged): void {
     - Everest front end will just pass a large value, such as 100 years, since we are not implementing
     custom features here now, but he have to pass a value nonetheless. The subgraph does not handle
     this value at all, it only considers the most recent DIDAttribute as the correct one
+
+  Note - someone could not upload any data here (blank IPFS file, or never calling
+  DIDAttributeChanged). But this is okay, because that project should get challenged  
 */
 export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
   let id = event.params.identity.toHexString()
