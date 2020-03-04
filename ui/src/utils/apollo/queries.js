@@ -160,19 +160,6 @@ export const PROFILE_QUERY = gql`
           name
         }
       }
-      challenges {
-        id
-        createdAt
-        project {
-          id
-          name
-          description
-          categories {
-            id
-            name
-          }
-        }
-      }
       delegatorProjects {
         id
         name

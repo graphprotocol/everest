@@ -298,46 +298,6 @@ const Profile = ({ location }) => {
         </Box>
       )}
 
-      {user && user.challenges && user.challenges.length > 0 && (
-        <Fragment>
-          <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-            <Box>
-              {isOwner() ? (
-                <Styled.h5>Your Challenges</Styled.h5>
-              ) : (
-                <Styled.h5>Challenges</Styled.h5>
-              )}
-              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-                <span>{user.challenges.length} Challenges</span>
-              </Styled.p>
-            </Box>
-            <Switcher
-              selected={selectedChallengesView}
-              setSelected={setSelectedChallengesView}
-            />
-          </Grid>
-          <Section
-            items={user.challenges.map(challenge => {
-              const project = challenge.project
-              return {
-                ...project,
-                description: project.description.slice(0, 30) + '...',
-                to: `/project/${project.id}`,
-                image: project.avatar,
-                pending: false,
-                isChallenged: true,
-                category:
-                  project.categories.length > 0
-                    ? project.categories[0].name
-                    : '',
-              }
-            })}
-            variant="project"
-            selected={selectedProjectsView}
-          />
-        </Fragment>
-      )}
-
       {user && user.delegatorProjects && user.delegatorProjects.length > 0 && (
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>

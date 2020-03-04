@@ -109,7 +109,6 @@ const NewProject = () => {
           user: {
             id: account.toLowerCase(),
             __typename: 'User',
-            challenges: profile.user.challenges,
             delegatorProjects: profile.user.delegatorProjects,
             projects: [...profileData.user.projects, result.data.addProject],
           },
