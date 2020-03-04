@@ -118,7 +118,7 @@ const Navbar = ({ path, ...props }) => {
         </Link>
         {userAccount ? (
           <Link
-            to={`/profile?id=${userAccount}`}
+            to={`/profile/${userAccount}`}
             sx={{
               lineHeight: 'inherit',
               '&:hover': { svg: { marginLeft: 0 } },

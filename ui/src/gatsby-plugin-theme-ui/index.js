@@ -119,7 +119,6 @@ export default {
       border: 'none',
       px: 6,
       width: 'fit-content',
-      cursor: 'pointer',
       transition: 'all 0.3s ease',
       '&:focus': {
         outline: 'none',
@@ -143,7 +142,6 @@ export default {
       boxSizing: 'content-box',
       px: 6,
       width: 'fit-content',
-      cursor: 'pointer',
       transition: 'all 0.3s ease',
       '&:focus': {
         outline: 'none',

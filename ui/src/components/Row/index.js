@@ -45,7 +45,7 @@ const Row = ({ item }) => {
       <Box sx={boxStyles}>
         <Styled.p sx={{ color: 'blackFaded' }}>
           {item.categories.map(cat => (
-            <span key={cat}>{cat}</span>
+            <span key={cat.id}>{cat.name}</span>
           ))}
         </Styled.p>
       </Box>

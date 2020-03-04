@@ -50,7 +50,7 @@ const TabView = ({
           <Styled.h1 sx={{ color: 'white', mb: 3 }}>{heading}</Styled.h1>
           <p sx={{ variant: 'text.field' }}>{description}</p>
           <p sx={{ variant: 'text.field', mt: 5 }}>Fee</p>
-          <p sx={{ variant: 'text.huge', color: 'white' }}>100 DAI</p>
+          <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
         </Box>
         <Box sx={{ maxWidth: '504px', width: '100%', mt: [5, 0] }}>
           {showFilters && (
@@ -61,7 +61,6 @@ const TabView = ({
               variant="project"
               setValue={async value => {
                 await setValue('projectId', value)
-                // setDisabled(value)
               }}
               items={items}
             />
@@ -73,7 +72,11 @@ const TabView = ({
             charsCount={charsCount}
             placeholder={placeholder}
             setValue={async value => {
-              setValue('description', value)
+              if (title === 'Description') {
+                setValue('description', value)
+              } else {
+                setValue(value)
+              }
             }}
           />
           <Button

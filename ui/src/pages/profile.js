@@ -4,10 +4,7 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import queryString from 'query-string'
-import cloneDeep from 'lodash.clonedeep'
 import ThreeBox from '3box'
-import { navigate } from 'gatsby'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
@@ -23,23 +20,18 @@ import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
 
-const Profile = ({ location, pendingProject }) => {
+const Profile = ({ location }) => {
   const { account } = useAccount()
 
-  const [allProjects, setAllProjects] = useState([])
-  const [selectedProjects, setSelectedProjects] = useState('cards')
-  const [selectedChallenges, setSelectedChallenges] = useState('cards')
+  const [selectedProjectsView, setSelectedProjectsView] = useState('cards')
+  const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
+  const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
   const [profile, setProfile] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
 
-  let param
-  if (location && location.search) {
-    param = queryString.parse(location.search)
-  }
-
-  const profileId = param && param.id ? param.id : ''
+  const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   useEffect(() => {
     async function getProfile() {
@@ -64,13 +56,6 @@ const Profile = ({ location, pendingProject }) => {
     getProfile()
   }, [])
 
-  // const handleClick = (e, to) => {
-  //   e.preventDefault()
-  //   if (typeof window !== 'undefined') {
-  //     window.open(to, '_blank')
-  //   }
-  // }
-
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: profileId.toLowerCase(),
@@ -78,21 +63,6 @@ const Profile = ({ location, pendingProject }) => {
       orderDirection: 'desc',
     },
   })
-
-  // TODO: We are still not getting the data
-  useEffect(() => {
-    if (data && data.user && data.user.projects) {
-      let all = cloneDeep(data.user.projects)
-      if (pendingProject) {
-        // add pendingProject to projects
-        all.unshift(pendingProject)
-      } else {
-        // navigate to profile to execute the query again
-        navigate(`/profile?id=${profileId}`)
-      }
-      setAllProjects(all)
-    }
-  }, [pendingProject, data])
 
   if (loading) {
     return <Styled.p>Loading</Styled.p>
@@ -103,14 +73,10 @@ const Profile = ({ location, pendingProject }) => {
     return <div />
   }
 
-  const isOwner = () => account && account.toLowerCase() === profileId
+  const isOwner = () =>
+    account === profileId || (account && account.toLowerCase() === profileId)
 
   const user = data && data.user
-
-  const challengedProjects =
-    user && user.projects && user.projects.length > 0
-      ? user.projects.filter(p => p.currentChallenge !== null)
-      : []
 
   return (
     <Grid>
@@ -277,55 +243,28 @@ const Profile = ({ location, pendingProject }) => {
               </Styled.p>
             </Box>
             <Switcher
-              selected={selectedProjects}
-              setSelected={setSelectedProjects}
+              selected={selectedProjectsView}
+              setSelected={setSelectedProjectsView}
             />
           </Grid>
           <Section
-            items={allProjects.map(project => {
+            items={user.projects.map(project => {
               return {
                 ...project,
                 description: project.description.slice(0, 30) + '...',
                 to: `/project/${project.id}`,
                 image: project.avatar,
+                pending: project.id.indexOf('0x') < 0,
+                isChallenged: project.currentChallenge !== null,
+                category:
+                  project.categories.length > 0
+                    ? project.categories[0].name
+                    : '',
               }
             })}
             variant="project"
-            selected={selectedProjects}
+            selected={selectedProjectsView}
           />
-
-          {challengedProjects.length > 0 && (
-            <Fragment>
-              <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-                <Box>
-                  {isOwner() ? (
-                    <Styled.h5>Your Challenges</Styled.h5>
-                  ) : (
-                    <Styled.h5> Challenges</Styled.h5>
-                  )}
-                  <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-                    <span>{challengedProjects.length} Projects - </span>
-                  </Styled.p>
-                </Box>
-                <Switcher
-                  selected={selectedChallenges}
-                  setSelected={setSelectedChallenges}
-                />
-              </Grid>
-              <Section
-                items={challengedProjects.map(project => {
-                  return {
-                    ...project,
-                    description: project.description.slice(0, 30) + '...',
-                    to: `/project/${project.id}`,
-                    image: project.avatar,
-                  }
-                })}
-                variant="project"
-                selected={selectedChallenges}
-              />
-            </Fragment>
-          )}
         </Fragment>
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
@@ -358,6 +297,41 @@ const Profile = ({ location, pendingProject }) => {
           )}
         </Box>
       )}
+
+      {user && user.delegatorProjects && user.delegatorProjects.length > 0 && (
+        <Fragment>
+          <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+            <Box>
+              <Styled.h5>Delegated Projects</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+                <span>{user.delegatorProjects.length} Delegated Projects</span>
+              </Styled.p>
+            </Box>
+            <Switcher
+              selected={selectedDelegatorView}
+              setSelected={setSelectedDelegatorView}
+            />
+          </Grid>
+          <Section
+            items={user.delegatorProjects.map(project => {
+              return {
+                ...project,
+                description: project.description.slice(0, 30) + '...',
+                to: `/project/${project.id}`,
+                image: project.avatar,
+                pending: project.id.indexOf('0x') < 0,
+                isChallenged: project.currentChallenge !== null,
+                category:
+                  project.categories.length > 0
+                    ? project.categories[0].name
+                    : '',
+              }
+            })}
+            variant="project"
+            selected={selectedDelegatorView}
+          />
+        </Fragment>
+      )}
     </Grid>
   )
 }
@@ -366,7 +340,6 @@ const profileImgStyles = { height: '96px', width: '96px', borderRadius: '50%' }
 
 Profile.propTypes = {
   location: PropTypes.any,
-  pendingProject: PropTypes.any,
 }
 
 export default Profile

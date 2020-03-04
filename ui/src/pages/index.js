@@ -29,7 +29,9 @@ const Index = () => {
     // navigate('/projects/new')
   }
 
-  const { data: categories } = useQuery(CATEGORIES_QUERY)
+  const { data: categories } = useQuery(CATEGORIES_QUERY, {
+    variables: { parentCategory: null },
+  })
   const { data: projects } = useQuery(PROJECTS_QUERY, {
     variables: {
       orderBy: 'createdAt',
@@ -46,7 +48,7 @@ const Index = () => {
   ]
 
   const challengedProjects = projects
-    ? projects.projects.filter(project => project.isChallenged === true)
+    ? projects.projects.filter(project => project.currentChallenge !== null)
     : []
 
   return (
@@ -209,8 +211,10 @@ const Index = () => {
                 to: `/project/${project.id}`,
                 image: project.image,
                 category:
-                  project.categories.length > 0 ? project.categories[0] : '',
-                isChallenged: project.isChallenged,
+                  project.categories.length > 0
+                    ? project.categories[0].name
+                    : '',
+                isChallenged: project.currentChallenge !== null,
               }
             })}
             linkTo="/projects"

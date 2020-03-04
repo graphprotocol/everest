@@ -184,11 +184,11 @@ const Filters = ({
               )}
             </Box>
             <Box sx={{ position: 'relative' }}>
-              {allItems.map((category, index) => (
+              {allItems.map((item, index) => (
                 <Row
-                  key={`${category.name}${index}`}
-                  item={category}
-                  parent={category.parent}
+                  key={`${item.name}${index}`}
+                  item={item}
+                  parent={item.parent}
                   selected={selected}
                   setSelected={setSelected}
                   multiselect={true}
@@ -215,15 +215,16 @@ const Filters = ({
                     boxSizing: 'border-box',
                     opacity: selected && selected.length > 0 ? 1 : 0.64,
                   }}
+                  disabled={allItems.every(it => it.disabled === true)}
                 />
               </Box>
             )}
           </Box>
         )}
         {type === 'categories' &&
-          selected.map(item => (
+          selected.map((item, index) => (
             <Row
-              key={item.name}
+              key={index}
               item={item}
               parent={item.parent}
               selected={selected}

@@ -146,18 +146,43 @@ export const PROFILE_QUERY = gql`
         name
         description
         avatar
+        image
+        website
+        github
+        twitter
+        isRepresentative
         createdAt
         currentChallenge {
           id
         }
         categories {
           id
-          description
+          name
         }
       }
-      challenges {
+      delegatorProjects {
         id
+        name
+        description
+        createdAt
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          name
+        }
       }
+    }
+  }
+`
+
+export const CHALLENGE_QUERY = gql`
+  query challenge($id: ID!) {
+    id
+    description
+    votes {
+      id
     }
   }
 `

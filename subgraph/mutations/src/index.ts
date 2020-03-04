@@ -9,7 +9,6 @@ import { ethers, utils } from 'ethers'
 import { Transaction } from 'ethers/utils'
 import { AsyncSendable, Web3Provider } from 'ethers/providers'
 import ipfsHttpClient from 'ipfs-http-client'
-import gql from 'graphql-tag'
 
 import { sleep, uploadToIpfs, queryMap } from './utils'
 
@@ -218,7 +217,6 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   return transaction
     .wait()
     .then(async (tx: any) => {
-      console.log('TXXXXXX: ', tx)
       const projectId = tx.events[0].args.member
       const { project } = await queryGraphNode(
         context,

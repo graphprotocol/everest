@@ -11,7 +11,6 @@ import Seo from '../Seo'
 export const ReactContext = createContext()
 
 const LayoutTemplate = ({ children, ...props }) => {
-  const [pendingProject, setPendingProject] = useState(null)
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
@@ -25,26 +24,14 @@ const LayoutTemplate = ({ children, ...props }) => {
       ? { backgroundColor: 'secondary', marginTop: '-18px' }
       : {}
 
-  // useEffect(() => {
-  //   if (typeof window !== undefined) {
-  //     const pp = window.localStorage.getItem('pendingProject')
-  //     setPendingProject(pp ? JSON.parse(pp) : pp)
-  //   }
-  // }, [])
-
   const childrenWithProps = React.Children.map(children, child => {
     return React.cloneElement(child, {
-      setPendingProject: setPendingProject,
-      pendingProject: pendingProject,
+      foo: 'bar',
     })
   })
 
   return (
-    <ReactContext.Provider
-      value={{
-        pendingProject: pendingProject,
-      }}
-    >
+    <ReactContext.Provider>
       <Global
         styles={() => {
           return {

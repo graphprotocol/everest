@@ -12,11 +12,11 @@ import { useAccount } from '../../utils/hooks'
 
 import { ADD_PROJECT } from '../../utils/apollo/mutations'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
-import { PROJECTS_QUERY } from '../../utils/apollo/queries'
+import { PROFILE_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
-const NewProject = ({ setPendingProject }) => {
+const NewProject = () => {
   const { account } = useAccount()
   const [isDisabled, setIsDisabled] = useState(true)
   const [project, setProject] = useState({
@@ -32,48 +32,90 @@ const NewProject = ({ setPendingProject }) => {
   })
 
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
-  const { data: projects } = useQuery(PROJECTS_QUERY)
+  const { data: profile } = useQuery(PROFILE_QUERY, {
+    variables: {
+      id: account.toLowerCase(),
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
+    },
+  })
 
-  const [addProject, { data, loading, error, state }] = useMutation(
-    ADD_PROJECT,
-    {
-      client: client,
-      refetchQueries: [
-        {
-          query: PROJECTS_QUERY,
-        },
-      ],
-      optimisticResponse: {
-        __typename: 'Mutation',
-        addProject: {
-          id: '123',
-          ...project,
-          __typename: 'Project',
-        },
-      },
-      onError: error => {
-        console.error('Error adding a project: ', error)
-      },
-      onCompleted: mydata => {
-        // setPendingProject(null)
-        // window.localStorage.removeItem('pendingProject')
-      },
-      update: (proxy, result) => {
-        const projectData = cloneDeep(
-          proxy.readQuery({
-            query: PROJECTS_QUERY,
-          }),
-        )
+  let selectedCategories
 
-        // TODO: this doesn't seem to be writing into the cache
-        proxy.writeQuery({
-          query: PROJECTS_QUERY,
-          data: { ...projectData },
-          projects: [...projectData.projects, result.data.addProject],
-        })
+  if (categories) {
+    selectedCategories =
+      project &&
+      project.categories &&
+      project.categories.map(pc => {
+        const category = categories.categories.find(cat => cat.id === pc)
+        return { id: category.id, name: category.name, __typename: 'Category' }
+      })
+  }
+
+  const [addProject] = useMutation(ADD_PROJECT, {
+    client: client,
+    refetchQueries: [
+      {
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+      },
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      addProject: {
+        id: '123',
+        name: project.name,
+        description: project.description,
+        avatar: project.avatar,
+        image: project.image,
+        website: project.website,
+        github: project.github,
+        twitter: project.twitter,
+        isRepresentative: project.isRepresentative,
+        createdAt: new Date(),
+        currentChallenge: null,
+        categories: selectedCategories,
+        __typename: 'Project',
       },
     },
-  )
+    onError: error => {
+      console.error('Error adding a project: ', error)
+    },
+    onCompleted: mydata => {},
+    update: (proxy, result) => {
+      const profileData = cloneDeep(
+        proxy.readQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account.toLowerCase(),
+            orderBy: 'createdAt',
+            orderDirection: 'desc',
+          },
+        }),
+      )
+
+      proxy.writeQuery({
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+        data: {
+          user: {
+            id: account.toLowerCase(),
+            __typename: 'User',
+            delegatorProjects: profile.user.delegatorProjects,
+            projects: [...profileData.user.projects, result.data.addProject],
+          },
+        },
+      })
+    },
+  })
 
   const setImage = (field, data) => {
     setProject(state => ({
@@ -126,11 +168,7 @@ const NewProject = ({ setPendingProject }) => {
     addProject({
       variables: data,
     })
-    // setPendingProject(project)
-    // if (typeof window !== undefined) {
-    //   window.localStorage.setItem('pendingProject', JSON.stringify(project))
-    // }
-    navigate(`/profile?id=${account}`)
+    navigate(`/profile/${account}`)
   }
 
   return (

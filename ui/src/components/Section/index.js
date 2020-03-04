@@ -89,6 +89,7 @@ const Section = ({
               to={item.to}
               category={item.category}
               isChallenged={item.isChallenged}
+              pending={item.pending}
             />
           ))}
         </Grid>

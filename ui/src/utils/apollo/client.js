@@ -26,7 +26,7 @@ const mutations = createMutations({
       }
 
       await ethereum.enable()
-      return window.web3.currentProvider
+      return window.web3.currentProvider // TODO: pass the right provider
     },
     ipfs: ipfsURI,
   },
