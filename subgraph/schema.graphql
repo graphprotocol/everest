@@ -1,76 +1,110 @@
+"""
+Projects are the member type which the Everest list is curated for
+"""
 type Project @entity {
+  "Required ID"
   id: ID!
   # From IPFS / off chain storage
-  # None of these are required, since first the event DIDOwnerChanged creates the project first
+  # None of these are required, since first the event DIDOwnerChanged creates the project
   # Then DIDAttributeChanged gets emitted, where we will see theses values filled in
-  # Note - someone could not upload any data here (blank IPFS file, or never calling
-  # DIDAttributeChanged). But this is okay, because that project should get challenged
+  "The IPFS hash where all off-chain data is stored"
+  ipfsHash: String
+  "Project name"
   name: String
+  "Project description"
   description: String
+  "Project website"
   website: String
+  "Project twitter handle"
   twitter: String
-  github: String # Make sure we call it github or something else
+  "Project github URL"
+  github: String
+  "Project avatar"
   avatar: String
+  "Project image"
   image: String
+  "List of project categories"
   categories: [Category!]
+  "True if a representative of the company owns this project"
   isRepresentative: Boolean
-
+  "Time it was created at on the blockchain"
   createdAt: Int!
+  "Time it was updated at on the blockchain"
   updatedAt: Int!
 
   # From smart contracts directly
+  "Owner of this project"
   owner: User
+  "Current challenge agaisnt this project"
   currentChallenge: Challenge
+  "Past challenges agaisnt this project"
   pastChallenges: [Challenge!]
-  # If now > memberShipStartTime , this project is a member.
-  # reputation = now - membershipStartTime.
-  membershipStartTime: Int!
-  delegates: [Bytes!] # Null if no delegate is set. There can be many delegates
-  # delegateValidities: [Int!] # Time delegate is valid
-  ipfsHash: String # aka DIDAttribute
-  # Derived from smart contract events
+  "Time this project joined Everest"
+  membershipStartTime: Int! # reputation = now - membershipStartTime.
+  "List of all delegates of this project"
+  delegates: [User!]
+  "Total vote count"
   totalVotes: Int!
-
-  # All votes a Project has made
+  "All votes a project has made"
   votes: [Vote!] @derivedFrom(field: "voter")
 }
 
+"""
+Project Categories
+"""
 type Category @entity {
-  id: ID! # id is equal to the slug, which is the name but used in the URL for consistency
+  "The ID is a lowercased name"
+  id: ID!
+  "The category description"
   description: String!
-  name: String! # the name, case insensitive
-  projects: [Project!] @derivedFrom(field: "categories") # TODO - ensure this works on the categories array
+  "The name of the category, case insensitive"
+  name: String!
+  "Projects with this category designation"
+  projects: [Project!] @derivedFrom(field: "categories")
+  "The subcategories of this Category"
   subcategories: [Category!] @derivedFrom(field: "parentCategory")
+  "Parent category of this category. Null if it is a top level category"
   parentCategory: Category
-
+  "Time it was created in the Subgraph"
   createdAt: Int!
 }
 
 type Challenge @entity {
+  "Challenge ID"
   id: ID!
+  "IPFS hash where the description is stored"
   ipfsHash: String!
+  "Challenge description"
   description: String
+  "End time of the challenge"
   endTime: Int!
+  "Votes for (in weight)"
   votesFor: Int!
+  "Votes against (in weight)"
   votesAgainst: Int!
+  "Project that is being challenged"
   project: Project!
+  "Owner of the challenge"
   owner: Bytes!
+  "List of all created votes"
   votes: [Vote!] @derivedFrom(field: "challenge")
   # This is when the challenge is resolved, which is different from end time. When we are past
   # the end time, we can implicitly calculate votesFor and votesAgainst, and determine if it
-  # passed or failed. Resolved means it is called in the smart contract, and the challenge
-  # is deleted from storage
+  # passed or failed. Resolved means resolveChallenge() was called in Everest.
+  "True if the challenge has been resolved"
   resolved: Boolean!
-
+  "Time challenge was created on the blockchain"
   createdAt: Int!
 }
 
-# For global variables
+"""
+Everest holds the global variables relevant to the dapp
+"""
 type Everest @entity {
   id: ID!
   "Owner of the Everest contract"
   owner: Bytes!
-  "Approved token for fees (DAI)"
+  "Approved token for Everest fees"
   approvedToken: Bytes!
   "Voting period for challenges"
   votingPeriodDuration: Int!
@@ -84,32 +118,58 @@ type Everest @entity {
   reserveBankBalance: BigInt!
   "IPFS hash pointing to the charter"
   charter: String!
+  "Time it was created on the blockchain"
   createdAt: Int
+  "Total count of projects created on Everest"
   projectCount: Int!
 }
 
+"""
+A challenge vote
+"""
 type Vote @entity {
-  id: ID! # concatenation of challenge ID and voter address
+  "Concatenation of challenge ID and voter address"
+  id: ID!
+  "Project that voted on the challenge"
   voter: Project!
+  "Challenge the vote is for"
   challenge: Challenge!
+  "Vote choice"
   choice: Choice!
+  "Vote weight based on project reputation"
   weight: Int!
-
+  "Time that vote was created on the blockchain"
   createdAt: Int!
 }
 
+"""
+The Vote choice enum
+"""
 enum Choice {
   Null
   Yes
   No
 }
 
+"""
+A User of the Everest Dapp. A User is the owner or delegate of Projects. User info
+is obtained from 3box
+"""
 type User @entity {
+  "User ethereum address"
   id: ID!
+  "User name"
   name: String
+  "User bio"
   bio: String
+  "Projects the user owns"
   projects: [Project!] @derivedFrom(field: "owner")
-  challenges: [Challenge!] # challenges you started
-  votes: [Project!] # participation in other people's challenges
+  "Projects the user is a delegate of"
+  delegatorProjects: [Project!] @derivedFrom(field: "delegates")
+  "Challenges the user has created"
+  challenges: [Challenge!]
+  "All votes the user has done on any challenge"
+  votes: [Project!]
+  "The time the user was created in the Subgraph (not the blockchain)"
   createdAt: Int!
 }

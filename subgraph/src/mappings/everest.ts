@@ -1,4 +1,4 @@
-import { BigInt, store, ipfs, json, Bytes, JSONValue, log } from '@graphprotocol/graph-ts'
+import { BigInt, store, ipfs, json, Bytes, JSONValue } from '@graphprotocol/graph-ts'
 
 import {
   NewMember,
