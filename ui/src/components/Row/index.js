@@ -43,11 +43,11 @@ const Row = ({ item }) => {
         </Box>
       </Grid>
       <Box sx={boxStyles}>
-        <Styled.p sx={{ color: 'blackFaded' }}>
+        {/*} <Styled.p sx={{ color: 'blackFaded' }}>
           {item.categories.map(cat => (
             <span key={cat}>{cat}</span>
           ))}
-        </Styled.p>
+          </Styled.p>*/}
       </Box>
       <Box sx={boxStyles}>
         <Styled.p sx={{ color: 'blackFaded' }}>

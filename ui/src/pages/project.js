@@ -6,7 +6,7 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import ThreeBox from '3box'
-// import client from '../utils/apollo/client'
+import client from '../utils/apollo/client'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
@@ -18,6 +18,7 @@ import {
   REMOVE_PROJECT,
   RESOLVE_CHALLENGE,
   CHALLENGE_PROJECT,
+  VOTE_CHALLENGE,
 } from '../utils/apollo/mutations'
 
 import Divider from '../components/Divider'
@@ -45,6 +46,7 @@ const Project = ({ location }) => {
   const [isKeepOpen, setIsKeepOpen] = useState(false)
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
   const [ownerName, setOwnerName] = useState('')
+  const [pendingVotes, setPendingVotes] = useState(false)
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
@@ -59,6 +61,8 @@ const Project = ({ location }) => {
     },
   })
 
+  let userProjects = userData ? userData.user.projects : []
+
   const [
     removeProject,
     // {
@@ -72,6 +76,15 @@ const Project = ({ location }) => {
   const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE)
 
   const [challengeProject] = useMutation(CHALLENGE_PROJECT)
+  const [voteChallenge] = useMutation(VOTE_CHALLENGE, {
+    client: client,
+    onError: error => {
+      console.error('Error voting on a challenge: ', error)
+    },
+    onCompleted: mydata => {
+      setPendingVotes(false)
+    },
+  })
 
   useEffect(() => {
     async function getProfile() {
@@ -81,23 +94,7 @@ const Project = ({ location }) => {
           setOwnerName(threeBoxProfile.name)
         }
       }
-      // let image
-      // if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
-      //   image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
-      // }
-      // const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
-      //   threeBoxProfile,
-      // )
-      // if (threeBoxProfile && Object.keys(threeBoxProfile).length > 0) {
-      //   setProfile(state => ({
-      //     ...state,
-      //     ...threeBoxProfile,
-      //     image: image,
-      //     accounts: threeBoxAccounts,
-      //   }))
-      // }
     }
-
     getProfile()
   }, [data])
 
@@ -122,12 +119,41 @@ const Project = ({ location }) => {
     )
   }
 
+  // If you are the owner of the current project
+  // you can't vote on behalf of that project
+  // if you already voted - you can't vote again
+  if (project.currentChallenge) {
+    let votes = []
+    votes = project.currentChallenge.votes.map(vote => vote.id.slice(2))
+    userProjects = userProjects.map(up => ({
+      ...up,
+      disabled: up.id === project.id || votes.includes(up.id),
+    }))
+  }
+
   const handleChallenge = () => {
     challengeProject({
       variables: {
         challengingProjectAddress: challenge.projectId,
         challengedProjectAddress: projectId,
         description: challenge.description,
+      },
+    })
+  }
+
+  const handleVoting = (projects, choice) => {
+    let voteChoice = []
+    let voters = []
+    projects.forEach(project => {
+      voteChoice.push(choice)
+      voters.push(project.id)
+    })
+    setPendingVotes(true)
+    voteChallenge({
+      variables: {
+        challengeId: project.currentChallenge.id,
+        voteChoice: voteChoice,
+        voters: voters,
       },
     })
   }
@@ -147,10 +173,6 @@ const Project = ({ location }) => {
       ...state,
       [field]: value,
     }))
-  }
-
-  const voteOnProject = () => {
-    // TODO: call mutatioins
   }
 
   const handleResolveChallenge = () => {
@@ -195,7 +217,7 @@ const Project = ({ location }) => {
         },
       ])
     }
-  } else {
+  } else if (userProjects.length > 0) {
     items = items.concat([
       {
         text: 'Challenge',
@@ -216,7 +238,7 @@ const Project = ({ location }) => {
     remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
 
   return (
-    <Grid>
+    <Grid sx={{ pb: project.currentChallenge ? '400px' : 0 }}>
       <Grid
         columns={[1, 1, 2]}
         gap={0}
@@ -350,14 +372,16 @@ const Project = ({ location }) => {
           title="Desription"
           placeholder="Challenge Description"
           heading={`Challenge ${project.name}`}
-          description="lala"
+          description="Challenge a project on the Everest registry if there is incorrect information or the project should be removed. Refer to the Charter as a guide about Everest's principles.
+          To challenge a project, write a reason for the challenge and lock-up 10 DAI as collateral against the challenge. 
+          If the challenge is successful, the 10 DAI deposit will be returned and the challenger will be rewarded with 1 DAI for successfully curating the Everest registry."
           value={challenge.description}
           setValue={setChallengeData}
           text="Challenge"
           icon="challenge.png"
           handleClick={handleChallenge}
           showFilters={true}
-          items={userData ? userData.user.projects : []}
+          items={userProjects}
           sx={{ mt: '140px' }}
         />
       )}
@@ -392,7 +416,12 @@ const Project = ({ location }) => {
             )}
           </Box>
         </Box>
-        <Box sx={{ margin: ['32px auto', '32px auto', 0] }}>
+        <Box
+          sx={{
+            margin: ['32px auto', '32px auto', 0],
+            opacity: pendingVotes ? 0.32 : 1,
+          }}
+        >
           {project.currentChallenge && !project.currentChallenge.resolved && (
             <Box>
               <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
@@ -422,7 +451,7 @@ const Project = ({ location }) => {
                 </Box>
                 <Box>
                   <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                  <Link to={`/profile?id=${project.currentChallenge.owner}`}>
+                  <Link to={`/project/${project.currentChallenge.owner}`}>
                     {`${project.currentChallenge.owner.slice(
                       0,
                       6,
@@ -459,7 +488,7 @@ const Project = ({ location }) => {
                     />
                   </Grid>
                 </Fragment>
-              ) : (
+              ) : userProjects.length > 0 ? (
                 <Fragment>
                   <Styled.h6>
                     What would you like to happen to this listing?
@@ -473,17 +502,17 @@ const Project = ({ location }) => {
                     }}
                   >
                     <MultiSelect
-                      setValue={projects => voteOnProject(projects, 'keep')}
+                      setValue={projects => handleVoting(projects, '1')}
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
-                      items={userData ? userData.user.projects : []}
+                      items={userProjects}
                       variant="project"
                       setOpen={value => {
                         setIsKeepOpen(value)
                       }}
                       styles={{
-                        pointerEvents: isRemoveOpen ? 'none' : 'all',
-                        cursor: isRemoveOpen ? 'auto' : 'pointer',
+                        pointerEvents:
+                          isRemoveOpen || pendingVotes ? 'none' : 'all',
                       }}
                     >
                       <Button
@@ -494,22 +523,26 @@ const Project = ({ location }) => {
                           backgroundColor: isKeepOpen ? 'secondary' : 'white',
                           color: isKeepOpen ? 'white' : 'secondary',
                           opacity: isRemoveOpen ? 0.48 : 1,
+                          cursor: pendingVotes ? 'auto' : 'pointer',
+                          '&:hover': {
+                            boxShadow: pendingVotes && 'none',
+                          },
                         }}
                         icon={isKeepOpen ? `keep-white.png` : `keep.png`}
                       />
                     </MultiSelect>
                     <MultiSelect
-                      setValue={projects => voteOnProject(projects, 'remove')}
+                      setValue={projects => handleVoting(projects, '2')}
                       title="Vote on behalf of"
                       subtitle="You can select multiple projects"
-                      items={userData ? userData.user.projects : []}
+                      items={userProjects}
                       variant="project"
                       setOpen={value => {
                         setIsRemoveOpen(value)
                       }}
                       styles={{
-                        pointerEvents: isKeepOpen && 'none',
-                        cursor: isKeepOpen && 'auto',
+                        pointerEvents:
+                          isKeepOpen || pendingVotes ? 'none' : 'all',
                       }}
                     >
                       <Button
@@ -520,12 +553,18 @@ const Project = ({ location }) => {
                           backgroundColor: isRemoveOpen ? 'secondary' : 'white',
                           color: isRemoveOpen ? 'white' : 'secondary',
                           opacity: isKeepOpen ? 0.48 : 1,
+                          cursor: pendingVotes ? 'auto' : 'pointer',
+                          '&:hover': {
+                            boxShadow: pendingVotes && 'none',
+                          },
                         }}
                         icon={isRemoveOpen ? `remove-white.png` : `remove.png`}
                       />
                     </MultiSelect>
                   </Grid>
                 </Fragment>
+              ) : (
+                ''
               )}
             </Box>
           )}

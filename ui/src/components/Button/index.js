@@ -19,6 +19,7 @@ const Button = ({
         variant: `buttons.${variant}`,
         opacity: disabled ? 0.64 : 1,
         pointerEvents: disabled || loading ? 'none' : 'all',
+        cursor: 'pointer',
         bg:
           loading &&
           (variant === 'primary'

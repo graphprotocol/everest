@@ -9,7 +9,6 @@ import { ethers, utils } from 'ethers'
 import { Transaction } from 'ethers/utils'
 import { AsyncSendable, Web3Provider } from 'ethers/providers'
 import ipfsHttpClient from 'ipfs-http-client'
-import gql from 'graphql-tag'
 
 import { sleep, uploadToIpfs, queryMap } from './utils'
 
@@ -405,6 +404,7 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
         challengeId,
         tx.blockHash,
       )
+      console.log('CHALLENGE: ', challenge)
       return challenge
     })
     .catch(err => {

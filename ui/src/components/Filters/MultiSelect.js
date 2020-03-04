@@ -23,6 +23,8 @@ const Filters = ({
   const [searchText, setSearchText] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
+  console.log('selected: ', selected)
+
   useEffect(() => {
     const handleClick = () => {
       setIsOpen(false)
@@ -67,7 +69,11 @@ const Filters = ({
     }
     allItems = allCats
   }
-
+  console.log('allItmeS: ', allItems)
+  console.log(
+    'disabled: ',
+    allItems.every(it => it.disabled === true),
+  )
   return (
     <Box>
       <Fragment>
@@ -184,11 +190,11 @@ const Filters = ({
               )}
             </Box>
             <Box sx={{ position: 'relative' }}>
-              {allItems.map((category, index) => (
+              {allItems.map((item, index) => (
                 <Row
-                  key={`${category.name}${index}`}
-                  item={category}
-                  parent={category.parent}
+                  key={`${item.name}${index}`}
+                  item={item}
+                  parent={item.parent}
                   selected={selected}
                   setSelected={setSelected}
                   multiselect={true}
@@ -215,6 +221,7 @@ const Filters = ({
                     boxSizing: 'border-box',
                     opacity: selected && selected.length > 0 ? 1 : 0.64,
                   }}
+                  disabled={allItems.every(it => it.disabled === true)}
                 />
               </Box>
             )}

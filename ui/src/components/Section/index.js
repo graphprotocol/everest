@@ -20,6 +20,8 @@ const Section = ({
 }) => {
   const [size, setSize] = useState([0, 0])
 
+  console.log('ITEMS: ', items)
+
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight])
@@ -89,6 +91,7 @@ const Section = ({
               to={item.to}
               category={item.category}
               isChallenged={item.isChallenged}
+              pending={item.pending}
             />
           ))}
         </Grid>

@@ -23,12 +23,11 @@ import Menu from '../components/Menu'
 import Modal from '../components/Modal'
 import ProfileImage from '../images/profile-placeholder.svg'
 
-const Profile = ({ location, pendingProject }) => {
+const Profile = ({ location }) => {
   const { account } = useAccount()
 
   const [allProjects, setAllProjects] = useState([])
   const [selectedProjects, setSelectedProjects] = useState('cards')
-  const [selectedChallenges, setSelectedChallenges] = useState('cards')
   const [profile, setProfile] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
@@ -79,21 +78,6 @@ const Profile = ({ location, pendingProject }) => {
     },
   })
 
-  // TODO: We are still not getting the data
-  useEffect(() => {
-    if (data && data.user && data.user.projects) {
-      let all = cloneDeep(data.user.projects)
-      if (pendingProject) {
-        // add pendingProject to projects
-        all.unshift(pendingProject)
-      } else {
-        // navigate to profile to execute the query again
-        navigate(`/profile?id=${profileId}`)
-      }
-      setAllProjects(all)
-    }
-  }, [pendingProject, data])
-
   if (loading) {
     return <Styled.p>Loading</Styled.p>
   }
@@ -103,14 +87,14 @@ const Profile = ({ location, pendingProject }) => {
     return <div />
   }
 
-  const isOwner = () => account && account.toLowerCase() === profileId
+  const isOwner = () =>
+    account === profileId || (account && account.toLowerCase() === profileId)
 
   const user = data && data.user
 
-  const challengedProjects =
-    user && user.projects && user.projects.length > 0
-      ? user.projects.filter(p => p.currentChallenge !== null)
-      : []
+  console.log('PROFILE QUERY: ', user)
+
+  // TODOs: Add back Your challenges section and those are projects YOU challenged
 
   return (
     <Grid>
@@ -282,50 +266,23 @@ const Profile = ({ location, pendingProject }) => {
             />
           </Grid>
           <Section
-            items={allProjects.map(project => {
+            items={user.projects.map(project => {
               return {
                 ...project,
                 description: project.description.slice(0, 30) + '...',
                 to: `/project/${project.id}`,
                 image: project.avatar,
+                pending: project.id.indexOf('0x') < 0,
+                isChallenged: project.currentChallenge !== null,
+                category:
+                  project.categories.length > 0
+                    ? project.categories[0].name
+                    : '',
               }
             })}
             variant="project"
             selected={selectedProjects}
           />
-
-          {challengedProjects.length > 0 && (
-            <Fragment>
-              <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-                <Box>
-                  {isOwner() ? (
-                    <Styled.h5>Your Challenges</Styled.h5>
-                  ) : (
-                    <Styled.h5> Challenges</Styled.h5>
-                  )}
-                  <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-                    <span>{challengedProjects.length} Projects - </span>
-                  </Styled.p>
-                </Box>
-                <Switcher
-                  selected={selectedChallenges}
-                  setSelected={setSelectedChallenges}
-                />
-              </Grid>
-              <Section
-                items={challengedProjects.map(project => {
-                  return {
-                    ...project,
-                    description: project.description.slice(0, 30) + '...',
-                    to: `/project/${project.id}`,
-                    image: project.avatar,
-                  }
-                })}
-                variant="project"
-                selected={selectedChallenges}
-              />
-            </Fragment>
-          )}
         </Fragment>
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
@@ -366,7 +323,6 @@ const profileImgStyles = { height: '96px', width: '96px', borderRadius: '50%' }
 
 Profile.propTypes = {
   location: PropTypes.any,
-  pendingProject: PropTypes.any,
 }
 
 export default Profile

@@ -15,11 +15,12 @@ const Card = ({
   isChallenged,
   variant,
   to,
+  pending,
 }) => {
   return (
     <Grid
       sx={
-        variant === 'disabled'
+        pending
           ? { ...styles.root, opacity: 0.32, pointerEvents: 'none' }
           : styles.root
       }
@@ -39,8 +40,8 @@ const Card = ({
           px: variant === 'project' ? 4 : 0,
         }}
       >
-        {variant === 'project' || variant === 'disabled' ? (
-          <Box sx={{ margin: 'auto' }}>
+        {variant === 'project' || pending ? (
+          <Box sx={{ textAlign: 'center' }}>
             <img
               src={
                 image

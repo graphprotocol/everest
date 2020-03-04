@@ -45,22 +45,9 @@ export const queryMap = {
     query everestChallenge {
       challenge(id: "${challengeId}", block: { hash: "${hash}" }) {
         id
-        name
         description
-        createdAt
-        website
-        twitter
-        github
-        image
-        avatar
-        totalVotes
-        owner {
+        votes {
           id
-          name
-        }
-        categories {
-          id
-          description
         }
       }
     }

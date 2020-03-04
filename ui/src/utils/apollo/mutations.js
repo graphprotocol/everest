@@ -38,11 +38,6 @@ export const ADD_PROJECT = gql`
       github
       twitter
       isRepresentative
-      categories {
-        id
-        name
-        description
-      }
     }
   }
 `
@@ -78,6 +73,9 @@ export const EDIT_PROJECT = gql`
       avatar
       image
       categories
+      currentChallenge {
+        id
+      }
     }
   }
 `
@@ -101,6 +99,26 @@ export const RESOLVE_CHALLENGE = gql`
     resolveChallenge(challengeId: $challengeId) @client {
       id
       description
+    }
+  }
+`
+
+export const VOTE_CHALLENGE = gql`
+  mutation voteChallenge(
+    $challengeId: ID!
+    $voteChoice: [String]
+    $voters: [String]
+  ) {
+    voteChallenge(
+      challengeId: $challengeId
+      voteChoice: $voteChoice
+      voters: $voters
+    ) @client {
+      id
+      description
+      votes {
+        id
+      }
     }
   }
 `

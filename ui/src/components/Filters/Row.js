@@ -29,6 +29,8 @@ const Row = ({
         cursor: close ? 'auto' : 'pointer',
         alignItems: 'center',
         border: isSelected ? '1px solid #4C66FF' : 'none',
+        opacity: item.disabled ? 0.32 : 1,
+        pointerEvents: item.disabled ? 'none' : 'all',
       }}
       onClick={() => {
         if (close) return
@@ -92,7 +94,7 @@ const Row = ({
             }
           }}
           sx={{
-            pr: 3,
+            mr: 3,
             fill: 'secondary',
             cursor: 'pointer',
           }}
