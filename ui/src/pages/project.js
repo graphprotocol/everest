@@ -19,6 +19,8 @@ import {
   RESOLVE_CHALLENGE,
   CHALLENGE_PROJECT,
   VOTE_CHALLENGE,
+  TRANSFER_OWNERSHIP,
+  DELEGATE_OWNERSHIP,
 } from '../utils/apollo/mutations'
 
 import Divider from '../components/Divider'
@@ -83,6 +85,26 @@ const Project = ({ location }) => {
     },
     onCompleted: mydata => {
       setPendingVotes(false)
+    },
+  })
+
+  const [transferOwnership] = useMutation(TRANSFER_OWNERSHIP, {
+    client: client,
+    onError: error => {
+      console.error('Error transfering ownership: ', error)
+    },
+    onCompleted: mydata => {
+      console.log('transfered: ', mydata)
+    },
+  })
+
+  const [delegateOwnership] = useMutation(DELEGATE_OWNERSHIP, {
+    client: client,
+    onError: error => {
+      console.error('Error delegating ownership: ', error)
+    },
+    onCompleted: mydata => {
+      console.log('delegated: ', mydata)
     },
   })
 
@@ -158,14 +180,24 @@ const Project = ({ location }) => {
     })
   }
 
-  const delegateProject = async () => {
-    console.log('DELEGATE PROJECT')
-    // TODO: call mutations
+  const handleTransfer = async () => {
+    console.log('TRANSFER OWNERSHIP: ', transferAddress)
+    transferOwnership({
+      variables: {
+        projectId: projectId,
+        newOwnerAddress: transferAddress,
+      },
+    })
   }
 
-  const transferOwnership = async () => {
-    console.log('TRANSFER OWNERSHIP')
-    // TODO: call mutations
+  const handleDelegate = async () => {
+    console.log('DELEGATE PROJECT: ', delegateAddress)
+    delegateOwnership({
+      variables: {
+        projectId: projectId,
+        delegateAddress: delegateAddress,
+      },
+    })
   }
 
   const setChallengeData = async (field, value) => {
@@ -189,6 +221,30 @@ const Project = ({ location }) => {
   ]
 
   if (account && project.owner && account.toLowerCase() === project.owner.id) {
+    items = items.concat([
+      {
+        text: 'Transfer',
+        handleSelect: () => {
+          setShowTransfer(true)
+          if (!showTransfer) {
+            setShowDelegate(false)
+            setShowChallenge(false)
+          }
+        },
+        icon: '/edit.png',
+      },
+      {
+        text: 'Delegate',
+        handleSelect: () => {
+          setShowDelegate(true)
+          if (!showDelegate) {
+            setShowTransfer(false)
+            setShowChallenge(false)
+          }
+        },
+        icon: '/edit.png',
+      },
+    ])
     if (project.currentChallenge) {
       items = items.concat([
         {
@@ -310,7 +366,7 @@ const Project = ({ location }) => {
               <p sx={{ variant: 'text.small' }}>Owner</p>
               <Link
                 sx={{ color: 'secondary', fontSize: '1.5rem' }}
-                to={`/profile?id=${project.owner.id}`}
+                to={`/profile/${project.owner.id}`}
               >
                 {ownerName
                   ? ownerName
@@ -322,7 +378,7 @@ const Project = ({ location }) => {
           </Grid>
           {account && (
             <Menu items={items} sx={{ justifySelf: 'end' }}>
-              {showChallenge ? (
+              {showChallenge || showTransfer ? (
                 <Box
                   sx={{
                     p: 5,
@@ -334,6 +390,7 @@ const Project = ({ location }) => {
                   <Close
                     onClick={async () => {
                       await setShowChallenge(false)
+                      await setShowTransfer(false)
                       const $el = document.querySelector('#click  ')
                       if ($el) {
                         $el.click()
@@ -369,7 +426,7 @@ const Project = ({ location }) => {
         <TabView
           fieldType="textarea"
           charsCount={300}
-          title="Desription"
+          title="Description"
           placeholder="Challenge Description"
           heading={`Challenge ${project.name}`}
           description="Challenge a project on the Everest registry if there is incorrect information or the project should be removed. Refer to the Charter as a guide about Everest's principles.
@@ -383,6 +440,37 @@ const Project = ({ location }) => {
           showFilters={true}
           items={userProjects}
           sx={{ mt: '140px' }}
+        />
+      )}
+      {showTransfer && (
+        <TabView
+          fieldType="input"
+          charsCount={42}
+          title="Ethereum address"
+          placeholder="Enter address"
+          heading={`Transfer ${project.name}`}
+          description="PLACEHOLDER"
+          value={transferAddress}
+          setValue={setTransferAddress}
+          text="Transfer"
+          icon="transfer-icon.svg"
+          handleClick={handleTransfer}
+          sx={{ mt: '140px' }}
+        />
+      )}
+      {showDelegate && (
+        <TabView
+          fieldType="input"
+          charsCount={42}
+          title="Ethereum address"
+          placeholder="Enter address"
+          heading={`Delegate ${project.name}`}
+          description="PLACEHOLDER"
+          value={delegateAddress}
+          setValue={setDelegateAddress}
+          text="Delegate"
+          icon="delegate-icon.svg"
+          handleClick={handleDelegate}
         />
       )}
       <Divider />
@@ -579,37 +667,6 @@ const Project = ({ location }) => {
           )}
         </Box>
       </Grid>
-
-      {showTransfer && (
-        <TabView
-          fieldType="input"
-          charsCount={42}
-          title="Ethereum address"
-          placeholder="Enter address"
-          heading={`Transfer ${project.name}`}
-          description="PLACEHOLDER"
-          value={transferAddress}
-          setValue={setTransferAddress}
-          text="Transfer"
-          icon="transfer-icon.svg"
-          handleClick={transferOwnership}
-        />
-      )}
-      {showDelegate && (
-        <TabView
-          fieldType="input"
-          charsCount={42}
-          title="Ethereum address"
-          placeholder="Enter address"
-          heading={`Delegate ${project.name}`}
-          description="PLACEHOLDER"
-          value={delegateAddress}
-          setValue={setDelegateAddress}
-          text="Delegate"
-          icon="delegate-icon.svg"
-          handleClick={delegateProject}
-        />
-      )}
     </Grid>
   )
 }

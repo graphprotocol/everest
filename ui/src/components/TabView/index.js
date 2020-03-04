@@ -73,7 +73,11 @@ const TabView = ({
             charsCount={charsCount}
             placeholder={placeholder}
             setValue={async value => {
-              setValue('description', value)
+              if (title === 'Description') {
+                setValue('description', value)
+              } else {
+                setValue(value)
+              }
             }}
           />
           <Button

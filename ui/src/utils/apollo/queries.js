@@ -151,6 +151,33 @@ export const PROFILE_QUERY = gql`
         github
         twitter
         isRepresentative
+        createdAt
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          name
+        }
+      }
+      challenges {
+        id
+        createdAt
+        project {
+          id
+          name
+          description
+          categories {
+            id
+            name
+          }
+        }
+      }
+      delegatorProjects {
+        id
+        name
+        description
+        createdAt
         currentChallenge {
           id
         }
