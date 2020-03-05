@@ -158,18 +158,10 @@ is obtained from 3box
 type User @entity {
   "User ethereum address"
   id: ID!
-  "User name"
-  name: String
-  "User bio"
-  bio: String
   "Projects the user owns"
   projects: [Project!] @derivedFrom(field: "owner")
   "Projects the user is a delegate of"
   delegatorProjects: [Project!] @derivedFrom(field: "delegates")
-  "Challenges the user has created"
-  challenges: [Challenge!]
-  "All votes the user has done on any challenge"
-  votes: [Project!]
   "The time the user was created in the Subgraph (not the blockchain)"
   createdAt: Int!
 }
