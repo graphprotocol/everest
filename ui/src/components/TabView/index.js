@@ -11,6 +11,7 @@ const TabView = ({
   fieldType,
   charsCount,
   title,
+  header,
   placeholder,
   heading,
   value,
@@ -52,7 +53,8 @@ const TabView = ({
           <p sx={{ variant: 'text.field', mt: 5 }}>Fee</p>
           <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
         </Box>
-        <Box sx={{ maxWidth: '504px', width: '100%', mt: [5, 0] }}>
+        <Box sx={{ maxWidth: '516px', width: '100%', mt: [5, 0], pt: 5 }}>
+          {header && <Styled.h4 sx={{ color: 'white' }}>{header}</Styled.h4>}
           {showFilters && (
             <Field
               multiselect={false}
@@ -99,9 +101,10 @@ const TabView = ({
 TabView.propTypes = {
   projects: PropTypes.array,
   fieldType: PropTypes.string,
-  description: PropTypes.string,
+  description: PropTypes.any,
   charsCount: PropTypes.number,
   title: PropTypes.string,
+  header: PropTypes.string,
   placeholder: PropTypes.string,
   heading: PropTypes.string,
   value: PropTypes.string,

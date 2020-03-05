@@ -83,14 +83,34 @@ export const EDIT_PROJECT = gql`
 export const TRANSFER_OWNERSHIP = gql`
   mutation transferOwnership($projectId: String!, $newOwnerAddress: String!) {
     transferOwnership(projectId: $projectId, newOwnerAddress: $newOwnerAddress)
-      @client
+      @client {
+      id
+      name
+      description
+      avatar
+      image
+      website
+      github
+      twitter
+      isRepresentative
+    }
   }
 `
 
 export const DELEGATE_OWNERSHIP = gql`
   mutation delegateOwnership($projectId: String!, $delegateAddress: String!) {
     delegateOwnership(projectId: $projectId, delegateAddress: $delegateAddress)
-      @client
+      @client {
+      id
+      name
+      description
+      avatar
+      image
+      website
+      github
+      twitter
+      isRepresentative
+    }
   }
 `
 

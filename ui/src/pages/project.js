@@ -7,13 +7,20 @@ import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import ThreeBox from '3box'
 import client from '../utils/apollo/client'
+import cloneDeep from 'lodash.clonedeep'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
 import { useAccount } from '../utils/hooks'
 import { remainingTime } from '../utils/helpers/date'
+import { metamaskAccountChange } from '../services/ethers'
 
-import { PROJECT_QUERY, USER_PROJECTS_QUERY } from '../utils/apollo/queries'
+import {
+  PROJECT_QUERY,
+  USER_PROJECTS_QUERY,
+  PROFILE_QUERY,
+  ALL_CATEGORIES_QUERY,
+} from '../utils/apollo/queries'
 import {
   REMOVE_PROJECT,
   RESOLVE_CHALLENGE,
@@ -37,8 +44,6 @@ import { navigate } from 'gatsby'
 const Project = ({ location }) => {
   const { account } = useAccount()
 
-  // client.resetStore()
-
   const [showChallenge, setShowChallenge] = useState(false)
   const [showTransfer, setShowTransfer] = useState(false)
   const [showDelegate, setShowDelegate] = useState(false)
@@ -59,11 +64,33 @@ const Project = ({ location }) => {
 
   const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
     variables: {
-      id: account.toLowerCase(),
+      id: account ? account.toLowerCase() : '',
     },
   })
 
-  let userProjects = userData ? userData.user.projects : []
+  const { data: profile } = useQuery(PROFILE_QUERY, {
+    variables: {
+      id: account ? account.toLowerCase() : '',
+      orderBy: 'createdAt',
+      orderDirection: 'desc',
+    },
+  })
+
+  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
+
+  let selectedCategories
+
+  if (categories) {
+    selectedCategories =
+      project &&
+      project.categories &&
+      project.categories.map(pc => {
+        const category = categories.categories.find(cat => cat.id === pc)
+        return { id: category.id, name: category.name, __typename: 'Category' }
+      })
+  }
+
+  let userProjects = userData && userData.user ? userData.user.projects : []
 
   const [
     removeProject,
@@ -90,25 +117,140 @@ const Project = ({ location }) => {
 
   const [transferOwnership] = useMutation(TRANSFER_OWNERSHIP, {
     client: client,
-    onError: error => {
-      console.error('Error transfering ownership: ', error)
+    refetchQueries: [
+      {
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+      },
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      transferOwnership: {
+        id: '123',
+        name: data && data.project ? data.project.name : '',
+        description: data && data.project ? data.project.description : '',
+        avatar: data && data.project ? data.project.avatar : '',
+        image: data && data.project ? data.project.image : '',
+        website: data && data.project ? data.project.website : '',
+        github: data && data.project ? data.project.github : '',
+        twitter: data && data.project ? data.project.twitter : '',
+        isRepresentative:
+          data && data.project ? data.project.isRepresentative : false,
+        createdAt: new Date(),
+        currentChallenge: null,
+        categories: [],
+        __typename: 'Project',
+      },
     },
-    onCompleted: mydata => {
-      console.log('transfered: ', mydata)
+    onError: error => {
+      console.error('Error transferring ownership: ', error)
+    },
+    update: (proxy, result) => {
+      const profileData = cloneDeep(
+        proxy.readQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account.toLowerCase(),
+            orderBy: 'createdAt',
+            orderDirection: 'desc',
+          },
+        }),
+      )
+      proxy.writeQuery({
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+        data: {
+          user: {
+            id: account.toLowerCase(),
+            __typename: 'User',
+            delegatorProjects: profile.user.delegatorProjects,
+            projects: [
+              ...profileData.user.projects,
+              result.data.transferOwnership,
+            ],
+          },
+        },
+      })
     },
   })
 
   const [delegateOwnership] = useMutation(DELEGATE_OWNERSHIP, {
     client: client,
+    refetchQueries: [
+      {
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+      },
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      delegateOwnership: {
+        id: '123',
+        name: data && data.project ? data.project.name : '',
+        description: data && data.project ? data.project.description : '',
+        avatar: data && data.project ? data.project.avatar : '',
+        image: data && data.project ? data.project.image : '',
+        website: data && data.project ? data.project.website : '',
+        github: data && data.project ? data.project.github : '',
+        twitter: data && data.project ? data.project.twitter : '',
+        isRepresentative:
+          data && data.project ? data.project.isRepresentative : false,
+        createdAt: new Date(),
+        currentChallenge: null,
+        categories: [],
+        __typename: 'Project',
+      },
+    },
     onError: error => {
       console.error('Error delegating ownership: ', error)
     },
-    onCompleted: mydata => {
-      console.log('delegated: ', mydata)
+    update: (proxy, result) => {
+      const profileData = cloneDeep(
+        proxy.readQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account.toLowerCase(),
+            orderBy: 'createdAt',
+            orderDirection: 'desc',
+          },
+        }),
+      )
+      proxy.writeQuery({
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+        data: {
+          user: {
+            id: account.toLowerCase(),
+            __typename: 'User',
+            delegatorProjects: profile.user.delegatorProjects,
+            projects: [
+              ...profileData.user.projects,
+              result.data.delegateOwnership,
+            ],
+          },
+        },
+      })
     },
   })
 
   useEffect(() => {
+    metamaskAccountChange(accounts => window.location.reload())
     async function getProfile() {
       if (data && data.project) {
         const threeBoxProfile = await ThreeBox.getProfile(data.project.owner.id)
@@ -181,23 +323,23 @@ const Project = ({ location }) => {
   }
 
   const handleTransfer = async () => {
-    console.log('TRANSFER OWNERSHIP: ', transferAddress)
     transferOwnership({
       variables: {
         projectId: projectId,
         newOwnerAddress: transferAddress,
       },
     })
+    navigate(`/profile/${account}`)
   }
 
   const handleDelegate = async () => {
-    console.log('DELEGATE PROJECT: ', delegateAddress)
     delegateOwnership({
       variables: {
         projectId: projectId,
         delegateAddress: delegateAddress,
       },
     })
+    navigate(`/profile/${account}`)
   }
 
   const setChallengeData = async (field, value) => {
@@ -231,7 +373,7 @@ const Project = ({ location }) => {
             setShowChallenge(false)
           }
         },
-        icon: '/edit.png',
+        icon: '/ownership.png',
       },
       {
         text: 'Delegate',
@@ -242,7 +384,7 @@ const Project = ({ location }) => {
             setShowChallenge(false)
           }
         },
-        icon: '/edit.png',
+        icon: '/delegate.png',
       },
     ])
     if (project.currentChallenge) {
@@ -429,9 +571,18 @@ const Project = ({ location }) => {
           title="Description"
           placeholder="Challenge Description"
           heading={`Challenge ${project.name}`}
-          description="Challenge a project on the Everest registry if there is incorrect information or the project should be removed. Refer to the Charter as a guide about Everest's principles.
-          To challenge a project, write a reason for the challenge and lock-up 10 DAI as collateral against the challenge. 
-          If the challenge is successful, the 10 DAI deposit will be returned and the challenger will be rewarded with 1 DAI for successfully curating the Everest registry."
+          description={
+            <span>
+              Challenge a project on the Everest registry if there is incorrect
+              information or the project should be removed. Refer to the Charter
+              as a guide about Everest's principles. <br />
+              <br /> To challenge a project, write a reason for the challenge
+              and lock-up 10 DAI as collateral against the challenge. <br />
+              <br /> If the challenge is successful, the 10 DAI deposit will be
+              returned and the challenger will be rewarded with 1 DAI for
+              successfully curating the Everest registry.
+            </span>
+          }
           value={challenge.description}
           setValue={setChallengeData}
           text="Challenge"
@@ -446,10 +597,19 @@ const Project = ({ location }) => {
         <TabView
           fieldType="input"
           charsCount={42}
-          title="Ethereum address"
+          header="Everest user"
           placeholder="Enter address"
           heading={`Transfer ${project.name}`}
-          description="PLACEHOLDER"
+          description={
+            <span>
+              You are currently the owner of a project on the Everest registry.
+              If you'd like to transfer ownership to another user, please select
+              an existing Everest user or enter a new Ethereum address. <br />
+              <br /> The new owner will be able to edit project details,
+              challenge and vote on behalf of the project and delegate voting to
+              other users.
+            </span>
+          }
           value={transferAddress}
           setValue={setTransferAddress}
           text="Transfer"
@@ -465,7 +625,17 @@ const Project = ({ location }) => {
           title="Ethereum address"
           placeholder="Enter address"
           heading={`Delegate ${project.name}`}
-          description="PLACEHOLDER"
+          description={
+            <span>
+              You are currently the owner of a project on the Everest registry.
+              If you'd like to delegate voting on behalf of your project to
+              another user, please select an existing Everest user or enter a
+              new Ethereum address. <br />
+              <br /> The new delegate will be able to challenge and vote on
+              projects, but they will not be able to edit project details or
+              delegate voting to other users.
+            </span>
+          }
           value={delegateAddress}
           setValue={setDelegateAddress}
           text="Delegate"

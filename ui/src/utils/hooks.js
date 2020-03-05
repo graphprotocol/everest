@@ -71,7 +71,7 @@ export function useEagerConnect() {
   return tried
 }
 
-export function useInactiveListener(suppress = false) {
+export function useInactiveListener(accountsChangedCB, suppress = false) {
   const { active, error, activate } = useWeb3ReactCore()
 
   useEffect(() => {
