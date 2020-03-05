@@ -111,12 +111,6 @@ export function handleMemberChallenged(event: MemberChallenged): void {
     user = new User(event.params.challenger.toHexString())
     user.createdAt = event.block.timestamp.toI32()
   }
-  let previousChallenges = user.challenges
-  if (previousChallenges == null) {
-    previousChallenges = []
-  }
-  previousChallenges.push(id)
-  user.challenges = previousChallenges
   user.save()
 }
 
