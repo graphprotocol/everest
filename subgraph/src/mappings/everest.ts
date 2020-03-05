@@ -97,10 +97,20 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   challenge.ipfsHash = base58Hash
   challenge.save()
 
-  let project = Project.load(event.params.member.toHexString())
-  project.currentChallenge = id
-  project.updatedAt = event.block.timestamp.toI32()
-  project.save()
+  let challengedProject = Project.load(event.params.member.toHexString())
+  challengedProject.currentChallenge = id
+  challengedProject.updatedAt = event.block.timestamp.toI32()
+  challengedProject.save()
+
+  let challengerProject = Project.load(event.params.challenger.toHexString())
+  let previousChallenges = challengerProject.createdChallenges
+  if (previousChallenges == null) {
+    previousChallenges = []
+  }
+  previousChallenges.push(id)
+  challengerProject.createdChallenges = previousChallenges
+  challengerProject.updatedAt = event.block.timestamp.toI32()
+  challengerProject.save()
 
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(everest.challengeDeposit)
