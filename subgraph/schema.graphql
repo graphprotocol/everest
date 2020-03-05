@@ -35,10 +35,12 @@ type Project @entity {
   # From smart contracts directly
   "Owner of this project"
   owner: User
-  "Current challenge agaisnt this project"
+  "Current challenge against this project"
   currentChallenge: Challenge
   "Past challenges agaisnt this project"
   pastChallenges: [Challenge!]
+  "Challenges this project has created against other projects"
+  createdChallenges: [Challenge!]
   "Time this project joined Everest"
   membershipStartTime: Int! # reputation = now - membershipStartTime.
   "List of all delegates of this project"
