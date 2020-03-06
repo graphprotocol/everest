@@ -66,7 +66,8 @@ const Navbar = ({ path, ...props }) => {
   //   getProfile()
   // })
 
-  const isNewProjectPage = path && path.includes('new')
+  const isNewProjectPage =
+    path && (path.includes('new') || path.includes('edit'))
 
   return (
     <Grid {...props} sx={{ height: '96px' }}>

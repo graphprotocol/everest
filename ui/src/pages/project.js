@@ -19,7 +19,6 @@ import {
   PROJECT_QUERY,
   USER_PROJECTS_QUERY,
   PROFILE_QUERY,
-  ALL_CATEGORIES_QUERY,
 } from '../utils/apollo/queries'
 import {
   REMOVE_PROJECT,
@@ -76,20 +75,6 @@ const Project = ({ location }) => {
     },
   })
 
-  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
-
-  let selectedCategories
-
-  if (categories) {
-    selectedCategories =
-      project &&
-      project.categories &&
-      project.categories.map(pc => {
-        const category = categories.categories.find(cat => cat.id === pc)
-        return { id: category.id, name: category.name, __typename: 'Category' }
-      })
-  }
-
   let userProjects = userData && userData.user ? userData.user.projects : []
 
   const [
@@ -140,9 +125,10 @@ const Project = ({ location }) => {
         twitter: data && data.project ? data.project.twitter : '',
         isRepresentative:
           data && data.project ? data.project.isRepresentative : false,
-        createdAt: new Date(),
-        currentChallenge: null,
-        categories: [],
+        createdAt: data && data.project ? data.project.createdAt : [],
+        currentChallenge:
+          data && data.project ? data.project.currentChallenge : [],
+        categories: data && data.project ? data.project.categories : [],
         __typename: 'Project',
       },
     },
@@ -160,6 +146,10 @@ const Project = ({ location }) => {
           },
         }),
       )
+
+      const remainingProjects = profileData.user.projects.filter(
+        project => project.id !== projectId,
+      )
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
@@ -172,10 +162,7 @@ const Project = ({ location }) => {
             id: account.toLowerCase(),
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
-            projects: [
-              ...profileData.user.projects,
-              result.data.transferOwnership,
-            ],
+            projects: remainingProjects,
           },
         },
       })
@@ -207,9 +194,11 @@ const Project = ({ location }) => {
         twitter: data && data.project ? data.project.twitter : '',
         isRepresentative:
           data && data.project ? data.project.isRepresentative : false,
-        createdAt: new Date(),
-        currentChallenge: null,
-        categories: [],
+        createdAt: data && data.project ? data.project.createdAt : [],
+        currentChallenge:
+          data && data.project ? data.project.currentChallenge : [],
+        categories: data && data.project ? data.project.categories : [],
+        delegates: data && data.projoect ? data.project.delegates : [],
         __typename: 'Project',
       },
     },
@@ -227,6 +216,14 @@ const Project = ({ location }) => {
           },
         }),
       )
+
+      const delegatedProjects = profileData.user.projects.map(proj => {
+        if (proj.id === projectId) {
+          proj.delegates.push(proj)
+        }
+        return proj
+      })
+
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
@@ -250,7 +247,7 @@ const Project = ({ location }) => {
   })
 
   useEffect(() => {
-    metamaskAccountChange(accounts => window.location.reload())
+    metamaskAccountChange(() => window.location.reload())
     async function getProfile() {
       if (data && data.project) {
         const threeBoxProfile = await ThreeBox.getProfile(data.project.owner.id)
@@ -286,7 +283,7 @@ const Project = ({ location }) => {
   // If you are the owner of the current project
   // you can't vote on behalf of that project
   // if you already voted - you can't vote again
-  if (project.currentChallenge) {
+  if (project && project.currentChallenge) {
     let votes = []
     votes = project.currentChallenge.votes.map(vote => vote.id.slice(2))
     userProjects = userProjects.map(up => ({
@@ -575,7 +572,7 @@ const Project = ({ location }) => {
             <span>
               Challenge a project on the Everest registry if there is incorrect
               information or the project should be removed. Refer to the Charter
-              as a guide about Everest's principles. <br />
+              as a guide about Everest&apos;s principles. <br />
               <br /> To challenge a project, write a reason for the challenge
               and lock-up 10 DAI as collateral against the challenge. <br />
               <br /> If the challenge is successful, the 10 DAI deposit will be
@@ -603,8 +600,9 @@ const Project = ({ location }) => {
           description={
             <span>
               You are currently the owner of a project on the Everest registry.
-              If you'd like to transfer ownership to another user, please select
-              an existing Everest user or enter a new Ethereum address. <br />
+              If you&apos;d like to transfer ownership to another user, please
+              select an existing Everest user or enter a new Ethereum address.
+              <br />
               <br /> The new owner will be able to edit project details,
               challenge and vote on behalf of the project and delegate voting to
               other users.
@@ -628,7 +626,7 @@ const Project = ({ location }) => {
           description={
             <span>
               You are currently the owner of a project on the Everest registry.
-              If you'd like to delegate voting on behalf of your project to
+              If you&apos;d like to delegate voting on behalf of your project to
               another user, please select an existing Everest user or enter a
               new Ethereum address. <br />
               <br /> The new delegate will be able to challenge and vote on
