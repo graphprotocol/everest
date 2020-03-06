@@ -8,6 +8,7 @@ import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import ThreeBox from '3box'
 import client from '../utils/apollo/client'
 import cloneDeep from 'lodash.clonedeep'
+import moment from 'moment'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
@@ -19,6 +20,7 @@ import {
   PROJECT_QUERY,
   USER_PROJECTS_QUERY,
   PROFILE_QUERY,
+  PROJECTS_QUERY,
 } from '../utils/apollo/queries'
 import {
   REMOVE_PROJECT,
@@ -77,19 +79,136 @@ const Project = ({ location }) => {
 
   let userProjects = userData && userData.user ? userData.user.projects : []
 
-  const [
-    removeProject,
-    // {
-    //   data: mutationData,
-    //   loading: mutationLoading,
-    //   error: mutationError,
-    //   state,
-    // },
-  ] = useMutation(REMOVE_PROJECT)
+  const [removeProject] = useMutation(REMOVE_PROJECT, {
+    client: client,
+    refetchQueries: [
+      {
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+      },
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      removeProject: true,
+    },
+    onError: error => {
+      console.error('Error adding a project: ', error)
+    },
+    onCompleted: mydata => {},
+    update: (proxy, result) => {
+      const profileData = cloneDeep(
+        proxy.readQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account.toLowerCase(),
+            orderBy: 'createdAt',
+            orderDirection: 'desc',
+          },
+        }),
+      )
+
+      const remainingProjects = profileData.user.projects.filter(
+        project => project.id !== projectId,
+      )
+
+      proxy.writeQuery({
+        query: PROFILE_QUERY,
+        variables: {
+          id: account.toLowerCase(),
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+        data: {
+          user: {
+            id: account.toLowerCase(),
+            __typename: 'User',
+            delegatorProjects: profile.user.delegatorProjects,
+            projects: remainingProjects,
+          },
+        },
+      })
+    },
+  })
 
   const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE)
 
-  const [challengeProject] = useMutation(CHALLENGE_PROJECT)
+  const [challengeProject] = useMutation(CHALLENGE_PROJECT, {
+    client: client,
+    refetchQueries: [
+      {
+        query: PROJECT_QUERY,
+        variables: {
+          id: data && data.project ? data.project.id : '',
+        },
+      },
+    ],
+    optimisticResponse: {
+      __typename: 'Mutation',
+      challengeProject: {
+        id: data && data.project ? data.project.id : '',
+        name: data && data.project ? data.project.name : '',
+        description: data && data.project ? data.project.description : '',
+        avatar: data && data.project ? data.project.avatar : '',
+        image: data && data.project ? data.project.image : '',
+        website: data && data.project ? data.project.website : '',
+        github: data && data.project ? data.project.github : '',
+        twitter: data && data.project ? data.project.twitter : '',
+        isRepresentative:
+          data && data.project ? data.project.isRepresentative : false,
+        createdAt: data && data.project ? data.project.createdAt : [],
+        totalVotes: data && data.project ? data.project.totalVotes : '',
+        currentChallenge: {
+          __typename: 'Challenge',
+          id: '123',
+          endTime: moment()
+            .add(4, 'days')
+            .unix(),
+          owner: account,
+          description: challenge.description,
+          resolved: false,
+          votesFor: 0,
+          votesAgainst: 0,
+          votes: [],
+        },
+        owner: {
+          id: data && data.project ? data.project.owner.id : '',
+        },
+        categories: data && data.project ? data.project.categories : [],
+        __typename: 'Project',
+      },
+    },
+    onError: error => {
+      console.error('Error challenging project: ', error)
+    },
+    update: (proxy, result) => {
+      const projectData = cloneDeep(
+        proxy.readQuery({
+          query: PROJECT_QUERY,
+          variables: {
+            id: data && data.project ? data.project.id : '',
+          },
+        }),
+      )
+
+      proxy.writeQuery({
+        query: PROJECT_QUERY,
+        variables: {
+          id: data && data.project ? data.project.id : '',
+        },
+        data: {
+          project: {
+            ...projectData.project,
+            currentChallenge: result.data.challengeProject.currentChallenge,
+          },
+        },
+      })
+    },
+  })
+
   const [voteChallenge] = useMutation(VOTE_CHALLENGE, {
     client: client,
     onError: error => {
@@ -217,13 +336,6 @@ const Project = ({ location }) => {
         }),
       )
 
-      const delegatedProjects = profileData.user.projects.map(proj => {
-        if (proj.id === projectId) {
-          proj.delegates.push(proj)
-        }
-        return proj
-      })
-
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
@@ -300,6 +412,8 @@ const Project = ({ location }) => {
         description: challenge.description,
       },
     })
+    setShowChallenge(false)
+    // window.location.reload()
   }
 
   const handleVoting = (projects, choice) => {
@@ -351,15 +465,20 @@ const Project = ({ location }) => {
     resolveChallenge({ variables: { challengeId } })
   }
 
-  let items = [
-    {
-      text: 'Share',
-      handleSelect: value => console.log('value: ', value),
-      icon: '/share.png',
-    },
-  ]
+  let tweet = ''
+  if (project) {
+    tweet = `We’d like to claim the ${project.name} project on @everest_tcr. Please transfer ownership to ${account} 🙌
+  everest.link/projects/${project.id}`
+  }
 
-  if (account && project.owner && account.toLowerCase() === project.owner.id) {
+  let items = []
+
+  if (
+    account &&
+    project &&
+    project.owner &&
+    account.toLowerCase() === project.owner.id
+  ) {
     items = items.concat([
       {
         text: 'Transfer',
@@ -407,12 +526,13 @@ const Project = ({ location }) => {
           text: 'Remove',
           handleSelect: () => {
             removeProject({ variables: { projectId } })
+            navigate(`/profile/${account}`)
           },
           icon: '/trash.png',
         },
       ])
     }
-  } else if (userProjects.length > 0) {
+  } else if (userProjects.length > 0 && project && !project.currentChallenge) {
     items = items.concat([
       {
         text: 'Challenge',
@@ -426,14 +546,29 @@ const Project = ({ location }) => {
         icon: '/challenge.png',
       },
     ])
+  } else {
+    items = items.concat([
+      {
+        text: 'Request ownership',
+        handleSelect: value => {
+          window.open(
+            `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
+        ${window.location.href}`,
+            '_blank',
+          )
+        },
+        icon: '/share.png',
+      },
+    ])
   }
 
   const isCompleted =
+    project &&
     project.currentChallenge &&
     remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
 
   return (
-    <Grid sx={{ pb: project.currentChallenge ? '400px' : 0 }}>
+    <Grid sx={{ pb: project && project.currentChallenge ? '400px' : 0 }}>
       <Grid
         columns={[1, 1, 2]}
         gap={0}
@@ -444,7 +579,8 @@ const Project = ({ location }) => {
           <Box>
             {project.avatar ? (
               <img
-                src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.avatar}`}
+                src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project &&
+                  project.avatar}`}
                 alt="Project avatar"
                 sx={projectLogoStyle}
               />
@@ -679,7 +815,13 @@ const Project = ({ location }) => {
           }}
         >
           {project.currentChallenge && !project.currentChallenge.resolved && (
-            <Box>
+            <Box
+              sx={{
+                opacity: project.currentChallenge.id === '123' ? 0.32 : 1,
+                pointerEvents:
+                  project.currentChallenge.id === '123' ? 'none' : 'all',
+              }}
+            >
               <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
                 {isCompleted ? (
                   <span>Completed Challenge</span>
