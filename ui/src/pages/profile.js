@@ -4,12 +4,14 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import { navigate } from 'gatsby'
 import ThreeBox from '3box'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 import { PROFILE_QUERY } from '../utils/apollo/queries'
+import { defaultImage } from '../utils/helpers/utils'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
@@ -35,10 +37,13 @@ const Profile = ({ location }) => {
 
   useEffect(() => {
     async function getProfile() {
-      const threeBoxProfile = await ThreeBox.getProfile(profileId)
+      const threeBoxProfile = await ThreeBox.getProfile(account.toLowerCase())
       let image
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+      } else {
+        image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+          ''}/profile-default.png`
       }
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
@@ -50,11 +55,13 @@ const Profile = ({ location }) => {
           image: image,
           accounts: threeBoxAccounts,
         }))
+      } else {
+        setProfile({ image: image })
       }
     }
-    metamaskAccountChange()
+    metamaskAccountChange(accounts => navigate(`/profile/${accounts[0]}`))
     getProfile()
-  }, [])
+  }, [account])
 
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
@@ -88,13 +95,11 @@ const Profile = ({ location }) => {
           }}
         >
           <Box>
-            {profile && profile.image ? (
+            {profile && profile.image && (
               <img src={profile.image} alt="Profile" sx={profileImgStyles} />
-            ) : (
-              <ProfileImage sx={profileImgStyles} />
             )}
           </Box>
-          {profile ? (
+          {profile && profile.name ? (
             <Box>
               <Styled.h2>{profile.name}</Styled.h2>
               <p
@@ -206,24 +211,26 @@ const Profile = ({ location }) => {
                 href={profile.website}
               />
             )}
-            {profile && Object.keys(profile.accounts).length > 0 && (
-              <Fragment>
-                {profile.accounts.twitter && (
-                  <DataRow
-                    name="Twitter"
-                    value={`twitter.com/${profile.accounts.twitter.username}`}
-                    href={`https://twitter.com/${profile.accounts.twitter.username}`}
-                  />
-                )}
-                {profile.accounts && profile.accounts.github && (
-                  <DataRow
-                    name="Github"
-                    value={`github.com/${profile.accounts.github.username}`}
-                    href={`https://github.com/${profile.accounts.github.username}`}
-                  />
-                )}
-              </Fragment>
-            )}
+            {profile &&
+              profile.accounts &&
+              Object.keys(profile.accounts).length > 0 && (
+                <Fragment>
+                  {profile.accounts.twitter && (
+                    <DataRow
+                      name="Twitter"
+                      value={`twitter.com/${profile.accounts.twitter.username}`}
+                      href={`https://twitter.com/${profile.accounts.twitter.username}`}
+                    />
+                  )}
+                  {profile.accounts && profile.accounts.github && (
+                    <DataRow
+                      name="Github"
+                      value={`github.com/${profile.accounts.github.username}`}
+                      href={`https://github.com/${profile.accounts.github.username}`}
+                    />
+                  )}
+                </Fragment>
+              )}
           </Box>
         )}
       </Grid>

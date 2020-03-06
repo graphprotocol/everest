@@ -377,7 +377,14 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
   return transaction
     .wait()
     .then(async (tx: any) => {
-      return tx
+      const challengeId = tx.events[0].args.member
+      const { challenge } = await queryGraphNode(
+        context,
+        'challenge',
+        challengeId,
+        tx.blockHash,
+      )
+      return challenge
     })
     .catch(err => {
       console.error('Transaction error: ', err)

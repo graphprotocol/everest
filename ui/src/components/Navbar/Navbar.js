@@ -129,7 +129,12 @@ const Navbar = ({ path, ...props }) => {
             {userImage ? (
               <img src={userImage} alt="profile" sx={imgStyles} />
             ) : (
-              <Placeholder sx={imgStyles} />
+              <img
+                src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+                  ''}/profile-default.png`}
+                alt="profile"
+                sx={imgStyles}
+              />
             )}
           </Link>
         ) : (

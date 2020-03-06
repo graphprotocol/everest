@@ -29,8 +29,15 @@ export const queryMap = {
         github
         image
         avatar
+        isRepresentative
         totalVotes
         owner {
+          id
+        }
+        delegates {
+          id
+        }
+        currentChallenge {
           id
         }
         categories {

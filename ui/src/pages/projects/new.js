@@ -6,6 +6,7 @@ import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
 import cloneDeep from 'lodash.clonedeep'
 import { navigate } from 'gatsby'
+import moment from 'moment'
 
 import client from '../../utils/apollo/client'
 import { useAccount } from '../../utils/hooks'
@@ -76,9 +77,10 @@ const NewProject = () => {
         github: project.github,
         twitter: project.twitter,
         isRepresentative: project.isRepresentative,
-        createdAt: new Date(),
+        createdAt: moment().unix(),
         currentChallenge: null,
         categories: selectedCategories,
+        delegates: [],
         __typename: 'Project',
       },
     },

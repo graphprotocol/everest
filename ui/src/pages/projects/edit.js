@@ -20,6 +20,7 @@ const EditProject = ({ location }) => {
   const projectId = location ? location.pathname.split('/')[2] : ''
   const [isDisabled, setIsDisabled] = useState(false)
   const [project, setProject] = useState({
+    id: projectId,
     name: '',
     description: '',
     avatar: '',
@@ -29,6 +30,8 @@ const EditProject = ({ location }) => {
     twitter: '',
     isRepresentative: false,
     categories: [],
+    createdAt: '',
+    totalVotes: null,
   })
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
@@ -37,15 +40,30 @@ const EditProject = ({ location }) => {
     },
   })
 
-  const [
-    editProject,
-    // {
-    //   data: mutationData,
-    //   loading: mutationLoading,
-    //   error: mutationError,
-    //   state,
-    // },
-  ] = useMutation(EDIT_PROJECT, {
+  useEffect(() => {
+    if (data) {
+      setProject(state => ({
+        ...state,
+        name: data && data.project ? data.project.name : '',
+        description: data && data.project ? data.project.description : '',
+        avatar: data && data.project ? data.project.avatar : '',
+        image: data && data.project ? data.project.image : '',
+        website: data && data.project ? data.project.website : '',
+        github: data && data.project ? data.project.github : '',
+        twitter: data && data.project ? data.project.twitter : '',
+        isRepresentative:
+          data && data.project ? data.project.isRepresentative : null,
+        categories: data && data.project ? data.project.categories : [],
+        createdAt: data && data.project ? data.project.createdAt : '',
+        totalVotes: data && data.project ? data.project.totalVotes : [],
+        currentChallenge:
+          data && data.project ? data.project.currentChallenge : {},
+        owner: data && data.project ? data.project.owner : {},
+      }))
+    }
+  }, [data])
+
+  const [editProject] = useMutation(EDIT_PROJECT, {
     client: client,
     refetchQueries: [
       {
@@ -58,21 +76,31 @@ const EditProject = ({ location }) => {
     optimisticResponse: {
       __typename: 'Mutation',
       editProject: {
-        id: projectId,
-        ...project,
         __typename: 'Project',
+        id: projectId,
+        name: project && project.name,
+        description: project.description,
+        avatar: project.avatar,
+        image: project.image,
+        website: project.website,
+        github: project.github,
+        twitter: project.twitter,
+        isRepresentative: project.isRepresentative,
+        createdAt: project.createdAt,
+        totalVotes: project.totalVotes,
+        currentChallenge: project.currentChallenge,
+        owner: project.owner && project.owner.id,
+        categories: project.categories,
       },
     },
     onError: error => {
       console.error('Error editing a project: ', error)
     },
-    onCompleted: mydata => {
-      if (data) {
-        // TODO: Update the global state for the
-        console.log('COMPLETED: ', mydata)
-      }
+    onCompleted: data => {
+      navigate(`/project/${projectId}`)
     },
     update: (proxy, result) => {
+      console.log('AM I HERE')
       const projectData = cloneDeep(
         proxy.readQuery({
           query: PROJECT_QUERY,
@@ -82,36 +110,23 @@ const EditProject = ({ location }) => {
         }),
       )
 
+      console.log('projectData: ', projectData)
+
+      console.log('Result: ', result)
+
       proxy.writeQuery({
         query: PROJECT_QUERY,
         variables: {
           id: projectId,
         },
-        data: { ...projectData },
-        project: result.data.editProject,
+        data: {
+          project: { ...projectData.project, ...result.data.editProject },
+        },
       })
     },
   })
 
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
-
-  useEffect(() => {
-    if (data) {
-      let projectObj = data && data.project
-      setProject(state => ({
-        ...state,
-        name: projectObj ? projectObj.name : '',
-        description: projectObj ? projectObj.description : '',
-        avatar: projectObj ? projectObj.avatar : '',
-        image: projectObj ? projectObj.image : '',
-        website: projectObj ? projectObj.website : '',
-        github: projectObj ? projectObj.github : '',
-        twitter: projectObj ? projectObj.twitter : '',
-        isRepresentative: projectObj ? projectObj.isRepresentative : null,
-        categories: projectObj ? projectObj.categories : [],
-      }))
-    }
-  }, [data])
 
   if (loading && !error) {
     return <Styled.p>Loading</Styled.p>
@@ -126,7 +141,7 @@ const EditProject = ({ location }) => {
   const handleSubmit = async project => {
     setIsDisabled(true)
     editProject({ variables: { ...project, projectId: projectId } })
-    navigate(`/project/${projectId}`)
+    // navigate(`/project/${projectId}`)
   }
 
   const setValue = async (field, value) => {
