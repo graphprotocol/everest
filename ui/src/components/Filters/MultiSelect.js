@@ -243,7 +243,7 @@ Filters.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   type: PropTypes.string,
-  variant: PropTypes.number,
+  variant: PropTypes.any,
   setValue: PropTypes.func,
   children: PropTypes.any,
   setOpen: PropTypes.func,

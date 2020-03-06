@@ -6,7 +6,7 @@ import { gql } from 'apollo-boost'
 //   name
 // }
 export const PROJECT_QUERY = gql`
-  query everestProject($id: ID!) {
+  query project($id: ID!) {
     project(id: $id) {
       id
       name
@@ -33,7 +33,6 @@ export const PROJECT_QUERY = gql`
       }
       owner {
         id
-        name
       }
       categories {
         id
@@ -47,7 +46,6 @@ export const USER_PROJECTS_QUERY = gql`
   query everestUserProjects($id: ID!) {
     user(id: $id) {
       id
-      name
       projects {
         id
         name
@@ -152,6 +150,9 @@ export const PROFILE_QUERY = gql`
         twitter
         isRepresentative
         createdAt
+        delegates {
+          id
+        }
         currentChallenge {
           id
         }

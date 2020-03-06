@@ -32,7 +32,6 @@ export const queryMap = {
         totalVotes
         owner {
           id
-          name
         }
         categories {
           id
