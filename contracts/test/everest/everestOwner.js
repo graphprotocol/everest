@@ -1,4 +1,7 @@
 const Everest = artifacts.require('Everest.sol')
+const Registry = artifacts.require('Registry.sol')
+const ReserveBank = artifacts.require('ReserveBank.sol')
+
 const Token = artifacts.require('Dai.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
@@ -9,11 +12,17 @@ contract('Everest', accounts => {
     const registryOwnerWallet = utils.wallets.zero()
     const registryOwnerAddress = registryOwnerWallet.signingKey.address
 
+    const newOwnerWallet = utils.wallets.six()
+    const newOwnerAddress = newOwnerWallet.signingKey.address
+
     let everest
     let token
     before(async () => {
         everest = await Everest.deployed()
         token = await Token.deployed()
+        registry = await Registry.deployed()
+        reserveBank = await ReserveBank.deployed()
+
     })
 
     describe('Everest owner functionality. Functions: withdraw(), updateCharter()', () => {
@@ -50,6 +59,18 @@ contract('Everest', accounts => {
                 reserveBankBalanceStart.sub(utils.applyFeeBN).toString(),
                 'Reserve bank did not withdraw funds'
             )
+        })
+
+        it('should allow owner the transfer of ReserveBank', async () => {
+            await everest.transferOwnershipReserveBank(newOwnerAddress, { from: registryOwnerAddress })
+            const newOwner = await reserveBank.owner()
+            assert.equal(newOwnerAddress, newOwner, 'ReserveBank ownership was not transferred')
+        })
+
+        it('should allow owner the transfer of Registry', async () => {
+            await everest.transferOwnershipRegistry(newOwnerAddress, { from: registryOwnerAddress })
+            const newOwner = await registry.owner()
+            assert.equal(newOwnerAddress, newOwner, 'Registry ownership was not transferred')
         })
     })
 })

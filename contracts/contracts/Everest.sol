@@ -17,7 +17,7 @@ import "./lib/dai.sol";
 import "./lib/Ownable.sol";
 import "./abdk-libraries-solidity/ABDKMath64x64.sol";
 
-contract Everest is Registry, Ownable {
+contract Everest is Ownable {
     using SafeMath for uint256;
     using ABDKMath64x64 for uint256;
     using ABDKMath64x64 for int128;
@@ -41,6 +41,8 @@ contract Everest is Registry, Ownable {
     ReserveBank public reserveBank;
     // ERC-1056 contract reference
     EthereumDIDRegistry public erc1056Registry;
+    // Registry contract reference
+    Registry public registry;
 
     // We pass in the bytes representation of the string 'everest'
     // bytes("everest") = 0x65766572657374. Then add 50 zeros to the end. The bytes32 value
@@ -59,13 +61,15 @@ contract Everest is Registry, Ownable {
     event Withdrawal(address indexed receiver, uint256 amount);
 
     event EverestDeployed(
-        address indexed reserveBank,
         address owner,
         address approvedToken,
         uint256 votingPeriodDuration,
         uint256 challengeDeposit,
         uint256 applicationFee,
-        bytes32 charter
+        bytes32 charter,
+        address didRegistry,
+        address reserveBank,
+        address registry
     );
 
     event MemberChallenged(
@@ -176,30 +180,39 @@ contract Everest is Registry, Ownable {
         uint256 _challengeDeposit,
         uint256 _applicationFee,
         bytes32 _charter,
-        address _DIDregistry
+        address _DIDregistry,
+        address _reserveBank,
+        address _registry
     ) public {
         require(_approvedToken != address(0), "constructor - _approvedToken cannot be 0");
+        require(_DIDregistry != address(0), "constructor - _DIDregistry cannot be 0");
+        require(_reserveBank != address(0), "constructor - _reserveBank cannot be 0");
+        require(_registry != address(0), "constructor - _registry cannot be 0");
+
         require(
             _votingPeriodDuration > 0,
             "constructor - _votingPeriodDuration cant be 0"
         );
 
         approvedToken = Dai(_approvedToken);
-        reserveBank = new ReserveBank(_approvedToken);
-        erc1056Registry = EthereumDIDRegistry(_DIDregistry);
-        charter = _charter;
         votingPeriodDuration = _votingPeriodDuration;
         challengeDeposit = _challengeDeposit;
         applicationFee = _applicationFee;
+        charter = _charter;
+        erc1056Registry = EthereumDIDRegistry(_DIDregistry);
+        reserveBank = ReserveBank(_reserveBank);
+        registry = Registry(_registry);
 
         emit EverestDeployed(
-            address(reserveBank),
             msg.sender, // owner
             _approvedToken,
             _votingPeriodDuration,
             _challengeDeposit,
             _applicationFee,
-            _charter
+            _charter,
+            _DIDregistry,
+            _reserveBank,
+            _registry
         );
     }
 
@@ -389,7 +402,7 @@ contract Everest is Registry, Ownable {
             !memberChallengeExists(_member),
             "memberExit - Can't exit during ongoing challenge"
         );
-        deleteMember(_member);
+        registry.deleteMember(_member);
         emit MemberExited(_member);
     }
 
@@ -447,7 +460,7 @@ contract Everest is Registry, Ownable {
         challenges[newChallengeID] = newChallenge;
 
         // Updates member to store most recent challenge
-        editChallengeID(_challengedMember, newChallengeID);
+        registry.editChallengeID(_challengedMember, newChallengeID);
 
         // Takes tokens from challenger
         require(
@@ -573,7 +586,7 @@ contract Everest is Registry, Ownable {
             );
             emit Withdrawal(challengerOwner, amount);
 
-            deleteMember(storedChallenge.challengee);
+            registry.deleteMember(storedChallenge.challengee);
             emit ChallengeSucceeded(
                 storedChallenge.challengee,
                 _challengeID,
@@ -591,7 +604,7 @@ contract Everest is Registry, Ownable {
             emit Withdrawal(challengeeOwner, challengeDeposit);
 
             // Remove challenge ID from registry
-            editChallengeID(storedChallenge.challengee, 0);
+            registry.editChallengeID(storedChallenge.challengee, 0);
             emit ChallengeFailed(
                 storedChallenge.challengee,
                 _challengeID,
@@ -619,6 +632,24 @@ contract Everest is Registry, Ownable {
     function withdraw(address _receiver, uint256 _amount) public onlyOwner returns (bool) {
         emit Withdrawal(_receiver, _amount);
         return reserveBank.withdraw(_receiver, _amount);
+    }
+
+    /**
+    @dev                Allows the owner of Everest to transfer the ownership of ReserveBank
+    @param _newOwner    The new owner
+    */
+    function transferOwnershipReserveBank(address _newOwner) public onlyOwner returns (bool) {
+        reserveBank.transferOwnership(_newOwner);
+        return true;
+    }
+
+    /**
+    @dev                Allows the owner of Everest to transfer the ownership of Registry
+    @param _newOwner    The new owner
+    */
+    function transferOwnershipRegistry(address _newOwner) public onlyOwner returns (bool) {
+        registry.transferOwnership(_newOwner);
+        return true;
     }
 
     /**
@@ -661,7 +692,7 @@ contract Everest is Registry, Ownable {
     @param _member  The member that is being checked for a challenge.
     */
     function memberChallengeExists(address _member) public view returns (bool) {
-        uint256 challengeID = getChallengeID(_member);
+        uint256 challengeID = registry.getChallengeID(_member);
         return (challengeID > 0);
     }
 

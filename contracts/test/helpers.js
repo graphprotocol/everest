@@ -5,6 +5,7 @@ const ethers = require('ethers')
 
 // Local imports
 const Everest = artifacts.require('Everest.sol')
+const Registry = artifacts.require('Registry.sol')
 const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const Token = artifacts.require('Dai.sol')
 const utils = require('./utils.js')
@@ -15,6 +16,7 @@ const helpers = {
         const newMemberAddress = newMemberWallet.signingKey.address
         const everest = await Everest.deployed()
         const token = await Token.deployed()
+        const registry = await Registry.deployed()
 
         const setAttributeData =
             Buffer.from('setAttribute').toString('hex') +

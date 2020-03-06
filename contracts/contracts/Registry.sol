@@ -43,7 +43,7 @@ contract Registry is Ownable {
         members[_member] = member;
     }
 
-    function editChallengeID(address _member, uint256 _newChallengeID) internal {
+    function editChallengeID(address _member, uint256 _newChallengeID) external {
         Member storage member = members[_member];
         member.challengeID = _newChallengeID;
     }

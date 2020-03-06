@@ -1,4 +1,5 @@
 const Everest = artifacts.require('Everest.sol')
+const Registry = artifacts.require('Registry.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
 
@@ -41,6 +42,7 @@ contract('Everest', () => {
     let everest
     before(async () => {
         everest = await Everest.deployed()
+        registry = await Registry.deployed()
     })
 
     describe('Test voting require statements and functionality', () => {
@@ -116,7 +118,7 @@ contract('Everest', () => {
         })
 
         it('Voting by a non-member fails', async () => {
-            const challengeID = await everest.getChallengeID(member5Address)
+            const challengeID = await registry.getChallengeID(member5Address)
             await utils.expectRevert(
                 everest.submitVote(challengeID, 1, nonMemberAddress, {
                     from: nonMemberAddress
@@ -125,7 +127,7 @@ contract('Everest', () => {
             )
         })
         it('Voting on an expired challenge fails', async () => {
-            const challengeID = await everest.getChallengeID(member5Address)
+            const challengeID = await registry.getChallengeID(member5Address)
 
             // Increase time, but do not resolve challenge yet
             await utils.increaseTime(utils.votePeriod + 1)
