@@ -37,7 +37,7 @@ const helpers = {
         const ownerBalanceStart = await token.balanceOf(ownerAddress)
 
         // Send all three meta transactions to Everest to be executed in one tx
-        tx = await everest.applySignedWithAttributeAndPermit(
+        const tx = await everest.applySignedWithAttributeAndPermit(
             newMemberAddress,
             [setAttributeSignedSig.v, applySignedSig.v, permitSig.v],
             [setAttributeSignedSig.r, applySignedSig.r, permitSig.r],
@@ -49,6 +49,19 @@ const helpers = {
             { from: ownerAddress }
         )
 
+        // Check square root math
+        const httpProvider = new ethers.providers.JsonRpcProvider();
+        const block = await httpProvider.getBlock(tx.receipt.blockNumber)
+        const timestamp = block.timestamp
+        const sqrtTimestamp = Math.floor(Math.sqrt(timestamp)).toString()
+        const member = await everest.members(newMemberAddress)
+        const memberStartTime = member.membershipStartTime.toString()
+        assert.equal(
+            sqrtTimestamp,
+            memberStartTime,
+            'Square root was not calculated properly'
+        )
+        
         // Tx logs order
         // 1. NewMember
         // 2. Owner changed

@@ -50,7 +50,7 @@ contract Everest is Registry, Ownable {
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
     // We rely on NewMember and MemberExited to distingushing between identities on
     // ERC-1056 that are part of everest and aren't
-    event NewMember(address indexed member, uint256 applicationTime, uint256 fee);
+    event NewMember(address indexed member, uint256 startTime, uint256 fee);
     event MemberExited(address indexed member);
     event CharterUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
@@ -234,16 +234,15 @@ contract Everest is Registry, Ownable {
             getMembershipStartTime(_newMember) == 0,
             "applySignedInternal - This member already exists"
         );
-        /* solium-disable-next-line security/no-block-members*/
-        uint256 membershipTime = now;
-        setMember(_newMember, membershipTime);
+        uint256 voteWeight = setMember(_newMember);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
         // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
         // identity
         emit NewMember(
             _newMember,
-            membershipTime,
+            /* solium-disable-next-line security/no-block-members*/
+            voteWeight,
             applicationFee
         );
 
@@ -340,16 +339,15 @@ contract Everest is Registry, Ownable {
             getMembershipStartTime(_newMember) == 0,
             "applySignedInternal - This member already exists"
         );
-        /* solium-disable-next-line security/no-block-members*/
-        uint256 membershipTime = now;
-        setMember(_newMember, membershipTime);
+        uint256 voteWeight = setMember(_newMember);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
         // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
         // identity
         emit NewMember(
             _newMember,
-            membershipTime,
+            /* solium-disable-next-line security/no-block-members*/
+            voteWeight,
             applicationFee
         );
 
