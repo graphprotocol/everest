@@ -48,19 +48,6 @@ const helpers = {
             '0x' + utils.maxValidity,
             { from: ownerAddress }
         )
-
-        // Check square root math
-        const httpProvider = new ethers.providers.JsonRpcProvider();
-        const block = await httpProvider.getBlock(tx.receipt.blockNumber)
-        const timestamp = block.timestamp
-        const sqrtTimestamp = Math.floor(Math.sqrt(timestamp)).toString()
-        const member = await everest.members(newMemberAddress)
-        const memberStartTime = member.membershipStartTime.toString()
-        assert.equal(
-            sqrtTimestamp,
-            memberStartTime,
-            'Square root was not calculated properly'
-        )
         
         // Tx logs order
         // 1. NewMember
@@ -107,7 +94,7 @@ const helpers = {
 
         // Everest checks
         const membershipStartTime = Number(
-            (await everest.getMembershipStartTime(newMemberAddress)).toString()
+            (await registry.getMemberStartTime(newMemberAddress)).toString()
         )
         assert(membershipStartTime > 0, 'Membership start time not updated')
 

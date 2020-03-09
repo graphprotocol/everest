@@ -15,9 +15,12 @@ import "./Registry.sol";
 import "./lib/EthereumDIDRegistry.sol";
 import "./lib/dai.sol";
 import "./lib/Ownable.sol";
+import "./abdk-libraries-solidity/ABDKMath64x64.sol";
 
 contract Everest is Registry, Ownable {
     using SafeMath for uint256;
+    using ABDKMath64x64 for uint256;
+    using ABDKMath64x64 for int128;
 
     /***************
     GLOBAL CONSTANTS
@@ -119,9 +122,9 @@ contract Everest is Registry, Ownable {
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
 
-    mapping (uint256 => Challenge) challenges;
+    mapping (uint256 => Challenge) public challenges;
     // Challenge counter for challenge IDs. Starts at 1 to prevent confusion with zeroed values
-    uint256 challengeCounter = 1;
+    uint256 public challengeCounter = 1;
 
     /********
     MODIFIERS
@@ -231,10 +234,10 @@ contract Everest is Registry, Ownable {
         uint256 _offChainDataValidity
     ) internal {
         require(
-            getMembershipStartTime(_newMember) == 0,
+            registry.getMemberStartTime(_newMember) == 0,
             "applySignedInternal - This member already exists"
         );
-        uint256 voteWeight = setMember(_newMember);
+        uint256 startTime = registry.setMember(_newMember);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
         // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
@@ -242,7 +245,7 @@ contract Everest is Registry, Ownable {
         emit NewMember(
             _newMember,
             /* solium-disable-next-line security/no-block-members*/
-            voteWeight,
+            startTime,
             applicationFee
         );
 
@@ -336,10 +339,10 @@ contract Everest is Registry, Ownable {
         uint256 _offChainDataValidity
     ) external {
         require(
-            getMembershipStartTime(_newMember) == 0,
+            registry.getMemberStartTime(_newMember) == 0,
             "applySignedInternal - This member already exists"
         );
-        uint256 voteWeight = setMember(_newMember);
+        uint256 startTime = registry.setMember(_newMember);
 
         // This event must be emitted before changeOwnerSigned() is called. This creates an identity
         // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
@@ -347,7 +350,7 @@ contract Everest is Registry, Ownable {
         emit NewMember(
             _newMember,
             /* solium-disable-next-line security/no-block-members*/
-            voteWeight,
+            startTime,
             applicationFee
         );
 
@@ -411,9 +414,9 @@ contract Everest is Registry, Ownable {
         address _challengedMember,
         bytes32 _details
     ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
-        uint256 challengeeMemberTime = getMembershipStartTime(_challengedMember);
-        require (challengeeMemberTime > 0, "challenge - Challengee must exist");
-        uint256 currentChallengeID = getChallengeID(_challengedMember);
+        uint256 challengeeStartTime = registry.getMemberStartTime(_challengedMember);
+        require (challengeeStartTime > 0, "challenge - Challengee must exist");
+        uint256 currentChallengeID = registry.getChallengeID(_challengedMember);
         if(currentChallengeID > 0){
             // Doing this allows us to never get stuck in a state with unresolved challenges
             // Also, the challenge rewards the deposit fee to winner or loser, so they are
@@ -501,9 +504,16 @@ contract Everest is Registry, Ownable {
             "submitVote - Member can't vote on their own challenge"
         );
 
-        uint256 memberStartTime = getMembershipStartTime(_voter);
+        uint256 startTime = registry.getMemberStartTime(_voter);
         // The lower the member start time (i.e. the older the member) the more vote weight
-        uint256 voteWeight = storedChallenge.endTime.sub(memberStartTime);
+        uint256 voteWeightSquared = storedChallenge.endTime.sub(startTime);
+
+        // Here we use ABDKMath64x64 to do the square root of the vote weight
+        // We have to covert it to a 64.64 fixed point number, do sqrt(), then convert it
+        // back to uint256. uint256 wraps the result of toUInt(), since it returns uint64
+        int128 sixtyFourBitFPInt = voteWeightSquared.fromUInt();
+        int128 voteWeightInt128 = sixtyFourBitFPInt.sqrt();
+        uint256 voteWeight = uint256(voteWeightInt128.toUInt());
 
         // Store vote (can't be msg.sender because delegate can be voting)
         storedChallenge.voteChoiceByMember[_voter] = _voteChoice;
@@ -638,7 +648,7 @@ contract Everest is Registry, Ownable {
     @param _member  The member name of the member whose status is to be examined
     */
     function isMember(address _member) public view returns (bool){
-        uint256 startTime = getMembershipStartTime(_member);
+        uint256 startTime = registry.getMemberStartTime(_member);
         if (startTime > 0){
             return true;
         }

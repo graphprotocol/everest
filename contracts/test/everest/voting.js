@@ -85,12 +85,28 @@ contract('Everest', () => {
             )
         })
 
-        it('Double voting on a challenge fails', async () => {
-            const challengeID = await everest.getChallengeID(member5Address)
+        it('Vote weight is calculated as sqrt(challengeEndTime - memberStartTime)', async () => {
+            const challengeID = await registry.getChallengeID(member5Address)
 
-            await everest.submitVote(challengeID, 1, member2Address, {
+            const tx = await everest.submitVote(challengeID, 1, member2Address, {
                 from: owner2Address
             })
+
+            const eventVoteWeight = Number(tx.logs[0].args.voteWeight.toString())
+            const challenge = await everest.challenges(challengeID)
+            const challengeEndTime = Number(challenge.endTime.toString())
+
+            const member = await registry.members(member2Address)
+            const memberStartTime = Number(member.memberStartTime.toString())
+            
+            const difference = challengeEndTime - memberStartTime
+            const voteWeight = Math.floor(Math.sqrt(difference))
+
+            assert.equal(voteWeight, eventVoteWeight, 'Square root was not calculated properly')
+        })
+
+        it('Double voting on a challenge fails. Vote ', async () => {
+            const challengeID = await registry.getChallengeID(member5Address)
             await utils.expectRevert(
                 everest.submitVote(challengeID, 1, member2Address, {
                     from: owner2Address

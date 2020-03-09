@@ -30,29 +30,6 @@
     },
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "members",
-      "outputs": [
-        {
-          "name": "challengeID",
-          "type": "uint256"
-        },
-        {
-          "name": "membershipStartTime",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
       "inputs": [],
       "name": "challengeDeposit",
       "outputs": [
@@ -80,31 +57,26 @@
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_member",
-          "type": "address"
-        }
-      ],
-      "name": "getChallengeID",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "constant": false,
       "inputs": [],
       "name": "renounceOwnership",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "registry",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -139,25 +111,6 @@
       "constant": true,
       "inputs": [],
       "name": "votingPeriodDuration",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_member",
-          "type": "address"
-        }
-      ],
-      "name": "getMembershipStartTime",
       "outputs": [
         {
           "name": "",
@@ -235,6 +188,14 @@
         {
           "name": "_DIDregistry",
           "type": "address"
+        },
+        {
+          "name": "_reserveBank",
+          "type": "address"
+        },
+        {
+          "name": "_registry",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -251,7 +212,7 @@
         },
         {
           "indexed": false,
-          "name": "applicationTime",
+          "name": "startTime",
           "type": "uint256"
         },
         {
@@ -308,11 +269,6 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "name": "reserveBank",
-          "type": "address"
-        },
-        {
           "indexed": false,
           "name": "owner",
           "type": "address"
@@ -341,6 +297,21 @@
           "indexed": false,
           "name": "charter",
           "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "didRegistry",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "reserveBank",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "registry",
+          "type": "address"
         }
       ],
       "name": "EverestDeployed",
@@ -687,6 +658,44 @@
         }
       ],
       "name": "withdraw",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnershipReserveBank",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnershipRegistry",
       "outputs": [
         {
           "name": "",
