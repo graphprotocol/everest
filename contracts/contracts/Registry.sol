@@ -41,6 +41,8 @@ contract Registry is Ownable {
         });
         // Store the member
         members[_member] = member;
+
+        return now;
     }
 
     function editChallengeID(address _member, uint256 _newChallengeID) external onlyOwner {
