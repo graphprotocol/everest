@@ -1,4 +1,5 @@
 const Everest = artifacts.require('Everest.sol')
+const Registry = artifacts.require('Registry.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
 
@@ -41,6 +42,7 @@ contract('Everest', () => {
     let everest
     before(async () => {
         everest = await Everest.deployed()
+        registry = await Registry.deployed()
     })
 
     describe('Test voting require statements and functionality', () => {
@@ -85,12 +87,28 @@ contract('Everest', () => {
             )
         })
 
-        it('Double voting on a challenge fails', async () => {
-            const challengeID = await everest.getChallengeID(member5Address)
+        it('Vote weight is calculated as sqrt(challengeEndTime - memberStartTime)', async () => {
+            const challengeID = await registry.getChallengeID(member5Address)
 
-            await everest.submitVote(challengeID, 1, member2Address, {
+            const tx = await everest.submitVote(challengeID, 1, member2Address, {
                 from: owner2Address
             })
+
+            const eventVoteWeight = Number(tx.logs[0].args.voteWeight.toString())
+            const challenge = await everest.challenges(challengeID)
+            const challengeEndTime = Number(challenge.endTime.toString())
+
+            const member = await registry.members(member2Address)
+            const memberStartTime = Number(member.memberStartTime.toString())
+            
+            const difference = challengeEndTime - memberStartTime
+            const voteWeight = Math.floor(Math.sqrt(difference))
+
+            assert.equal(voteWeight, eventVoteWeight, 'Square root was not calculated properly')
+        })
+
+        it('Double voting on a challenge fails. Vote ', async () => {
+            const challengeID = await registry.getChallengeID(member5Address)
             await utils.expectRevert(
                 everest.submitVote(challengeID, 1, member2Address, {
                     from: owner2Address
@@ -100,7 +118,7 @@ contract('Everest', () => {
         })
 
         it('Voting by a non-member fails', async () => {
-            const challengeID = await everest.getChallengeID(member5Address)
+            const challengeID = await registry.getChallengeID(member5Address)
             await utils.expectRevert(
                 everest.submitVote(challengeID, 1, nonMemberAddress, {
                     from: nonMemberAddress
@@ -109,7 +127,7 @@ contract('Everest', () => {
             )
         })
         it('Voting on an expired challenge fails', async () => {
-            const challengeID = await everest.getChallengeID(member5Address)
+            const challengeID = await registry.getChallengeID(member5Address)
 
             // Increase time, but do not resolve challenge yet
             await utils.increaseTime(utils.votePeriod + 1)

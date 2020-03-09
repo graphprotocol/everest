@@ -1,4 +1,5 @@
 const Everest = artifacts.require('Everest.sol')
+const Registry = artifacts.require('Registry.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
 
@@ -30,16 +31,18 @@ contract('Everest', () => {
         })
 
         it('should allow a member to exit', async () => {
+            const registry = await Registry.deployed()
+
             // Get previous member start time
             const membershipStartTime = Number(
-                (await everest.getMembershipStartTime(newMemberAddress)).toString()
+                (await registry.getMemberStartTime(newMemberAddress)).toString()
             )
             assert(membershipStartTime > 0, 'Membership start time not updated')
 
             // Get updated member start time (should be 0)
             await everest.memberExit(newMemberAddress, { from: ownerAddress1 })
             const membershipStartTimeUpdated = Number(
-                (await everest.getMembershipStartTime(newMemberAddress)).toString()
+                (await registry.getMemberStartTime(newMemberAddress)).toString()
             )
             assert(membershipStartTimeUpdated == 0, 'Membership start time should be reset to 0')
         })

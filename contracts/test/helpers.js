@@ -5,6 +5,7 @@ const ethers = require('ethers')
 
 // Local imports
 const Everest = artifacts.require('Everest.sol')
+const Registry = artifacts.require('Registry.sol')
 const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const Token = artifacts.require('Dai.sol')
 const utils = require('./utils.js')
@@ -15,6 +16,7 @@ const helpers = {
         const newMemberAddress = newMemberWallet.signingKey.address
         const everest = await Everest.deployed()
         const token = await Token.deployed()
+        const registry = await Registry.deployed()
 
         const setAttributeData =
             Buffer.from('setAttribute').toString('hex') +
@@ -37,7 +39,7 @@ const helpers = {
         const ownerBalanceStart = await token.balanceOf(ownerAddress)
 
         // Send all three meta transactions to Everest to be executed in one tx
-        tx = await everest.applySignedWithAttributeAndPermit(
+        const tx = await everest.applySignedWithAttributeAndPermit(
             newMemberAddress,
             [setAttributeSignedSig.v, applySignedSig.v, permitSig.v],
             [setAttributeSignedSig.r, applySignedSig.r, permitSig.r],
@@ -48,7 +50,7 @@ const helpers = {
             '0x' + utils.maxValidity,
             { from: ownerAddress }
         )
-
+        
         // Tx logs order
         // 1. NewMember
         // 2. Owner changed
@@ -94,7 +96,7 @@ const helpers = {
 
         // Everest checks
         const membershipStartTime = Number(
-            (await everest.getMembershipStartTime(newMemberAddress)).toString()
+            (await registry.getMemberStartTime(newMemberAddress)).toString()
         )
         assert(membershipStartTime > 0, 'Membership start time not updated')
 

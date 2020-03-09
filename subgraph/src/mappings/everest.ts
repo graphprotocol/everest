@@ -22,7 +22,7 @@ export function handleNewMember(event: NewMember): void {
   let id = event.params.member.toHexString()
   let project = new Project(id)
   project.totalVotes = 0
-  project.membershipStartTime = event.params.applicationTime.toI32()
+  project.membershipStartTime = event.params.startTime.toI32()
   project.createdAt = event.block.timestamp.toI32()
   project.updatedAt = event.block.timestamp.toI32()
   project.save()

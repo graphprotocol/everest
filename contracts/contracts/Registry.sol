@@ -1,19 +1,18 @@
 pragma solidity ^0.5.8;
 
-contract Registry {
+import "./lib/Ownable.sol";
+
+contract Registry is Ownable {
     // ------
     // STATE
     // ------
 
-    // Maps member address to Member data
-    // Note, this address is used to map to the owner and delegates in the ERC-1056 registry
     struct Member {
-        uint256 challengeID;    // Is 0 if it is not challenged
-        // Used for reputation: (now - membershipStartTime) = voteWeight
-        // Used to determine membership as well: membershipStartTime > now
-        uint256 membershipStartTime;
+        uint256 challengeID;
+        uint256 memberStartTime; // Used for voting: voteWeight = sqrt(now - memberStartTime)
     }
 
+    // Note, this address is used to map to the owner and delegates in the ERC-1056 registry
     mapping(address => Member) public members;
 
     // --------------------
@@ -25,36 +24,33 @@ contract Registry {
         return member.challengeID;
     }
 
-    function getMembershipStartTime(address _member) public view returns (uint256) {
+    function getMemberStartTime(address _member) public view returns (uint256) {
         Member memory member = members[_member];
-        return member.membershipStartTime;
+        return member.memberStartTime;
     }
 
     // --------------------
     // SETTER FUNCTIONS
     // --------------------
 
-    function setMember(address _member, uint256 _membershipStartTime) internal {
+    function setMember(address _member) external onlyOwner returns (uint256) {
         // Create the member struct
         Member memory member = Member({
             challengeID: 0,
-            membershipStartTime: _membershipStartTime
+            memberStartTime: now
         });
         // Store the member
         members[_member] = member;
+
+        return now;
     }
 
-    function editChallengeID(address _member, uint256 _newChallengeID) internal {
+    function editChallengeID(address _member, uint256 _newChallengeID) external onlyOwner {
         Member storage member = members[_member];
         member.challengeID = _newChallengeID;
     }
 
-    function editMembershipStartTime(address _member, uint256 _newTime) internal {
-        Member storage member = members[_member];
-        member.membershipStartTime = _newTime;
-    }
-
-    function deleteMember(address _member) internal {
+    function deleteMember(address _member) external onlyOwner {
         delete members[_member];
     }
 }
