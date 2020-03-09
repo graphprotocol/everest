@@ -33,7 +33,7 @@ contract Registry is Ownable {
     // SETTER FUNCTIONS
     // --------------------
 
-    function setMember(address _member) external returns (uint256) {
+    function setMember(address _member) external onlyOwner returns (uint256) {
         // Create the member struct
         Member memory member = Member({
             challengeID: 0,
@@ -43,12 +43,12 @@ contract Registry is Ownable {
         members[_member] = member;
     }
 
-    function editChallengeID(address _member, uint256 _newChallengeID) external {
+    function editChallengeID(address _member, uint256 _newChallengeID) external onlyOwner {
         Member storage member = members[_member];
         member.challengeID = _newChallengeID;
     }
 
-    function deleteMember(address _member) external {
+    function deleteMember(address _member) external onlyOwner {
         delete members[_member];
     }
 }
