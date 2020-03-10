@@ -100,7 +100,6 @@ const EditProject = ({ location }) => {
       navigate(`/project/${projectId}`)
     },
     update: (proxy, result) => {
-      console.log('AM I HERE')
       const projectData = cloneDeep(
         proxy.readQuery({
           query: PROJECT_QUERY,
@@ -109,10 +108,6 @@ const EditProject = ({ location }) => {
           },
         }),
       )
-
-      console.log('projectData: ', projectData)
-
-      console.log('Result: ', result)
 
       proxy.writeQuery({
         query: PROJECT_QUERY,

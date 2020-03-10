@@ -34,8 +34,8 @@ const Categories = () => {
           data.categories.map(cat => {
             return {
               name: cat.name,
-              description: cat.subcategories
-                ? `${cat.subcategories.length} PROJECTS`
+              description: cat.projects
+                ? `${cat.projects.length} PROJECTS`
                 : '0 PROJECTS',
               image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
                 cat.id

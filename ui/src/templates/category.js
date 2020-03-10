@@ -1,10 +1,8 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import { graphql, navigate } from 'gatsby'
-import queryString from 'query-string'
 import { useQuery } from '@apollo/react-hooks'
 
 import Section from '../components/Section'
@@ -23,16 +21,8 @@ const Category = ({ location }) => {
   }
 
   const [imagePrefix, setImagePrefix] = useState('')
-  let param
-  if (location && location.search) {
-    param = queryString.parse(location.search)
-  }
 
-  const [selected, setSelected] = useState(
-    param && param.show && ['table', 'cards'].includes(param.show)
-      ? param.show
-      : 'cards',
-  )
+  const [selected, setSelected] = useState('cards')
 
   const { loading, error, data } = useQuery(CATEGORY_QUERY, {
     variables: {
@@ -40,11 +30,13 @@ const Category = ({ location }) => {
     },
   })
 
+  const viewRef = useRef()
+
   useEffect(() => {
     if (typeof window !== undefined) {
       setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__)
     }
-  })
+  }, [])
 
   if (loading) return <div>Loading</div>
   if (error) {
@@ -54,15 +46,10 @@ const Category = ({ location }) => {
 
   let category = data && data.category
 
-  const setSelectedView = value => {
-    setSelected(value)
-    navigate('/category', { state: { show: 'table' } })
-  }
-
-  const categoryProjects = []
+  const categoryProjects = category ? category.projects : []
 
   const challengedProjects = categoryProjects.filter(
-    p => p.isChallenged === true,
+    p => p.currentChallenge !== null,
   )
 
   return (
@@ -90,7 +77,9 @@ const Category = ({ location }) => {
           items={category.subcategories.map(subcat => {
             return {
               name: subcat.name,
-              description: `6 projects`,
+              description: `${
+                subcat.projects ? subcat.projects.length : 0
+              } projects`,
               image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
                 subcat.id
               }.png`,
@@ -101,7 +90,7 @@ const Category = ({ location }) => {
         />
       )}
       <Grid columns={[1, 2, 2]} mb={1} mt={6} sx={{ alignItems: 'center' }}>
-        <Box>
+        <Box ref={viewRef}>
           <Styled.h3>Projects</Styled.h3>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
             {categoryProjects.length} Projects -{' '}
@@ -113,17 +102,20 @@ const Category = ({ location }) => {
         {categoryProjects.length > 0 && (
           <Switcher
             selected={selected}
-            setSelected={value => setSelectedView(value)}
+            setSelected={value => setSelected(value)}
           />
         )}
       </Grid>
-
       <Section
-        items={categoryProjects.map(categoryProject => {
+        items={categoryProjects.map(project => {
           return {
-            ...categoryProject,
-            description: categoryProject.description.slice(0, 40) + '...',
-            to: `/project/${categoryProject.id}`,
+            ...project,
+            description: project.description.slice(0, 40) + '...',
+            to: `/project/${project.id}`,
+            category:
+              project.categories.length > 0 ? project.categories[0].name : '',
+            isChallenged: project.currentChallenge !== null,
+            image: project.avatar,
           }
         })}
         variant="project"
@@ -151,19 +143,3 @@ Category.propTypes = {
 }
 
 export default Category
-
-export const query = graphql`
-  query {
-    everest {
-      projects {
-        id
-        name
-        description
-        categories
-        createdAt
-        reputation
-        isChallenged
-      }
-    }
-  }
-`

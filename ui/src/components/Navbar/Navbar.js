@@ -15,7 +15,6 @@ import Modal from '../../components/Modal'
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
-import Placeholder from '../../images/profile-placeholder.svg'
 
 const Navbar = ({ path, ...props }) => {
   const { account } = useWeb3React()
@@ -75,7 +74,7 @@ const Navbar = ({ path, ...props }) => {
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       ) : (
         <Grid sx={navStyles}>
-          <Link to="/">
+          <Link to="/" sx={{ '&:hover': { svg: { marginLeft: 0 } } }}>
             <Logo sx={{ verticalAlign: 'middle' }} />
           </Link>
           <Link to="/">

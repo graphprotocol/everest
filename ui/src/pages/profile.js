@@ -11,7 +11,6 @@ import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 import { PROFILE_QUERY } from '../utils/apollo/queries'
-import { defaultImage } from '../utils/helpers/utils'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
@@ -20,7 +19,6 @@ import Switcher from '../components/Switcher'
 import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
 import Modal from '../components/Modal'
-import ProfileImage from '../images/profile-placeholder.svg'
 
 const Profile = ({ location }) => {
   const { account } = useAccount()

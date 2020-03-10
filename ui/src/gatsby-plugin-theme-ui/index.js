@@ -29,12 +29,6 @@ export default {
     root: {
       position: 'relative',
     },
-    Main: {
-      py: [5, 7],
-    },
-    Header: {
-      position: 'relative',
-    },
     h1: {
       fontWeight: 'heading',
       fontSize: '3.25rem',
@@ -84,7 +78,7 @@ export default {
     a: {
       textDecoration: 'none',
       display: 'block',
-      color: '#4C66FF',
+      color: 'secondary',
       fontSize: '1rem',
       fontWeight: 'bold',
       letterSpacing: '0.31px',

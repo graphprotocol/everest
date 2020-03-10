@@ -28,17 +28,6 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-source-graphql',
-      options: {
-        // This type will contain remote schema Query type
-        typeName: 'everest',
-        // This is the field under which it's accessible
-        fieldName: 'everest',
-        // URL to query from
-        url: 'https://eu1.prisma.sh/nevena-djaja/ui-mocks/dev',
-      },
-    },
-    {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'images',
