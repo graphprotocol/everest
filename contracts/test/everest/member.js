@@ -9,6 +9,7 @@ contract('Everest', () => {
     const ownerWallet1 = utils.wallets.one()
     const ownerAddress1 = ownerWallet1.signingKey.address
     const ownerWallet2 = utils.wallets.two()
+    const ownerAddress2 = ownerWallet2.signingKey.address
 
     let everest
     before(async () => {
@@ -30,7 +31,7 @@ contract('Everest', () => {
             )
         })
 
-        it('should allow a member to exit', async () => {
+        it('Should allow a member to exit', async () => {
             const registry = await Registry.deployed()
 
             // Get previous member start time
@@ -46,10 +47,25 @@ contract('Everest', () => {
             )
             assert(membershipStartTimeUpdated == 0, 'Membership start time should be reset to 0')
         })
+ 
+        it('Should revert if non-owner try to exit a member', async () => {
+            await utils.expectRevert(
+                everest.memberExit(newMemberAddress, { from: ownerAddress2 }),
+                'onlyMemberOwner - Address is not a member -- Reason given: onlyMemberOwner - Address is not a member.'
+            )
+        })
     })
+
     describe('Member editing. Functions: setAttribute()', () => {
         it('should allow an updated owner to set attribute', async () => {
             await helpers.setAttribute(newMemberAddress, ownerWallet1)
+        })
+
+        it('should disallow a non-owner to set attribute', async () => {
+            await utils.expectRevert(
+                helpers.setAttribute(newMemberAddress, ownerWallet2),
+                "Caller must be the identity owner -- Reason given: Caller must be the identity owner."
+            )
         })
     })
 })
