@@ -67,6 +67,9 @@ export const CATEGORIES_QUERY = gql`
       parentCategory {
         id
       }
+      projects {
+        id
+      }
     }
   }
 `
@@ -97,6 +100,26 @@ export const CATEGORY_QUERY = gql`
         id
         name
         description
+        projects {
+          id
+        }
+      }
+      projects {
+        id
+        name
+        image
+        description
+        avatar
+        createdAt
+        isRepresentative
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          name
+          description
+        }
       }
     }
   }
@@ -117,16 +140,9 @@ export const PROJECTS_QUERY = gql`
       }
       categories {
         id
+        name
         description
       }
-    }
-  }
-`
-
-export const TOTALS_QUERY = gql`
-  query totals {
-    totals {
-      projectCount
     }
   }
 `

@@ -7,11 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { useWeb3React } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
-import {
-  CATEGORIES_QUERY,
-  PROJECTS_QUERY,
-  TOTALS_QUERY,
-} from '../utils/apollo/queries'
+import { CATEGORIES_QUERY, PROJECTS_QUERY } from '../utils/apollo/queries'
 
 import Link from '../components/Link'
 import Stats from '../components/Stats'
@@ -38,12 +34,11 @@ const Index = () => {
       orderDirection: 'desc',
     },
   })
-  const { data: total } = useQuery(TOTALS_QUERY)
 
-  // TODO: update these
+  // TODO: replace with Totals for faster performance
   const stats = [
-    { title: 'Projects', value: total ? total.projectCount.toString() : '150' },
-    { title: 'Categories', value: '64' },
+    { title: 'Projects', value: projects && projects.projects.length },
+    { title: 'Categories', value: categories && categories.categories.length },
     { title: 'Registry Value (DAI)', value: '150,000' },
   ]
 
@@ -121,8 +116,10 @@ const Index = () => {
           categories
             ? categories.categories.slice(0, 10).map(category => {
                 return {
-                  name: category.id,
-                  description: '24 projects',
+                  name: category.name,
+                  description: category.projects
+                    ? `${category.projects.length} projects`
+                    : '0 projects',
                   image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
                     category.id
                   }.png`,
@@ -153,6 +150,7 @@ const Index = () => {
                     project.categories.length > 0
                       ? project.categories[0].name
                       : '',
+                  isChallenged: project.currentChallenge !== null,
                 }
               })
             : []
@@ -239,7 +237,25 @@ const Index = () => {
             achievement on the road to decentralization.
           </Styled.p>
           <Grid columns={['max-content', 1]} mt={[6, 6, 5]} mb={[6, 6, 5]}>
-            <Button to="/projects/new" text="Add a project" variant="primary" />
+            {showModal ? (
+              <Modal showModal={showModal} closeModal={closeModal}>
+                <Button
+                  onClick={openModal}
+                  text="Add a project"
+                  variant="primary"
+                />
+              </Modal>
+            ) : (
+              <Button
+                onClick={async () =>
+                  account || (await getAddress())
+                    ? navigate('/projects/new')
+                    : setShowModal(true)
+                }
+                text="Add a project"
+                variant="primary"
+              />
+            )}
           </Grid>
         </Box>
       </Grid>

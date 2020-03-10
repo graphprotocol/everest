@@ -23,20 +23,11 @@ const Projects = () => {
     return <div />
   }
 
-  const allProjects =
-    data &&
-    data.projects.map(project => {
-      return {
-        ...project,
-        description: project.description
-          ? project.description.length > 30
-            ? project.description.slice(0, 26) + '...'
-            : project.description
-          : '',
-      }
-    })
+  const allProjects = data && data.projects
 
-  const challengedProjects = data.projects.filter(p => p.isChallenged === true)
+  const challengedProjects = data.projects.filter(
+    p => p.currentChallenge !== null,
+  )
 
   return (
     <Grid>
@@ -58,9 +49,16 @@ const Projects = () => {
         items={allProjects.map(project => {
           return {
             ...project,
-            description: project.description,
+            description: project.description
+              ? project.description.length > 30
+                ? project.description.slice(0, 26) + '...'
+                : project.description
+              : '',
             to: `/project/${project.id}`,
             image: project.avatar,
+            isChallenged: project.currentChallenge !== null,
+            category:
+              project.categories.length > 0 ? project.categories[0].name : '',
           }
         })}
         variant="project"

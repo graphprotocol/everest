@@ -41,18 +41,14 @@ const Filters = ({
     let allCats = items.reduce((acc, current) => {
       acc.push({
         ...current,
-        image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}cats/${
-          current.id
-        }.png`,
+        image: `cats/${current.id}.png`,
         name: current.name,
       })
       if (current.subcategories) {
         const cat = current.subcategories.map(subcat => ({
           ...subcat,
           parent: current,
-          image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}cats/${
-            subcat.id
-          }.png`,
+          image: `cats/${subcat.id}.png`,
         }))
         acc.concat(cat)
       }

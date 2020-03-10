@@ -20,7 +20,6 @@ import {
   PROJECT_QUERY,
   USER_PROJECTS_QUERY,
   PROFILE_QUERY,
-  PROJECTS_QUERY,
 } from '../utils/apollo/queries'
 import {
   REMOVE_PROJECT,
@@ -55,6 +54,8 @@ const Project = ({ location }) => {
   const [isRemoveOpen, setIsRemoveOpen] = useState(false)
   const [ownerName, setOwnerName] = useState('')
   const [pendingVotes, setPendingVotes] = useState(false)
+  const [pendingResolve, setPendingResolve] = useState(false)
+  const [challengeResolved, setChallengeResolved] = useState(false)
   const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
@@ -85,7 +86,7 @@ const Project = ({ location }) => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account ? account.toLowerCase() : '',
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -134,7 +135,15 @@ const Project = ({ location }) => {
     },
   })
 
-  const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE)
+  const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE, {
+    onError: error => {
+      console.error('Error voting on a challenge: ', error)
+      setPendingResolve(false)
+    },
+    onCompleted: mydata => {
+      setChallengeResolved(true)
+    },
+  })
 
   const [challengeProject] = useMutation(CHALLENGE_PROJECT, {
     client: client,
@@ -225,7 +234,7 @@ const Project = ({ location }) => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account ? account.toLowerCase() : '',
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -294,7 +303,7 @@ const Project = ({ location }) => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account ? account.toLowerCase() : '',
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -329,7 +338,7 @@ const Project = ({ location }) => {
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
-            id: account.toLowerCase(),
+            id: account ? account.toLowerCase() : '',
             orderBy: 'createdAt',
             orderDirection: 'desc',
           },
@@ -339,13 +348,13 @@ const Project = ({ location }) => {
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account ? account.toLowerCase() : '',
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
         data: {
           user: {
-            id: account.toLowerCase(),
+            id: account ? account.toLowerCase() : '',
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
             projects: [
@@ -463,6 +472,7 @@ const Project = ({ location }) => {
   const handleResolveChallenge = () => {
     const challengeId = project.currentChallenge.id
     resolveChallenge({ variables: { challengeId } })
+    setPendingResolve(true)
   }
 
   let tweet = ''
@@ -814,158 +824,169 @@ const Project = ({ location }) => {
             opacity: pendingVotes ? 0.32 : 1,
           }}
         >
-          {project.currentChallenge && !project.currentChallenge.resolved && (
-            <Box
-              sx={{
-                opacity: project.currentChallenge.id === '123' ? 0.32 : 1,
-                pointerEvents:
-                  project.currentChallenge.id === '123' ? 'none' : 'all',
-              }}
-            >
-              <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
-                {isCompleted ? (
-                  <span>Completed Challenge</span>
-                ) : (
-                  <span>Active Challenge</span>
-                )}
-              </Styled.h5>
-              <Box>
-                <p sx={{ variant: 'text.small' }}>Description</p>
-                <Styled.p>{project.currentChallenge.description}</Styled.p>
-              </Box>
+          {project.currentChallenge &&
+            !project.currentChallenge.resolved &&
+            !challengeResolved && (
+              <Box
+                sx={{
+                  opacity:
+                    project.currentChallenge.id === '123' || pendingResolve
+                      ? 0.32
+                      : 1,
+                  pointerEvents:
+                    project.currentChallenge.id === '123' || pendingResolve
+                      ? 'none'
+                      : 'all',
+                }}
+              >
+                <Styled.h5 sx={{ color: 'secondary', mb: 4 }}>
+                  {isCompleted ? (
+                    <span>Completed Challenge</span>
+                  ) : (
+                    <span>Active Challenge</span>
+                  )}
+                </Styled.h5>
+                <Box>
+                  <p sx={{ variant: 'text.small' }}>Description</p>
+                  <Styled.p>{project.currentChallenge.description}</Styled.p>
+                </Box>
 
-              <Grid columns={3} gap={3} sx={{ my: 4 }}>
-                <Box>
-                  <p sx={{ variant: 'text.small' }}>Challenge ends</p>
-                  <p sx={{ variant: 'text.huge' }}>
-                    {remainingTime(project.currentChallenge.endTime)}
-                  </p>
-                </Box>
-                <Box>
-                  <p sx={{ variant: 'text.small' }}>Voters</p>
-                  <p sx={{ variant: 'text.huge' }}>
-                    {project.currentChallenge.votes.length}
-                  </p>
-                </Box>
-                <Box>
-                  <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                  <Link to={`/project/${project.currentChallenge.owner}`}>
-                    {`${project.currentChallenge.owner.slice(
-                      0,
-                      6,
-                    )}-${project.currentChallenge.owner.slice(-6)}`}
-                  </Link>
-                </Box>
-              </Grid>
-              {isCompleted ? (
-                <Fragment>
-                  <Styled.h6>
-                    This challenge has ended and the project will be{' '}
-                    {project.currentChallenge.votesFor >
-                    project.currentChallenge.votesAgainst ? (
-                      <span>kept</span>
-                    ) : (
-                      <span>removed</span>
-                    )}
-                    . Resolve this challenge to update the registry&apos;s state
-                    and earn a reward.
-                  </Styled.h6>
-                  <Grid
-                    columns={2}
-                    sx={{
-                      mt: 4,
-                      mb: 6,
-                      gridTemplateColumns: 'max-content max-content',
-                    }}
-                  >
-                    <Button
-                      variant="secondary"
-                      text="Resolve"
-                      sx={{ border: '1px solid #4C66FF' }}
-                      onClick={handleResolveChallenge}
-                    />
-                  </Grid>
-                </Fragment>
-              ) : userProjects.length > 0 ? (
-                <Fragment>
-                  <Styled.h6>
-                    What would you like to happen to this listing?
-                  </Styled.h6>
-                  <Grid
-                    columns={2}
-                    sx={{
-                      mt: 4,
-                      mb: 6,
-                      gridTemplateColumns: 'max-content max-content',
-                    }}
-                  >
-                    <MultiSelect
-                      setValue={projects => handleVoting(projects, '1')}
-                      title="Vote on behalf of"
-                      subtitle="You can select multiple projects"
-                      items={userProjects}
-                      variant="project"
-                      setOpen={value => {
-                        setIsKeepOpen(value)
-                      }}
-                      styles={{
-                        pointerEvents:
-                          isRemoveOpen || pendingVotes ? 'none' : 'all',
+                <Grid columns={3} gap={3} sx={{ my: 4 }}>
+                  <Box>
+                    <p sx={{ variant: 'text.small' }}>Challenge ends</p>
+                    <p sx={{ variant: 'text.huge' }}>
+                      {remainingTime(project.currentChallenge.endTime)}
+                    </p>
+                  </Box>
+                  <Box>
+                    <p sx={{ variant: 'text.small' }}>Voters</p>
+                    <p sx={{ variant: 'text.huge' }}>
+                      {project.currentChallenge.votes.length}
+                    </p>
+                  </Box>
+                  <Box>
+                    <p sx={{ variant: 'text.small' }}>Challenged by</p>
+                    <Link to={`/project/${project.currentChallenge.owner}`}>
+                      {`${project.currentChallenge.owner.slice(
+                        0,
+                        6,
+                      )}-${project.currentChallenge.owner.slice(-6)}`}
+                    </Link>
+                  </Box>
+                </Grid>
+                {isCompleted && !challengeResolved ? (
+                  <Fragment>
+                    <Styled.h6>
+                      This challenge has ended and the project will be{' '}
+                      {project.currentChallenge.votesFor >
+                      project.currentChallenge.votesAgainst ? (
+                        <span>kept</span>
+                      ) : (
+                        <span>removed</span>
+                      )}
+                      . Resolve this challenge to update the registry&apos;s
+                      state and earn a reward.
+                    </Styled.h6>
+                    <Grid
+                      columns={2}
+                      sx={{
+                        mt: 4,
+                        mb: 6,
+                        gridTemplateColumns: 'max-content max-content',
                       }}
                     >
                       <Button
                         variant="secondary"
-                        text="Keep"
-                        sx={{
-                          ...buttonStyles,
-                          backgroundColor: isKeepOpen ? 'secondary' : 'white',
-                          color: isKeepOpen ? 'white' : 'secondary',
-                          opacity: isRemoveOpen ? 0.48 : 1,
-                          cursor: pendingVotes ? 'auto' : 'pointer',
-                          '&:hover': {
-                            boxShadow: pendingVotes && 'none',
-                          },
-                        }}
-                        icon={isKeepOpen ? `keep-white.png` : `keep.png`}
+                        text="Resolve"
+                        sx={{ border: '1px solid #4C66FF' }}
+                        onClick={handleResolveChallenge}
                       />
-                    </MultiSelect>
-                    <MultiSelect
-                      setValue={projects => handleVoting(projects, '2')}
-                      title="Vote on behalf of"
-                      subtitle="You can select multiple projects"
-                      items={userProjects}
-                      variant="project"
-                      setOpen={value => {
-                        setIsRemoveOpen(value)
-                      }}
-                      styles={{
-                        pointerEvents:
-                          isKeepOpen || pendingVotes ? 'none' : 'all',
+                    </Grid>
+                  </Fragment>
+                ) : userProjects.length > 0 ? (
+                  <Fragment>
+                    <Styled.h6>
+                      What would you like to happen to this listing?
+                    </Styled.h6>
+                    <Grid
+                      columns={2}
+                      sx={{
+                        mt: 4,
+                        mb: 6,
+                        gridTemplateColumns: 'max-content max-content',
                       }}
                     >
-                      <Button
-                        variant="secondary"
-                        text="Remove"
-                        sx={{
-                          ...buttonStyles,
-                          backgroundColor: isRemoveOpen ? 'secondary' : 'white',
-                          color: isRemoveOpen ? 'white' : 'secondary',
-                          opacity: isKeepOpen ? 0.48 : 1,
-                          cursor: pendingVotes ? 'auto' : 'pointer',
-                          '&:hover': {
-                            boxShadow: pendingVotes && 'none',
-                          },
+                      <MultiSelect
+                        setValue={projects => handleVoting(projects, '1')}
+                        title="Vote on behalf of"
+                        subtitle="You can select multiple projects"
+                        items={userProjects}
+                        variant="project"
+                        setOpen={value => {
+                          setIsKeepOpen(value)
                         }}
-                        icon={isRemoveOpen ? `remove-white.png` : `remove.png`}
-                      />
-                    </MultiSelect>
-                  </Grid>
-                </Fragment>
-              ) : (
-                ''
-              )}
-            </Box>
-          )}
+                        styles={{
+                          pointerEvents:
+                            isRemoveOpen || pendingVotes ? 'none' : 'all',
+                        }}
+                      >
+                        <Button
+                          variant="secondary"
+                          text="Keep"
+                          sx={{
+                            ...buttonStyles,
+                            backgroundColor: isKeepOpen ? 'secondary' : 'white',
+                            color: isKeepOpen ? 'white' : 'secondary',
+                            opacity: isRemoveOpen ? 0.48 : 1,
+                            cursor: pendingVotes ? 'auto' : 'pointer',
+                            '&:hover': {
+                              boxShadow: pendingVotes && 'none',
+                            },
+                          }}
+                          icon={isKeepOpen ? `keep-white.png` : `keep.png`}
+                        />
+                      </MultiSelect>
+                      <MultiSelect
+                        setValue={projects => handleVoting(projects, '2')}
+                        title="Vote on behalf of"
+                        subtitle="You can select multiple projects"
+                        items={userProjects}
+                        variant="project"
+                        setOpen={value => {
+                          setIsRemoveOpen(value)
+                        }}
+                        styles={{
+                          pointerEvents:
+                            isKeepOpen || pendingVotes ? 'none' : 'all',
+                        }}
+                      >
+                        <Button
+                          variant="secondary"
+                          text="Remove"
+                          sx={{
+                            ...buttonStyles,
+                            backgroundColor: isRemoveOpen
+                              ? 'secondary'
+                              : 'white',
+                            color: isRemoveOpen ? 'white' : 'secondary',
+                            opacity: isKeepOpen ? 0.48 : 1,
+                            cursor: pendingVotes ? 'auto' : 'pointer',
+                            '&:hover': {
+                              boxShadow: pendingVotes && 'none',
+                            },
+                          }}
+                          icon={
+                            isRemoveOpen ? `remove-white.png` : `remove.png`
+                          }
+                        />
+                      </MultiSelect>
+                    </Grid>
+                  </Fragment>
+                ) : (
+                  ''
+                )}
+              </Box>
+            )}
           {project.image && (
             <Box
               sx={{

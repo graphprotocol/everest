@@ -95,7 +95,7 @@ Row.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
     category: PropTypes.string,
-    createdAt: PropTypes.string,
+    createdAt: PropTypes.number,
     image: PropTypes.string,
     reputation: PropTypes.string,
     isChallenged: PropTypes.bool,
