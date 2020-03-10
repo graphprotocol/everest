@@ -50,7 +50,7 @@ const helpers = {
             '0x' + utils.maxValidity,
             { from: ownerAddress }
         )
-        
+
         // Tx logs order
         // 1. NewMember
         // 2. Owner changed
@@ -345,10 +345,9 @@ const helpers = {
 
         // Increase time so challenge can be resolved
         await utils.increaseTime(utils.votePeriod + 1)
-        assert(await everest.challengeCanBeResolved(challengeID), 'Challenge could not be resolved')
         // We call from challengeeOwner, to show that anyone can challenge
         const result = await everest.resolveChallenge(challengeID, { from: challengeeOwner })
-        const challengeResult = result.logs[1].event
+        const challengeResult = result.logs[0].event
 
         // Check balances
         const reserveBankBalanceAfterResolve = await token.balanceOf(reserveBankAddress)
@@ -357,14 +356,14 @@ const helpers = {
             const challengerBalanceAfterResolve = await token.balanceOf(challengerOwner)
             assert.equal(
                 reserveBankBalanceAfterChallenge
-                    .sub(utils.challengeDepositBN.add(utils.applyFeeBN))
+                    .sub(utils.challengeRewardBN.add(utils.applyFeeBN))
                     .toString(),
                 reserveBankBalanceAfterResolve.toString(),
                 'Reserve bank did not send out challenge deposit and application fee'
             )
             assert.equal(
                 challengerBalanceAfterChallenge
-                    .add(utils.challengeDepositBN.add(utils.applyFeeBN))
+                    .add(utils.challengeRewardBN.add(utils.applyFeeBN))
                     .toString(),
                 challengerBalanceAfterResolve.toString(),
                 'Challenger did not get their deposit and challengees application fee'
@@ -372,12 +371,12 @@ const helpers = {
         } else if (challengeResult === 'ChallengeFailed') {
             const challengeeBalanceAfterResolve = await token.balanceOf(challengeeOwner)
             assert.equal(
-                reserveBankBalanceAfterChallenge.sub(utils.challengeDepositBN).toString(),
+                reserveBankBalanceAfterChallenge.sub(utils.challengeRewardBN).toString(),
                 reserveBankBalanceAfterResolve.toString(),
                 'Reserve bank did not send out challenge deposit and application fee'
             )
             assert.equal(
-                challengeeBalanceAfterChallenge.add(utils.challengeDepositBN).toString(),
+                challengeeBalanceAfterChallenge.add(utils.challengeRewardBN).toString(),
                 challengeeBalanceAfterResolve.toString(),
                 'Challenger did not get their deposit and challengees application fee'
             )

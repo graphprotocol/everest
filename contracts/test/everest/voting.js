@@ -100,7 +100,7 @@ contract('Everest', () => {
 
             const member = await registry.members(member2Address)
             const memberStartTime = Number(member.memberStartTime.toString())
-            
+
             const difference = challengeEndTime - memberStartTime
             const voteWeight = Math.floor(Math.sqrt(difference))
 

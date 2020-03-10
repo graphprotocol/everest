@@ -22,11 +22,10 @@ readFiles(
     'build/contracts/',
     (filename, content) => {
         const abi = JSON.parse(content).abi
-        fs.writeFileSync('abis/' + filename , JSON.stringify({abi}, null, 2))
-
+        fs.writeFileSync('abis/' + filename, JSON.stringify({ abi }, null, 2))
     },
-    (err) => {
-        console.log("error: ", err)
+    err => {
+        console.log('error: ', err)
         throw err
     }
 )
