@@ -36,7 +36,7 @@ import Button from '../components/Button'
 import TabView from '../components/TabView'
 import Link from '../components/Link'
 import Menu from '../components/Menu'
-import MultiSelect from '../components/Filters/MultiSelect'
+import MultiSelect from '../components/Select/MultiSelect'
 
 import Close from '../images/close.svg'
 import { navigate } from 'gatsby'

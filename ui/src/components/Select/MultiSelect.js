@@ -8,7 +8,7 @@ import Button from '../Button'
 import Row from './Row'
 import Divider from '../Divider'
 
-const Filters = ({
+const MultiSelect = ({
   title,
   subtitle,
   setValue,
@@ -235,7 +235,7 @@ const Filters = ({
   )
 }
 
-Filters.propTypes = {
+MultiSelect.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   type: PropTypes.string,
@@ -252,4 +252,4 @@ Filters.propTypes = {
   ),
 }
 
-export default Filters
+export default MultiSelect

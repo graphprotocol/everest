@@ -126,8 +126,16 @@ export const CATEGORY_QUERY = gql`
 `
 
 export const PROJECTS_QUERY = gql`
-  query projects($orderBy: Project_orderBy, $orderDirection: OrderDirection) {
-    projects(orderBy: $orderBy, orderDirection: $orderDirection) {
+  query projects(
+    $orderBy: Project_orderBy
+    $orderDirection: OrderDirection
+    $where: Project_filter
+  ) {
+    projects(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: $where
+    ) {
       id
       name
       image

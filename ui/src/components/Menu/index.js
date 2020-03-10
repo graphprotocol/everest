@@ -4,12 +4,13 @@ import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
-const Menu = ({ children, items, ...props }) => {
+const Menu = ({ children, items, menuStyles, setOpen, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const handleClick = () => {
       setIsOpen(false)
+      setOpen && setOpen(false)
     }
     window.addEventListener('click', handleClick)
 
@@ -24,12 +25,13 @@ const Menu = ({ children, items, ...props }) => {
         onClick={e => {
           e.stopPropagation()
           setIsOpen(!isOpen)
+          setOpen && setOpen(!isOpen)
         }}
       >
         {children}
       </Box>
       {isOpen && (
-        <Box sx={listStyles}>
+        <Box sx={{ ...listStyles, ...menuStyles }}>
           {items &&
             items.map(item => (
               <Box
@@ -38,6 +40,7 @@ const Menu = ({ children, items, ...props }) => {
                   e.stopPropagation()
                   item.handleSelect && item.handleSelect(e)
                   setIsOpen(false)
+                  setOpen && setOpen(false)
                 }}
                 key={item.text}
               >
@@ -96,6 +99,8 @@ const iconStyles = {
 
 Menu.propTypes = {
   children: PropTypes.any,
+  setOpen: PropTypes.func,
+  menuStyles: PropTypes.func,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.any,

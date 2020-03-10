@@ -5,8 +5,8 @@ import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import TextareaAutosize from 'react-textarea-autosize'
 
-import MultiSelect from '../Filters/MultiSelect'
-import Select from '../Filters/Select'
+import MultiSelect from '../Select/MultiSelect'
+import Select from '../Select'
 import UploadImage from '../UploadImage'
 
 const Field = ({
