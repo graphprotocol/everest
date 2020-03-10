@@ -421,7 +421,7 @@
         },
         {
           "indexed": true,
-          "name": "memberOwner",
+          "name": "votingMember",
           "type": "address"
         },
         {
@@ -463,7 +463,12 @@
         },
         {
           "indexed": false,
-          "name": "voteCount",
+          "name": "voterCount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "reward",
           "type": "uint256"
         }
       ],
@@ -495,7 +500,12 @@
         },
         {
           "indexed": false,
-          "name": "voteCount",
+          "name": "voterCount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "reward",
           "type": "uint256"
         }
       ],
@@ -621,11 +631,11 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_challengingMember",
+          "name": "_challenger",
           "type": "address"
         },
         {
-          "name": "_challengedMember",
+          "name": "_challengee",
           "type": "address"
         },
         {
@@ -656,7 +666,7 @@
           "type": "uint8"
         },
         {
-          "name": "_voter",
+          "name": "_votingMember",
           "type": "address"
         }
       ],
@@ -781,25 +791,6 @@
       "constant": true,
       "inputs": [
         {
-          "name": "_endTime",
-          "type": "uint256"
-        }
-      ],
-      "name": "hasVotingPeriodExpired",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
           "name": "_member",
           "type": "address"
         }
@@ -824,25 +815,6 @@
         }
       ],
       "name": "memberChallengeExists",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_challengeID",
-          "type": "uint256"
-        }
-      ],
-      "name": "challengeCanBeResolved",
       "outputs": [
         {
           "name": "",

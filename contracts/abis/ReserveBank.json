@@ -97,11 +97,11 @@
       "constant": false,
       "inputs": [
         {
-          "name": "receiver",
+          "name": "_receiver",
           "type": "address"
         },
         {
-          "name": "amount",
+          "name": "_amount",
           "type": "uint256"
         }
       ],

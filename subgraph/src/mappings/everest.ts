@@ -129,13 +129,13 @@ export function handleSubmitVote(event: SubmitVote): void {
   let id = event.params.challengeID
     .toString()
     .concat('-')
-    .concat(event.params.memberOwner.toHexString())
+    .concat(event.params.votingMember.toHexString())
   let vote = new Vote(id)
   let voteChoice = getVoteChoice(event.params.voteChoice)
   vote.choice = voteChoice
   vote.weight = event.params.voteWeight.toI32()
   vote.challenge = event.params.challengeID.toString()
-  vote.voter = event.params.memberOwner.toHexString()
+  vote.voter = event.params.votingMember.toHexString()
   vote.createdAt = event.block.timestamp.toI32()
   vote.save()
 
@@ -152,7 +152,7 @@ export function handleSubmitVote(event: SubmitVote): void {
 // Note a failed challenge means the Project gets to stay on the list
 export function handleChallengeFailed(event: ChallengeFailed): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(everest.challengeDeposit)
+  everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
   everest.save()
 
   let challenge = Challenge.load(event.params.challengeID.toString())
@@ -171,7 +171,7 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 // Note a successful challenge means the project is removed from the list
 export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(everest.challengeDeposit)
+  everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
   everest.save()
 
   let challenge = Challenge.load(event.params.challengeID.toString())
