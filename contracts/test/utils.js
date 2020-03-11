@@ -10,6 +10,7 @@ const utils = {
     /****** Constants ******/
     applyFeeBN: new BN(paramConfig.applicationFee),
     challengeDepositBN: new BN(paramConfig.challengeDeposit),
+    challengeRewardBN: new BN(paramConfig.challengeDeposit).div(new BN(10)),
 
     ZERO_ADDRESS: constants.ZERO_ADDRESS,
 

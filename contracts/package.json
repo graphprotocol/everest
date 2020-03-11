@@ -2,18 +2,19 @@
   "name": "everest-contracts",
   "version": "0.0.1",
   "scripts": {
-    "abis": "rm -rf ./abis && mkdir ./abis/ && node extractAbis.js",
-    "build": "truffle compile && yarn abis",
+    "abis": "rm -rf ./abis && mkdir ./abis/ && node ./scripts/extractAbis.js",
+    "build": "yarn compile && yarn abis && yarn flatten",
+    "compile": "truffle compile",
     "fix-js": "eslint ./ --fix",
     "fix-sol": "solium -d contracts/ --fix",
+    "flatten": "bash scripts/flatten.sh",
     "lint-js": "eslint ./",
     "lint-sol": "solium -d contracts/",
     "prettier-check": "prettier -c '**/*.js' && prettier -c '**/*.sol'",
     "prettier-js": "prettier -c '**/*.js'",
     "prettier-sol": "prettier -c '**/*.sol'",
     "prettier-write-js": "prettier --write '**/*.js'",
-    "prettier-write-sol": "prettier --write '**/*.sol'",
-    "flatten": "truffle-flattener ./contracts"
+    "prettier-write-sol": "prettier --write '**/*.sol'"
   },
   "dependencies": {
     "@truffle/hdwallet-provider": "1.0.28",
@@ -23,7 +24,8 @@
     "ethers": "4.0.39",
     "js-sha3": "^0.8.0",
     "openzeppelin-test-helpers": "0.5.1",
-    "truffle": "^5.0.4"
+    "truffle": "^5.0.4",
+    "truffle-flattener": "^1.4.2"
   },
   "devDependencies": {
     "eslint": "4.15.0",

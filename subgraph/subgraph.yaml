@@ -41,9 +41,9 @@ dataSources:
           handler: handleMemberChallenged
         - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
           handler: handleSubmitVote
-        - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256,uint256)
+        - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256,uint256,uint256)
           handler: handleChallengeFailed
-        - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256)
+        - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256,uint256)
           handler: handleChallengeSucceeded
   - kind: ethereum/contract
     name: EthereumDIDRegistry

@@ -15,12 +15,14 @@ import "./Registry.sol";
 import "./lib/EthereumDIDRegistry.sol";
 import "./lib/dai.sol";
 import "./lib/Ownable.sol";
+import "./lib/AddressUtils.sol";
 import "./abdk-libraries-solidity/ABDKMath64x64.sol";
 
 contract Everest is Ownable {
     using SafeMath for uint256;
     using ABDKMath64x64 for uint256;
     using ABDKMath64x64 for int128;
+    using AddressUtils for address;
 
     /***************
     GLOBAL CONSTANTS
@@ -83,7 +85,7 @@ contract Everest is Ownable {
     event SubmitVote(
         uint256 indexed challengeID,
         address indexed submitter, // msg.sender
-        address indexed memberOwner,
+        address indexed votingMember,
         VoteChoice voteChoice,
         uint256 voteWeight
     );
@@ -93,14 +95,16 @@ contract Everest is Ownable {
         uint256 indexed challengeID,
         uint256 yesVotes,
         uint256 noVotes,
-        uint256 voteCount
+        uint256 voterCount,
+        uint256 reward
     );
     event ChallengeSucceeded(
         address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
         uint256 noVotes,
-        uint256 voteCount
+        uint256 voterCount,
+        uint256 reward
     );
 
     /****
@@ -184,10 +188,11 @@ contract Everest is Ownable {
         address _reserveBank,
         address _registry
     ) public {
-        require(_approvedToken != address(0), "constructor - _approvedToken cannot be 0");
-        require(_DIDregistry != address(0), "constructor - _DIDregistry cannot be 0");
-        require(_reserveBank != address(0), "constructor - _reserveBank cannot be 0");
-        require(_registry != address(0), "constructor - _registry cannot be 0");
+        require(_approvedToken.isContract(), "The _approvedToken address should be a contract");
+        require(_DIDregistry.isContract(), "The _DIDregistry address should be a contract");
+        require(_reserveBank.isContract(), "The _reserveBank address should be a contract");
+        require(_registry.isContract(), "The _registry address should be a contract");
+
 
         require(
             _votingPeriodDuration > 0,
@@ -418,18 +423,21 @@ contract Everest is Ownable {
 
     /**
     @dev                        Starts a challenge on a member. Challenger deposits a fee.
-    @param _challengingMember   The memberName of the member who is challenging another member
-    @param _challengedMember    The memberName of the member being challenged
+    @param _challenger   The memberName of the member who is challenging another member
+    @param _challengee    The memberName of the member being challenged
     @param _details             Extra details relevant to the challenge. (IPFS hash without Qm)
     */
     function challenge(
-        address _challengingMember,
-        address _challengedMember,
+        address _challenger,
+        address _challengee,
         bytes32 _details
-    ) external onlyMemberOwner(_challengingMember) returns (uint256 challengeID) {
-        uint256 challengeeStartTime = registry.getMemberStartTime(_challengedMember);
-        require (challengeeStartTime > 0, "challenge - Challengee must exist");
-        uint256 currentChallengeID = registry.getChallengeID(_challengedMember);
+    ) external onlyMemberOwner(_challenger) returns (uint256 challengeID) {
+        require(isMember(_challengee), "challenge - Challengee must exist");
+        require(
+            _challenger != _challengee,
+            "challenge - Can't challenge self"
+        );
+        uint256 currentChallengeID = registry.getChallengeID(_challengee);
         if(currentChallengeID > 0){
             // Doing this allows us to never get stuck in a state with unresolved challenges
             // Also, the challenge rewards the deposit fee to winner or loser, so they are
@@ -437,15 +445,10 @@ contract Everest is Ownable {
             resolveChallenge(currentChallengeID);
         }
 
-        require(
-            _challengingMember != _challengedMember,
-            "challenge - Can't challenge self"
-        );
-
         uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
-            challenger: _challengingMember,
-            challengee: _challengedMember,
+            challenger: _challenger,
+            challengee: _challengee,
             // starts at 0 since the submitVote() will add this
             yesVotes: 0,
             noVotes: 0,
@@ -460,7 +463,7 @@ contract Everest is Ownable {
         challenges[newChallengeID] = newChallenge;
 
         // Updates member to store most recent challenge
-        registry.editChallengeID(_challengedMember, newChallengeID);
+        registry.editChallengeID(_challengee, newChallengeID);
 
         // Takes tokens from challenger
         require(
@@ -469,16 +472,16 @@ contract Everest is Ownable {
         );
 
         emit MemberChallenged(
-            _challengedMember,
+            _challengee,
             newChallengeID,
-            _challengingMember,
+            _challenger,
             /* solium-disable-next-line security/no-block-members*/
             now + votingPeriodDuration,
             newChallenge.details
         );
 
         // Insert challengers vote into the challenge
-        submitVote(newChallengeID, VoteChoice.Yes, _challengingMember);
+        submitVote(newChallengeID, VoteChoice.Yes, _challenger);
         return newChallengeID;
     }
 
@@ -486,13 +489,13 @@ contract Everest is Ownable {
     @dev                    Submit a vote. Owner or delegate can submit
     @param _challengeID     The challenge ID
     @param _voteChoice      The vote choice (yes or no)
-    @param _voter           The member who is voting
+    @param _votingMember    The member who is voting
     */
     function submitVote(
         uint256 _challengeID,
         VoteChoice _voteChoice,
-        address _voter
-    ) public onlyMemberOwnerOrDelegate(_voter) {
+        address _votingMember
+    ) public onlyMemberOwnerOrDelegate(_votingMember) {
         require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
             "submitVote - Vote must be either Yes or No"
@@ -508,16 +511,16 @@ contract Everest is Ownable {
             "submitVote - Challenge voting period has expired"
         );
         require(
-            storedChallenge.voteChoiceByMember[_voter] == VoteChoice.Null,
+            storedChallenge.voteChoiceByMember[_votingMember] == VoteChoice.Null,
             "submitVote - Member has already voted on this challenge"
         );
 
         require(
-            storedChallenge.challengee != _voter,
+            storedChallenge.challengee != _votingMember,
             "submitVote - Member can't vote on their own challenge"
         );
 
-        uint256 startTime = registry.getMemberStartTime(_voter);
+        uint256 startTime = registry.getMemberStartTime(_votingMember);
         // The lower the member start time (i.e. the older the member) the more vote weight
         uint256 voteWeightSquared = storedChallenge.endTime.sub(startTime);
 
@@ -529,8 +532,8 @@ contract Everest is Ownable {
         uint256 voteWeight = uint256(voteWeightInt128.toUInt());
 
         // Store vote (can't be msg.sender because delegate can be voting)
-        storedChallenge.voteChoiceByMember[_voter] = _voteChoice;
-        storedChallenge.voteWeightByMember[_voter] = voteWeight;
+        storedChallenge.voteChoiceByMember[_votingMember] = _voteChoice;
+        storedChallenge.voteWeightByMember[_votingMember] = voteWeight;
         storedChallenge.voterCount += 1;
 
         // Count vote
@@ -540,7 +543,7 @@ contract Everest is Ownable {
             storedChallenge.noVotes = storedChallenge.noVotes.add(voteWeight);
         }
 
-        emit SubmitVote(_challengeID, msg.sender, _voter, _voteChoice, voteWeight);
+        emit SubmitVote(_challengeID, msg.sender, _votingMember, _voteChoice, voteWeight);
     }
 
     /**
@@ -574,17 +577,20 @@ contract Everest is Ownable {
 
         bool didPass = storedChallenge.yesVotes > storedChallenge.noVotes;
         bool moreThanOneVote = storedChallenge.voterCount > 1;
+        // Challenge reward is 1/10th the challenge deposit. This allows incentivzation to
+        // always resolve the challenge, but also allows the reserveBank to accumlate value.
+        uint challengeReward = challengeDeposit.div(10);
+
         if (didPass && moreThanOneVote) {
             address challengerOwner = erc1056Registry.identityOwner(storedChallenge.challenger);
 
-            // Transfer challenge deposit and losers application fee
-            // to challenger for winning challenge
-            uint256 amount = challengeDeposit + applicationFee;
+            // The amount includes the applicationFee, which is the reward for challenging a project
+            // and getting it successfully removed.
+            uint256 amount = challengeReward + applicationFee;
             require(
                 reserveBank.withdraw(challengerOwner, amount),
                 "resolveChallenge - Rewarding challenger failed"
             );
-            emit Withdrawal(challengerOwner, amount);
 
             registry.deleteMember(storedChallenge.challengee);
             emit ChallengeSucceeded(
@@ -592,16 +598,16 @@ contract Everest is Ownable {
                 _challengeID,
                 storedChallenge.yesVotes,
                 storedChallenge.noVotes,
-                storedChallenge.voterCount
+                storedChallenge.voterCount,
+                amount
             );
         } else {
             address challengeeOwner = erc1056Registry.identityOwner(storedChallenge.challengee);
             // Transfer challenge deposit to challengee
             require(
-                reserveBank.withdraw(challengeeOwner, challengeDeposit),
+                reserveBank.withdraw(challengeeOwner, challengeReward),
                 "resolveChallenge - Rewarding challenger failed"
             );
-            emit Withdrawal(challengeeOwner, challengeDeposit);
 
             // Remove challenge ID from registry
             registry.editChallengeID(storedChallenge.challengee, 0);
@@ -610,7 +616,8 @@ contract Everest is Ownable {
                 _challengeID,
                 storedChallenge.yesVotes,
                 storedChallenge.noVotes,
-                storedChallenge.voterCount
+                storedChallenge.voterCount,
+                challengeReward
             );
         }
 
@@ -630,6 +637,7 @@ contract Everest is Ownable {
     @param _amount      The amount of funds being withdrawn
     */
     function withdraw(address _receiver, uint256 _amount) public onlyOwner returns (bool) {
+        require(_receiver != address(0), "Receiver must not be 0 address");
         emit Withdrawal(_receiver, _amount);
         return reserveBank.withdraw(_receiver, _amount);
     }
@@ -656,7 +664,7 @@ contract Everest is Ownable {
     @dev                Updates the charter for the Everest
     @param _newCharter  The data that point to the new charter
     */
-    function updateCharter(bytes32 _newCharter) public onlyOwner {
+    function updateCharter(bytes32 _newCharter) external onlyOwner {
         charter = _newCharter;
         emit CharterUpdated(charter);
     }
@@ -669,7 +677,7 @@ contract Everest is Ownable {
     @dev                    Returns true if a challenge vote period has finished
     @param _endTime  The starting period of the challenge
     */
-    function hasVotingPeriodExpired(uint256 _endTime) public view returns (bool) {
+    function hasVotingPeriodExpired(uint256 _endTime) private view returns (bool) {
         /* solium-disable-next-line security/no-block-members*/
         return now >= _endTime;
     }
@@ -701,7 +709,7 @@ contract Everest is Ownable {
                         member. Throws if challenge can't be resolved
     @param _challengeID The challenge ID
     */
-    function challengeCanBeResolved(uint256 _challengeID) public view returns (bool) {
+    function challengeCanBeResolved(uint256 _challengeID) private view returns (bool) {
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
             challenges[_challengeID].endTime > 0,

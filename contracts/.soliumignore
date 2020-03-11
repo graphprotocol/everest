@@ -1,3 +1,5 @@
 node_modules
 contracts/lib/Context.sol
 contracts/lib/Dai.sol
+contracts/lib/AddressUtils.sol
+contracts/abdk-libraries-solidity

@@ -89,7 +89,7 @@ contract('Everest', () => {
 
             assert.equal(tx.logs[0].args.submitter, owner5Address, 'Delegate did not submit vote')
             assert.equal(
-                tx.logs[0].args.memberOwner,
+                tx.logs[0].args.votingMember,
                 member2Address,
                 'Member was not used for vote'
             )

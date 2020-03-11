@@ -45,7 +45,7 @@ contract('everest', () => {
 
     describe(
         'Challenges. Functions: challenge(), submitVote(), submitVotes() resolveChallenge(), ' +
-            'memberChallengeExists(), challengeCanBeResolved(), isMember()',
+            'memberChallengeExists(), isMember()',
         () => {
             // Set up 5 Tokens
             before(async () => {

@@ -47,7 +47,7 @@ contract('Everest', () => {
             )
             assert(membershipStartTimeUpdated == 0, 'Membership start time should be reset to 0')
         })
- 
+
         it('Should revert if non-owner try to exit a member', async () => {
             await utils.expectRevert(
                 everest.memberExit(newMemberAddress, { from: ownerAddress2 }),
@@ -64,7 +64,7 @@ contract('Everest', () => {
         it('should disallow a non-owner to set attribute', async () => {
             await utils.expectRevert(
                 helpers.setAttribute(newMemberAddress, ownerWallet2),
-                "Caller must be the identity owner -- Reason given: Caller must be the identity owner."
+                'Caller must be the identity owner -- Reason given: Caller must be the identity owner.'
             )
         })
     })

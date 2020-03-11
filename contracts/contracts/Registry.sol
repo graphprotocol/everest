@@ -37,11 +37,13 @@ contract Registry is Ownable {
         // Create the member struct
         Member memory member = Member({
             challengeID: 0,
+            /* solium-disable-next-line security/no-block-members*/
             memberStartTime: now
         });
         // Store the member
         members[_member] = member;
 
+        /* solium-disable-next-line security/no-block-members*/
         return now;
     }
 

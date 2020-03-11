@@ -22,7 +22,6 @@ contract('Everest', accounts => {
         token = await Token.deployed()
         registry = await Registry.deployed()
         reserveBank = await ReserveBank.deployed()
-
     })
 
     describe('Everest owner functionality. Functions: withdraw(), updateCharter()', () => {
@@ -62,7 +61,9 @@ contract('Everest', accounts => {
         })
 
         it('should allow owner the transfer of ReserveBank', async () => {
-            await everest.transferOwnershipReserveBank(newOwnerAddress, { from: registryOwnerAddress })
+            await everest.transferOwnershipReserveBank(newOwnerAddress, {
+                from: registryOwnerAddress
+            })
             const newOwner = await reserveBank.owner()
             assert.equal(newOwnerAddress, newOwner, 'ReserveBank ownership was not transferred')
         })
