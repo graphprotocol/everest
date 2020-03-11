@@ -92,7 +92,7 @@ const helpers = {
         assert.equal(ownerAddress, identityOwner, 'Ownership was not transferred')
 
         // Check set attribute worked
-        const setAttributeLogData = tx.receipt.rawLogs[1].data
+        const setAttributeLogData = tx.receipt.rawLogs[2].data
         const mockDataFromLogs = setAttributeLogData.slice(
             setAttributeLogData.length - 64,
             setAttributeLogData.length

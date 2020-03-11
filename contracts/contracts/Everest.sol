@@ -220,59 +220,6 @@ contract Everest is Ownable {
     // ADD MEMBER FUNCTIONS
     // ---------------------
 
-
-    /// @dev    Note that this internal function is created in order to avoid the
-    ///         Solidity stack too deep error.
-    function applySignedWithAttributeAndPermitInternal(
-        address _newMember,
-        uint8[3] memory _sigV,
-        bytes32[3] memory _sigR,
-        bytes32[3] memory _sigS,
-        address _owner,
-        bytes32 _offChainDataName,
-        bytes memory _offChainDataValue,
-        uint256 _offChainDataValidity
-    ) internal {
-        require(
-            registry.getMemberStartTime(_newMember) == 0,
-            "applySignedInternal - This member already exists"
-        );
-        uint256 startTime = registry.setMember(_newMember);
-
-        // This event should be emitted before changeOwnerSigned() is called. This way all events
-        // in the Ethereum DID registry can start to be considered within the bounds of the event
-        // event NewMember() and the end of membership with event MemberExit() or event
-        // ChallengeSucceeded()
-        emit NewMember(
-            _newMember,
-            startTime,
-            applicationFee
-        );
-
-        erc1056Registry.setAttributeSigned(
-            _newMember,
-            _sigV[0],
-            _sigR[0],
-            _sigS[0],
-            _offChainDataName,
-            _offChainDataValue,
-            _offChainDataValidity
-        );
-
-        erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _owner);
-
-        // Approve Everest to transfer DAI on the owners behalf
-        // Expiry = 0 is infinite. true is unlimited allowance
-        uint256 nonce = approvedToken.nonces(_owner);
-        approvedToken.permit(_owner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
-
-        // Transfers tokens from owner to the reserve bank
-        require(
-            approvedToken.transferFrom(_owner, address(reserveBank), applicationFee),
-            "applySignedInternal - Token transfer failed"
-        );
-    }
-
     /**
     @dev                            Allows a user to add a member to the Registry and
                                     add off chain data to the DID registry. The sig for
@@ -316,6 +263,35 @@ contract Everest is Ownable {
         );
     }
 
+    /// @dev    Note that this internal function is created in order to avoid the
+    ///         Solidity stack too deep error.
+    function applySignedWithAttributeAndPermitInternal(
+        address _newMember,
+        uint8[3] memory _sigV,
+        bytes32[3] memory _sigR,
+        bytes32[3] memory _sigS,
+        address _owner,
+        bytes32 _offChainDataName,
+        bytes memory _offChainDataValue,
+        uint256 _offChainDataValidity
+    ) internal {
+        // Approve Everest to transfer DAI on the owners behalf
+        // Expiry = 0 is infinite. true is unlimited allowance
+        uint256 nonce = approvedToken.nonces(_owner);
+        approvedToken.permit(_owner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
+
+        applySignedWithAttribute(
+            _newMember,
+            [_sigV[0], _sigV[1]],
+            [_sigR[0], _sigR[1]],
+            [_sigS[0], _sigS[1]],
+            _owner,
+            _offChainDataName,
+            _offChainDataValue,
+            _offChainDataValidity
+        );
+    }
+
     /**
     @dev                            Functions the same as applySignedWithAttributeAndPermit(),
                                     except without permit(). This function should be called by
@@ -337,14 +313,14 @@ contract Everest is Ownable {
     */
     function applySignedWithAttribute(
         address _newMember,
-        uint8[2] calldata _sigV,
-        bytes32[2] calldata _sigR,
-        bytes32[2] calldata _sigS,
+        uint8[2] memory _sigV,
+        bytes32[2] memory _sigR,
+        bytes32[2] memory _sigS,
         address _owner,
         bytes32 _offChainDataName,
-        bytes calldata _offChainDataValue,
+        bytes memory _offChainDataValue,
         uint256 _offChainDataValidity
-    ) external {
+    ) public {
         require(
             registry.getMemberStartTime(_newMember) == 0,
             "applySignedInternal - This member already exists"
@@ -379,9 +355,6 @@ contract Everest is Ownable {
             "applySignedInternal - Token transfer failed"
         );
     }
-
-
-
 
     /**
     @dev                Allow a member to voluntarily leave. Note that this does not
