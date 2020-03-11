@@ -73,15 +73,33 @@ const Navbar = ({ path, ...props }) => {
       {isMobile ? (
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       ) : (
-        <Grid sx={navStyles}>
+        <Grid
+          sx={{
+            gridTemplateColumns: ['auto', '30px 1fr'],
+            width: [0, '100%', '100%'],
+            alignItems: 'center',
+          }}
+          gap={2}
+        >
           <Link to="/" sx={{ '&:hover': { svg: { marginLeft: 0 } } }}>
-            <Logo sx={{ verticalAlign: 'middle' }} />
+            <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
           </Link>
-          <Link to="/">
-            <span>Everest</span>
-          </Link>
-          <Link to="/projects">Projects</Link>
-          <Link to="/categories">Categories</Link>
+          <Grid
+            sx={{
+              gridTemplateColumns: ['auto', 'repeat(4, max-content)'],
+              width: [0, '100%', '100%'],
+              maxWidth: '420px',
+              alignItems: 'center',
+            }}
+            gap={6}
+          >
+            <Link to="/">
+              <span>Everest</span>
+            </Link>
+            <Link to="/projects">Projects</Link>
+            <Link to="/categories">Categories</Link>
+            <Link to="/charter">Charter</Link>
+          </Grid>
         </Grid>
       )}
       <Grid
@@ -152,7 +170,7 @@ const Navbar = ({ path, ...props }) => {
 }
 
 const navStyles = {
-  gridTemplateColumns: ['auto', '50px 1fr 1fr 1fr'],
+  gridTemplateColumns: ['auto', '50px 1fr 1fr 1fr 1fr'],
   width: [0, '100%', '100%'],
   maxWidth: '380px',
   alignItems: 'center',
