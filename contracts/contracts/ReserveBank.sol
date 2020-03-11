@@ -21,13 +21,19 @@ contract ReserveBank is Ownable {
     using SafeMath for uint256;
     using AddressUtils for address;
 
-    Dai public token; // approved token contract reference
+    Dai public token;
 
     constructor(address _daiAddress) public {
         require(_daiAddress.isContract(), "The address should be a contract");
         token = Dai(_daiAddress);
     }
 
+    /**
+    @dev                Allow the owner of the contract (Everest) to withdraw the funds.
+    @param _receiver    The address receiving the tokens
+    @param _amount      The amount being withdrawn
+    @return             True if successful
+    */
     function withdraw(address _receiver, uint256 _amount)
         public
         onlyOwner

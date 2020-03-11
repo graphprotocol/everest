@@ -6,9 +6,11 @@ const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const config = require('../conf/config.js')
 const params = config.everestParams
 
-module.exports = async (deployer, network, accounts) => {
+module.exports = async (deployer, network) => {
     let owner
     let didAddress
+
+    // Set up didAddress and owner depending on the network
     if (network === 'development') {
         owner = params.owner
         // We must deploy our own DID registry for ganache
@@ -20,11 +22,12 @@ module.exports = async (deployer, network, accounts) => {
         didAddress = config.ropstenParams.ethereumDIDRegistryAddress
     }
 
+    // Deploy the three dependant contracts that must exist before Everest
     let daiAddress = (await Token.deployed()).address
-
     const reserveBank = await deployer.deploy(ReserveBank, daiAddress, { from: owner })
     const registry = await deployer.deploy(Registry, { from: owner })
 
+    // Deploy Everest
     await deployer.deploy(
         Everest,
         daiAddress,
@@ -37,9 +40,13 @@ module.exports = async (deployer, network, accounts) => {
         registry.address,
         { from: owner }
     )
+
+    // The ownership of Registry and ReserveBank must be transferred to Everest
     const everest = await Everest.deployed()
     await registry.transferOwnership(everest.address)
     await reserveBank.transferOwnership(everest.address)
+
+    // Log all addresses of contracts
     console.log(`Mock DAI Address: ${daiAddress}`)
     console.log(`Ethr DID Address: ${didAddress}`)
     console.log(`ReserveBank Address: ${reserveBank.address}`)

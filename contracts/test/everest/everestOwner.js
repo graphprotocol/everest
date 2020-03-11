@@ -6,7 +6,7 @@ const Token = artifacts.require('Dai.sol')
 const helpers = require('../helpers.js')
 const utils = require('../utils.js')
 
-contract('Everest', accounts => {
+contract('Everest', () => {
     const newMemberWallet = utils.wallets.nine() // throw away wallet
     const ownerWallet = utils.wallets.one()
     const registryOwnerWallet = utils.wallets.zero()
@@ -34,7 +34,7 @@ contract('Everest', accounts => {
 
         it('should allow owner to withdraw DAI from reserve bank', async () => {
             // Apply one member so the reserve bank has 10 DAI
-            await helpers.applySignedWithAttribute(newMemberWallet, ownerWallet)
+            await helpers.applySignedWithAttributeAndPermit(newMemberWallet, ownerWallet)
 
             const reserveBankAddress = await everest.reserveBank()
 

@@ -48,11 +48,11 @@ contract('Everest', () => {
     describe('Test voting require statements and functionality', () => {
         // Set up 5 Tokens
         before(async () => {
-            await helpers.applySignedWithAttribute(member1Wallet, owner1Wallet)
-            await helpers.applySignedWithAttribute(member2Wallet, owner2Wallet)
-            await helpers.applySignedWithAttribute(member3Wallet, owner3Wallet)
-            await helpers.applySignedWithAttribute(member4Wallet, owner4Wallet)
-            await helpers.applySignedWithAttribute(member5Wallet, owner5Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet)
         })
         it('Voting on a challenge that does not exist fails', async () => {
             const fakeChallengeID = 500
@@ -107,7 +107,7 @@ contract('Everest', () => {
             assert.equal(voteWeight, eventVoteWeight, 'Square root was not calculated properly')
         })
 
-        it('Double voting on a challenge fails. Vote ', async () => {
+        it('Double voting on a challenge fails.', async () => {
             const challengeID = await registry.getChallengeID(member5Address)
             await utils.expectRevert(
                 everest.submitVote(challengeID, 1, member2Address, {

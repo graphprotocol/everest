@@ -1,5 +1,4 @@
 # Everest Contracts
-The Everest contracts allow for any list of members to be curated on Ethereum by a list of members.
 Everest is a DAO that allows any Ethereum account to apply as a member. Whitelisted members can
 then challenge any member they believe is representing themselves incorrectly, and with a majority
 vote they can be removed from the list. 
@@ -8,18 +7,23 @@ Everest is used specifically to curate a list of crypto projects. However, it is
 this code is forked, and used to curate any list. 
 
 ## Building Solidity and ABIs
-The `package.json` has a command `yarn build` that will run `truffle build` and then run a script
-to extract just the abis in json files. The abis are located in `abis`.
+The `package.json` has a command `yarn build` that will run `truffle compile`, run a script to 
+extract the abis, and run a script to create flattened contracts.
+
+## Linting
+This project uses Prettier, Solium, and eslint. Node scripts are in `package.json`
+to help.
 
 ## Testing
 1. Make sure Node 12 is installed (It might work with newer versions, but it is unconfirmed)
-2. Make sure Truffle 5.1.8 is installed globally `yarn global add truffle@5.1.18`
-3. Run `yarn` at project root directory
-4. Start ganache with `ganache-cli -d -l 9900000 -i 9545`. Note - we use 9,900,000 because
-   that is what mainnet eth is doing today (Dec 2019)
-5. Run `truffle deploy`
+2. Make sure Truffle is installed globally. It currently works with version `v5.0.43`. 
+   The command is `yarn global add truffle`
+3. Run `yarn` at contracts root directory
+4. Start ganache with `ganache-cli -d -l 9900000 -i 9545`. Note - we use 9,900,000 because that is 
+   what mainnet eth is doing today (Dec 2019)
+5. Run `truffle test`
 6. Truffle stores the contracts each time you deploy. So the easiest way to restart is to just
-   restart ganache with `CRTL-C`, and then start it up again and run `truffle deploy`
+   restart ganache with `CRTL-C`, and then start it up again and run `truffle test`
 
 ## Current Contract Addresses
 See `addresses.json`
@@ -28,5 +32,5 @@ See `addresses.json`
 1. Deploy new contracts to Ropsten with `truffle deploy --network ropsten`. Truffle stores the 
    addresses for networks, so if you are trying to re-deploy you may have to 
    run `truffle deploy --reset --network ropsten`
-2. Get the new contract addresses from the deployment. They are logged in the te
-3. rminal output from deploying. Put these contract addresses into `addresses.json`
+2. Get the new contract addresses from the deployment. They are logged in the terminal
+   output from deploying. Put these contract addresses into `addresses.json`

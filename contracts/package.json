@@ -24,7 +24,6 @@
     "ethers": "4.0.39",
     "js-sha3": "^0.8.0",
     "openzeppelin-test-helpers": "0.5.1",
-    "truffle": "^5.0.4",
     "truffle-flattener": "^1.4.2"
   },
   "devDependencies": {

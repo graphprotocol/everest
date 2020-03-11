@@ -30,21 +30,12 @@ contract('Everest', () => {
     const owner5Wallet = utils.wallets.four()
     const owner5Address = owner5Wallet.signingKey.address
 
-    const nonMemberWallet = utils.wallets.ten()
-    const nonMemberAddress = nonMemberWallet.signingKey.address
-
-    const voteChoice = {
-        Null: 0,
-        Yes: 1,
-        No: 2
-    }
     const fakeDetails = '0x5555555555555555555555555555555555555555555555555555555555554444'
 
     const delegateType = '0x6576657265737400000000000000000000000000000000000000000000000000'
 
-    // TODO - fix this, it isnt 100 years
-    const oneHundredYearsValidity =
-        '0x00000000000000000000000000000000000000000000000000ffffffffffffff'
+    // Arbitrarily set to a high value, as Everest does not use Delegate Validity
+    const delegateValidity = '0x00000000000000000000000000000000000000000000000000ffffffffffffff'
 
     let everest
     let edr
@@ -53,22 +44,19 @@ contract('Everest', () => {
         edr = await EthereumDIDRegistry.deployed()
     })
 
-    describe('Test voting require statements and functionality', () => {
+    describe('Delegates - Testing delegate voting', () => {
         before(async () => {
-            await helpers.applySignedWithAttribute(member1Wallet, owner1Wallet)
-            await helpers.applySignedWithAttribute(member2Wallet, owner2Wallet)
-            await helpers.applySignedWithAttribute(member3Wallet, owner3Wallet)
-            await helpers.applySignedWithAttribute(member4Wallet, owner4Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
         })
         it('Allows a delegate to vote for the owner', async () => {
-            await edr.addDelegate(
-                member2Address,
-                delegateType,
-                owner5Address,
-                oneHundredYearsValidity,
-                { from: owner2Address }
-            )
+            await edr.addDelegate(member2Address, delegateType, owner5Address, delegateValidity, {
+                from: owner2Address
+            })
 
+            // Check delegate was added successfully
             const validDelegate = await edr.validDelegate(
                 member2Address,
                 delegateType,
@@ -83,6 +71,7 @@ contract('Everest', () => {
                 owner1Address
             )
 
+            // Vote with delegate account
             const tx = await everest.submitVote(challengeID, 1, member2Address, {
                 from: owner5Address
             })
