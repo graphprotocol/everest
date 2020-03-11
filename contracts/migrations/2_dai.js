@@ -7,6 +7,8 @@ module.exports = async (deployer, network) => {
     let tokenHolders
     let tokenMinter
     let chainID
+
+    // Set up ganache token holders for MockDAI
     if (network === 'development') {
         tokenHolders = [
             // Zero is minter, starts with 100M, so skip it
@@ -17,6 +19,8 @@ module.exports = async (deployer, network) => {
         ]
         tokenMinter = config.wallets.zero().signingKey.address
         chainID = 9545
+
+        // Set up Testnet token holders for MockDAI
     } else {
         tokenHolders = [
             config.metamaskAddresses.one,
@@ -32,6 +36,7 @@ module.exports = async (deployer, network) => {
         }
     }
 
+    // Iterate through tokenHolders and give them each 20M MockDAI by recursion
     async function giveTokensTo(tokenHolders) {
         if (tokenHolders.length === 0) {
             return
@@ -49,15 +54,16 @@ module.exports = async (deployer, network) => {
         giveTokensTo(tokenHolders.slice(1))
     }
 
+    // Deploy token, mint, and give to 5 accounts
     if (network !== 'mainnet') {
         // eslint-disable-next-line no-console
         console.log('Deploying token to a test network and minting 100M DAI.....')
         await deployer.deploy(Token, chainID)
 
+        // eslint-disable-next-line no-console
         console.log(`Giving tokens to ${tokenHolders.length} accounts`)
         const token = await Token.deployed()
 
-        // eslint-disable-next-line no-console
         await token.mint(tokenMinter, config.ropstenParams.supply)
         await giveTokensTo(tokenHolders)
     } else {

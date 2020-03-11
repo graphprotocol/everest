@@ -20,13 +20,13 @@ contract('Everest', () => {
         // Allows a member to permit the Everest to transfer DAI, apply to be on the
         // Everest, and update the token information, while using ERC-1056 for each
         it('Should allow member to join the registry', async () => {
-            await helpers.applySignedWithAttribute(newMemberWallet, ownerWallet1)
+            await helpers.applySignedWithAttributeAndPermit(newMemberWallet, ownerWallet1)
         })
 
         it('Should prevent a member from double joining', async () => {
             // Should fail when trying to apply again
             await utils.expectRevert(
-                helpers.applySignedWithAttribute(newMemberWallet, ownerWallet1),
+                helpers.applySignedWithAttributeAndPermit(newMemberWallet, ownerWallet1),
                 'applySignedInternal - This member already exists'
             )
         })

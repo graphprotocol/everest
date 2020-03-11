@@ -28,9 +28,6 @@ contract('everest', () => {
     const owner5Wallet = utils.wallets.four()
     const owner5Address = owner5Wallet.signingKey.address
 
-    const nonMemberWallet = utils.wallets.ten()
-    const nonMemberAddress = nonMemberWallet.signingKey.address
-
     const voteChoice = {
         Null: 0,
         Yes: 1,
@@ -43,17 +40,17 @@ contract('everest', () => {
         everest = await Everest.deployed()
     })
 
-    describe('Test voting require statements and functionality', () => {
+    describe('Test the submitVotes() function', () => {
         // Set up 5 Tokens
         before(async () => {
             // Note one address owns 4 of these tokens
-            await helpers.applySignedWithAttribute(member1Wallet, owner1Wallet)
-            await helpers.applySignedWithAttribute(member2Wallet, owner1Wallet)
-            await helpers.applySignedWithAttribute(member3Wallet, owner1Wallet)
-            await helpers.applySignedWithAttribute(member4Wallet, owner4Wallet)
-            await helpers.applySignedWithAttribute(member5Wallet, owner5Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner1Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner1Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet)
         })
-        it('submitVotes() works. and tests passing unequal arrays will fail', async () => {
+        it('submitVotes() works as intended, and fails with unequal arrays', async () => {
             // Member 4 challenges Member 5
             // We will then get owner1, who owns three token members, to vote 3 times
             const challengeID = await helpers.challenge(

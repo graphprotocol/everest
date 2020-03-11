@@ -1,12 +1,12 @@
 /*
- Everest is a DAO that is designed to curate a Registry of members. Specifically
- it is a list of crypto projects.
+ Everest is a DAO that is designed to curate a Registry of members.
 
- This storage of the list is in Registry.sol and in the EthereumDIDRegistry (created by uport).
+ This storage of the list is in Registry. The EthereumDIDRegistry is used to store data such
+ as attributes and delegates and transfer of ownership. The only storage in the Everest contract
+ is Challenges and Votes, which can be safely removed upon completion. This allows for Everest
+ to be an upgradeable contract, while Registry is the persistent storage.
 
  The DAO is inspired by the Moloch DAO smart contracts https://github.com/MolochVentures/moloch
- The DAO allows anoyone to apply to the list.
- It also has reputation based voting for challenges based on how long a project has been a member.
 */
 pragma solidity ^0.5.8;
 
@@ -24,20 +24,20 @@ contract Everest is Ownable {
     using ABDKMath64x64 for int128;
     using AddressUtils for address;
 
-    /***************
-    GLOBAL CONSTANTS
-    ***************/
+    // -----------------
+    // GLOBAL CONSTANTS
+    // -----------------
+
     // Voting period length for a challenge (in unix seconds)
     uint256 public votingPeriodDuration;
-    // Deposit that must be made in order to submit a challenge. Returned if challenge is won
+    // Deposit that must be made in order to submit a challenge
     uint256 public challengeDeposit;
     // Application fee to become a member
     uint256 public applicationFee;
-    // IPFS hash for charter, which dicates how token data should be posted
+    // IPFS hash for off chain storage of the Everest Charter
     bytes32 public charter;
 
-
-    // Approved token contract reference (this version = DAI)
+    // Approved token contract reference (i.e. DAI)
     Dai public approvedToken;
     // Reserve bank contract reference
     ReserveBank public reserveBank;
@@ -51,12 +51,11 @@ contract Everest is Ownable {
     // is passed to the ERC-1056 registry, and hashed within the delegate functions
     bytes32 delegateType = 0x6576657265737400000000000000000000000000000000000000000000000000;
 
-    /******
-    EVENTS
-    ******/
+    // -------
+    // EVENTS
+    // -------
+
     // Event data on delegates, owner, and offChainData are emitted from the ERC-1056 registry
-    // We rely on NewMember and MemberExited to distingushing between identities on
-    // ERC-1056 that are part of everest and aren't
     event NewMember(address indexed member, uint256 startTime, uint256 fee);
     event MemberExited(address indexed member);
     event CharterUpdated(bytes32 indexed data);
@@ -84,7 +83,7 @@ contract Everest is Ownable {
 
     event SubmitVote(
         uint256 indexed challengeID,
-        address indexed submitter, // msg.sender
+        address indexed submitter,      // i.e. msg.sender
         address indexed votingMember,
         VoteChoice voteChoice,
         uint256 voteWeight
@@ -98,6 +97,7 @@ contract Everest is Ownable {
         uint256 voterCount,
         uint256 reward
     );
+
     event ChallengeSucceeded(
         address indexed member,
         uint256 indexed challengeID,
@@ -107,9 +107,9 @@ contract Everest is Ownable {
         uint256 reward
     );
 
-    /****
-    STATE
-    *****/
+    // ------
+    // STATE
+    // ------
 
     enum VoteChoice {
         Null, // Same as not voting at all (i.e. 0 value)
@@ -117,12 +117,11 @@ contract Everest is Ownable {
         No
     }
 
-    // Note that challenge deposit and token held constant in global variable
     struct Challenge {
         address challenger;         // The member who submitted the challenge
         address challengee;         // The member being challenged
-        uint256 yesVotes;           // The total number of YES votes for this challenge
-        uint256 noVotes;            // The total number of NO votes for this challenge
+        uint256 yesVotes;           // The total weight of YES votes for this challenge
+        uint256 noVotes;            // The total weight of NO votes for this challenge
         uint256 voterCount;         // Total count of voters participating in the challenge
         uint256 endTime;            // Ending time of the challenge
         bytes32 details;            // Challenge details - an IPFS hash, without Qm, to make bytes32
@@ -131,12 +130,12 @@ contract Everest is Ownable {
     }
 
     mapping (uint256 => Challenge) public challenges;
-    // Challenge counter for challenge IDs. Starts at 1 to prevent confusion with zeroed values
+    // Challenge counter for challenge IDs
     uint256 public challengeCounter = 1;
 
-    /********
-    MODIFIERS
-    ********/
+    // ----------
+    // MODIFIERS
+    // ----------
 
     /**
     @dev                Modifer that allows a function to be called by a real member.
@@ -170,14 +169,15 @@ contract Everest is Ownable {
         address owner = erc1056Registry.identityOwner(_member);
         require(
             owner == msg.sender,
-            "onlyMemberOwner - Caller must be the delegate or owner"
+            "onlyMemberOwner - Caller must be the owner"
         );
         _;
     }
 
-    /********
-    FUNCTIONS
-    ********/
+    // ----------
+    // FUNCTIONS
+    // ----------
+
     constructor(
         address _approvedToken,
         uint256 _votingPeriodDuration,
@@ -192,12 +192,7 @@ contract Everest is Ownable {
         require(_DIDregistry.isContract(), "The _DIDregistry address should be a contract");
         require(_reserveBank.isContract(), "The _reserveBank address should be a contract");
         require(_registry.isContract(), "The _registry address should be a contract");
-
-
-        require(
-            _votingPeriodDuration > 0,
-            "constructor - _votingPeriodDuration cant be 0"
-        );
+        require(_votingPeriodDuration > 0, "constructor - _votingPeriodDuration cannot be 0");
 
         approvedToken = Dai(_approvedToken);
         votingPeriodDuration = _votingPeriodDuration;
@@ -209,7 +204,7 @@ contract Everest is Ownable {
         registry = Registry(_registry);
 
         emit EverestDeployed(
-            msg.sender, // owner
+            msg.sender,             // i.e owner
             _approvedToken,
             _votingPeriodDuration,
             _challengeDeposit,
@@ -221,26 +216,13 @@ contract Everest is Ownable {
         );
     }
 
-    /*******************
-    ADD MEMBER FUNCTIONS
-    *******************/
+    // ---------------------
+    // ADD MEMBER FUNCTIONS
+    // ---------------------
 
-    /**
-    @dev                            Allows a user to apply to add a member to the Registry and
-                                    add off chain data to the DID registry. The sig for
-                                    changeOwner() and setAttribute are from _newMember (the browser
-                                    created private key) and for permit() it is the _owner
-    @param _newMember               The address of the new member
-    @param _sigV                    V of sigs
-    @param _sigR                    R of sigs
-    @param _sigS                    S of sigs
-    @param _owner                   Owner of the member application
-    @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
-                                    to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
-                                    with zeros appended to make it 32 bytes
-    @param _offChainDataValue       Attribute data stored offchain (IPFS)
-    @param _offChainDataValidity    Length of time attribute data is valid
-    */
+
+    /// @dev    Note that this internal function is created in order to avoid the
+    ///         Solidity stack too deep error.
     function applySignedWithAttributeAndPermitInternal(
         address _newMember,
         uint8[3] memory _sigV,
@@ -257,12 +239,12 @@ contract Everest is Ownable {
         );
         uint256 startTime = registry.setMember(_newMember);
 
-        // This event must be emitted before changeOwnerSigned() is called. This creates an identity
-        // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
-        // identity
+        // This event should be emitted before changeOwnerSigned() is called. This way all events
+        // in the Ethereum DID registry can start to be considered within the bounds of the event
+        // event NewMember() and the end of membership with event MemberExit() or event
+        // ChallengeSucceeded()
         emit NewMember(
             _newMember,
-            /* solium-disable-next-line security/no-block-members*/
             startTime,
             applicationFee
         );
@@ -279,7 +261,7 @@ contract Everest is Ownable {
 
         erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _owner);
 
-        // Approve the Everest to transfer on the owners behalf
+        // Approve Everest to transfer DAI on the owners behalf
         // Expiry = 0 is infinite. true is unlimited allowance
         uint256 nonce = approvedToken.nonces(_owner);
         approvedToken.permit(_owner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
@@ -292,20 +274,25 @@ contract Everest is Ownable {
     }
 
     /**
-    @dev                            Allows a user to apply to add a member to the Registry and
+    @dev                            Allows a user to add a member to the Registry and
                                     add off chain data to the DID registry. The sig for
-                                    changeOwner() and setAttribute are from _newMember (the browser
-                                    created private key) and for permit() it is the _owner
+                                    changeOwner() and setAttribute() are from _newMember
+                                    and for DAIS permit() it is the _owner.
+
+                                    [0] = setAttributeSigned() signature
+                                    [1] = changeOwnerSigned() signature
+                                    [2] = permit() signature
+
     @param _newMember               The address of the new member
     @param _sigV                    V of sigs
     @param _sigR                    R of sigs
     @param _sigS                    S of sigs
-    @param _owner                   Owner of the member application
+    @param _owner                   Owner of the member (on the DID registry)
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
                                     with zeros appended to make it 32 bytes
     @param _offChainDataValue       Attribute data stored offchain (IPFS)
-    @param _offChainDataValidity    Length of time attribute data is valid
+    @param _offChainDataValidity    Length of time attribute data is valid (unix)
     */
     function applySignedWithAttributeAndPermit(
         address _newMember,
@@ -330,11 +317,13 @@ contract Everest is Ownable {
     }
 
     /**
-    @dev                            Allows a user to apply to add a member to the Registry and
-                                    add off chain data to the DID registry. The sig for
-                                    changeOwner() and setAttribute are from _newMember (the browser
-                                    created private key). This is called when the _owner has already
-                                    called permit()
+    @dev                            Functions the same as applySignedWithAttributeAndPermit(),
+                                    except without permit(). This function should be called by
+                                    any _owner that has already called permit() for Everest.
+
+                                    [0] = setAttributeSigned() signature
+                                    [1] = changeOwnerSigned() signature
+
     @param _newMember               The address of the new member
     @param _sigV                    V of sigs
     @param _sigR                    R of sigs
@@ -362,12 +351,12 @@ contract Everest is Ownable {
         );
         uint256 startTime = registry.setMember(_newMember);
 
-        // This event must be emitted before changeOwnerSigned() is called. This creates an identity
-        // in Everest, and from that point on, ethereumDIDRegistry events are relevant to this
-        // identity
+        // This event should be emitted before changeOwnerSigned() is called. This way all events
+        // in the Ethereum DID registry can start to be considered within the bounds of the event
+        // event NewMember() and the end of membership with event MemberExit() or event
+        // ChallengeSucceeded()
         emit NewMember(
             _newMember,
-            /* solium-disable-next-line security/no-block-members*/
             startTime,
             applicationFee
         );
@@ -397,7 +386,7 @@ contract Everest is Ownable {
     /**
     @dev                Allow a member to voluntarily leave. Note that this does not
                         reset ownership or delegates in the ERC-1056 registry. This must be done by
-                        calling the respective functions in the registry that handle those resets.
+                        calling the respective functions in the registry that handle those.
     @param _member      Member exiting the list
     */
     function memberExit(
@@ -411,21 +400,16 @@ contract Everest is Ownable {
         emit MemberExited(_member);
     }
 
-    /******************
-    EDIT MEMBER FUNCTIONS
-    ******************/
-
-    // To edit members, call EthereumDIDRegistry.sol directly
-
-    /******************
-    CHALLENGE FUNCTIONS
-    ******************/
+    // --------------------
+    // CHALLENGE FUNCTIONS
+    // --------------------
 
     /**
     @dev                        Starts a challenge on a member. Challenger deposits a fee.
-    @param _challenger   The memberName of the member who is challenging another member
-    @param _challengee    The memberName of the member being challenged
+    @param _challenger          The memberName of the member who is challenging another member
+    @param _challengee          The memberName of the member being challenged
     @param _details             Extra details relevant to the challenge. (IPFS hash without Qm)
+    @return                     Challenge ID for the created challenge
     */
     function challenge(
         address _challenger,
@@ -439,9 +423,7 @@ contract Everest is Ownable {
         );
         uint256 currentChallengeID = registry.getChallengeID(_challengee);
         if(currentChallengeID > 0){
-            // Doing this allows us to never get stuck in a state with unresolved challenges
-            // Also, the challenge rewards the deposit fee to winner or loser, so they are
-            // financially motivated too
+            // Doing this allows the contract to never get stuck with unresolved challenges
             resolveChallenge(currentChallengeID);
         }
 
@@ -449,10 +431,9 @@ contract Everest is Ownable {
         Challenge memory newChallenge = Challenge({
             challenger: _challenger,
             challengee: _challengee,
-            // starts at 0 since the submitVote() will add this
+            // It is okay to start counts at 0 here. submitVote() is called at the end of the func
             yesVotes: 0,
             noVotes: 0,
-            // starts at 0 since submitVote() will add this
             voterCount: 0,
             /* solium-disable-next-line security/no-block-members*/
             endTime: now + votingPeriodDuration,
@@ -465,7 +446,7 @@ contract Everest is Ownable {
         // Updates member to store most recent challenge
         registry.editChallengeID(_challengee, newChallengeID);
 
-        // Takes tokens from challenger
+        // Transfer tokens from challenger to reserve bank
         require(
             approvedToken.transferFrom(msg.sender, address(reserveBank), challengeDeposit),
             "challenge - Token transfer failed"
@@ -480,7 +461,7 @@ contract Everest is Ownable {
             newChallenge.details
         );
 
-        // Insert challengers vote into the challenge
+        // Add challengers vote into the challenge
         submitVote(newChallengeID, VoteChoice.Yes, _challenger);
         return newChallengeID;
     }
@@ -531,7 +512,7 @@ contract Everest is Ownable {
         int128 voteWeightInt128 = sixtyFourBitFPInt.sqrt();
         uint256 voteWeight = uint256(voteWeightInt128.toUInt());
 
-        // Store vote (can't be msg.sender because delegate can be voting)
+        // Store vote with _votingMember, not msg.sender, since a delegate can vote
         storedChallenge.voteChoiceByMember[_votingMember] = _voteChoice;
         storedChallenge.voteWeightByMember[_votingMember] = voteWeight;
         storedChallenge.voterCount += 1;
@@ -566,9 +547,10 @@ contract Everest is Ownable {
             submitVote(_challengeID, _voteChoices[i], _voters[i]);
         }
     }
+
     /**
-    @dev                    Resolve a challenge. Anyone can call this function. A successful
-                            challenge means the member is removed.
+    @dev                    Resolve a challenge A successful challenge means the member is removed.
+                            Anyone can call this function.
     @param _challengeID     The challenge ID
     */
     function resolveChallenge(uint256 _challengeID) public {
@@ -577,7 +559,7 @@ contract Everest is Ownable {
 
         bool didPass = storedChallenge.yesVotes > storedChallenge.noVotes;
         bool moreThanOneVote = storedChallenge.voterCount > 1;
-        // Challenge reward is 1/10th the challenge deposit. This allows incentivzation to
+        // Challenge reward is 1/10th the challenge deposit. This allows incentivization to
         // always resolve the challenge, but also allows the reserveBank to accumlate value.
         uint challengeReward = challengeDeposit.div(10);
 
@@ -601,15 +583,16 @@ contract Everest is Ownable {
                 storedChallenge.voterCount,
                 amount
             );
+
         } else {
             address challengeeOwner = erc1056Registry.identityOwner(storedChallenge.challengee);
-            // Transfer challenge deposit to challengee
+            // Transfer challenge reward to challengee
             require(
                 reserveBank.withdraw(challengeeOwner, challengeReward),
                 "resolveChallenge - Rewarding challenger failed"
             );
 
-            // Remove challenge ID from registry
+            // Remove challenge ID from the Member in the registry
             registry.editChallengeID(storedChallenge.challengee, 0);
             emit ChallengeFailed(
                 storedChallenge.challengee,
@@ -625,16 +608,15 @@ contract Everest is Ownable {
         delete challenges[_challengeID];
     }
 
-    /***************
-    EVEREST OWNER FUNCTIONS
-    ***************/
+    // ------------------------
+    // EVEREST OWNER FUNCTIONS
+    // ------------------------
 
     /**
-    @dev                Allows the owner of everest to withdraw funds from the reserve bank
-                        in the case of an emergency, or an upgrade from V1. With plans
-                        to decentralize this functionality in the future.
+    @dev                Allows the owner of everest to withdraw funds from the reserve bank.
     @param _receiver    The address receiving funds
     @param _amount      The amount of funds being withdrawn
+    @return             True if withdrawal is successful
     */
     function withdraw(address _receiver, uint256 _amount) public onlyOwner returns (bool) {
         require(_receiver != address(0), "Receiver must not be 0 address");
@@ -645,6 +627,7 @@ contract Everest is Ownable {
     /**
     @dev                Allows the owner of Everest to transfer the ownership of ReserveBank
     @param _newOwner    The new owner
+    @return             True if ownership transfer is successful
     */
     function transferOwnershipReserveBank(address _newOwner) public onlyOwner returns (bool) {
         reserveBank.transferOwnership(_newOwner);
@@ -654,6 +637,7 @@ contract Everest is Ownable {
     /**
     @dev                Allows the owner of Everest to transfer the ownership of Registry
     @param _newOwner    The new owner
+    @return             True if ownership transfer is successful
     */
     function transferOwnershipRegistry(address _newOwner) public onlyOwner returns (bool) {
         registry.transferOwnership(_newOwner);
@@ -669,13 +653,15 @@ contract Everest is Ownable {
         emit CharterUpdated(charter);
     }
 
-    /***************
-    GETTER FUNCTIONS
-    ***************/
+    // -----------------
+    // GETTER FUNCTIONS
+    // -----------------
+
 
     /**
-    @dev                    Returns true if a challenge vote period has finished
-    @param _endTime  The starting period of the challenge
+    @dev                Returns true if a challenge vote period has finished
+    @param _endTime     The starting period of the challenge
+    @return             True if voting period has expired
     */
     function hasVotingPeriodExpired(uint256 _endTime) private view returns (bool) {
         /* solium-disable-next-line security/no-block-members*/
@@ -685,6 +671,7 @@ contract Everest is Ownable {
     /**
     @dev            Returns true if the address is a member
     @param _member  The member name of the member whose status is to be examined
+    @return         True is address is a member
     */
     function isMember(address _member) public view returns (bool){
         uint256 startTime = registry.getMemberStartTime(_member);
@@ -698,6 +685,7 @@ contract Everest is Ownable {
     @dev            Returns true if the member has an unresolved challenge. False if the challenge
                     does not exist.
     @param _member  The member that is being checked for a challenge.
+    @return         True if a challenge exists on the member
     */
     function memberChallengeExists(address _member) public view returns (bool) {
         uint256 challengeID = registry.getChallengeID(_member);
@@ -708,6 +696,7 @@ contract Everest is Ownable {
     @dev                Determines whether voting has concluded in a challenge for a given
                         member. Throws if challenge can't be resolved
     @param _challengeID The challenge ID
+    @return             True if the challenge can be resolved
     */
     function challengeCanBeResolved(uint256 _challengeID) private view returns (bool) {
         Challenge storage storedChallenge = challenges[_challengeID];

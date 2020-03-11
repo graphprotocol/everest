@@ -36,11 +36,10 @@ const config = {
         votingPeriodDuration: 259200, // 3 days, in seconds
         challengeDeposit: '10000000000000000000', // $10 DAI challenge fee
         applicationFee: '10000000000000000000', // $10 DAI application fee
-        // Currently points to a rough draft of the charter
+        // This Currently points to a rough draft of the charter
         charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0'
     },
     ganacheParams: {
-        ethereumDIDRegistryAddress: '', // Not in use, is inserted upon creation
         chainID: 9545
     },
     ropstenParams: {
@@ -57,7 +56,6 @@ const config = {
         ethereumDIDRegistryAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
     },
     // Used for deploying and interacting on testnets
-    // These should be 5 metamask accounts in your own browser
     metamaskAddresses: {
         zero: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd',
         one: '0x7F11E5B7Fe8C04c1E4Ce0dD98aC5c922ECcfA4ed',

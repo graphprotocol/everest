@@ -10,8 +10,14 @@ const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const Token = artifacts.require('Dai.sol')
 const utils = require('./utils.js')
 
+// Note:    Sadly, ganache-cli does not support eth_signTypedDatav3. So we need to manually
+//          build and sign data for permit(). In the front end, the code would be much cleaner
+
 const helpers = {
-    applySignedWithAttribute: async (newMemberWallet, ownerWallet) => {
+    /// @dev    Helper function to test everest.applySignedWithAttributeAndPermit(). It calls
+    ///         many other functions in helpers.js to get the three signatures needed, and
+    ///         then submits the transaction to everest
+    applySignedWithAttributeAndPermit: async (newMemberWallet, ownerWallet) => {
         const ownerAddress = ownerWallet.signingKey.address
         const newMemberAddress = newMemberWallet.signingKey.address
         const everest = await Everest.deployed()
@@ -103,6 +109,7 @@ const helpers = {
         console.log(`Member ${newMemberAddress} successfully added`)
     },
 
+    /// @dev    Creates the signature for changeOwner()
     applySigned: async (newMemberWallet, ownerWallet) => {
         const memberAddress = newMemberWallet.signingKey.address
         const memberPrivateKey = Buffer.from(
@@ -120,7 +127,8 @@ const helpers = {
         return sig
     },
 
-    // Used after the owner is in possession of the identity
+    /// @dev    Calls setAttribute on the EthereumDIDRegisty. No signature needed, it is called
+    ///         directly by the real owner.
     setAttribute: async (memberAddress, ownerWallet) => {
         const didReg = await EthereumDIDRegistry.deployed()
         const ownerAddress = ownerWallet.signingKey.address
@@ -138,8 +146,7 @@ const helpers = {
         assert.equal(event.args.value, utils.mockIPFSData)
     },
 
-    // Must be used in applySignedWithAttribute() to make a single transaction
-    // At the time, owner is  random key generated in browser
+    /// @dev Is used in applySignedWithAttribute() to create the signature
     setAttributeSigned: async (newMemberWallet, data) => {
         const memberAddress = newMemberWallet.signingKey.address
         const signerAddress = memberAddress
@@ -157,6 +164,8 @@ const helpers = {
         return sig
     },
 
+    /// @dev    Returns the signature for either the changeOwner() or the setAttribute() function
+    ///         from ethereumDIDRegistry
     signDataDIDRegistry: async (identity, signingKey, signingAddress, data, functionName) => {
         const didReg = await EthereumDIDRegistry.deployed()
         let nonce = await didReg.nonce(signingAddress)
@@ -195,9 +204,7 @@ const helpers = {
         }
     },
 
-    // Sadly, ganache-cli doese not support the clean eth_signTypedDatav3
-    // So we must do all this manual building and signing for permit()
-
+    /// @dev    Creates the dai domain separator. Note it depends on the choice of the Chain ID
     createDaiDomainSeparator: async () => {
         const domain = keccak256(
             'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
@@ -216,6 +223,7 @@ const helpers = {
         return hash
     },
 
+    /// @dev Creates the permit() signature
     signPermit: async (holderAddress, spenderAddress, holderPrivateKey, nonce) => {
         const paddedNonce = utils.leftPad(Buffer.from([nonce], 64).toString('hex'))
         // We set expiry to 0 always, as that will be default for the Everest calling
@@ -283,7 +291,7 @@ const helpers = {
         }
     },
 
-    // Where holder == owner and spender == Everest
+    /// @dev    Wrapper function around signPermit(). Note: holder == owner and spender == Everest
     daiPermit: async (holderWallet, spenderAddress) => {
         const token = await Token.deployed()
         const holderAddress = holderWallet.signingKey.address
@@ -301,6 +309,7 @@ const helpers = {
         return sig
     },
 
+    /// @dev Helper function to challenge a Member, and do checks
     challenge: async (challenger, challengee, details, challengerOwner) => {
         const everest = await Everest.deployed()
         const token = await Token.deployed()
@@ -335,6 +344,7 @@ const helpers = {
         return challengeID
     },
 
+    /// @dev helper function to resolve a challenge, and do checks
     resolveChallenge: async (challengeID, challengerOwner, challengeeOwner) => {
         const everest = await Everest.deployed()
         const token = await Token.deployed()

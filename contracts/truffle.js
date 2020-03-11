@@ -3,11 +3,10 @@ const path = require('path')
 const ethers = require('ethers')
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 
-// There seems to be no good way to avoid deploying with truffle and having
-// to use HDWallerProvider. This package has ugly yarn errors, but appears to still
-// work with the errors
+// There seems to be no easy way to avoid deploying with truffle and having
+// to use HDWallerProvider. This package has  yarn errors, but still works with the errors
 // Discussions in ethers here https://github.com/ethers-io/ethers.js/issues/147
-// and here https://github.com/ethers-io/ethers.js/issues/71
+// and here https://github.com/ethers-io/ethers.js/issues/71 for potential ethers deployments
 // For now, we use HDWalletProvider, since it works.
 
 module.exports = {
@@ -20,8 +19,8 @@ module.exports = {
             gasPrice: 20000000000,
             skipDryRun: true
         },
-        // Note, this must use the syntax () => new... otherwise it hangs forever on tests.
         ropsten: {
+            // Note, this must use the syntax () => new... otherwise it hangs forever on tests.
             provider: () =>
                 new HDWalletProvider(
                     fs.readFileSync(path.join(__dirname, '.privkey.txt'), 'utf-8').trim(),
@@ -32,8 +31,7 @@ module.exports = {
                     4 // Create 4 addresses, which are funded with MockDAI
                 ),
             network_id: 3, // Ropsten's id
-            //gas: 8000000,
-            gasPrice: ethers.utils.parseUnits('25', 'gwei'), // To easily get in blocks on ropsten
+            gasPrice: ethers.utils.parseUnits('25', 'gwei'), // Keep at 25 for fast deployment
             skipDryRun: true
         },
         rinkeby: {
@@ -47,23 +45,17 @@ module.exports = {
                     4 // Create 4 addresses, which are funded with MockDAI
                 ),
             network_id: 4, // rinkeby's id
-            //gas: 8000000,
-            gasPrice: ethers.utils.parseUnits('100', 'gwei'), // To easily get in blocks on ropsten
+            gasPrice: ethers.utils.parseUnits('25', 'gwei'), // Keep at 25 for fast deployment
             skipDryRun: true
         }
     },
-    // Note, right now we are just using the compiler that truffle comes with.
-    // We might lock down a version later
     compilers: {
         solc: {
             version: '0.5.8',
             settings: {
                 optimizer: {
                     enabled: true,
-                    runs: 200 //,
-                    // details: {
-                    //     yul: false
-                    // }
+                    runs: 200
                 }
             }
         }

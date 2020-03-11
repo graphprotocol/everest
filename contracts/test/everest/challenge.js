@@ -44,52 +44,56 @@ contract('everest', () => {
     })
 
     describe(
-        'Challenges. Functions: challenge(), submitVote(), submitVotes() resolveChallenge(), ' +
+        'Test challenges. Functions: challenge(), submitVote(), resolveChallenge(), ' +
             'memberChallengeExists(), isMember()',
         () => {
             // Set up 5 Tokens
             before(async () => {
-                await helpers.applySignedWithAttribute(member1Wallet, owner1Wallet)
-                await helpers.applySignedWithAttribute(member2Wallet, owner2Wallet)
-                await helpers.applySignedWithAttribute(member3Wallet, owner3Wallet)
-                await helpers.applySignedWithAttribute(member4Wallet, owner4Wallet)
-                await helpers.applySignedWithAttribute(member5Wallet, owner5Wallet)
+                await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
+                await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet)
+                await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet)
+                await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
+                await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet)
             })
 
-            it('should allow a member to be challenged, lose, and be removed, and then reapply successfully. Also tests chalengee cannot vote on their own challenge', async () => {
-                const challengeID = await helpers.challenge(
-                    member1Address,
-                    member5Address,
-                    fakeDetails,
-                    owner1Address
-                )
+            it(
+                'should allow a member to be challenged, lose, and be removed.' +
+                    'Also tests challengee cannot vote on their own challenge',
+                async () => {
+                    const challengeID = await helpers.challenge(
+                        member1Address,
+                        member5Address,
+                        fakeDetails,
+                        owner1Address
+                    )
 
-                await everest.submitVote(challengeID, voteChoice.Yes, member2Address, {
-                    from: owner2Address
-                })
-                await everest.submitVote(challengeID, voteChoice.Yes, member3Address, {
-                    from: owner3Address
-                })
+                    await everest.submitVote(challengeID, voteChoice.Yes, member2Address, {
+                        from: owner2Address
+                    })
+                    await everest.submitVote(challengeID, voteChoice.Yes, member3Address, {
+                        from: owner3Address
+                    })
 
-                // Expect that challengee can't vote on their own challenge
-                await utils.expectRevert(
-                    everest.submitVote(challengeID, voteChoice.Yes, member5Address, {
-                        from: owner5Address
-                    }),
-                    `submitVote - Member can't vote on their own challenge`
-                )
+                    // Expect that challengee can't vote on their own challenge
+                    await utils.expectRevert(
+                        everest.submitVote(challengeID, voteChoice.Yes, member5Address, {
+                            from: owner5Address
+                        }),
+                        `submitVote - Member can't vote on their own challenge`
+                    )
 
-                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address)
+                    await helpers.resolveChallenge(challengeID, owner1Address, owner5Address)
 
-                // Check member has been removed
-                assert(!(await everest.isMember(member5Address)), 'Member was not removed')
+                    // Check member has been removed
+                    assert(!(await everest.isMember(member5Address)), 'Member was not removed')
 
-                // Check challenge was removed
-                assert(
-                    !(await everest.memberChallengeExists(member5Address)),
-                    'Challenge was removed as expected'
-                )
-            })
+                    // Check challenge was removed
+                    assert(
+                        !(await everest.memberChallengeExists(member5Address)),
+                        'Challenge was removed as expected'
+                    )
+                }
+            )
 
             it('should allow a member to be challenged, win, and stay', async () => {
                 // Check member exists
