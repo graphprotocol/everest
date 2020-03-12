@@ -137,6 +137,12 @@ export const RESOLVE_CHALLENGE = gql`
   }
 `
 
+export const DAI_BALANCE = gql`
+  mutation daiBalance($account: ID!) {
+    daiBalance(account: $account) @client
+  }
+`
+
 export const VOTE_CHALLENGE = gql`
   mutation voteChallenge(
     $challengeId: ID!

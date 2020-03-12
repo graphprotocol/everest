@@ -183,8 +183,6 @@ const EditProject = ({ location }) => {
           Make sure to tag your project&apos;s categories to allow other users
           to search for your project.
         </p>
-        <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
-        <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
       </Box>
       <Box>
         <ProjectForm

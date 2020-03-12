@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
@@ -11,7 +11,7 @@ import moment from 'moment'
 import client from '../../utils/apollo/client'
 import { useAccount } from '../../utils/hooks'
 
-import { ADD_PROJECT } from '../../utils/apollo/mutations'
+import { ADD_PROJECT, DAI_BALANCE } from '../../utils/apollo/mutations'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 import { PROFILE_QUERY } from '../../utils/apollo/queries'
 
@@ -20,6 +20,7 @@ import ProjectForm from '../../components/ProjectForm'
 const NewProject = () => {
   const { account } = useAccount()
   const [isDisabled, setIsDisabled] = useState(true)
+  const [daiAmount, setDaiAmount] = useState(null)
   const [project, setProject] = useState({
     name: '',
     description: '',
@@ -52,6 +53,18 @@ const NewProject = () => {
         return { id: category.id, name: category.name, __typename: 'Category' }
       })
   }
+
+  const [daiBalance] = useMutation(DAI_BALANCE, {
+    client: client,
+    onCompleted: data => {
+      if (data && data.daiBalance) {
+        setDaiAmount(data.daiBalance)
+      }
+    },
+    onError: error => {
+      console.error('Error getting Dai balance: ', error)
+    },
+  })
 
   const [addProject] = useMutation(ADD_PROJECT, {
     client: client,
@@ -118,6 +131,14 @@ const NewProject = () => {
       })
     },
   })
+
+  useEffect(() => {
+    if (account) {
+      daiBalance({
+        variables: { account: account },
+      })
+    }
+  }, [account])
 
   const setImage = (field, data) => {
     setProject(state => ({
@@ -198,6 +219,21 @@ const NewProject = () => {
         <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
       </Box>
       <Box>
+        {daiAmount && parseFloat(daiAmount) < 10 && (
+          <Styled.h6
+            sx={{
+              color: 'white',
+              mb: 7,
+              mt: -9,
+              maxWidth: '504px',
+              width: '100%',
+              fontWeight: 'heading',
+            }}
+          >
+            You need at least 10 DAI in order to add a project. Please add more
+            DAI to your Wallet.
+          </Styled.h6>
+        )}
         <ProjectForm
           project={project}
           isDisabled={isDisabled}

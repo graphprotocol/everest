@@ -1,11 +1,11 @@
 /** @jsx jsx */
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { jsx, Styled, Box } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
-import { useWeb3React } from '../utils/hooks'
+import { useAccount } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
 import { CATEGORIES_QUERY, PROJECTS_QUERY } from '../utils/apollo/queries'
 
@@ -17,7 +17,7 @@ import Divider from '../components/Divider'
 import Modal from '../components/Modal'
 
 const Index = () => {
-  const { account } = useWeb3React()
+  const { account } = useAccount()
   const [showModal, setShowModal] = useState(false)
   const openModal = () => setShowModal(true)
   const closeModal = () => {
