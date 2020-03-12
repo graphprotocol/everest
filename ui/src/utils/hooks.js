@@ -25,7 +25,7 @@ export function useAccount() {
     accountAddress()
   }, [web3Account, setAccount])
 
-  return { account, setAccount }
+  return { account: account ? account.toLowerCase() : null, setAccount }
 }
 
 export function useProvider() {

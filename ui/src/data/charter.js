@@ -121,7 +121,11 @@ export default [
         <br />
         <br />
         Check out the{' '}
-        <a href="https://github.com/graphprotocol/everest" target="_blank">
+        <a
+          href="https://github.com/graphprotocol/everest"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Everest Monorepo
         </a>{' '}
         to learn more and contribute.

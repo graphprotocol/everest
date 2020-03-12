@@ -36,7 +36,7 @@ const NewProject = () => {
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
   const { data: profile } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: account.toLowerCase(),
+      id: account,
       orderBy: 'createdAt',
       orderDirection: 'desc',
     },
@@ -72,7 +72,7 @@ const NewProject = () => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -100,13 +100,12 @@ const NewProject = () => {
     onError: error => {
       console.error('Error adding a project: ', error)
     },
-    onCompleted: mydata => {},
     update: (proxy, result) => {
       const profileData = cloneDeep(
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
-            id: account.toLowerCase(),
+            id: account,
             orderBy: 'createdAt',
             orderDirection: 'desc',
           },
@@ -116,13 +115,13 @@ const NewProject = () => {
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
         data: {
           user: {
-            id: account.toLowerCase(),
+            id: account,
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
             projects: [...profileData.user.projects, result.data.addProject],

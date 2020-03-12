@@ -96,7 +96,7 @@ const EditProject = ({ location }) => {
     onError: error => {
       console.error('Error editing a project: ', error)
     },
-    onCompleted: data => {
+    onCompleted: () => {
       navigate(`/project/${projectId}`)
     },
     update: (proxy, result) => {

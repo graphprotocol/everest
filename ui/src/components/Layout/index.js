@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState, createContext } from 'react'
+import React, { createContext } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Global } from '@emotion/core'
@@ -20,7 +20,10 @@ const LayoutTemplate = ({ children, ...props }) => {
   }
 
   const mStyles =
-    props.path.includes('new') || props.path.includes('edit')
+    (props.location &&
+      props.location.pathname &&
+      props.location.pathname.includes('new')) ||
+    props.location.pathname.includes('edit')
       ? { backgroundColor: 'secondary', marginTop: '-18px' }
       : {}
 
@@ -51,7 +54,7 @@ const LayoutTemplate = ({ children, ...props }) => {
       />
       <Seo />
       <section>
-        <Navbar sx={styles} path={props && props.path} />
+        <Navbar sx={styles} location={props.location} />
         <Box
           sx={{
             ...mStyles,
@@ -82,8 +85,8 @@ const LayoutTemplate = ({ children, ...props }) => {
 
 LayoutTemplate.propTypes = {
   children: PropTypes.any,
-  path: PropTypes.any,
-  closeModal: PropTypes.func,
+  location: PropTypes.any,
+  props: PropTypes.any,
 }
 
 export default LayoutTemplate

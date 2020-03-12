@@ -1,11 +1,12 @@
 {
   "parser": "babel-eslint",
   "rules": {
-    "camelcase": "warn",
+    "camelcase": "off",
     "no-unused-vars": "warn",
     "no-undef": "off",
     "no-constant-condition": "warn",
-    "react/prop-types": "warn"
+    "react/prop-types": "warn",
+    "react/no-unescaped-entities": "off"
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "plugins": ["react"],

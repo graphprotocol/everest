@@ -111,6 +111,7 @@ Row.propTypes = {
     image: PropTypes.string,
     avatar: PropTypes.string,
     slug: PropTypes.string,
+    disabled: PropTypes.bool,
   }),
   parent: PropTypes.any,
   selected: PropTypes.any,

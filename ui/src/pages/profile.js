@@ -35,7 +35,7 @@ const Profile = ({ location }) => {
 
   useEffect(() => {
     async function getProfile() {
-      const threeBoxProfile = await ThreeBox.getProfile(account.toLowerCase())
+      const threeBoxProfile = await ThreeBox.getProfile(account)
       let image
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
@@ -58,12 +58,14 @@ const Profile = ({ location }) => {
       }
     }
     metamaskAccountChange(accounts => navigate(`/profile/${accounts[0]}`))
-    getProfile()
+    if (account) {
+      getProfile()
+    }
   }, [account])
 
   const { loading, error, data } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: profileId.toLowerCase(),
+      id: profileId,
       orderBy: 'createdAt',
       orderDirection: 'desc',
     },
@@ -78,8 +80,7 @@ const Profile = ({ location }) => {
     return <div />
   }
 
-  const isOwner = () =>
-    account === profileId || (account && account.toLowerCase() === profileId)
+  const isOwner = () => account === profileId || account === profileId
 
   const user = data && data.user
 
