@@ -6,8 +6,9 @@ const Charter = () => {
   return (
     <Box>
       <Styled.h1 sx={{ textAlign: 'center', mb: 4 }}>Everest Charter</Styled.h1>
-      {charter.map(entry => (
+      {charter.map((entry, index) => (
         <Box
+          key={index}
           sx={{
             margin: '0 auto',
             py: 6,

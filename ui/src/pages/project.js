@@ -66,13 +66,13 @@ const Project = ({ location }) => {
 
   const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
     variables: {
-      id: account ? account.toLowerCase() : '',
+      id: account,
     },
   })
 
   const { data: profile } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: account ? account.toLowerCase() : '',
+      id: account,
       orderBy: 'createdAt',
       orderDirection: 'desc',
     },
@@ -86,7 +86,7 @@ const Project = ({ location }) => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account ? account.toLowerCase() : '',
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -99,13 +99,12 @@ const Project = ({ location }) => {
     onError: error => {
       console.error('Error adding a project: ', error)
     },
-    onCompleted: mydata => {},
-    update: (proxy, result) => {
+    update: proxy => {
       const profileData = cloneDeep(
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
-            id: account.toLowerCase(),
+            id: account,
             orderBy: 'createdAt',
             orderDirection: 'desc',
           },
@@ -119,13 +118,13 @@ const Project = ({ location }) => {
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
         data: {
           user: {
-            id: account.toLowerCase(),
+            id: account,
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
             projects: remainingProjects,
@@ -140,7 +139,7 @@ const Project = ({ location }) => {
       console.error('Error voting on a challenge: ', error)
       setPendingResolve(false)
     },
-    onCompleted: mydata => {
+    onCompleted: () => {
       setChallengeResolved(true)
     },
   })
@@ -223,7 +222,7 @@ const Project = ({ location }) => {
     onError: error => {
       console.error('Error voting on a challenge: ', error)
     },
-    onCompleted: mydata => {
+    onCompleted: () => {
       setPendingVotes(false)
     },
   })
@@ -234,7 +233,7 @@ const Project = ({ location }) => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account ? account.toLowerCase() : '',
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -263,12 +262,12 @@ const Project = ({ location }) => {
     onError: error => {
       console.error('Error transferring ownership: ', error)
     },
-    update: (proxy, result) => {
+    update: proxy => {
       const profileData = cloneDeep(
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
-            id: account.toLowerCase(),
+            id: account,
             orderBy: 'createdAt',
             orderDirection: 'desc',
           },
@@ -281,13 +280,13 @@ const Project = ({ location }) => {
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
         data: {
           user: {
-            id: account.toLowerCase(),
+            id: account,
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
             projects: remainingProjects,
@@ -303,7 +302,7 @@ const Project = ({ location }) => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account ? account.toLowerCase() : '',
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -338,7 +337,7 @@ const Project = ({ location }) => {
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
-            id: account ? account.toLowerCase() : '',
+            id: account,
             orderBy: 'createdAt',
             orderDirection: 'desc',
           },
@@ -348,13 +347,13 @@ const Project = ({ location }) => {
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
-          id: account ? account.toLowerCase() : '',
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
         data: {
           user: {
-            id: account ? account.toLowerCase() : '',
+            id: account,
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
             projects: [
@@ -483,12 +482,7 @@ const Project = ({ location }) => {
 
   let items = []
 
-  if (
-    account &&
-    project &&
-    project.owner &&
-    account.toLowerCase() === project.owner.id
-  ) {
+  if (account && project && project.owner && account === project.owner.id) {
     items = items.concat([
       {
         text: 'Transfer',
@@ -560,7 +554,7 @@ const Project = ({ location }) => {
     items = items.concat([
       {
         text: 'Request ownership',
-        handleSelect: value => {
+        handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
         ${window.location.href}`,

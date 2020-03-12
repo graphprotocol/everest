@@ -16,7 +16,7 @@ import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
 
-const Navbar = ({ path, ...props }) => {
+const Navbar = ({ location, ...props }) => {
   const { account } = useWeb3React()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -66,7 +66,8 @@ const Navbar = ({ path, ...props }) => {
   // })
 
   const isNewProjectPage =
-    path && (path.includes('new') || path.includes('edit'))
+    location &&
+    (location.pathname.includes('new') || location.pathname.includes('edit'))
 
   return (
     <Grid {...props} sx={{ height: '96px' }}>
@@ -169,13 +170,6 @@ const Navbar = ({ path, ...props }) => {
   )
 }
 
-const navStyles = {
-  gridTemplateColumns: ['auto', '50px 1fr 1fr 1fr 1fr'],
-  width: [0, '100%', '100%'],
-  maxWidth: '380px',
-  alignItems: 'center',
-}
-
 const imgStyles = {
   width: '32px',
   height: '32px',
@@ -186,7 +180,7 @@ const imgStyles = {
 }
 
 Navbar.propTypes = {
-  path: PropTypes.string,
+  location: PropTypes.any,
 }
 
 export default Navbar

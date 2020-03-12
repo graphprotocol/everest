@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
@@ -35,7 +35,7 @@ const NewProject = () => {
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
   const { data: profile } = useQuery(PROFILE_QUERY, {
     variables: {
-      id: account.toLowerCase(),
+      id: account,
       orderBy: 'createdAt',
       orderDirection: 'desc',
     },
@@ -59,7 +59,7 @@ const NewProject = () => {
       {
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
@@ -87,13 +87,12 @@ const NewProject = () => {
     onError: error => {
       console.error('Error adding a project: ', error)
     },
-    onCompleted: mydata => {},
     update: (proxy, result) => {
       const profileData = cloneDeep(
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
-            id: account.toLowerCase(),
+            id: account,
             orderBy: 'createdAt',
             orderDirection: 'desc',
           },
@@ -103,13 +102,13 @@ const NewProject = () => {
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
-          id: account.toLowerCase(),
+          id: account,
           orderBy: 'createdAt',
           orderDirection: 'desc',
         },
         data: {
           user: {
-            id: account.toLowerCase(),
+            id: account,
             __typename: 'User',
             delegatorProjects: profile.user.delegatorProjects,
             projects: [...profileData.user.projects, result.data.addProject],

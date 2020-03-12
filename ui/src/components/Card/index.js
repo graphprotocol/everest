@@ -139,6 +139,7 @@ Card.propTypes = {
   isChallenged: PropTypes.bool,
   variant: PropTypes.string,
   to: PropTypes.string,
+  pending: PropTypes.bool,
 }
 
 export default Card

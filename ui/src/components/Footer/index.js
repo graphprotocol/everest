@@ -19,6 +19,7 @@ const Footer = ({ ...props }) => {
         <a
           href="https://thegraph.com"
           target="_blank"
+          rel="noopener noreferrer"
           sx={{
             textDecoration: 'none',
             color: 'secondary',
@@ -38,6 +39,7 @@ const Footer = ({ ...props }) => {
         <a
           href="https://github.com/graphprotocol/everest"
           target="_blank"
+          rel="noopener noreferrer"
           sx={{
             borderRight: '1px solid',
             borderColor: 'grey',
