@@ -50,8 +50,6 @@ const TabView = ({
         <Box>
           <Styled.h1 sx={{ color: 'white', mb: 3 }}>{heading}</Styled.h1>
           <p sx={{ variant: 'text.field' }}>{description}</p>
-          <p sx={{ variant: 'text.field', mt: 5 }}>Fee</p>
-          <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
         </Box>
         <Box sx={{ maxWidth: '516px', width: '100%', mt: [5, 0], pt: 5 }}>
           {header && <Styled.h4 sx={{ color: 'white' }}>{header}</Styled.h4>}

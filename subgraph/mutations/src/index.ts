@@ -184,6 +184,12 @@ const uploadImage = async (_: any, { image }: any, context: Context) => {
   return await uploadToIpfs(ipfs, image)
 }
 
+const daiBalance = async (_: any, args: any, context: Context) => {
+  const daiContract = await getContract(context, 'Dai')
+  const balance = await daiContract.balanceOf(args.account)
+  return ethers.utils.formatUnits(balance, 18)
+}
+
 const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const { ethereum, ipfs } = context.graph.config
 
@@ -447,6 +453,7 @@ const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Con
 const resolvers: MutationResolvers<Config, State, EventMap> = {
   Mutation: {
     uploadImage,
+    daiBalance,
     addProject,
     removeProject,
     editProject,
