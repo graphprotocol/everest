@@ -56,10 +56,26 @@ async function signPermit(provider, domain, message) {
     message,
   }
 
-  let sig = await provider.send('eth_signTypedData_v3', [
-    signerAddr,
-    JSON.stringify(typedData),
-  ])
+  let sig
+
+  if (provider._web3Provider._metamask != null) {
+    sig = await provider.send('eth_signTypedData_v3', [
+      signerAddr,
+      JSON.stringify(typedData),
+    ])
+  } else if (provider._web3Provider.isWalletLink) {
+    // Wallet link expects typedData to not be stringified
+    sig = await provider.send('eth_signTypedData_v3', [
+      signerAddr,
+      typedData
+    ])
+  } else {
+    // We default trying with stringify
+    sig = await provider.send('eth_signTypedData_v3', [
+      signerAddr,
+      JSON.stringify(typedData),
+    ])
+  }
 
   return sig
 }
