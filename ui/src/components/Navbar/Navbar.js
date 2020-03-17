@@ -2,22 +2,23 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
-import { Grid } from '@theme-ui/components'
-import { useWeb3React } from '@web3-react/core'
+import { Grid, Box } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 // import ThreeBox from '3box' // TODO: failing the build
 
 import { metamaskAccountChange } from '../../services/ethers'
+import { useAccount } from '../../utils/hooks'
 
 import Link from '../../components/Link'
 import Button from '../../components/Button'
 import Modal from '../../components/Modal'
+import Menu from '../../components/Menu'
 import MobileNavbar from './MobileNavbar'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
 
 const Navbar = ({ location, ...props }) => {
-  const { account } = useWeb3React()
+  const { account } = useAccount()
 
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState()
@@ -49,6 +50,17 @@ const Navbar = ({ location, ...props }) => {
       setUserAccount(account)
     }
     metamaskAccountChange(accounts => setUserAccount(accounts[0]))
+    if (typeof window !== undefined) {
+      const storage = window.localStorage.getItem('WALLET_CONNECTOR')
+      if (storage) {
+        const walletConnector = JSON.parse(storage)
+        if (walletConnector && walletConnector.accounts) {
+          setUserAccount(walletConnector.accounts[0])
+        }
+      } else {
+        setUserAccount(account)
+      }
+    }
     setIsMobile(window.innerWidth < 640)
   }, [account])
 
@@ -136,36 +148,76 @@ const Navbar = ({ location, ...props }) => {
           />
         </Link>
         {userAccount ? (
-          <Link
-            to={`/profile/${userAccount}`}
+          <Grid
             sx={{
-              lineHeight: 'inherit',
-              '&:hover': { svg: { marginLeft: 0 } },
-              textAlign: 'right',
+              gridTemplateColumns: 'max-content max-content',
+              alignItems: 'center',
             }}
+            gap={5}
           >
-            {userImage ? (
-              <img src={userImage} alt="profile" sx={imgStyles} />
-            ) : (
-              <img
-                src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-                  ''}/profile-default.png`}
-                alt="profile"
-                sx={imgStyles}
+            <Link
+              to={`/profile/${userAccount}`}
+              sx={{
+                lineHeight: 'inherit',
+                '&:hover': { svg: { marginLeft: 0 } },
+                textAlign: 'right',
+              }}
+            >
+              {userImage ? (
+                <img src={userImage} alt="profile" sx={imgStyles} />
+              ) : (
+                <img
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+                    ''}/profile-default.png`}
+                  alt="profile"
+                  sx={imgStyles}
+                />
+              )}
+            </Link>
+            <Menu
+              items={[
+                {
+                  text: (
+                    <Box
+                      onClick={e => {
+                        e.preventDefault()
+                        openModal()
+                      }}
+                    >
+                      Change wallet
+                    </Box>
+                  ),
+                  icon: '/share.png',
+                },
+              ]}
+            >
+              <Box
+                sx={{
+                  justifySelf: 'end',
+                  height: '9px',
+                  width: '9px',
+                  borderTop: '2px solid',
+                  borderRight: '2px solid',
+                  borderColor: 'secondary',
+                  transform: 'rotate(135deg)',
+                  display: ['none', 'block'],
+                  cursor: 'pointer',
+                }}
               />
-            )}
-          </Link>
+            </Menu>
+          </Grid>
         ) : (
-          <Modal showModal={showModal} closeModal={closeModal}>
-            <Button
-              variant="primary"
-              sx={{ maxWidth: '140px' }}
-              text="Sign in"
-              onClick={() => openModal()}
-            />
-          </Modal>
+          <Button
+            variant="primary"
+            sx={{ maxWidth: '140px' }}
+            text="Sign in"
+            onClick={() => openModal()}
+          />
         )}
       </Grid>
+      {showModal && (
+        <Modal showModal={showModal} closeModal={closeModal}></Modal>
+      )}
     </Grid>
   )
 }
