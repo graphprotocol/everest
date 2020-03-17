@@ -11,6 +11,7 @@ import { URI_AVAILABLE } from '@web3-react/walletconnect-connector'
 import { walletExists } from '../../services/ethers'
 import wallets from '../../connectors/wallets'
 import { walletconnect } from '../../connectors'
+import { useAccount } from '../../utils/hooks'
 
 import QRCodeData from './QRCodeData'
 import Divider from '../Divider'
@@ -18,7 +19,8 @@ import Close from '../../images/close.svg'
 import Arrow from '../../images/arrow.svg'
 
 const Modal = ({ children, showModal, closeModal }) => {
-  const { account, activate } = useWeb3React()
+  const { activate } = useWeb3React()
+  const { account } = useAccount()
 
   // TODO: refactor this logic
   const [walletError, setWalletError] = useState(false)
@@ -27,9 +29,22 @@ const Modal = ({ children, showModal, closeModal }) => {
   const [showPendingView, setShowPendingView] = useState(false)
   const [showWalletsView, setShowWalletsView] = useState(true)
   const [uri, setUri] = useState('')
+  const [userAccount, setUserAccount] = useState(null)
   const [isWalletEnabled, setIsWalletEnabled] = useState(false)
 
-  // TODO: reset the view to the main wallet selection view
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const storage = window.localStorage.getItem('WALLET_CONNECTOR')
+      if (!account && storage) {
+        const walletConnector = JSON.parse(storage)
+        if (walletConnector && walletConnector.accounts) {
+          setUserAccount(walletConnector.accounts[0])
+        }
+      } else {
+        setUserAccount(account)
+      }
+    }
+  }, [account])
 
   // set up uri listener for walletconnect
   useEffect(() => {
@@ -52,6 +67,15 @@ const Modal = ({ children, showModal, closeModal }) => {
         if (account) {
           setShowWalletsView(false)
           setShowAccountView(true)
+
+          const connnectData = JSON.stringify({
+            name: wallet.type,
+            accounts: [account],
+          })
+          if (typeof window !== undefined) {
+            window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
+            window.location.reload()
+          }
           return
         }
       } else {
@@ -74,6 +98,17 @@ const Modal = ({ children, showModal, closeModal }) => {
       .then(async () => {
         setShowWalletsView(false)
         setShowAccountView(true)
+
+        const provider = await wallet.connector.getProvider()
+
+        const connnectData = JSON.stringify({
+          name: wallet.type,
+          accounts: provider._addresses || provider.accounts,
+        })
+        if (typeof window !== undefined) {
+          window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
+          window.location.reload()
+        }
       })
   }
 

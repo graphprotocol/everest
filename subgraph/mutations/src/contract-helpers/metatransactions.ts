@@ -221,12 +221,11 @@ export const applySignedWithAttribute = async (
   newMemberSigningKey,
   owner,
   metadataIpfsHash,
-  tokenRegistryContract,
+  everestContract,
   ethDIDContract,
   daiContract,
   ethereum,
 ) => {
-  // TODO Nestor: owner is an object you call getAddress() on
   const ownerAddress = owner
   const memberAddress = await newMember.getAddress()
 
@@ -239,12 +238,7 @@ export const applySignedWithAttribute = async (
   )
 
   // Get the signature for permitting TokenRegistry to transfer DAI on users behalf
-  const permitSig = await daiPermit(
-    owner,
-    tokenRegistryContract.address,
-    daiContract,
-    ethereum,
-  )
+  const permitSig = await daiPermit(owner, everestContract.address, daiContract, ethereum)
 
   const metadataIpfsBytes = ipfsHexHash(metadataIpfsHash)
 
@@ -264,7 +258,7 @@ export const applySignedWithAttribute = async (
   )
 
   // Send all three meta transactions to TokenRegistry to be executed in one tx
-  const tx = await tokenRegistryContract.applySignedWithAttributeAndPermit(
+  const tx = await everestContract.applySignedWithAttributeAndPermit(
     memberAddress,
     [setAttributeSignedSig.v, applySignedSig.v, permitSig.v],
     [setAttributeSignedSig.r, applySignedSig.r, permitSig.r],

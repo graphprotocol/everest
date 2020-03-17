@@ -55,7 +55,10 @@
     "react-textarea-autosize": "^7.1.2",
     "react-toastify": "5.5.0",
     "theme-ui": "^0.3.1",
-    "web3-react": "^5.0.5"
+    "walletlink": "^2.0.1",
+    "web3-react": "^5.0.5",
+    "@walletconnect/web3-provider": "1.0.0-beta.47",
+    "wallet-connect-provider": "0.1.2"
   },
   "devDependencies": {
     "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.8",

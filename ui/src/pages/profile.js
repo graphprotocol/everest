@@ -18,7 +18,6 @@ import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
-import Modal from '../components/Modal'
 
 const Profile = ({ location }) => {
   const { account } = useAccount()
@@ -27,9 +26,6 @@ const Profile = ({ location }) => {
   const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
   const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
   const [profile, setProfile] = useState(null)
-  const [showModal, setShowModal] = useState(false)
-  const openModal = () => setShowModal(true)
-  const closeModal = () => setShowModal(false)
 
   const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
 
@@ -148,32 +144,11 @@ const Profile = ({ location }) => {
             <Menu
               items={[
                 {
-                  text: 'Edit',
+                  text: 'Edit (3Box)',
                   handleSelect: () => {
                     window.open(`https://3box.io/${account}`, '_blank')
                   },
                   icon: '/challenge.png',
-                },
-                {
-                  text: (
-                    <Fragment>
-                      <Box
-                        onClick={e => {
-                          e.preventDefault()
-                          openModal()
-                        }}
-                      >
-                        Change wallet
-                      </Box>
-                      {showModal && (
-                        <Modal
-                          showModal={showModal}
-                          closeModal={closeModal}
-                        ></Modal>
-                      )}
-                    </Fragment>
-                  ),
-                  icon: '/share.png',
                 },
               ]}
             >
