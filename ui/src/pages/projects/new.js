@@ -100,35 +100,38 @@ const NewProject = () => {
     onError: error => {
       console.error('Error adding a project: ', error)
     },
-    update: (proxy, result) => {
-      const profileData = cloneDeep(
-        proxy.readQuery({
-          query: PROFILE_QUERY,
-          variables: {
-            id: account,
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
-          },
-        }),
-      )
+    // update: (proxy, result) => {
+    //   const profileData = cloneDeep(
+    //     proxy.readQuery({
+    //       query: PROFILE_QUERY,
+    //       variables: {
+    //         id: account,
+    //         orderBy: 'createdAt',
+    //         orderDirection: 'desc',
+    //       },
+    //     }),
+    //   )
 
-      proxy.writeQuery({
-        query: PROFILE_QUERY,
-        variables: {
-          id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
-        },
-        data: {
-          user: {
-            id: account,
-            __typename: 'User',
-            delegatorProjects: profile.user.delegatorProjects,
-            projects: [...profileData.user.projects, result.data.addProject],
-          },
-        },
-      })
-    },
+    //   console.log('profileData: ', profileData)
+
+    //   proxy.writeQuery({
+    //     query: PROFILE_QUERY,
+    //     variables: {
+    //       id: account,
+    //       orderBy: 'createdAt',
+    //       orderDirection: 'desc',
+    //     },
+    //     data: {
+    //       user: {
+    //         id: account,
+    //         __typename: 'User',
+    //         delegatorProjects:
+    //           profile && profile.user && profile.user.delegatorProjects,
+    //         projects: [...profileData.user.projects, result.data.addProject],
+    //       },
+    //     },
+    //   })
+    // },
   })
 
   useEffect(() => {

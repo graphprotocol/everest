@@ -18,6 +18,16 @@ export function useAccount() {
     async function accountAddress() {
       if (web3Account) {
         setAccount(web3Account)
+      } else if (typeof window !== undefined && window.localStorage) {
+        const storage = window.localStorage.getItem('WALLET_CONNECTOR')
+        if (storage) {
+          const walletConnector = JSON.parse(storage)
+          if (walletConnector && walletConnector.accounts) {
+            setAccount(walletConnector.accounts[0])
+          }
+        } else {
+          setAccount(await getAddress())
+        }
       } else {
         setAccount(await getAddress())
       }

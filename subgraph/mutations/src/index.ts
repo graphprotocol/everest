@@ -187,7 +187,8 @@ const uploadImage = async (_: any, { image }: any, context: Context) => {
 const daiBalance = async (_: any, args: any, context: Context) => {
   const daiContract = await getContract(context, 'Dai')
   const balance = await daiContract.balanceOf(args.account)
-  return ethers.utils.formatUnits(balance, 18)
+  const formattedBalance = ethers.utils.formatUnits(balance, 18)
+  return formattedBalance
 }
 
 const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
