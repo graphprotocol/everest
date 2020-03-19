@@ -6,6 +6,7 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { navigate } from 'gatsby'
 import ThreeBox from '3box'
+import queryString from 'query-string'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
@@ -18,17 +19,19 @@ import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
+import Link from '../components/Link'
 import ProfilePlaceholder from '../images/profile-placeholder.svg'
 
 const Profile = ({ location }) => {
   const { account } = useAccount()
-
   const [selectedProjectsView, setSelectedProjectsView] = useState('cards')
   const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
   const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
   const [profile, setProfile] = useState(null)
 
-  const profileId = location ? location.pathname.split('/').slice(-1)[0] : ''
+  const queryParams = location ? queryString.parse(location.search) : null
+
+  const profileId = queryParams ? queryParams.id : null
 
   useEffect(() => {
     async function getProfile() {
@@ -54,7 +57,7 @@ const Profile = ({ location }) => {
         setProfile({ image: image })
       }
     }
-    metamaskAccountChange(accounts => navigate(`/profile/${accounts[0]}`))
+    metamaskAccountChange(accounts => navigate(`/profile?id=${accounts[0]}`))
     if (account) {
       getProfile()
     }
@@ -115,11 +118,14 @@ const Profile = ({ location }) => {
             <Box>
               <Styled.h5>{profileId}</Styled.h5>
               {isOwner() && (
-                <Styled.p
+                <Link
+                  onClick={() =>
+                    window.open(`https://3box.io/${account}`, '_blank')
+                  }
                   sx={{ fontWeight: 'heading', color: 'secondary', mt: 3 }}
                 >
                   Edit/Create profile (3Box)
-                </Styled.p>
+                </Link>
               )}
             </Box>
           )}
@@ -166,7 +172,6 @@ const Profile = ({ location }) => {
                   transition: 'all 0.3s ease',
                 }}
                 alt="dots"
-                onClick={() => closeModal()}
               />
             </Menu>
           )}

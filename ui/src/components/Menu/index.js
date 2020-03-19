@@ -100,7 +100,7 @@ const iconStyles = {
 Menu.propTypes = {
   children: PropTypes.any,
   setOpen: PropTypes.func,
-  menuStyles: PropTypes.func,
+  menuStyles: PropTypes.any,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.any,
