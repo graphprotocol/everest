@@ -93,5 +93,5 @@ app.post('/api/project/build', (req, res) => {
 
 // Serve the build files
 app.listen(PORT, () => {
-  'Server running on PORT ' + PORT
+  console.log('Server running on PORT ' + PORT)
 })
