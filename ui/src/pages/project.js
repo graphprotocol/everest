@@ -451,7 +451,7 @@ const Project = ({ location }) => {
         newOwnerAddress: transferAddress,
       },
     })
-    navigate(`/profile/${account}`)
+    navigate(`/profile?id=${account}`)
   }
 
   const handleDelegate = async () => {
@@ -461,7 +461,7 @@ const Project = ({ location }) => {
         delegateAddress: delegateAddress,
       },
     })
-    navigate(`/profile/${account}`)
+    navigate(`/profile?id=${account}`)
   }
 
   const setChallengeData = async (field, value) => {
@@ -533,7 +533,7 @@ const Project = ({ location }) => {
           text: 'Remove',
           handleSelect: () => {
             removeProject({ variables: { projectId } })
-            navigate(`/profile/${account}`)
+            navigate(`/profile?id=${account}`)
           },
           icon: '/trash.png',
         },
@@ -648,7 +648,7 @@ const Project = ({ location }) => {
               <p sx={{ variant: 'text.small' }}>Owner</p>
               <Link
                 sx={{ color: 'secondary', fontSize: '1.5rem' }}
-                to={`/profile/${project.owner.id}`}
+                to={`/profile?id=${project.owner.id}`}
               >
                 {ownerName
                   ? ownerName

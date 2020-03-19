@@ -156,7 +156,7 @@ const Navbar = ({ location, ...props }) => {
             gap={5}
           >
             <Link
-              to={`/profile/${userAccount}`}
+              to={`/profile?id=${userAccount}`}
               sx={{
                 lineHeight: 'inherit',
                 '&:hover': { svg: { marginLeft: 0 } },
