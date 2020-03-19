@@ -32,8 +32,7 @@ try {
         }
       } else if (walletConnector.name === 'walletconnect') {
         provider = new WalletConnectProvider({
-          infuraId: '038f06bdd4de43b4a2f96ff2608b2a34',
-          // rpc: process.env.GATSBY_NETWORK_CONNECTOR_URI,
+          infuraId: process.env.GATSBY_INFURA_ID,
           chainId: 3,
         })
       } else if (walletConnector.name === 'injected') {

@@ -100,38 +100,39 @@ const NewProject = () => {
     onError: error => {
       console.error('Error adding a project: ', error)
     },
-    // update: (proxy, result) => {
-    //   const profileData = cloneDeep(
-    //     proxy.readQuery({
-    //       query: PROFILE_QUERY,
-    //       variables: {
-    //         id: account,
-    //         orderBy: 'createdAt',
-    //         orderDirection: 'desc',
-    //       },
-    //     }),
-    //   )
+    update: (proxy, result) => {
+      const profileData = cloneDeep(
+        proxy.readQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account,
+            orderBy: 'createdAt',
+            orderDirection: 'desc',
+          },
+        }),
+      )
 
-    //   console.log('profileData: ', profileData)
-
-    //   proxy.writeQuery({
-    //     query: PROFILE_QUERY,
-    //     variables: {
-    //       id: account,
-    //       orderBy: 'createdAt',
-    //       orderDirection: 'desc',
-    //     },
-    //     data: {
-    //       user: {
-    //         id: account,
-    //         __typename: 'User',
-    //         delegatorProjects:
-    //           profile && profile.user && profile.user.delegatorProjects,
-    //         projects: [...profileData.user.projects, result.data.addProject],
-    //       },
-    //     },
-    //   })
-    // },
+      proxy.writeQuery({
+        query: PROFILE_QUERY,
+        variables: {
+          id: account,
+          orderBy: 'createdAt',
+          orderDirection: 'desc',
+        },
+        data: {
+          user: {
+            id: account,
+            __typename: 'User',
+            delegatorProjects:
+              profile && profile.user && profile.user.delegatorProjects,
+            projects:
+              profileData && profileData.user
+                ? [...profileData.user.projects, result.data.addProject]
+                : [result.data.addProject],
+          },
+        },
+      })
+    },
   })
 
   useEffect(() => {
@@ -193,7 +194,7 @@ const NewProject = () => {
     addProject({
       variables: data,
     })
-    // navigate(`/profile/${account}`)
+    navigate(`/profile/${account}`)
   }
 
   return (

@@ -17,13 +17,14 @@ export default {
     description: 'Connect to Coinbase Wallet on your phone',
     href: null,
   },
-  WALLET_CONNECT: {
-    name: 'Wallet Connect',
-    connector: walletconnect,
-    type: 'walletconnect',
-    icon: '/wallet-connect.png',
-    description:
-      'Connect to Trust Wallet, Rainbow Wallet and others on your phone.',
-    href: null,
-  },
+  // TODO: Enable when you get it to work
+  // WALLET_CONNECT: {
+  //   name: 'Wallet Connect',
+  //   connector: walletconnect,
+  //   type: 'walletconnect',
+  //   icon: '/wallet-connect.png',
+  //   description:
+  //     'Connect to Trust Wallet, Rainbow Wallet and others on your phone.',
+  //   href: null,
+  // },
 }
