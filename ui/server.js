@@ -3,6 +3,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const execa = require('execa')
+const cors = require('cors')
 
 const app = express()
 
@@ -10,10 +11,12 @@ const app = express()
 const PORT = process.env.PORT || 4040
 app.set('port', PORT)
 app.use(bodyParser.json())
+app.use(cors())
 
-function getMetaTags(title, description, image) {
+function getMetaTags(title, description, image, url) {
   const tags = {
-    title: '',
+    title: `<title data-react-helmet="true">${title}</title>`,
+    titleMeta: `<meta data-react-helmet="true" name="title" content="${title}"/>`,
     titleOg: `<meta data-react-helmet="true" property="og:title" content="${title}"/>`,
     titleTwitter: `<meta data-react-helmet="true" name="twitter:title" content="${title}"/>`,
     description: `<meta data-react-helmet="true" name="description" content="${description}"/>`,
@@ -22,6 +25,7 @@ function getMetaTags(title, description, image) {
     image: `<meta data-react-helmet="true" name="image" content="${image}"/>`,
     imageOg: `<meta data-react-helmet="true" property="og:image" content="${image}"/>`,
     imageTwitter: `<meta data-react-helmet="true" name="twitter:image" content="${image}"/>`,
+    url: `<meta data-react-helmet="true" property="og:url" content="${url}"/>`,
   }
   return tags
 }
@@ -30,10 +34,7 @@ function replaceTags(text, oldTag, newTag) {
   return text.replace(oldTag, newTag)
 }
 
-// Endpont for POST request
-// move the script.js logic in here
-app.post('/api/project/create', (req, res) => {
-  console.log('REQ.BODY: ', req.body)
+app.post('/api/project/build', (req, res) => {
   const filename = path.join(__dirname, 'public/project', 'index.html')
   const newDir = path.join(__dirname, `public/project/${req.body.projectId}`)
   const newFilename = path.join(
@@ -41,51 +42,56 @@ app.post('/api/project/create', (req, res) => {
     `public/project/${req.body.projectId}`,
     'index.html',
   )
-  fs.readFile(filename, 'utf8', async (err, data) => {
-    if (err) throw err
-    if (data) {
-      const oldTags = getMetaTags(
-        'Everest',
-        'Repository of crypto projects',
-        'http://test22.eth',
-      )
-      const newTags = getMetaTags(
-        req.body.title,
-        req.body.description,
-        req.body.image,
-      )
-      let newData = data
 
-      Object.keys(oldTags).forEach(function(tag) {
-        newData = replaceTags(newData, oldTags[tag], newTags[tag])
-      })
+  let data
+  if (filename) {
+    data = fs.readFileSync(filename, 'utf8')
+  }
 
-      if (!fs.existsSync(newDir)) {
-        fs.mkdirSync(newDir)
-      }
-      fs.writeFileSync(newFilename, newData)
+  if (!fs.existsSync(newDir)) {
+    fs.mkdirSync(newDir)
+  }
 
-      console.log(`EXECUTING: textile bucket push public/ everest-ui`)
+  const oldTags = getMetaTags(
+    'Everest',
+    'Repository of crypto projects',
+    'https://everest.link/mountain.jpg',
+    'https://everest.link/',
+  )
+  const newTags = getMetaTags(
+    req.body.title,
+    req.body.description,
+    req.body.image,
+  )
+  let newData = data
 
-      try {
-        const { stdout, stderr } = execa.command(
-          'textile bucket push public/ everest-ui',
-          {
-            input: '\n',
-          },
-        )
-        stdout.pipe(process.stdout)
-        stderr.pipe(process.stdout)
-      } catch (error) {
-        console.log('ERROR: ', error)
-      }
-    }
+  Object.keys(oldTags).forEach(function(tag) {
+    newData = replaceTags(newData, oldTags[tag], newTags[tag])
   })
-  return res.send('Received a POST HTTP method')
+
+  fs.writeFileSync(newFilename, newData)
+
+  console.log(`EXECUTING: textile bucket push public/ everest-ui`)
+
+  try {
+    const { stdout, stderr } = execa.command(
+      'textile bucket push public/ everest-ui',
+      {
+        input: '\n',
+      },
+    )
+    stdout.pipe(process.stdout)
+    stderr.pipe(process.stdout)
+    setTimeout(function() {
+      res.send('ok')
+    }, 30000)
+  } catch (error) {
+    console.log('ERROR: ', error)
+    return res.send('error')
+  }
 })
 
 // Serve the build files
 app.listen(PORT, () => {
-  console.log('Server running on PORT ' + PORT)
-  console.log('Go to http://localhost:4040/ to serve everest')
+  'Server running on PORT ' + PORT
 })

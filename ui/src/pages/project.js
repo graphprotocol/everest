@@ -56,7 +56,10 @@ const Project = ({ location }) => {
   const [pendingVotes, setPendingVotes] = useState(false)
   const [pendingResolve, setPendingResolve] = useState(false)
   const [challengeResolved, setChallengeResolved] = useState(false)
-  const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
+
+  const index = location ? location.pathname.indexOf('0x') : null
+  const projectId =
+    location && index ? location.pathname.slice(index, index + 42) : ''
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {

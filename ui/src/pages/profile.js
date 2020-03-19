@@ -24,7 +24,6 @@ const Profile = ({ location }) => {
   const { account } = useAccount()
 
   const [selectedProjectsView, setSelectedProjectsView] = useState('cards')
-  const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
   const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
   const [profile, setProfile] = useState(null)
 

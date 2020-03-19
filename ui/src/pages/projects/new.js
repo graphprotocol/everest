@@ -4,16 +4,14 @@ import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
-import cloneDeep from 'lodash.clonedeep'
 import { navigate } from 'gatsby'
-import moment from 'moment'
+import fetch from 'isomorphic-fetch'
 
 import client from '../../utils/apollo/client'
 import { useAccount } from '../../utils/hooks'
 
 import { ADD_PROJECT, DAI_BALANCE } from '../../utils/apollo/mutations'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
-import { PROFILE_QUERY } from '../../utils/apollo/queries'
 
 import ProjectForm from '../../components/ProjectForm'
 
@@ -21,6 +19,7 @@ const NewProject = () => {
   const { account } = useAccount()
   const [isDisabled, setIsDisabled] = useState(true)
   const [daiAmount, setDaiAmount] = useState(null)
+  const [pending, setPending] = useState(false)
   const [project, setProject] = useState({
     name: '',
     description: '',
@@ -34,25 +33,6 @@ const NewProject = () => {
   })
 
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
-  const { data: profile } = useQuery(PROFILE_QUERY, {
-    variables: {
-      id: account,
-      orderBy: 'createdAt',
-      orderDirection: 'desc',
-    },
-  })
-
-  let selectedCategories
-
-  if (categories) {
-    selectedCategories =
-      project &&
-      project.categories &&
-      project.categories.map(pc => {
-        const category = categories.categories.find(cat => cat.id === pc)
-        return { id: category.id, name: category.name, __typename: 'Category' }
-      })
-  }
 
   const [daiBalance] = useMutation(DAI_BALANCE, {
     client: client,
@@ -68,70 +48,28 @@ const NewProject = () => {
 
   const [addProject] = useMutation(ADD_PROJECT, {
     client: client,
-    refetchQueries: [
-      {
-        query: PROFILE_QUERY,
-        variables: {
-          id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
-        },
-      },
-    ],
-    optimisticResponse: {
-      __typename: 'Mutation',
-      addProject: {
-        id: '123',
-        name: project.name,
-        description: project.description,
-        avatar: project.avatar,
-        image: project.image,
-        website: project.website,
-        github: project.github,
-        twitter: project.twitter,
-        isRepresentative: project.isRepresentative,
-        createdAt: moment().unix(),
-        currentChallenge: null,
-        categories: selectedCategories,
-        delegates: [],
-        __typename: 'Project',
-      },
+    onCompleted: async data => {
+      if (data && data.addProject) {
+        const params = {
+          projectId: data.addProject.id,
+          title: data.addProject.name,
+          description: data.addProject.description,
+          image: `https://api.staging.thegraph.com/ipfs/api/v0/cat?arg=${data.addProject.avatar}`,
+        }
+        // Build project page
+        await fetch(`${process.env.GATSBY_API_ENDPOINT}project/build`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(params),
+        })
+        setPending(false)
+        navigate(`/project/${data.addProject.id}`)
+      }
     },
     onError: error => {
       console.error('Error adding a project: ', error)
-    },
-    update: (proxy, result) => {
-      const profileData = cloneDeep(
-        proxy.readQuery({
-          query: PROFILE_QUERY,
-          variables: {
-            id: account,
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
-          },
-        }),
-      )
-
-      proxy.writeQuery({
-        query: PROFILE_QUERY,
-        variables: {
-          id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
-        },
-        data: {
-          user: {
-            id: account,
-            __typename: 'User',
-            delegatorProjects:
-              profile && profile.user && profile.user.delegatorProjects,
-            projects:
-              profileData && profileData.user
-                ? [...profileData.user.projects, result.data.addProject]
-                : [result.data.addProject],
-          },
-        },
-      })
     },
   })
 
@@ -194,7 +132,7 @@ const NewProject = () => {
     addProject({
       variables: data,
     })
-    navigate(`/profile/${account}`)
+    setPending(true)
   }
 
   return (
@@ -221,7 +159,7 @@ const NewProject = () => {
         <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
         <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
       </Box>
-      <Box>
+      <Box sx={{ position: 'relative' }}>
         {daiAmount && parseFloat(daiAmount) < 10 && (
           <Styled.h6
             sx={{
@@ -237,6 +175,20 @@ const NewProject = () => {
             DAI to your Wallet.
           </Styled.h6>
         )}
+        {pending && (
+          <Box
+            sx={{
+              position: 'absolute',
+              margin: '120px 0 120px 60px',
+              textAlign: 'center',
+            }}
+          >
+            <Styled.h4 sx={{ color: 'white' }}>
+              Processing your transaction
+            </Styled.h4>
+            <img src="/loading-dots-white.gif" />
+          </Box>
+        )}
         <ProjectForm
           project={project}
           isDisabled={isDisabled}
@@ -246,6 +198,10 @@ const NewProject = () => {
           buttonText="Add project"
           setImage={setImage}
           categories={categories ? categories.categories : []}
+          sx={{
+            opacity: pending ? 0.36 : 1,
+            pointerEvents: pending ? 'none' : 'all',
+          }}
         />
       </Box>
     </Grid>

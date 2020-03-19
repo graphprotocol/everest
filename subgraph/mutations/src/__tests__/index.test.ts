@@ -102,8 +102,6 @@ describe('Mutation Resolvers', () => {
         `,
         variables: args,
       })
-
-      console.log(addProject)
     })
   })
 
