@@ -65,13 +65,10 @@ async function signPermit(provider, domain, message) {
     ])
   } else if (provider._web3Provider.isWalletLink) {
     // Wallet link expects typedData to not be stringified
-    sig = await provider.send('eth_signTypedData_v3', [
-      signerAddr,
-      typedData
-    ])
+    sig = await provider.send('eth_signTypedData_v3', [signerAddr, typedData])
   } else {
     // We default trying with stringify
-    sig = await provider.send('eth_signTypedData_v3', [
+    sig = await provider.send('eth_signTypedData', [
       signerAddr,
       JSON.stringify(typedData),
     ])

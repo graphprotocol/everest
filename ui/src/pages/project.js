@@ -126,7 +126,8 @@ const Project = ({ location }) => {
           user: {
             id: account,
             __typename: 'User',
-            delegatorProjects: profile.user.delegatorProjects,
+            delegatorProjects:
+              profile && profile.user && profile.user.delegatorProjects,
             projects: remainingProjects,
           },
         },
@@ -288,7 +289,8 @@ const Project = ({ location }) => {
           user: {
             id: account,
             __typename: 'User',
-            delegatorProjects: profile.user.delegatorProjects,
+            delegatorProjects:
+              profile && profile.user && profile.user.delegatorProjects,
             projects: remainingProjects,
           },
         },
@@ -355,7 +357,8 @@ const Project = ({ location }) => {
           user: {
             id: account,
             __typename: 'User',
-            delegatorProjects: profile.user.delegatorProjects,
+            delegatorProjects:
+              profile && profile.user && profile.user.delegatorProjects,
             projects: [
               ...profileData.user.projects,
               result.data.delegateOwnership,

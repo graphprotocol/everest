@@ -23,6 +23,7 @@
     "@reach/menu-button": "^0.6.4",
     "@reach/router": "^1.2.1",
     "@theme-ui/components": "0.3.1",
+    "@walletconnect/web3-provider": "1.0.0-beta.47",
     "@web3-react/core": "^6.0.2",
     "@web3-react/injected-connector": "^6.0.3",
     "@web3-react/network-connector": "^6.0.4",
@@ -36,6 +37,7 @@
     "gatsby-plugin-emotion": "^4.1.22",
     "gatsby-plugin-eslint": "^2.0.8",
     "gatsby-plugin-ipfs": "2.0.2",
+    "gatsby-plugin-layout": "1.1.22",
     "gatsby-plugin-prefetch-google-fonts": "^1.4.3",
     "gatsby-plugin-react-helmet": "^3.1.16",
     "gatsby-plugin-react-svg": "^2.1.2",
@@ -43,7 +45,6 @@
     "gatsby-plugin-theme-ui": "0.3.0",
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-source-graphql": "2.1.28",
-    "gatsby-plugin-layout": "1.1.22",
     "graphql": "^14.5.8",
     "moment": "2.24.0",
     "numeral": "^2.0.6",
@@ -55,10 +56,9 @@
     "react-textarea-autosize": "^7.1.2",
     "react-toastify": "5.5.0",
     "theme-ui": "^0.3.1",
+    "wallet-connect-provider": "0.1.2",
     "walletlink": "^2.0.1",
-    "web3-react": "^5.0.5",
-    "@walletconnect/web3-provider": "1.0.0-beta.47",
-    "wallet-connect-provider": "0.1.2"
+    "web3-react": "^5.0.5"
   },
   "devDependencies": {
     "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.8",

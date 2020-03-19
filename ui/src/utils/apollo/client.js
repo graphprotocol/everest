@@ -32,7 +32,7 @@ try {
         }
       } else if (walletConnector.name === 'walletconnect') {
         provider = new WalletConnectProvider({
-          rpc: process.env.GATSBY_NETWORK_CONNECTOR_URI,
+          infuraId: process.env.GATSBY_INFURA_ID,
           chainId: 3,
         })
       } else if (walletConnector.name === 'injected') {

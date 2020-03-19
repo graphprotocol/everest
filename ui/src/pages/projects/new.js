@@ -123,8 +123,12 @@ const NewProject = () => {
           user: {
             id: account,
             __typename: 'User',
-            delegatorProjects: profile.user.delegatorProjects,
-            projects: [...profileData.user.projects, result.data.addProject],
+            delegatorProjects:
+              profile && profile.user && profile.user.delegatorProjects,
+            projects:
+              profileData && profileData.user
+                ? [...profileData.user.projects, result.data.addProject]
+                : [result.data.addProject],
           },
         },
       })
@@ -190,7 +194,7 @@ const NewProject = () => {
     addProject({
       variables: data,
     })
-    // navigate(`/profile/${account}`)
+    navigate(`/profile/${account}`)
   }
 
   return (

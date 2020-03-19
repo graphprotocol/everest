@@ -18,6 +18,7 @@ import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
+import ProfilePlaceholder from '../images/profile-placeholder.svg'
 
 const Profile = ({ location }) => {
   const { account } = useAccount()
@@ -90,8 +91,10 @@ const Profile = ({ location }) => {
           }}
         >
           <Box>
-            {profile && profile.image && (
+            {profile && profile.image ? (
               <img src={profile.image} alt="Profile" sx={profileImgStyles} />
+            ) : (
+              <ProfilePlaceholder sx={profileImgStyles} />
             )}
           </Box>
           {profile && profile.name ? (
