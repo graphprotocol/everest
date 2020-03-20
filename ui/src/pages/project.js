@@ -9,6 +9,7 @@ import ThreeBox from '3box'
 import client from '../utils/apollo/client'
 import cloneDeep from 'lodash.clonedeep'
 import moment from 'moment'
+import { isMobile } from 'react-device-detect'
 
 import { convertDate } from '../utils/helpers/date'
 import { defaultImage } from '../utils/helpers/utils'
@@ -56,7 +57,9 @@ const Project = ({ location }) => {
   const [pendingVotes, setPendingVotes] = useState(false)
   const [pendingResolve, setPendingResolve] = useState(false)
   const [challengeResolved, setChallengeResolved] = useState(false)
-  const projectId = location ? location.pathname.split('/').slice(-1)[0] : ''
+  const index = location ? location.pathname.indexOf('0x') : null
+  const projectId =
+    location && index ? location.pathname.slice(index, index + 42) : ''
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -582,7 +585,7 @@ const Project = ({ location }) => {
         sx={{ alignItems: 'center' }}
         id="click"
       >
-        <Grid sx={{ gridTemplateColumns: [1, '120px 1fr'] }}>
+        <Grid sx={{ gridTemplateColumns: ['1fr', '120px 1fr'] }}>
           <Box>
             {project.avatar ? (
               <img
@@ -599,21 +602,77 @@ const Project = ({ location }) => {
               />
             )}
           </Box>
-          <Box>
-            <p sx={{ variant: 'text.large' }}>
-              {project.categories && project.categories.length > 0
-                ? project.categories.map((cat, index) => (
-                    <Link to={`/category/${cat.id}`} key={index}>
-                      {cat.name}
-                      {index !== project.categories.length - 1 && (
-                        <span>,&nbsp;</span>
-                      )}
-                    </Link>
-                  ))
-                : ''}
-            </p>
-            <Styled.h2>{project.name}</Styled.h2>
-          </Box>
+          <Grid
+            sx={
+              isMobile
+                ? {
+                    gridTemplateColumns: 'max-content max-content',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }
+                : {}
+            }
+          >
+            <Box>
+              <p sx={{ variant: 'text.large' }}>
+                {project.categories && project.categories.length > 0
+                  ? project.categories.map((cat, index) => (
+                      <Link to={`/category/${cat.id}`} key={index}>
+                        {cat.name}
+                        {index !== project.categories.length - 1 && (
+                          <span>,&nbsp;</span>
+                        )}
+                      </Link>
+                    ))
+                  : ''}
+              </p>
+              <Styled.h2>{project.name}</Styled.h2>
+            </Box>
+            {account && isMobile && (
+              <Menu items={items} sx={{ justifySelf: 'end' }}>
+                {showChallenge || showTransfer || showDelegate ? (
+                  <Box
+                    sx={{
+                      p: [4, 5, 5],
+                      borderRadius: '50%',
+                      backgroundColor: 'secondary',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Close
+                      onClick={async () => {
+                        await setShowChallenge(false)
+                        await setShowTransfer(false)
+                        const $el = document.querySelector('#click  ')
+                        if ($el) {
+                          $el.click()
+                        }
+                      }}
+                      sx={{
+                        fill: 'white',
+                        width: ['18px', '22px', '22px'],
+                        height: 'auto',
+                        transition: 'all 0.3s ease',
+                      }}
+                    />
+                  </Box>
+                ) : (
+                  <img
+                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                    sx={{
+                      pt: 1,
+                      pl: 2,
+                      width: '32px',
+                      transform: 'rotate(90deg)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                    }}
+                    alt="dots"
+                  />
+                )}
+              </Menu>
+            )}
+          </Grid>
         </Grid>
         <Grid
           mt={[5, 5, 0]}
@@ -621,6 +680,7 @@ const Project = ({ location }) => {
             alignItems: 'center',
             gridTemplateColumns: '200px max-content 1fr',
           }}
+          gap={0}
         >
           <Box>
             <p sx={{ variant: 'text.small' }}>Date Added</p>
@@ -647,7 +707,10 @@ const Project = ({ location }) => {
             <Box>
               <p sx={{ variant: 'text.small' }}>Owner</p>
               <Link
-                sx={{ color: 'secondary', fontSize: '1.5rem' }}
+                sx={{
+                  color: 'secondary',
+                  fontSize: ['1rem', '1.5rem', '1.5rem'],
+                }}
                 to={`/profile?id=${project.owner.id}`}
               >
                 {ownerName
@@ -658,12 +721,13 @@ const Project = ({ location }) => {
               </Link>
             </Box>
           </Grid>
-          {account && (
+          {account && !isMobile && (
             <Menu items={items} sx={{ justifySelf: 'end' }}>
-              {showChallenge || showTransfer ? (
+              {showChallenge || showTransfer || showDelegate ? (
                 <Box
                   sx={{
-                    p: 5,
+                    p: [4, 5, 5],
+                    mt: ['-120px', 0, 0],
                     borderRadius: '50%',
                     backgroundColor: 'secondary',
                     cursor: 'pointer',
@@ -673,6 +737,7 @@ const Project = ({ location }) => {
                     onClick={async () => {
                       await setShowChallenge(false)
                       await setShowTransfer(false)
+                      await setShowDelegate(false)
                       const $el = document.querySelector('#click  ')
                       if ($el) {
                         $el.click()
@@ -680,8 +745,8 @@ const Project = ({ location }) => {
                     }}
                     sx={{
                       fill: 'white',
-                      width: '22px',
-                      height: '22 px',
+                      width: ['18px', '22px', '22px'],
+                      height: 'auto',
                       transition: 'all 0.3s ease',
                     }}
                   />
@@ -730,7 +795,7 @@ const Project = ({ location }) => {
           handleClick={handleChallenge}
           showFilters={true}
           items={userProjects}
-          sx={{ mt: '140px' }}
+          sx={{ mt: ['220px', '140px', '140px'] }}
         />
       )}
       {showTransfer && (
@@ -756,7 +821,7 @@ const Project = ({ location }) => {
           text="Transfer"
           icon="transfer-icon.svg"
           handleClick={handleTransfer}
-          sx={{ mt: '140px' }}
+          sx={{ mt: ['220px', '140px', '140px'] }}
         />
       )}
       {showDelegate && (
@@ -782,11 +847,12 @@ const Project = ({ location }) => {
           text="Delegate"
           icon="delegate-icon.svg"
           handleClick={handleDelegate}
+          sx={{ mt: ['220px', '140px', '140px'] }}
         />
       )}
       <Divider />
       <Grid columns={[1, 1, 2]} gap={3}>
-        <Box sx={{ margin: ['auto', 'auto', 0], position: 'relative' }}>
+        <Box sx={{ margin: [0, 'auto', 0], position: 'relative' }}>
           <Styled.p sx={{ maxWidth: '504px', width: '100%' }}>
             {project.description}
           </Styled.p>

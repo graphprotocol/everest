@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { navigate } from 'gatsby'
 import ThreeBox from '3box'
 import queryString from 'query-string'
+import { isMobile } from 'react-device-detect'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
@@ -89,21 +90,57 @@ const Profile = ({ location }) => {
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
         <Grid
           sx={{
-            gridTemplateColumns: [1, '120px 1fr'],
+            gridTemplateColumns: ['1fr', '120px 1fr'],
             alignItems: 'center',
           }}
         >
-          <Box>
+          <Grid
+            sx={
+              isMobile
+                ? {
+                    gridTemplateColumns: 'max-content max-content',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }
+                : {}
+            }
+          >
             {profile && profile.image ? (
               <img src={profile.image} alt="Profile" sx={profileImgStyles} />
             ) : (
               <ProfilePlaceholder sx={profileImgStyles} />
             )}
-          </Box>
+            {isOwner() && isMobile && (
+              <Menu
+                items={[
+                  {
+                    text: 'Edit (3Box)',
+                    handleSelect: () => {
+                      window.open(`https://3box.io/${account}`, '_blank')
+                    },
+                    icon: '/edit.png',
+                  },
+                ]}
+              >
+                <img
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                  sx={{
+                    pt: 1,
+                    pl: 2,
+                    width: '24px',
+                    transform: 'rotate(90deg)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                  alt="dots"
+                />
+              </Menu>
+            )}
+          </Grid>
           {profile && profile.name ? (
             <Box>
               <Styled.h2>{profile.name}</Styled.h2>
-              <p
+              <Styled.p
                 sx={{
                   fontSize: ['0.85rem', '0.85rem', '1rem'],
                   fontWeight: 'heading',
@@ -112,11 +149,13 @@ const Profile = ({ location }) => {
                 }}
               >
                 {profileId}
-              </p>
+              </Styled.p>
             </Box>
           ) : (
             <Box>
-              <Styled.h5>{profileId}</Styled.h5>
+              <Styled.h5 sx={{ fontSize: ['0.85rem', '1.25rem', '1.5rem'] }}>
+                {profileId}
+              </Styled.h5>
               {isOwner() && (
                 <Link
                   onClick={() =>
@@ -149,7 +188,7 @@ const Profile = ({ location }) => {
               </p>
             </Box>
           )}
-          {isOwner() && (
+          {isOwner() && !isMobile && (
             <Menu
               items={[
                 {
@@ -157,7 +196,7 @@ const Profile = ({ location }) => {
                   handleSelect: () => {
                     window.open(`https://3box.io/${account}`, '_blank')
                   },
-                  icon: '/challenge.png',
+                  icon: '/edit.png',
                 },
               ]}
             >
@@ -260,7 +299,7 @@ const Profile = ({ location }) => {
           <img
             src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
               ''}/mountain-empty.png`}
-            sx={{ height: '190px', width: 'auto' }}
+            sx={{ height: '190px', width: ['100%', 'auto', 'auto'] }}
           />
           <Divider sx={{ mt: '-6px !important' }} />
           {isOwner() ? (

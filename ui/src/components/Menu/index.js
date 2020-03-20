@@ -33,7 +33,7 @@ const Menu = ({ children, items, menuStyles, setOpen, ...props }) => {
       {isOpen && (
         <Box sx={{ ...listStyles, ...menuStyles }}>
           {items &&
-            items.map(item => (
+            items.map((item, index) => (
               <Box
                 sx={{ ...linkStyles, display: item.icon ? 'grid' : 'block' }}
                 onClick={e => {
@@ -42,7 +42,7 @@ const Menu = ({ children, items, menuStyles, setOpen, ...props }) => {
                   setIsOpen(false)
                   setOpen && setOpen(false)
                 }}
-                key={item.text}
+                key={index}
               >
                 {item.icon && (
                   <img
@@ -73,6 +73,7 @@ const listStyles = {
   textAlign: 'center',
   cursor: 'pointer',
   padding: 5,
+  zIndex: 12,
 }
 
 const linkStyles = {
