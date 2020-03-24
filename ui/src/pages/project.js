@@ -626,7 +626,12 @@ const Project = ({ location }) => {
                     ))
                   : ''}
               </p>
-              <Styled.h2>{project.name}</Styled.h2>
+              <Styled.h2>
+                {project.name}{' '}
+                {project.isRepresentative && (
+                  <img src="/verified.png" sx={{ width: '24px', ml: -3 }} />
+                )}
+              </Styled.h2>
             </Box>
             {account && isMobile && (
               <Menu items={items} sx={{ justifySelf: 'end' }}>

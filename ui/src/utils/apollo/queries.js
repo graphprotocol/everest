@@ -211,3 +211,13 @@ export const CHALLENGE_QUERY = gql`
     }
   }
 `
+
+export const EVEREST_QUERY = gql`
+  query everests {
+    everests {
+      id
+      projectCount
+      reserveBankBalance
+    }
+  }
+`
