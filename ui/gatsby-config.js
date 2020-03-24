@@ -12,7 +12,7 @@ module.exports = {
   pathPrefix: '__GATSBY_IPFS_PATH_PREFIX__',
   plugins: [
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-webpack-bundle-analyser-v2',
+    // 'gatsby-plugin-webpack-bundle-analyser-v2',
     {
       resolve: 'gatsby-plugin-theme-ui',
       options: {

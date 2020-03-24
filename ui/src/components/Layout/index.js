@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { createContext } from 'react'
+import React, { useState, createContext } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Global } from '@emotion/core'
@@ -11,6 +11,7 @@ import Seo from '../Seo'
 export const ReactContext = createContext()
 
 const LayoutTemplate = ({ children, ...props }) => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
   const styles = {
     maxWidth: '1260px',
     mx: 'auto',
@@ -53,8 +54,14 @@ const LayoutTemplate = ({ children, ...props }) => {
         }}
       />
       <Seo />
-      <section>
-        <Navbar sx={styles} location={props.location} />
+      <section
+        sx={isMobileOpen ? { position: 'fixed', overflow: 'hidden' } : {}}
+      >
+        <Navbar
+          sx={styles}
+          location={props.location}
+          setParentMobileOpen={setIsMobileOpen}
+        />
         <Box
           sx={{
             ...mStyles,

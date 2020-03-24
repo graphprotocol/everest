@@ -21,10 +21,10 @@ const DataRow = ({ name, value, href }) => (
         {value}
       </Link>
     ) : (
-      <Styled.p sx={{ fontWeight: 'heading', color: 'blackFaded' }}>
-        {value}
-      </Styled.p>
-    )}
+        <Styled.p sx={{ fontWeight: 'heading', color: 'blackFaded', fontSize: ['0.85rem', '1rem ', '1rem'] }}>
+          {value}
+        </Styled.p>
+      )}
   </Grid>
 )
 

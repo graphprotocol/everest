@@ -12,9 +12,10 @@ const ProjectForm = ({
   setDisabled,
   buttonText,
   categories,
+  ...props
 }) => {
   return (
-    <form sx={{ maxWidth: '504px', width: '100%', mt: [5, 0, 0] }}>
+    <form sx={{ maxWidth: '504px', width: '100%', mt: [5, 0, 0] }} {...props}>
       <Field
         title="Name *"
         field="name"
