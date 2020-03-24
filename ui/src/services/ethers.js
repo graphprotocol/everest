@@ -17,8 +17,6 @@ export const getAddress = async () => {
   return address
 }
 
-// TODO: change the event to chainChanged or networkChanged in 2020
-// https://medium.com/metamask/no-longer-reloading-pages-on-network-change-fbf041942b44
 export const metamaskAccountChange = callback => {
   if (typeof window.ethereum !== undefined && window.ethereum !== undefined) {
     window.ethereum.on('accountsChanged', accounts => {

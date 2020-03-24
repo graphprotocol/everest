@@ -15,7 +15,6 @@ try {
 
   if (typeof window !== undefined) {
     const storage = window.localStorage.getItem('WALLET_CONNECTOR')
-    console.log('STORAGE: ', storage)
     if (storage) {
       const walletConnector = JSON.parse(storage)
       if (walletConnector.name === 'walletlink') {
@@ -39,9 +38,11 @@ try {
         provider = window.web3.currentProvider
       }
     }
+  } else {
+    provider = window.web3.currentProvider
   }
 } catch (e) {
-  console.error('Error importing provider: ', e)
+  console.log('Error importing provider: ', e)
 }
 
 const networkURI = process.env.GATSBY_NETWORK_URI
@@ -62,7 +63,6 @@ const mutations = createMutations({
         throw Error('Please use web3 enabled browser')
       }
 
-      console.log('PROVIDER: ', provider)
       await provider.enable()
       return provider
     },

@@ -20,7 +20,7 @@ Stats.propTypes = {
   stats: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
-      value: PropTypes.number || PropTypes.string,
+      value: PropTypes.any,
     }),
   ),
 }

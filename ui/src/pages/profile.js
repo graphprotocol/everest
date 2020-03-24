@@ -58,9 +58,23 @@ const Profile = ({ location }) => {
         setProfile({ image: image })
       }
     }
-    metamaskAccountChange(accounts => navigate(`/profile?id=${accounts[0]}`))
+    metamaskAccountChange(accounts => {
+      if (accounts && accounts.length > 0) {
+        navigate(`/profile?id=${accounts[0]}`)
+      } else {
+        navigate('/')
+      }
+    })
     if (account) {
       getProfile()
+    }
+  }, [account])
+
+  useEffect(() => {
+    if (account) {
+      navigate(`/profile?id=${account}`)
+    } else {
+      navigate('/')
     }
   }, [account])
 
