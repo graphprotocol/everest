@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState } from 'react'
 import { jsx, Styled, Box } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'

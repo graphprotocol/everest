@@ -24,7 +24,7 @@ export function useAccount() {
             setAccount(walletConnector.accounts[0])
           }
         } else {
-          setAccount(await getAddress())
+          web3Account ? setAccount(web3Account) : setAccount(await getAddress())
         }
       } else if (web3Account) {
         setAccount(web3Account)

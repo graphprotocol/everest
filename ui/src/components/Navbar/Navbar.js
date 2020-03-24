@@ -6,8 +6,6 @@ import { Grid, Box } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 import { isMobile } from 'react-device-detect'
 
-// import ThreeBox from '3box' // TODO: failing the build
-
 import { metamaskAccountChange } from '../../services/ethers'
 import { useAccount } from '../../utils/hooks'
 
@@ -49,14 +47,11 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
   // }
 
   useEffect(() => {
-    if (account) {
-      setUserAccount(account)
-    }
-    metamaskAccountChange(accounts => setUserAccount(accounts[0]))
+    let walletConnector
     if (typeof window !== undefined) {
       const storage = window.localStorage.getItem('WALLET_CONNECTOR')
       if (storage) {
-        const walletConnector = JSON.parse(storage)
+        walletConnector = JSON.parse(storage)
         if (walletConnector && walletConnector.accounts) {
           setUserAccount(walletConnector.accounts[0])
         }
@@ -64,26 +59,25 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         setUserAccount(account)
       }
     }
+    metamaskAccountChange(accounts => {
+      if (accounts && accounts.length > 0) {
+        setUserAccount(accounts[0])
+        if (typeof window !== undefined) {
+          if (walletConnector && walletConnector.name === 'injected') {
+            const newWalletConnector = JSON.stringify({
+              ...walletConnector,
+              accounts: accounts,
+            })
+            window.localStorage.setItem('WALLET_CONNECTOR', newWalletConnector)
+          }
+        }
+      }
+    })
   }, [account])
-
-  // useEffect(() => {
-  //   async function getProfile() {
-  //     const threeBoxProfile = await ThreeBox.getProfile(userAccount)
-
-  //     let image
-  //     if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
-  //       image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
-  //     }
-  //     setUserImage(image)
-  //   }
-  //   getProfile()
-  // })
 
   const isNewProjectPage =
     location &&
     (location.pathname.includes('new') || location.pathname.includes('edit'))
-
-  console.log('IS MOBILE: ', isMobile)
 
   const renderActions = () => {
     if (userAccount) {
@@ -286,7 +280,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
               <Styled.a href="/categories">
                 Categories <Arrow sx={{ ml: 1, fill: 'secondary' }} />
               </Styled.a>
-              <Styled.a href="/categories">
+              <Styled.a href="/charter">
                 Charter <Arrow sx={{ ml: 1, fill: 'secondary' }} />
               </Styled.a>
             </Box>
@@ -371,6 +365,7 @@ const imgStyles = {
 
 Navbar.propTypes = {
   location: PropTypes.any,
+  setParentMobileOpen: PropTypes.func,
 }
 
 export default Navbar

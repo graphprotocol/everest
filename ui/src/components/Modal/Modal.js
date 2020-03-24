@@ -12,6 +12,7 @@ import { walletExists } from '../../services/ethers'
 import wallets from '../../connectors/wallets'
 import { walletconnect } from '../../connectors'
 import { useAccount } from '../../utils/hooks'
+import { getAddress } from '../../services/ethers'
 
 import QRCodeData from './QRCodeData'
 import Divider from '../Divider'
@@ -29,7 +30,7 @@ const Modal = ({ children, showModal, closeModal }) => {
   const [showPendingView, setShowPendingView] = useState(false)
   const [showWalletsView, setShowWalletsView] = useState(true)
   const [uri, setUri] = useState('')
-  const [userAccount, setUserAccount] = useState(null)
+  const [userAccount, setUserAccount] = useState(account)
   const [isWalletEnabled, setIsWalletEnabled] = useState(false)
 
   useEffect(() => {
@@ -63,14 +64,16 @@ const Modal = ({ children, showModal, closeModal }) => {
   const handleWalletActivation = async wallet => {
     setSelectedWallet(wallet)
     if (wallet.name === 'MetaMask') {
+      const mmAccount = await getAddress()
       if (await walletExists()) {
-        if (account) {
+        if (mmAccount) {
           setShowWalletsView(false)
           setShowAccountView(true)
+          setUserAccount(mmAccount)
 
           const connnectData = JSON.stringify({
             name: wallet.type,
-            accounts: [account],
+            accounts: [mmAccount],
           })
           if (typeof window !== undefined) {
             window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
@@ -81,8 +84,7 @@ const Modal = ({ children, showModal, closeModal }) => {
       } else {
         return window.open('https://metamask.io/', '_blank')
       }
-    }
-    if (wallet.name !== 'MetaMask') {
+    } else if (wallet.name !== 'MetaMask') {
       setShowPendingView(true)
       setShowWalletsView(false)
     }
@@ -100,10 +102,16 @@ const Modal = ({ children, showModal, closeModal }) => {
         setShowAccountView(true)
 
         const provider = await wallet.connector.getProvider()
+        const address = provider._addresses
+          ? provider._addresses[0]
+          : provider.accounts
+          ? provider.accounts[0]
+          : provider.selectedAddress
+        setUserAccount(address)
 
         const connnectData = JSON.stringify({
           name: wallet.type,
-          accounts: provider._addresses || provider.accounts,
+          accounts: [address],
         })
         if (typeof window !== undefined) {
           window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
@@ -157,10 +165,10 @@ const Modal = ({ children, showModal, closeModal }) => {
           }}
         />
         {!showWalletsView ? (
-          account && showAccountView ? (
+          userAccount && showAccountView ? (
             <Grid>
               <Styled.p>You are logged in with {selectedWallet.name}</Styled.p>
-              <Styled.p>{account}</Styled.p>
+              <Styled.p>{userAccount}</Styled.p>
             </Grid>
           ) : (
             <QRCodeData size={240} uri={uri} />
