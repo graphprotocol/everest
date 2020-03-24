@@ -4,10 +4,15 @@ import { jsx, Styled, Box } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import { utils } from 'ethers'
 
 import { useAccount } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
-import { CATEGORIES_QUERY, PROJECTS_QUERY } from '../utils/apollo/queries'
+import {
+  CATEGORIES_QUERY,
+  PROJECTS_QUERY,
+  EVEREST_QUERY,
+} from '../utils/apollo/queries'
 
 import Link from '../components/Link'
 import Stats from '../components/Stats'
@@ -34,12 +39,18 @@ const Index = () => {
       orderDirection: 'desc',
     },
   })
+  const { data: everestData } = useQuery(EVEREST_QUERY)
+  const everestStats =
+    everestData && everestData.everests && everestData.everests[0]
 
-  // TODO: replace with Totals for faster performance
   const stats = [
-    { title: 'Projects', value: projects && projects.projects.length },
+    { title: 'Projects', value: everestStats && everestStats.projectCount },
     { title: 'Categories', value: categories && categories.categories.length },
-    { title: 'Registry Value (DAI)', value: '150,000' },
+    {
+      title: 'Registry Value (DAI)',
+      value:
+        everestStats && utils.formatUnits(everestStats.reserveBankBalance, 18),
+    },
   ]
 
   const challengedProjects = projects
