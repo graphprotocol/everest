@@ -81,10 +81,8 @@ module.exports = {
   ],
   siteMetadata: {
     title: 'Everest',
-    titleTemplate: '%s · Everest',
     description: 'Repository of crypto projects',
-    url: 'http://test22.eth', // No trailing slash allowed!
-    image: '', // Path to your image you placed in the 'static' folder
-    twitterUsername: '@graphprotocol',
+    url: 'https://everest.link', // No trailing slash allowed!
+    image: '/mountain.jpg', // Path to your image you placed in the 'static' folder
   },
 }
