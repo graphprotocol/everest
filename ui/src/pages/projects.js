@@ -5,42 +5,51 @@ import { Grid, Box } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
 import { PROJECTS_QUERY } from '../utils/apollo/queries'
+import { ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
 import Menu from '../components/Menu'
+import Sorting from '../components/Sorting'
+
 import Arrow from '../images/arrow.svg'
 
 const Projects = () => {
   const [selected, setSelected] = useState('cards')
   const [selectedFilter, setSelectedFilter] = useState('All')
-  const [isFilterOpen, setIsFileterOpen] = useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [selectedOrderBy, setSelectedOrderBy] = useState(ORDER_BY['Name'])
+  const [selectedOrderDirection, setSelectedOrderDirection] = useState(
+    ORDER_DIRECTION.ASC,
+  )
+  const [isSortingOpen, setIsSortingOpen] = useState(false)
+
+  const variables = {
+    orderDirection: selectedOrderDirection,
+    orderBy: selectedOrderBy,
+  }
 
   const { loading, error, data } = useQuery(PROJECTS_QUERY, {
     variables:
       selectedFilter === 'All'
-        ? {}
+        ? variables
         : {
+            ...variables,
             where: {
               currentChallenge_not: null,
             },
           },
   })
 
-  if (loading) {
-    return <div />
-  }
-
   if (error) {
     console.error('Error with GraphQL query: ', error)
     return <div />
   }
 
-  const allProjects = data && data.projects
+  const allProjects = data ? data.projects : []
 
-  const challengedProjects = data.projects.filter(
-    p => p.currentChallenge !== null,
-  )
+  const challengedProjects =
+    allProjects && allProjects.filter(p => p.currentChallenge !== null)
 
   return (
     <Grid>
@@ -87,7 +96,7 @@ const Projects = () => {
                 },
               ]}
               menuStyles={{ left: 0, width: '280px', top: '60px' }}
-              setOpen={setIsFileterOpen}
+              setOpen={setIsFilterOpen}
             >
               <Grid
                 sx={{
@@ -127,32 +136,48 @@ const Projects = () => {
             </Menu>
           </Grid>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {allProjects.length} Projects -{' '}
+            {allProjects && allProjects.length} Projects -{' '}
             {challengedProjects && (
               <span>{challengedProjects.length} Challenges</span>
             )}
           </Styled.p>
         </Box>
-        {allProjects.length > 0 && (
+        <Grid
+          sx={{
+            gridTemplateColumns: '1fr max-content',
+            alignItems: 'baseline',
+          }}
+        >
+          <Sorting
+            selectedOrderBy={selectedOrderBy}
+            setSelectedOrderBy={setSelectedOrderBy}
+            selectedOrderDirection={selectedOrderDirection}
+            setSelectedOrderDirection={setSelectedOrderDirection}
+            isSortingOpen={isSortingOpen}
+            setIsSortingOpen={setIsSortingOpen}
+          />
           <Switcher selected={selected} setSelected={setSelected} />
-        )}
+        </Grid>
       </Grid>
       <Section
-        items={allProjects.map(project => {
-          return {
-            ...project,
-            description: project.description
-              ? project.description.length > 30
-                ? project.description.slice(0, 26) + '...'
-                : project.description
-              : '',
-            to: `/project/${project.id}`,
-            image: project.avatar,
-            isChallenged: project.currentChallenge !== null,
-            category:
-              project.categories.length > 0 ? project.categories[0].name : '',
-          }
-        })}
+        items={
+          allProjects &&
+          allProjects.map(project => {
+            return {
+              ...project,
+              description: project.description
+                ? project.description.length > 30
+                  ? project.description.slice(0, 26) + '...'
+                  : project.description
+                : '',
+              to: `/project/${project.id}`,
+              image: project.avatar,
+              isChallenged: project.currentChallenge !== null,
+              category:
+                project.categories.length > 0 ? project.categories[0].name : '',
+            }
+          })
+        }
         variant="project"
         selected={selected}
       />

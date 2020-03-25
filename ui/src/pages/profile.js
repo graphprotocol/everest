@@ -13,11 +13,13 @@ import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
 import { PROFILE_QUERY } from '../utils/apollo/queries'
+import { ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
+import Sorting from '../components/Sorting'
 import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
 import Link from '../components/Link'
@@ -29,6 +31,11 @@ const Profile = ({ location }) => {
   const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
   const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
   const [profile, setProfile] = useState(null)
+  const [selectedOrderBy, setSelectedOrderBy] = useState(ORDER_BY['Name'])
+  const [selectedOrderDirection, setSelectedOrderDirection] = useState(
+    ORDER_DIRECTION.ASC,
+  )
+  const [isSortingOpen, setIsSortingOpen] = useState(false)
 
   const queryParams = location ? queryString.parse(location.search) : null
 
@@ -73,22 +80,16 @@ const Profile = ({ location }) => {
   useEffect(() => {
     if (account) {
       navigate(`/profile?id=${account}`)
-    } else {
-      navigate('/')
     }
   }, [account])
 
-  const { loading, error, data } = useQuery(PROFILE_QUERY, {
+  const { error, data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: profileId,
-      orderBy: 'createdAt',
-      orderDirection: 'desc',
+      orderBy: selectedOrderBy,
+      orderDirection: selectedOrderDirection,
     },
   })
-
-  if (loading) {
-    return <Styled.p>Loading</Styled.p>
-  }
 
   if (error) {
     console.error('Error with Profile query: ', error)
@@ -97,7 +98,7 @@ const Profile = ({ location }) => {
 
   const isOwner = () => account === profileId || account === profileId
 
-  const user = data && data.user
+  const user = data ? data.user : {}
 
   return (
     <Grid>
@@ -284,10 +285,25 @@ const Profile = ({ location }) => {
                 )}
               </Styled.p>
             </Box>
-            <Switcher
-              selected={selectedProjectsView}
-              setSelected={setSelectedProjectsView}
-            />
+            <Grid
+              sx={{
+                gridTemplateColumns: '1fr max-content',
+                alignItems: 'baseline',
+              }}
+            >
+              <Sorting
+                selectedOrderBy={selectedOrderBy}
+                setSelectedOrderBy={setSelectedOrderBy}
+                selectedOrderDirection={selectedOrderDirection}
+                setSelectedOrderDirection={setSelectedOrderDirection}
+                isSortingOpen={isSortingOpen}
+                setIsSortingOpen={setIsSortingOpen}
+              />
+              <Switcher
+                selected={selectedProjectsView}
+                setSelected={setSelectedProjectsView}
+              />
+            </Grid>
           </Grid>
           <Section
             items={user.projects.map(project => {
@@ -311,8 +327,7 @@ const Profile = ({ location }) => {
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
           <img
-            src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-              ''}/mountain-empty.png`}
+            src={`/mountain-empty.png`}
             sx={{ height: '190px', width: ['100%', 'auto', 'auto'] }}
           />
           <Divider sx={{ mt: '-6px !important' }} />
