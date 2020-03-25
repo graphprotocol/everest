@@ -12,6 +12,7 @@ export default {
     grey: 'rgba(30,37,44,0.16)',
     whiteFaded: 'rgba(255,255,255,0.4)',
     linkHover: '#3043B2',
+    error: '#ED4A6D',
   },
   fonts: {
     body: 'Space Mono, monospace',
@@ -84,7 +85,7 @@ export default {
       letterSpacing: '0.31px',
       lineHeight: '2.375rem',
       '&:hover': {
-        color: 'primary',
+        color: 'linkHover',
       },
     },
     Link: {

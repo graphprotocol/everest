@@ -23,6 +23,7 @@ const Field = ({
   setImage,
   categories,
   variant,
+  error,
 }) => {
   const charRef = useRef()
 
@@ -41,7 +42,9 @@ const Field = ({
         ...styles.field,
         borderBottom:
           type === 'input' || type === 'textarea'
-            ? '1px solid rgba(255,255,255,0.32)'
+            ? error
+              ? '1px solid #ED4A6D'
+              : '1px solid rgba(255,255,255,0.32)'
             : 'none',
       }}
     >
@@ -135,6 +138,18 @@ const Field = ({
           </p>
         )}
       </Grid>
+      {error && (
+        <p
+          sx={{
+            variant: 'text.smaller',
+            color: '#ED4A6D !important',
+            position: 'absolute',
+            bottom: '-36px',
+          }}
+        >
+          {error}
+        </p>
+      )}
     </Box>
   )
 }
@@ -142,6 +157,7 @@ const Field = ({
 const styles = {
   field: {
     width: '100%',
+    position: 'relative',
     mb: '40px',
     pb: 2,
     transition: 'all 0.3s ease',
