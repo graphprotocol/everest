@@ -1,20 +1,28 @@
+#!/usr/bin/env node
+
 const fs = require('fs')
 const path = require('path')
-const execa = require('execa')
+const child_process = require('child_process')
 const fetch = require('isomorphic-fetch')
 
-async function getLatestProjects(membershipStartTime) {
+let state = {
+  lastUpdatedAt: 0,
+  queuedProjects: [],
+}
+
+async function getLatestProjects(updatedAt) {
   const query = `{ 
     projects(
-      where: { membershipStartTime_gt: ${membershipStartTime} }, 
-      orderBy: membershipStartTime, 
+      first: 1000
+      where: { updatedAt_gt: ${updatedAt} }
+      orderBy: updatedAt
       orderDirection: desc
     ) { 
       id 
       name 
       description 
       avatar 
-      membershipStartTime 
+      updatedAt
     } 
   }`
 
@@ -41,27 +49,6 @@ async function getLatestProjects(membershipStartTime) {
     })
 
   return projects
-}
-
-async function pollAndBuild(startTime) {
-  let membershipStartTime = startTime
-  const projects = await getLatestProjects(membershipStartTime)
-  // only run if there latest projects
-  if (projects && projects.length > 0) {
-    // get the latest timestamp
-    membershipStartTime = projects[0].membershipStartTime
-    // execute only if a new project is added since the last poll
-    const oldContent = getOldContent()
-    projects.forEach(project => {
-      generateProjectPage(project, oldContent)
-    })
-    deployProjectPages()
-  }
-  // TODO: Queue up projects before you run  Textile
-  // Check if the previous shell process finished
-  // Bulk upload the projects to Textile
-  // poll again every 5 seconds
-  return setTimeout(() => pollAndBuild(membershipStartTime), 5000)
 }
 
 function getOldContent() {
@@ -95,6 +82,10 @@ function replaceTags(text, oldTag, newTag) {
 }
 
 function generateProjectPage(project, oldContent) {
+  console.log(
+    `Generate page for project ${project.name} (updated at: ${project.updatedAt})`,
+  )
+
   let projectDir = path.join(__dirname, `public/project/${project.id}`)
   let projectFileName = path.join(
     __dirname,
@@ -126,20 +117,78 @@ function generateProjectPage(project, oldContent) {
   }
 }
 
-function deployProjectPages() {
-  try {
-    console.log('Deploying public to textile')
-    const { stdout, stderr } = execa.command(
-      'textile --debug bucket push public/ everest-ui',
-      {
-        input: '\n',
-      },
-    )
-    stdout.pipe(process.stdout)
-    stderr.pipe(process.stdout)
-  } catch (error) {
-    console.log('ERROR: ', error)
+async function deployProjectPages() {
+  console.log('Deploying project pages from public/ to textile')
+  const { error } = await child_process.spawnSync(
+    'textile',
+    ['--debug', 'bucket', 'push', 'public/', 'everest-ui'],
+    {
+      input: '\n',
+      encoding: 'utf-8',
+      stdio: ['pipe', 'inherit', 'inherit'],
+    },
+  )
+  if (error) {
+    throw error
   }
 }
 
-pollAndBuild(0)
+async function fetchProjectsLoop() {
+  console.log(`Polling for new project updates`)
+
+  const projects = await getLatestProjects(state.lastUpdatedAt)
+
+  if (projects && projects.length > 0) {
+    console.log(`Adding ${projects.length} projects to the queue`)
+
+    // queue new projects
+    state.queuedProjects.push(...projects)
+
+    // get the most recent updatedAt time in the list
+    state.lastUpdatedAt = projects[0].updatedAt
+  }
+
+  // poll projects again every 5 seconds
+  return setTimeout(fetchProjectsLoop, 5000)
+}
+
+async function buildAndDeployProjectsLoop() {
+  console.log('Build and deploy project pages')
+
+  // guard against building and deploying pages multiple times in parallel
+  if (state.queuedProjects.length > 0) {
+    let projects = [...state.queuedProjects]
+
+    console.log(`Building ${projects.length} queued project pages`)
+
+    // generate pages for all queued projects
+    const oldContent = getOldContent()
+    projects.forEach(project => {
+      generateProjectPage(project, oldContent)
+    })
+
+    try {
+      await deployProjectPages()
+
+      // only keep project updates in the queue that we didn't just regenerate and deploy
+      state.queuedProjects = state.queuedProjects.filter(
+        queuedProject =>
+          projects.find(
+            updatedProject =>
+              JSON.stringify(updatedProject) === JSON.stringify(queuedProject),
+          ) === undefined,
+      )
+
+      console.log(`Deployed project pages`)
+    } catch (e) {
+      console.error(`Deploying project pages failed: ${e}`)
+    }
+    console.log(`${state.queuedProjects.length} projects still in the queue`)
+  }
+
+  // check if there are queued projects again in 5s
+  return setTimeout(buildAndDeployProjectsLoop, 5000)
+}
+
+fetchProjectsLoop()
+buildAndDeployProjectsLoop()
