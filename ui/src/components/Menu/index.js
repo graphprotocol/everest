@@ -17,7 +17,7 @@ const Menu = ({ children, items, menuStyles, setOpen, ...props }) => {
     return () => {
       window.removeEventListener('click', handleClick)
     }
-  }, [])
+  }, [setOpen])
 
   return (
     <Grid sx={{ position: 'relative' }} {...props}>
@@ -39,8 +39,15 @@ const Menu = ({ children, items, menuStyles, setOpen, ...props }) => {
                 onClick={e => {
                   e.stopPropagation()
                   item.handleSelect && item.handleSelect(e)
-                  setIsOpen(false)
-                  setOpen && setOpen(false)
+                  if (item.delay) {
+                    setTimeout(() => {
+                      setIsOpen(false)
+                      setOpen && setOpen(false)
+                    }, item.delay)
+                  } else {
+                    setIsOpen(false)
+                    setOpen && setOpen(false)
+                  }
                 }}
                 key={index}
               >
