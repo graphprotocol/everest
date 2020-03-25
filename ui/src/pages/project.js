@@ -409,13 +409,20 @@ const Project = ({ location }) => {
   // If you are the owner of the current project
   // you can't vote on behalf of that project
   // if you already voted - you can't vote again
+  let hideVoting
   if (project && project.currentChallenge) {
     let votes = []
     votes = project.currentChallenge.votes.map(vote => vote.id.slice(2))
     userProjects = userProjects.map(up => ({
       ...up,
-      disabled: up.id === project.id || votes.includes(up.id),
+      disabled:
+        up.id === project.id ||
+        votes.includes(up.id) ||
+        project.currentChallenge.owner === up.id,
     }))
+    hideVoting =
+      userProjects.length === 1 &&
+      userProjects[0].id === project.currentChallenge.owner
   }
 
   const handleChallenge = () => {
@@ -971,7 +978,9 @@ const Project = ({ location }) => {
                       />
                     </Grid>
                   </Fragment>
-                ) : userProjects.length > 0 ? (
+                ) : userProjects.length > 0 &&
+                  project.currentChallenge.id !== '123' &&
+                  !hideVoting ? (
                   <Fragment>
                     <Styled.h6>
                       What would you like to happen to this listing?
@@ -1059,7 +1068,7 @@ const Project = ({ location }) => {
             <Box
               sx={{
                 ...imageStyles,
-                backgroundImage: `url(${project.image})`,
+                backgroundImage: `url(${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.image})`,
                 margin: ['auto', 'auto', 0],
               }}
             ></Box>
