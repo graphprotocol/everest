@@ -183,3 +183,18 @@ type User @entity {
   "The time the user was created in the Subgraph (not the blockchain)"
   createdAt: Int!
 }
+
+type _Schema_ @fulltext(
+  name: "projectSearch"
+  language: en
+  algorithm: rank
+  include: [
+    {
+      entity: "Project",
+      fields: [
+        { name: "name" },
+        { name: "description" },
+      ]
+    }
+  ]
+)
