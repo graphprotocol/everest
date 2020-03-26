@@ -28,7 +28,7 @@ module.exports = async (deployer, network) => {
     const registry = await deployer.deploy(Registry, { from: owner })
 
     // Deploy Everest
-    await deployer.deploy(
+    const everest = await deployer.deploy(
         Everest,
         daiAddress,
         params.votingPeriodDuration,
@@ -42,7 +42,6 @@ module.exports = async (deployer, network) => {
     )
 
     // The ownership of Registry and ReserveBank must be transferred to Everest
-    const everest = await Everest.deployed()
     await registry.transferOwnership(everest.address)
     await reserveBank.transferOwnership(everest.address)
 
