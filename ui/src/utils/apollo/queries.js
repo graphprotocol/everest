@@ -66,6 +66,7 @@ export const CATEGORIES_QUERY = gql`
       }
       parentCategory {
         id
+        name
       }
       projects {
         id
@@ -85,6 +86,7 @@ export const ALL_CATEGORIES_QUERY = gql`
       }
       parentCategory {
         id
+        name
       }
     }
   }

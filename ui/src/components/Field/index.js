@@ -22,6 +22,7 @@ const Field = ({
   image,
   setImage,
   categories,
+  selectedItems,
   variant,
   error,
 }) => {
@@ -84,6 +85,7 @@ const Field = ({
               title={title}
               type="categories"
               items={categories}
+              selectedItems={selectedItems}
             >
               <p
                 sx={{
@@ -92,7 +94,7 @@ const Field = ({
                   variant: 'text.large',
                 }}
               >
-                <span>Pick categories</span>
+                <span>Select all categories that apply</span>
               </p>
               <Box
                 sx={{
@@ -143,8 +145,8 @@ const Field = ({
           sx={{
             variant: 'text.smaller',
             color: '#ED4A6D !important',
-            position: 'absolute',
-            bottom: '-36px',
+            position: 'relative',
+            bottom: '-42px',
           }}
         >
           {error}
@@ -157,7 +159,6 @@ const Field = ({
 const styles = {
   field: {
     width: '100%',
-    position: 'relative',
     mb: '40px',
     pb: 2,
     transition: 'all 0.3s ease',

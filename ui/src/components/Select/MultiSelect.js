@@ -14,6 +14,7 @@ const MultiSelect = ({
   setValue,
   type,
   items,
+  selectedItems,
   variant,
   children,
   setOpen,
@@ -34,6 +35,17 @@ const MultiSelect = ({
       window.removeEventListener('click', handleClick)
     }
   }, [setOpen])
+
+  useEffect(() => {
+    setSelected(
+      selectedItems
+        ? selectedItems.map(selectedItem => ({
+            ...selectedItem,
+            image: `cats/${selectedItem.id}.png`,
+          }))
+        : [],
+    )
+  }, [selectedItems])
 
   let allItems = items
 
