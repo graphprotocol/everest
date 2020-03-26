@@ -22,6 +22,16 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Everest`,
+        short_name: `Everest`,
+        start_url: `/`,
+        display: `standalone`,
+        icon: `static/favicon.png`,
+      },
+    },
+    {
       resolve: `gatsby-plugin-layout`,
       options: {
         component: require.resolve(`./src/components/Layout/`),

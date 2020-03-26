@@ -176,10 +176,15 @@ export const PROFILE_QUERY = gql`
     $id: ID!
     $orderBy: Project_orderBy
     $orderDirection: OrderDirection
+    $where: Project_filter
   ) {
     user(id: $id) {
       id
-      projects(orderBy: $orderBy, orderDirection: $orderDirection) {
+      projects(
+        orderBy: $orderBy
+        orderDirection: $orderDirection
+        where: $where
+      ) {
         id
         name
         description
@@ -224,6 +229,33 @@ export const CHALLENGE_QUERY = gql`
     description
     votes {
       id
+    }
+  }
+`
+
+export const USER_CHALLENGES_QUERY = gql`
+  query challenges($projects: [ID!], $endTime: Int) {
+    challenges(where: { owner_in: $projects, endTime_lt: $endTime }) {
+      id
+      project {
+        id
+        name
+        description
+        avatar
+        image
+        website
+        github
+        twitter
+        isRepresentative
+        createdAt
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          name
+        }
+      }
     }
   }
 `

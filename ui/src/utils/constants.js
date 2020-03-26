@@ -1,6 +1,7 @@
 export const FILTERS = {
   all: 'All',
   challenged: 'Challenged',
+  delegated: 'Delegated',
 }
 
 export const ORDER_BY = {

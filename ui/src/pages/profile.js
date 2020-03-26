@@ -8,12 +8,13 @@ import { navigate } from 'gatsby'
 import ThreeBox from '3box'
 import queryString from 'query-string'
 import { isMobile } from 'react-device-detect'
+import moment from 'moment'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers/date'
-import { PROFILE_QUERY } from '../utils/apollo/queries'
-import { ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
+import { PROFILE_QUERY, USER_CHALLENGES_QUERY } from '../utils/apollo/queries'
+import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Divider from '../components/Divider'
 import Button from '../components/Button'
@@ -22,22 +23,27 @@ import Switcher from '../components/Switcher'
 import Sorting from '../components/Sorting'
 import DataRow from '../components/DataRow'
 import Menu from '../components/Menu'
+import Filters from '../components/Filters'
 import Link from '../components/Link'
 import ProfilePlaceholder from '../images/profile-placeholder.svg'
 
 const Profile = ({ location }) => {
   const { account } = useAccount()
+  const queryParams = location ? queryString.parse(location.search) : null
+
   const [selectedProjectsView, setSelectedProjectsView] = useState('cards')
   const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
   const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
   const [profile, setProfile] = useState(null)
+  const [selectedFilter, setSelectedFilter] = useState(
+    queryParams && queryParams.view ? queryParams.view : FILTERS.all,
+  )
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [selectedOrderBy, setSelectedOrderBy] = useState(ORDER_BY['Name'])
   const [selectedOrderDirection, setSelectedOrderDirection] = useState(
     ORDER_DIRECTION.ASC,
   )
   const [isSortingOpen, setIsSortingOpen] = useState(false)
-
-  const queryParams = location ? queryString.parse(location.search) : null
 
   const profileId = queryParams ? queryParams.id : null
 
@@ -77,11 +83,34 @@ const Profile = ({ location }) => {
     }
   }, [account])
 
+  const variables = {
+    id: profileId,
+    orderBy: selectedOrderBy,
+    orderDirection: selectedOrderDirection,
+  }
+
   const { error, data } = useQuery(PROFILE_QUERY, {
+    variables:
+      selectedFilter === FILTERS.all
+        ? variables
+        : {
+            ...variables,
+            where: {
+              currentChallenge_not: null,
+            },
+          },
+  })
+
+  const { data: userChallenges } = useQuery(USER_CHALLENGES_QUERY, {
     variables: {
-      id: profileId,
-      orderBy: selectedOrderBy,
-      orderDirection: selectedOrderDirection,
+      endTime: moment().unix(),
+      projects:
+        data && data.user
+          ? data.user.projects.reduce(
+              (acc, current) => acc.concat(current.id),
+              [],
+            )
+          : [],
     },
   })
 
@@ -268,11 +297,57 @@ const Profile = ({ location }) => {
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
-              {isOwner() ? (
-                <Styled.h5>Your Projects</Styled.h5>
-              ) : (
-                <Styled.h5>Projects</Styled.h5>
-              )}
+              <Grid
+                sx={{
+                  gridTemplateColumns: 'max-content 1fr ',
+                  alignItems: 'center',
+                }}
+                gap={4}
+              >
+                {isOwner() ? (
+                  <Styled.h5
+                    sx={{
+                      borderRight: '1px solid',
+                      borderColor: 'grey',
+                      pr: 5,
+                      mb: 2,
+                    }}
+                  >
+                    Your Projects
+                  </Styled.h5>
+                ) : (
+                  <Styled.h5
+                    sx={{
+                      borderRight: '1px solid',
+                      borderColor: 'grey',
+                      pr: 5,
+                      mb: 2,
+                    }}
+                  >
+                    Projects
+                  </Styled.h5>
+                )}
+                <Filters
+                  items={[
+                    {
+                      text: 'All projects',
+                      handleSelect: () => {
+                        setSelectedFilter(FILTERS.all)
+                      },
+                    },
+                    {
+                      text: 'Challenged projects',
+                      handleSelect: () => {
+                        setSelectedFilter(FILTERS.challenged)
+                      },
+                    },
+                  ]}
+                  menuStyles={{ left: 0, width: '280px', top: '60px' }}
+                  setIsFilterOpen={setIsFilterOpen}
+                  isFilterOpen={isFilterOpen}
+                  selectedFilter={selectedFilter}
+                />
+              </Grid>
               <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                 {user && user.projects && user.projects.length > 0 && (
                   <span>{user.projects.length} Projects</span>
@@ -353,7 +428,7 @@ const Profile = ({ location }) => {
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
-              <Styled.h5>Delegated Projects</Styled.h5>
+              <Styled.h5>Projects Delegated to You</Styled.h5>
               <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                 <span>{user.delegatorProjects.length} Delegated Projects</span>
               </Styled.p>
@@ -380,6 +455,49 @@ const Profile = ({ location }) => {
             })}
             variant="project"
             selected={selectedDelegatorView}
+          />
+        </Fragment>
+      )}
+
+      {user && user.delegatorProjects && user.delegatorProjects.length > 0 && (
+        <Fragment>
+          <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+            <Box>
+              <Styled.h5>Projects You're Challenging</Styled.h5>
+              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+                <span>
+                  {userChallenges ? userChallenges.challenges.length : ''}{' '}
+                  Challenged Projects
+                </span>
+              </Styled.p>
+            </Box>
+            <Switcher
+              selected={selectedChallengesView}
+              setSelected={selectedChallengesView}
+            />
+          </Grid>
+          <Section
+            items={
+              userChallenges
+                ? userChallenges.challenges.map(challenge => {
+                    const project = challenge.project
+                    return {
+                      ...project,
+                      description: project.description.slice(0, 30) + '...',
+                      to: `/project/${project.id}`,
+                      image: project.avatar,
+                      pending: project.id.indexOf('0x') < 0,
+                      isChallenged: project.currentChallenge !== null,
+                      category:
+                        project.categories.length > 0
+                          ? project.categories[0].name
+                          : '',
+                    }
+                  })
+                : []
+            }
+            variant="project"
+            selected={selectedChallengesView}
           />
         </Fragment>
       )}
