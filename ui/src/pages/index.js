@@ -213,7 +213,7 @@ const Index = () => {
             title="Active Challenges"
             description="These projects were recently challanged by members of
         the community."
-            items={challengedProjects.map(project => {
+            items={challengedProjects.slice(0, 6).map(project => {
               return {
                 name: project.name,
                 description: project.description.slice(0, 20) + '...',
@@ -226,7 +226,7 @@ const Index = () => {
                 isChallenged: project.currentChallenge !== null,
               }
             })}
-            linkTo="/projects"
+            linkTo="/projects?view=Challenged"
             linkText="View all Challenges"
             variant="project"
           />

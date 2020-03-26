@@ -1,11 +1,14 @@
 /** @jsx jsx */
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import queryString from 'query-string'
+import { navigate } from '@reach/router'
 
 import { PROJECTS_QUERY } from '../utils/apollo/queries'
-import { ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
+import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
@@ -14,9 +17,13 @@ import Sorting from '../components/Sorting'
 
 import Arrow from '../images/arrow.svg'
 
-const Projects = () => {
+const Projects = ({ location }) => {
+  const queryParams = queryString.parse(location.search)
+
   const [selected, setSelected] = useState('cards')
-  const [selectedFilter, setSelectedFilter] = useState('All')
+  const [selectedFilter, setSelectedFilter] = useState(
+    queryParams && queryParams.view ? queryParams.view : FILTERS.all,
+  )
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [selectedOrderBy, setSelectedOrderBy] = useState(ORDER_BY['Name'])
   const [selectedOrderDirection, setSelectedOrderDirection] = useState(
@@ -29,9 +36,9 @@ const Projects = () => {
     orderBy: selectedOrderBy,
   }
 
-  const { loading, error, data } = useQuery(PROJECTS_QUERY, {
+  const { error, data } = useQuery(PROJECTS_QUERY, {
     variables:
-      selectedFilter === 'All'
+      selectedFilter === FILTERS.all
         ? variables
         : {
             ...variables,
@@ -81,7 +88,8 @@ const Projects = () => {
                     </Box>
                   ),
                   handleSelect: () => {
-                    setSelectedFilter('All')
+                    setSelectedFilter(FILTERS.all)
+                    navigate(`?view=${FILTERS.all}`)
                   },
                 },
                 {
@@ -91,7 +99,8 @@ const Projects = () => {
                     </Box>
                   ),
                   handleSelect: () => {
-                    setSelectedFilter('Challenged')
+                    setSelectedFilter(FILTERS.challenged)
+                    navigate(`?view=${FILTERS.challenged}`)
                   },
                 },
               ]}
@@ -196,6 +205,10 @@ const menuItemStyles = {
       ml: 2,
     },
   },
+}
+
+Projects.propTypes = {
+  location: PropTypes.any,
 }
 
 export default Projects

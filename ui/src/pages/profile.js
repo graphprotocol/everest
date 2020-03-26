@@ -77,12 +77,6 @@ const Profile = ({ location }) => {
     }
   }, [account])
 
-  useEffect(() => {
-    if (account) {
-      navigate(`/profile?id=${account}`)
-    }
-  }, [account])
-
   const { error, data } = useQuery(PROFILE_QUERY, {
     variables: {
       id: profileId,
@@ -393,7 +387,12 @@ const Profile = ({ location }) => {
   )
 }
 
-const profileImgStyles = { height: '96px', width: '96px', borderRadius: '50%' }
+const profileImgStyles = {
+  height: '96px',
+  width: '96px',
+  borderRadius: '50%',
+  objectFit: 'contain',
+}
 
 Profile.propTypes = {
   location: PropTypes.any,

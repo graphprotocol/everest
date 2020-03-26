@@ -17,14 +17,20 @@ const DataRow = ({ name, value, href }) => (
     <p sx={{ variant: 'text.small' }}>{name}</p>
 
     {href ? (
-      <Link onClick={() => navigate(href)} target="_blank">
+      <Styled.a href={href} target="_blank">
         {value}
-      </Link>
+      </Styled.a>
     ) : (
-        <Styled.p sx={{ fontWeight: 'heading', color: 'blackFaded', fontSize: ['0.85rem', '1rem ', '1rem'] }}>
-          {value}
-        </Styled.p>
-      )}
+      <Styled.p
+        sx={{
+          fontWeight: 'heading',
+          color: 'blackFaded',
+          fontSize: ['0.85rem', '1rem ', '1rem'],
+        }}
+      >
+        {value}
+      </Styled.p>
+    )}
   </Grid>
 )
 

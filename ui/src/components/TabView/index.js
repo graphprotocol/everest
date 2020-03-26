@@ -21,6 +21,7 @@ const TabView = ({
   handleClick,
   showFilters,
   items,
+  error,
   ...props
 }) => {
   return (
@@ -37,7 +38,7 @@ const TabView = ({
     >
       <Grid
         sx={{
-          gridTemplateColumns: ['1fr', '312px 1fr'],
+          gridTemplateColumns: ['1fr', '380px 1fr'],
           position: 'relative',
           maxWidth: '1260px',
           padding: '0 20px',
@@ -48,7 +49,16 @@ const TabView = ({
         gap={[1, 8]}
       >
         <Box>
-          <Styled.h1 sx={{ color: 'white', mb: 3 }}>{heading}</Styled.h1>
+          <Styled.h1
+            sx={{
+              color: 'white',
+              mb: 3,
+              hyphens: 'manual',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {heading}
+          </Styled.h1>
           <p sx={{ variant: 'text.field' }}>{description}</p>
         </Box>
         <Box sx={{ maxWidth: '516px', width: '100%', mt: [5, 0], pt: 5 }}>
@@ -78,6 +88,7 @@ const TabView = ({
                 setValue(value)
               }
             }}
+            error={error}
           />
           <Button
             variant={'secondary'}

@@ -57,7 +57,7 @@ const Card = ({
             />
           </Box>
         ) : (
-          <Box className="box">
+          <Box>
             <img
               src={image}
               alt={title}
