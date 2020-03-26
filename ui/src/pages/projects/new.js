@@ -42,18 +42,6 @@ const NewProject = () => {
     },
   })
 
-  let selectedCategories
-
-  if (categories) {
-    selectedCategories =
-      project &&
-      project.categories &&
-      project.categories.map(pc => {
-        const category = categories.categories.find(cat => cat.id === pc)
-        return { id: category.id, name: category.name, __typename: 'Category' }
-      })
-  }
-
   const [daiBalance] = useMutation(DAI_BALANCE, {
     client: client,
     onCompleted: data => {
@@ -92,7 +80,7 @@ const NewProject = () => {
         isRepresentative: project.isRepresentative,
         createdAt: moment().unix(),
         currentChallenge: null,
-        categories: selectedCategories,
+        categories: project.categories,
         delegates: [],
         __typename: 'Project',
       },
@@ -152,12 +140,6 @@ const NewProject = () => {
 
   const setValue = async (field, value) => {
     let newValue = value
-    if (field === 'categories') {
-      newValue = value.reduce((acc, current) => {
-        acc.push(current.id)
-        return acc
-      }, [])
-    }
     await setProject(state => ({
       ...state,
       [field]: newValue,

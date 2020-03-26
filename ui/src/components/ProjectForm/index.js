@@ -23,7 +23,6 @@ const ProjectForm = ({
         value={project.name}
         charsCount={35}
         placeholder="Project name"
-        project={project}
         setValue={async value => {
           await setValue('name', value)
           setDisabled(value)
@@ -36,7 +35,6 @@ const ProjectForm = ({
         type="textarea"
         charsCount={300}
         placeholder="Describe your project"
-        project={project}
         setValue={async value => {
           await setValue('description', value)
           setDisabled(value)
@@ -46,20 +44,19 @@ const ProjectForm = ({
         title="Categories *"
         field="category"
         type="filters"
-        project={project}
         setValue={async value => {
           await setValue('categories', value)
           setDisabled(value)
         }}
         multiselect={true}
         categories={categories}
+        selectedItems={project.categories}
       />
       <Field
         title="Project logo"
         type="upload"
         field="logo"
         image={project.avatar}
-        project={project}
         setImage={data => setValue('avatar', data)}
       />
       <Field
@@ -67,7 +64,6 @@ const ProjectForm = ({
         type="upload"
         field="image"
         image={project.image}
-        project={project}
         setImage={data => setValue('image', data)}
       />
       <Field
@@ -76,7 +72,6 @@ const ProjectForm = ({
         value={project.website}
         type="input"
         placeholder="Project website"
-        project={project}
         setValue={value => setValue('website', value)}
       />
       <Field
@@ -85,7 +80,6 @@ const ProjectForm = ({
         value={project.github}
         type="input"
         placeholder="Github url"
-        project={project}
         setValue={value => setValue('github', value)}
       />
       <Field
@@ -94,7 +88,6 @@ const ProjectForm = ({
         value={project.twitter}
         type="input"
         placeholder="Twitter url"
-        project={project}
         setValue={value => setValue('twitter', value)}
       />
       <Field
@@ -103,7 +96,6 @@ const ProjectForm = ({
         value={project.isRepresentative}
         field="isRepresentative"
         type="checkbox"
-        project={project}
         setValue={value => setValue('isRepresentative', value)}
       />
       <Button

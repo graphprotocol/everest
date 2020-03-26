@@ -7,7 +7,6 @@ import Close from '../../images/close-small.svg'
 
 const Row = ({
   item,
-  parent,
   selected,
   setSelected,
   close,
@@ -77,7 +76,9 @@ const Row = ({
         }
       />
       <Box>
-        {parent && <p sx={{ variant: 'text.smaller' }}>{parent.name}</p>}
+        {item.parentCategory && (
+          <p sx={{ variant: 'text.smaller' }}>{item.parentCategory.name} ></p>
+        )}
         <p sx={{ variant: 'text.emphasis' }}>{item.name}</p>
       </Box>
       {close && (
@@ -113,7 +114,6 @@ Row.propTypes = {
     slug: PropTypes.string,
     disabled: PropTypes.bool,
   }),
-  parent: PropTypes.any,
   selected: PropTypes.any,
   setSelected: PropTypes.func,
   close: PropTypes.bool,

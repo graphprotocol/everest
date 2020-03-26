@@ -1090,27 +1090,26 @@ const Project = ({ location }) => {
                     ''
                   )}
                 </Box>
-                {project.currentChallenge.id === '123' ||
-                  (pendingResolve && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        textAlign: 'center',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                      }}
+                {(project.currentChallenge.id === '123' || pendingResolve) && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      textAlign: 'center',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                    }}
+                  >
+                    <Styled.h6
+                      sx={{ color: 'secondary', fontWeight: 'heading' }}
                     >
-                      <Styled.h6
-                        sx={{ color: 'secondary', fontWeight: 'heading' }}
-                      >
-                        Waiting for transaction to confirm{' '}
-                      </Styled.h6>
-                      <img src="/loading-dots-blue.gif" />
-                    </Box>
-                  ))}
+                      Waiting for transaction to confirm{' '}
+                    </Styled.h6>
+                    <img src="/loading-dots-blue.gif" />
+                  </Box>
+                )}
               </Box>
             )}
           {project.image && (
