@@ -20,19 +20,6 @@ const Categories = () => {
     return <div />
   }
 
-  const projectsCount = cat => {
-    let count = 0
-    if (cat.projects) {
-      count += cat.projects.length
-    }
-    if (cat.subcategories) {
-      cat.subcategories.forEach(subcat =>
-        subcat.projects ? (count += subcat.projects.length) : count,
-      )
-    }
-    return `${count} projects`
-  }
-
   return (
     <Box>
       <Box>
@@ -47,7 +34,9 @@ const Categories = () => {
           data.categories.map(cat => {
             return {
               name: cat.name,
-              description: projectsCount(cat),
+              description: cat.projects
+                ? `${cat.projects.length} PROJECTS`
+                : '0 PROJECTS',
               image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
                 cat.id
               }.png`,
