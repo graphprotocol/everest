@@ -63,6 +63,9 @@ export const CATEGORIES_QUERY = gql`
       description
       subcategories {
         id
+        projects {
+          id
+        }
       }
       parentCategory {
         id
@@ -104,6 +107,17 @@ export const CATEGORY_QUERY = gql`
         description
         projects {
           id
+          name
+          description
+          avatar
+          createdAt
+          currentChallenge {
+            id
+          }
+          categories {
+            id
+            name
+          }
         }
       }
       projects {

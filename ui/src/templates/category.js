@@ -51,6 +51,17 @@ const Category = ({ location }) => {
   const challengedProjects = categoryProjects.filter(
     p => p.currentChallenge !== null,
   )
+  const allProjects = () => {
+    let allCategoriesProjects = categoryProjects
+    if (category && category.subcategories) {
+      category.subcategories.forEach(subcat => {
+        if (subcat.projects) {
+          allCategoriesProjects = [...allCategoriesProjects, ...subcat.projects]
+        }
+      })
+    }
+    return allCategoriesProjects
+  }
 
   return (
     <Grid>
@@ -93,13 +104,13 @@ const Category = ({ location }) => {
         <Box ref={viewRef}>
           <Styled.h3>Projects</Styled.h3>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {categoryProjects.length} Projects -{' '}
+            {allProjects().length} Projects -{' '}
             {challengedProjects && (
               <span>{challengedProjects.length} Challenges</span>
             )}
           </Styled.p>
         </Box>
-        {categoryProjects.length > 0 && (
+        {allProjects().length > 0 && (
           <Switcher
             selected={selected}
             setSelected={value => setSelected(value)}
@@ -107,7 +118,7 @@ const Category = ({ location }) => {
         )}
       </Grid>
       <Section
-        items={categoryProjects.map(project => {
+        items={allProjects().map(project => {
           return {
             ...project,
             description: project.description.slice(0, 40) + '...',
