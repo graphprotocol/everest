@@ -66,14 +66,22 @@ async function signPermit(provider, domain, message) {
   } else if (provider._web3Provider.isWalletLink) {
     // Wallet link expects typedData to not be stringified
     sig = await provider.send('eth_signTypedData_v3', [signerAddr, typedData])
+  } else if (provider._web3Provider.isWalletConnect) {
+    const msgParams = [
+      { name: 'holder', type: 'address', value: message.holderAddress },
+      { name: 'spender', type: 'address', value: message.spender },
+      { name: 'nonce', type: 'uint256', value: message.nonce },
+      { name: 'expiry', type: 'uint256', value: message.expiry },
+      { name: 'allowed', type: 'bool', value: message.allowed },
+    ]
+    sig = await provider.send('eth_signTypedData', [msgParams, signerAddr], signerAddr)
   } else {
-    // We default trying with stringify
-    sig = await provider.send('eth_signTypedData', [
+    console.log('Unknown wallet. Trying the same method as metamask')
+    sig = await provider.send('eth_signTypedData_v3', [
       signerAddr,
       JSON.stringify(typedData),
     ])
   }
-
   return sig
 }
 
