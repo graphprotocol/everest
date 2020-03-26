@@ -76,7 +76,7 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   challenge.votesFor = 0 // Don't need to record one here, since a SubmitVote event will be emitted
   challenge.votesAgainst = 0
   challenge.project = event.params.member.toHexString()
-  challenge.owner = event.params.challenger
+  challenge.owner = event.params.challenger.toString()
   challenge.createdAt = event.block.timestamp.toI32()
   challenge.resolved = false
 

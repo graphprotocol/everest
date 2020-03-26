@@ -33,9 +33,9 @@ const wallets = {
 const config = {
     everestParams: {
         owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
-        votingPeriodDuration: 259200, // 3 days, in seconds
-        challengeDeposit: '10000000000000000000', // $10 DAI challenge fee
-        applicationFee: '10000000000000000000', // $10 DAI application fee
+        votingPeriodDuration: 172800, // 2 days, in seconds
+        challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
+        applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
         // This Currently points to a rough draft of the charter
         charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0'
     },

@@ -87,7 +87,7 @@ type Challenge @entity {
   "Project that is being challenged"
   project: Project!
   "Owner of the challenge"
-  owner: Bytes!
+  owner: Project!
   "List of all created votes"
   votes: [Vote!] @derivedFrom(field: "challenge")
   # This is when the challenge is resolved, which is different from end time. When we are past
@@ -121,7 +121,7 @@ type Everest @entity {
   "IPFS hash pointing to the charter"
   charter: String!
   "Time it was created on the blockchain"
-  createdAt: Int
+  createdAt: Int!
   "Total count of projects created on Everest"
   projectCount: Int!
 }

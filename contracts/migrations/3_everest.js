@@ -9,6 +9,7 @@ const params = config.everestParams
 module.exports = async (deployer, network) => {
     let owner
     let didAddress
+    let daiAddress
 
     // Set up didAddress and owner depending on the network
     if (network === 'development') {
@@ -17,13 +18,16 @@ module.exports = async (deployer, network) => {
         await deployer.deploy(EthereumDIDRegistry)
         const edr = await EthereumDIDRegistry.deployed()
         didAddress = edr.address
+        daiAddress = (await Token.deployed()).address
     } else if (network === 'ropsten') {
         owner = config.ropstenParams.ropstenOwner
         didAddress = config.ropstenParams.ethereumDIDRegistryAddress
+        daiAddress = (await Token.deployed()).address
+    } else if (network === 'mainnet'){
+        daiAddress = config.mainnetParams.daiAddress
     }
 
-    // Deploy the three dependant contracts that must exist before Everest
-    let daiAddress = (await Token.deployed()).address
+    // Deploy the dependant contracts that must exist before Everest
     const reserveBank = await deployer.deploy(ReserveBank, daiAddress, { from: owner })
     const registry = await deployer.deploy(Registry, { from: owner })
 
@@ -46,7 +50,8 @@ module.exports = async (deployer, network) => {
     await reserveBank.transferOwnership(everest.address)
 
     // Log all addresses of contracts
-    console.log(`Mock DAI Address: ${daiAddress}`)
+    network
+    console.log(`${network === mainnet? "Mock": "Mainnet"} DAI Address: ${daiAddress}`)
     console.log(`Ethr DID Address: ${didAddress}`)
     console.log(`ReserveBank Address: ${reserveBank.address}`)
     console.log(`Registry Address: ${registry.address}`)
