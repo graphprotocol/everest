@@ -39,6 +39,7 @@ module.exports = async (deployer, network) => {
         params.challengeDeposit,
         params.applicationFee,
         params.charter,
+        params.categories,
         didAddress,
         reserveBank.address,
         registry.address,
@@ -51,7 +52,7 @@ module.exports = async (deployer, network) => {
 
     // Log all addresses of contracts
     network
-    console.log(`${network === mainnet? "Mock": "Mainnet"} DAI Address: ${daiAddress}`)
+    console.log(`${network === 'mainnet'? "Mock": "Mainnet"} DAI Address: ${daiAddress}`)
     console.log(`Ethr DID Address: ${didAddress}`)
     console.log(`ReserveBank Address: ${reserveBank.address}`)
     console.log(`Registry Address: ${registry.address}`)

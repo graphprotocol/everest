@@ -1,5 +1,4 @@
-QmX6EpD13DVLz3pe83sazDgYQbGtUquc1TnJAx1EeHpuD9 categories.json
-
+Qma1PeeiZ51HDiaxrkRHKKQ3tmC29GY9zMFRfHU953TBTG categories.json
 QmXy3urqtnzzn4YYTacS2noep7J16bBPFWoSrjZNJWgUpH Asset-management - Grants.jpg
 QmTj8vqyZbmqhBvvPEXVQMxLtkbD5jUS6JHzKry74FnF2e Asset-management - Hedge-fund.jpg
 QmTYPqQTUXTncAACX7hrXBrnLaSQdKUtyAH6N1oA4t4QVN Asset-management - Venture-capital.jpg
@@ -44,9 +43,9 @@ QmNuk54toRqhZFhz6wn5F76d7oVba7ndKC5qaP3LqGzEwU Health-and-wellness.jpg
 QmV4A3tcWMFgpRWMtWqqmW9rXgDyfQb3B29BqpjddMJ8nb Identity.jpg
 QmZX7ed6UCyEGf6PE6gbWL4mKtGi6wo4EC3v4PXXZuWt2N Marketplaces.jpg
 QmVHbkujAFanmb68nzbhSGsCKSzCTqkzCzRSsEcMbVkHbG News-and-media.jpg
-QmNfhKdPnqeSek3HtMLPEchEc5Fk3n8qs6er9ioZjcTZpX Philanthropy.jpg
+QmNfhKdPnqeSek3HtMLPEchEc5Fk3n8qs6er9ioZjcTZpX Philanthropy.jpg (NOT IN USE, we use the Grants one)
 QmTYCN5QbGBsiM1hKHL1gBPy4kWb9ZSkEUkdD8QvaM6w7n Places.jpg
-QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk Research.jpg
+QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk Research.jpg (Also used for Defi --> Research)
 QmWSa9uCqvQcTT12DjcxE2eStvHWNaRS8h87Tzijsxf7Qb Security.jpg
 QmWQCU4VxnpoRfpKSTs7h5zkH7Rxc7qMJPEapMv52ZyGpv Social.jpg
 QmUQ3ehvVrJrNQCKP5EtpdQNF1z9NvjvQn2duh6S3M6KEG Software - APIs.jpg

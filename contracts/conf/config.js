@@ -36,8 +36,10 @@ const config = {
         votingPeriodDuration: 172800, // 2 days, in seconds
         challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
         applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
-        // This Currently points to a rough draft of the charter
-        charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0'
+        // This points to the charter TODO - update mainnet
+        charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0',
+        // Point to IPFS hash of categories. TODO - update mainnnet
+        categories: '0xad5d2e08f7ed73b601a3f473c4ca6aef72e45448286be4ff804657bdb19f6b8b'
     },
     ganacheParams: {
         chainID: 9545
