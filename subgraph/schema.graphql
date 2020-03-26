@@ -119,7 +119,7 @@ type Everest @entity {
   "Balance of the reserve bank (DAI)"
   reserveBankBalance: BigInt!
   "IPFS hash pointing to the charter"
-  charter: String!
+  charter: Bytes!
   "Time it was created on the blockchain"
   createdAt: Int!
   "Total count of projects created on Everest"

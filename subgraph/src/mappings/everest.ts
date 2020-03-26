@@ -61,7 +61,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.applicationFee = event.params.applicationFee
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
-  everest.charter = event.params.charter.toHexString()
+  everest.charter = event.params.charter
   everest.createdAt = event.block.timestamp.toI32()
   everest.projectCount = 0
   everest.save()
