@@ -31,7 +31,7 @@ exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions
   // set up a client-side route
   if (page.path.match(/^\/projects\/edit\//)) {
-    page.matchPath = '/edit/*'
+    page.matchPath = '/projects/edit/*'
     createPage(page)
   }
 
