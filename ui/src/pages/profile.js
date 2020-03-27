@@ -49,7 +49,7 @@ const Profile = ({ location }) => {
 
   useEffect(() => {
     async function getProfile() {
-      const threeBoxProfile = await ThreeBox.getProfile(account)
+      const threeBoxProfile = await ThreeBox.getProfile(profileId)
       let image
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
@@ -78,10 +78,8 @@ const Profile = ({ location }) => {
         navigate('/')
       }
     })
-    if (account) {
-      getProfile()
-    }
-  }, [account])
+    getProfile()
+  }, [profileId])
 
   const variables = {
     id: profileId,
@@ -473,7 +471,7 @@ const Profile = ({ location }) => {
             </Box>
             <Switcher
               selected={selectedChallengesView}
-              setSelected={selectedChallengesView}
+              setSelected={setSelectedChallengesView}
             />
           </Grid>
           <Section
