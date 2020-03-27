@@ -48,7 +48,7 @@ const Projects = ({ location }) => {
         : {
             ...variables,
             where: {
-              rentChallenge_not: null,
+              currentChallenge_not: null,
             },
           },
     notifyOnNetworkStatusChange: true,

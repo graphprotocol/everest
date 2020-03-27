@@ -5,8 +5,8 @@ import { Grid } from '@theme-ui/components'
 import { Styled, jsx, Box } from 'theme-ui'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import { useQuery } from '@apollo/react-hooks'
-import cloneDeep from 'lodash.clonedeep'
 import { navigate } from 'gatsby'
+import queryString from 'query-string'
 
 import client from '../../utils/apollo/client'
 
@@ -17,9 +17,10 @@ import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location }) => {
+  const queryParams = location ? queryString.parse(location.search) : null
   const index = location ? location.pathname.indexOf('0x') : null
-  const projectId =
-    location && index ? location.pathname.slice(index, index + 42) : ''
+  const projectId = queryParams ? queryParams.id : null
+
   const [isDisabled, setIsDisabled] = useState(false)
   const [project, setProject] = useState({
     id: projectId,

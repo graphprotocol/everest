@@ -525,7 +525,7 @@ const Project = ({ location }) => {
         {
           text: 'Edit',
           handleSelect: () => {
-            navigate(`/edit/${projectId}`)
+            navigate(`/edit?id=${projectId}`)
           },
           icon: '/edit.png',
         },
@@ -535,7 +535,7 @@ const Project = ({ location }) => {
         {
           text: 'Edit',
           handleSelect: () => {
-            navigate(`/edit/${projectId}`)
+            navigate(`/edit?id=${projectId}`)
           },
           icon: '/edit.png',
         },
