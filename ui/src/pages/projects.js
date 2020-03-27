@@ -12,10 +12,8 @@ import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Section from '../components/Section'
 import Switcher from '../components/Switcher'
-import Menu from '../components/Menu'
+import Filters from '../components/Filters'
 import Sorting from '../components/Sorting'
-
-import Arrow from '../images/arrow.svg'
 
 const Projects = ({ location }) => {
   const queryParams = queryString.parse(location.search)
@@ -79,25 +77,17 @@ const Projects = ({ location }) => {
             >
               Projects
             </Styled.h2>
-            <Menu
+            <Filters
               items={[
                 {
-                  text: (
-                    <Box sx={menuItemStyles}>
-                      All projects <Arrow sx={{ fill: 'secondary' }} />
-                    </Box>
-                  ),
+                  text: 'All projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.all)
                     navigate(`?view=${FILTERS.all}`)
                   },
                 },
                 {
-                  text: (
-                    <Box sx={menuItemStyles}>
-                      Challenged projects <Arrow sx={{ fill: 'secondary' }} />
-                    </Box>
-                  ),
+                  text: 'Challenged projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.challenged)
                     navigate(`?view=${FILTERS.challenged}`)
@@ -105,44 +95,10 @@ const Projects = ({ location }) => {
                 },
               ]}
               menuStyles={{ left: 0, width: '280px', top: '60px' }}
-              setOpen={setIsFilterOpen}
-            >
-              <Grid
-                sx={{
-                  gridTemplateColumns: 'max-content max-content',
-                  width: 'fit-content',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  padding: 4,
-                  backgroundColor: isFilterOpen ? 'secondary' : 'white',
-                }}
-              >
-                <p
-                  sx={{
-                    variant: 'text.huge',
-                    color: isFilterOpen ? 'white' : 'secondary',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {selectedFilter}
-                </p>
-                <Box
-                  sx={{
-                    justifySelf: 'end',
-                    height: '9px',
-                    width: '9px',
-                    borderTop: '2px solid',
-                    borderRight: '2px solid',
-                    borderColor: isFilterOpen ? 'white' : 'secondary',
-                    transition: 'all 0.2s ease',
-                    transform: isFilterOpen
-                      ? 'rotate(-45deg)'
-                      : 'rotate(135deg)',
-                    display: ['none', 'block'],
-                  }}
-                />
-              </Grid>
-            </Menu>
+              setIsFilterOpen={setIsFilterOpen}
+              isFilterOpen={isFilterOpen}
+              selectedFilter={selectedFilter}
+            />
           </Grid>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
             {allProjects && allProjects.length} Projects -{' '}
@@ -192,19 +148,6 @@ const Projects = ({ location }) => {
       />
     </Grid>
   )
-}
-
-const menuItemStyles = {
-  transition: 'all 0.2s ease',
-  '&:hover': {
-    color: 'linkHover',
-    transition: 'all 0.2s ease',
-    svg: {
-      transition: 'all 0.2s ease',
-      fill: 'linkHover',
-      ml: 2,
-    },
-  },
 }
 
 Projects.propTypes = {

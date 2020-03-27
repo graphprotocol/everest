@@ -17,7 +17,9 @@ import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location }) => {
-  const projectId = location ? location.pathname.split('/')[2] : ''
+  const index = location ? location.pathname.indexOf('0x') : null
+  const projectId =
+    location && index ? location.pathname.slice(index, index + 42) : ''
   const [isDisabled, setIsDisabled] = useState(false)
   const [project, setProject] = useState({
     id: projectId,
@@ -30,9 +32,8 @@ const EditProject = ({ location }) => {
     twitter: '',
     isRepresentative: false,
     categories: [],
-    createdAt: '',
-    totalVotes: null,
   })
+  const [pendingTransaction, setPendingTransaction] = useState(false)
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -54,70 +55,18 @@ const EditProject = ({ location }) => {
         isRepresentative:
           data && data.project ? data.project.isRepresentative : null,
         categories: data && data.project ? data.project.categories : [],
-        createdAt: data && data.project ? data.project.createdAt : '',
-        totalVotes: data && data.project ? data.project.totalVotes : [],
-        currentChallenge:
-          data && data.project ? data.project.currentChallenge : {},
-        owner: data && data.project ? data.project.owner : {},
       }))
     }
   }, [data])
 
   const [editProject] = useMutation(EDIT_PROJECT, {
     client: client,
-    refetchQueries: [
-      {
-        query: PROJECT_QUERY,
-        variables: {
-          id: projectId,
-        },
-      },
-    ],
-    optimisticResponse: {
-      __typename: 'Mutation',
-      editProject: {
-        __typename: 'Project',
-        id: projectId,
-        name: project && project.name,
-        description: project.description,
-        avatar: project.avatar,
-        image: project.image,
-        website: project.website,
-        github: project.github,
-        twitter: project.twitter,
-        isRepresentative: project.isRepresentative,
-        createdAt: project.createdAt,
-        totalVotes: project.totalVotes,
-        currentChallenge: project.currentChallenge,
-        owner: project.owner && project.owner.id,
-        categories: project.categories,
-      },
-    },
     onError: error => {
-      console.error('Error editing a project: ', error)
+      setPendingTransaction(false)
     },
-    onCompleted: () => {
+    onCompleted: dataaa => {
+      setPendingTransaction(false)
       navigate(`/project/${projectId}`)
-    },
-    update: (proxy, result) => {
-      const projectData = cloneDeep(
-        proxy.readQuery({
-          query: PROJECT_QUERY,
-          variables: {
-            id: projectId,
-          },
-        }),
-      )
-
-      proxy.writeQuery({
-        query: PROJECT_QUERY,
-        variables: {
-          id: projectId,
-        },
-        data: {
-          project: { ...projectData.project, ...result.data.editProject },
-        },
-      })
     },
   })
 
@@ -136,7 +85,7 @@ const EditProject = ({ location }) => {
   const handleSubmit = async project => {
     setIsDisabled(true)
     editProject({ variables: { ...project, projectId: projectId } })
-    // navigate(`/project/${projectId}`)
+    setPendingTransaction(true)
   }
 
   const setValue = async (field, value) => {
@@ -184,7 +133,25 @@ const EditProject = ({ location }) => {
           to search for your project.
         </p>
       </Box>
-      <Box>
+      <Box sx={{ position: 'relative' }}>
+        {pendingTransaction && (
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              textAlign: 'center',
+              top: '100px',
+              maxWidth: '504px',
+            }}
+          >
+            <Styled.h6 sx={{ color: 'white', fontWeight: 'heading' }}>
+              Waiting for transaction to confirm{' '}
+            </Styled.h6>
+            <img src="/loading-dots-white.gif" />
+          </Box>
+        )}
         <ProjectForm
           project={project}
           isDisabled={isDisabled}
@@ -193,6 +160,9 @@ const EditProject = ({ location }) => {
           setDisabled={setDisabled}
           buttonText="Update project"
           categories={categories ? categories.categories : []}
+          sx={
+            pendingTransaction ? { opacity: 0.32, pointerEvents: 'none' } : {}
+          }
         />
       </Box>
     </Grid>
