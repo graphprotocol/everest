@@ -69,6 +69,8 @@ type Category @entity {
   parentCategory: Category
   "Time it was created in the Subgraph"
   createdAt: Int!
+  "Project count under this category. Includes subcategory projects for parent categories"
+  projectCount: Int!
 }
 
 type Challenge @entity {
@@ -118,12 +120,18 @@ type Everest @entity {
   reserveBankAddress: Bytes!
   "Balance of the reserve bank (DAI)"
   reserveBankBalance: BigInt!
+  "IPFS hash pointing to the categories"
+  categories: Bytes!
   "IPFS hash pointing to the charter"
   charter: Bytes!
   "Time it was created on the blockchain"
   createdAt: Int!
   "Total count of projects created on Everest"
   projectCount: Int!
+  "Projects that are currently in control by a representative"
+  claimedProjects: Int!
+  "Projects that are currently under challenge"
+  challengedProjects: Int!
 }
 
 """

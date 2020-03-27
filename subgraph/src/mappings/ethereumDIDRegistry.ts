@@ -6,7 +6,7 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project, User } from '../types/schema'
+import { Project, User, Category, Everest } from '../types/schema'
 import { addQm } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
@@ -87,7 +87,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
       event.params.name.toHexString() ==
       '0x50726f6a65637444617461000000000000000000000000000000000000000000'
     ) {
-      // TODO - ponential for crashing? Because value is not forced to be 32 bytes. This is an
+      // Potnential for crashing? Because value is not forced to be 32 bytes. This is an
       // edge case because it has to be an identity, then it has to be called outside of the
       // everest front end
       let hexHash = addQm(event.params.value) as Bytes
@@ -117,7 +117,29 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
         if (!data.get('isRepresentative').isNull()) {
           if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
-            project.isRepresentative = data.get('isRepresentative').toBool()
+            const newRepStatus = data.get('isRepresentative').toBool()
+            let everest = Everest.load('1')
+            // If we don't already have a rep status, we have to add to everest
+            if (project.isRepresentative == null) {
+              if (newRepStatus) {
+                everest.claimedProjects = everest.claimedProjects + 1
+                everest.save()
+              }
+              project.isRepresentative = newRepStatus
+
+              // In this case, isRep is already false or true
+              // true true do nothing. false false do nothing.
+            } else {
+              if (newRepStatus == true && project.isRepresentative == false) {
+                everest.claimedProjects = everest.claimedProjects + 1
+                everest.save()
+              }
+              if (newRepStatus == false && project.isRepresentative == true) {
+                everest.claimedProjects = everest.claimedProjects - 1
+                everest.save()
+              }
+              project.isRepresentative = newRepStatus
+            }
           }
         }
 
@@ -126,16 +148,44 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           if (categories.kind == JSONValueKind.ARRAY) {
             let categoriesArray = categories.toArray()
 
-            // First we MUST check if it is null and if so, make it an empty array
             let projCategories = project.categories
-            if (projCategories == null) {
-              projCategories = []
+            // If it already exists, it means we are editing the project. We have to minus the
+            // count for categories here
+            if (projCategories != null) {
+              for (let i = 0; i < projCategories.length; i++) {
+                let category = Category.load(projCategories[i])
+                category.projectCount = category.projectCount - 1
+                category.save()
+
+                // If it has a parent category, it must be removed there too.
+                if (category.parentCategory != null) {
+                  let parent = Category.load(category.parentCategory)
+                  parent.projectCount = category.projectCount - 1
+                  parent.save()
+                }
+              }
             }
+
+            // We reset the project categories, because the IPFS file will always have a new
+            projCategories = []
 
             // Push all of the values into the empty array
             for (let i = 0; i < categoriesArray.length; i++) {
               if (categoriesArray[i].kind == JSONValueKind.STRING) {
                 projCategories.push(categoriesArray[i].toString())
+
+                // We add categories back. It might involve added and subtracting if categories
+                // were not changed, but send result is the same. Could be optimized in the future
+                let category = Category.load(categoriesArray[i].toString())
+                category.projectCount = category.projectCount + 1
+                category.save()
+
+                // If it has a parent category, it must be added there too.
+                if (category.parentCategory != null) {
+                  let parent = Category.load(category.parentCategory)
+                  parent.projectCount = category.projectCount + 1
+                  parent.save()
+                }
               }
             }
 
