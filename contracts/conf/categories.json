@@ -1,0 +1,536 @@
+[
+    {
+        "id": "0x2790729af79695ea8ce2c1ec0caf84df38501ca2",
+        "imageHash": "QmdUkt56CH6a649YxuHiAg7XR9T14h1p71pvsFvsSbmLPZ",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdUkt56CH6a649YxuHiAg7XR9T14h1p71pvsFvsSbmLPZ",
+        "name": "Asset Management",
+        "slug": "asset-management",
+        "description": "todo",
+        "subcategories": [
+            {
+                "id": "0x2f5981f4bc479a7d333af677580c2d2d44701e00",
+                "imageHash": "QmTYPqQTUXTncAACX7hrXBrnLaSQdKUtyAH6N1oA4t4QVN",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTYPqQTUXTncAACX7hrXBrnLaSQdKUtyAH6N1oA4t4QVN",
+                "name": "Venture Capital",
+                "slug": "venture-capital",
+                "description": ""
+            },
+            {
+                "id": "0x6afcf3657105f9eb5db33dd839dcf317a95773f7",
+                "imageHash": "QmTj8vqyZbmqhBvvPEXVQMxLtkbD5jUS6JHzKry74FnF2e",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTj8vqyZbmqhBvvPEXVQMxLtkbD5jUS6JHzKry74FnF2e",
+                "name": "Hedge Fund",
+                "slug": "hedge-fund",
+                "description": ""
+            }
+        ]
+    },
+    {
+        "id": "0x9d078dab4fdb9f2be33cb7f0c693b12cc131b338",
+        "imageHash": "QmNmRqCVYK8d182FmnbGcdWxHRYu1k7Ug2ECaF5QguiMTD",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmNmRqCVYK8d182FmnbGcdWxHRYu1k7Ug2ECaF5QguiMTD",
+        "name": "Business Services",
+        "slug": "business-services",
+        "description": "apps and protocols providing professional services",
+        "subcategories": [
+            {
+                "id": "0xc0b9b78c70beed5bb32da9364adf4a5b531a7328",
+                "imageHash": "QmYVdkUB2TxUHw3vcBinfLDRr7m3aUW2rx2QU98qDKVuR4",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmYVdkUB2TxUHw3vcBinfLDRr7m3aUW2rx2QU98qDKVuR4",
+                "name": "Accounting",
+                "slug": "accounting",
+                "description": "accounting services focused on cryptocurrency and tokenized assetsR"
+            },
+            {
+                "id": "0xadf09d6af89cac056427f2f88c2db73a128aa665",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "name": "Human Resources",
+                "slug": "human-resources",
+                "description": "HR and professional services, including hiring, recruiting, people management and development"
+            },
+            {
+                "id": "0x85d91e1aeab3ff88f001ec236eb4b798ab665814",
+                "imageHash": "QmVkRBq2WLjw2mhdari7qxwrH6TEnP4Us3TYAYCJ9Q2W2z",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmVkRBq2WLjw2mhdari7qxwrH6TEnP4Us3TYAYCJ9Q2W2z",
+                "name": "Legal",
+                "slug": "legal",
+                "description": "legal services focused on cryptocurrency and blockchain, including regulation, securities laws, LAOs"
+            },
+            {
+                "id": "0x349da07f499d84ce04ab1bf4ae9052a1118837fd",
+                "imageHash": "QmYEEhLBDM6dxm9GzxTtpXAYmc8mqr739vfaBHc5FtsLTb",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmYEEhLBDM6dxm9GzxTtpXAYmc8mqr739vfaBHc5FtsLTb",
+                "name": "Marketing",
+                "slug": "marketing",
+                "description": ""
+            },
+            {
+                "id": "0xf7d3cee651ecb9d1278b5681226c8bc2f777f22c",
+                "imageHash": "QmapYnHmkSrGij17igK8tjhETXjG9EQsQPKvjyXuTnHLQA",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmapYnHmkSrGij17igK8tjhETXjG9EQsQPKvjyXuTnHLQA",
+                "name": "Public Relations",
+                "slug": "public-relations",
+                "description": ""
+            },
+            {
+                "id": "0x3523d511a52f6292f4e0242d88b51dcb53ab7147",
+                "imageHash": "QmapDeZAur3UFGNFAkMXPokDn91QT24H61rtNc9WfbdCDP",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmapDeZAur3UFGNFAkMXPokDn91QT24H61rtNc9WfbdCDP",
+                "name": "Software Development",
+                "slug": "software-development",
+                "description": "developer shops and projects focused on software creation as a service"
+            }
+        ]
+    },
+    {
+        "id": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2",
+        "imageHash": "QmdikmwvCSozVmgUovhExRtLQG5jsTWRvsnQzjrAMxn8Fq",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdikmwvCSozVmgUovhExRtLQG5jsTWRvsnQzjrAMxn8Fq",
+        "name": "DeFi",
+        "slug": "defi",
+        "description": "projects focused on decentralized finance or open finance",
+        "subcategories": [
+            {
+                "id": "0xa8d12d660ebd012846383fb8897882fda954a82c",
+                "imageHash": "QmULYWKKWwRECa5hWDxsdF7kc8XnNfi9atWyj8FWKvisVk",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmULYWKKWwRECa5hWDxsdF7kc8XnNfi9atWyj8FWKvisVk",
+                "name": "Currencies",
+                "slug": "currencies",
+                "description": "apps and protocols that issue a cryptocurrency, including stablecoins, ERC20s and non-fungible tokens"
+            },
+            {
+                "id": "0x94fc4ee382084249f315ff5268c3c75a7343f9ab",
+                "imageHash": "QmdNonHta91rYy6eSBFd3VNy4SSZFkZUMWNMKdno27FDig",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdNonHta91rYy6eSBFd3VNy4SSZFkZUMWNMKdno27FDig",
+                "name": "Derivatives",
+                "slug": "derivatives",
+                "description": "derivative issuance and trading platforms"
+            },
+            {
+                "id": "0x623bcb7d19e9a6690eab8808d4bc6cbfca5545b2",
+                "imageHash": "Qmdu8MpGuSdEi4sDnEDRsxffEBtv1HPMNbWsRcBp72p7Mk",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmdu8MpGuSdEi4sDnEDRsxffEBtv1HPMNbWsRcBp72p7Mk",
+                "name": "Exchanges",
+                "slug": "exchanges",
+                "description": "apps and protocols for exchanging and trading cryptocurrencies and tokens, including decentralized and centralized exchanges and liquidity networks"
+            },
+            {
+                "id": "0xb6f65b431d3aca07497b92144d4695473a2f7a9b",
+                "imageHash": "QmXuams73su3hjNGrC6XPPdzphbEBmXoozEGycPwU3uqup",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXuams73su3hjNGrC6XPPdzphbEBmXoozEGycPwU3uqup",
+                "name": "Insurance",
+                "slug": "insurance",
+                "description": "insurance services providers"
+            },
+            {
+                "id": "0x0abfde6070020295c852acfc669aac63bf45250e",
+                "imageHash": "QmPHb4f3jABdLkRbtnmx8bTAkgkymZ3nAFeSNWCbuzqtFe",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPHb4f3jABdLkRbtnmx8bTAkgkymZ3nAFeSNWCbuzqtFe",
+                "name": "Investing",
+                "slug": "investing",
+                "description": "investment funds, venture capital funds and asset management apps"
+            },
+            {
+                "id": "0xcad7f99ceb18e19454cff6831988c1f8fadba89a",
+                "imageHash": "QmcpSbRi2qC4GD1zQ38ZCEyimUHk4x3WDbEZhk3fxUGALY",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcpSbRi2qC4GD1zQ38ZCEyimUHk4x3WDbEZhk3fxUGALY",
+                "name": "Lending",
+                "slug": "lending",
+                "description": "apps and protocols for lending cryptocurrencies and tokenized assets and tokenizing collateral"
+            },
+            {
+                "id": "0x2be4d83b58d2a90e2aca5c7b985351d6cf893677",
+                "imageHash": "QmUS6u9uV6XJaiTrdwbtFhxD6HHFf5LkEmEsiSE5yGRL6F",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUS6u9uV6XJaiTrdwbtFhxD6HHFf5LkEmEsiSE5yGRL6F",
+                "name": "Payments",
+                "slug": "payments",
+                "description": "payment providers supporting cryptocurrencies and tokenized assets, including on-ramps, payment and settlement solutions"
+            },
+            {
+                "id": "0x0708e6d866ac9e0a226dc62cfaf105ef6c5c74e2",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "name": "Prediction Markets",
+                "slug": "prediction-markets",
+                "description": ""
+            },
+            {
+                "id": "0xa1f87329389bb38333e6f334c116dd4c0af66c57",
+                "imageHash": "QmNnuL2pHzLtBVF6FtcpjW7QcTnYQvucB4W3rkPRkpZNA2",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmNnuL2pHzLtBVF6FtcpjW7QcTnYQvucB4W3rkPRkpZNA2",
+                "name": "Ratings",
+                "slug": "ratings",
+                "description": "financial ratings or credit score providers"
+            },
+            {
+                "id": "0x19adf5da0eca1de41483f53038c6ee4749e3feb7",
+                "imageHash": "QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk",
+                "name": "Research",
+                "slug": "research",
+                "description": "projects focused on providing data and research about DeFi"
+            },
+            {
+                "id": "0xb5f66f4697dfd68417310f5319a8e2430d6f12f5",
+                "imageHash": "QmXtTWcpftLuW31K51My7iWk64iYQN5MRa1k5zs3ETZCpG",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXtTWcpftLuW31K51My7iWk64iYQN5MRa1k5zs3ETZCpG",
+                "name": "Staking",
+                "slug": "staking",
+                "description": "projects focused on providing staking services, such as staking research, delegated staking or node operations"
+            },
+            {
+                "id": "0x4c3b457f5b9288d9a8f3852db95677c98e92c8b7",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "name": "Wallets",
+                "slug": "wallets",
+                "description": "wallet apps that support cryptocurrencies and tokenized assets and can provide other DeFi services"
+            }
+        ]
+    },
+    {
+        "id": "0x50fd3543c52ffd8a67abcc7ef72d9fa5571856fb",
+        "imageHash": "QmSQHJwdWCVJRcMYd1zrFaBi4wH8pbE5cwurrrVBPrYEkA",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmSQHJwdWCVJRcMYd1zrFaBi4wH8pbE5cwurrrVBPrYEkA",
+        "name": "Education",
+        "slug": "education",
+        "description": "any projects focused on education and learning provision, including institutional academia, technical skills learning, Web3 resources and more"
+    },
+    {
+        "id": "0x80b1d1fab5e41fb01cd840e6ea6f52e70d948f7b",
+        "imageHash": "Qma5FbqpJwMQfDEMjDzvH3cTXxzLEyUHaNcQHyVkauEBDZ",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qma5FbqpJwMQfDEMjDzvH3cTXxzLEyUHaNcQHyVkauEBDZ",
+        "name": "Energy",
+        "slug": "energy",
+        "description": "projects focused on the energy and oil sectorsR"
+    },
+    {
+        "id": "0xc00f480db7754ce2e0f992a1080598e53fc511a0",
+        "imageHash": "Qmaue78eCnAy9HZ8AJ31YHo5YLGYi6iKmkNPyhnta8yZS6",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmaue78eCnAy9HZ8AJ31YHo5YLGYi6iKmkNPyhnta8yZS6",
+        "name": "Entertainment",
+        "slug": "entertainment",
+        "description": "projects for entertainment purposes, including music, video, art, books, sports and gaming",
+        "subcategories": [
+            {
+                "id": "0xf55a96b762663accc666d271ea1e012c5b14a9ba",
+                "imageHash": "QmecWcTo9PAgNE5s1TToBGnR3EvckuetfMRepmx4DMisJi",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmecWcTo9PAgNE5s1TToBGnR3EvckuetfMRepmx4DMisJi",
+                "name": "Adult",
+                "slug": "adult",
+                "description": "projects focused on providing adult entertainment"
+            },
+            {
+                "id": "0x42422f37b9b9b8ca5e08fcff8a02d6f0ab9ba79d",
+                "imageHash": "Qmd2eUaT9En4XBJmctZjbbspPa9KB7hNQj8StZ6GvYU6SX",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmd2eUaT9En4XBJmctZjbbspPa9KB7hNQj8StZ6GvYU6SX",
+                "name": "Art",
+                "slug": "art",
+                "description": "projects focused art creation, exchange and hosting"
+            },
+            {
+                "id": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3",
+                "imageHash": "QmbtmTALa3v5WrGyZmDFC8ipKtK79XFwL9qLBMQD3KBCN5",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmbtmTALa3v5WrGyZmDFC8ipKtK79XFwL9qLBMQD3KBCN5",
+                "name": "Books",
+                "slug": "books",
+                "description": "projects focused on writing and publishing books and formalized content"
+            },
+            {
+                "id": "0x729b01ac439f8709c58558587f9d58e1c7f35b8d",
+                "imageHash": "QmfTWxUC9cqFrihHrLf6NCzGsnfXcsFanuUr3drSq2Hfjp",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmfTWxUC9cqFrihHrLf6NCzGsnfXcsFanuUr3drSq2Hfjp",
+                "name": "Collectibles",
+                "slug": "collectibles",
+                "description": "projects for collectibles issuance, exchange and hosting"
+            },
+            {
+                "id": "0x9ad12cbd8b6f5fa1978a019532b8a125f43269c3",
+                "imageHash": "QmSqWZqV7hLz5CDpF9ibSvATyNRqX7uCCWbvgKD388aUij",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmSqWZqV7hLz5CDpF9ibSvATyNRqX7uCCWbvgKD388aUij",
+                "name": "Events",
+                "slug": "events",
+                "description": ""
+            },
+            {
+                "id": "0xf911b695d484965f46e598a0b7e9268060ddf47a",
+                "imageHash": "QmbriUBudRNxfPv2fM6pUNRLxAYcTiJmzwnEFGvJ8xJZNY",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmbriUBudRNxfPv2fM6pUNRLxAYcTiJmzwnEFGvJ8xJZNY",
+                "name": "Gaming",
+                "slug": "gaming",
+                "description": "applications and protocols for gaming and gambling "
+            },
+            {
+                "id": "0xa0ffa221bcbe89a8ba2114adb84442f707b19538",
+                "imageHash": "QmUZALjqJvKDzZwJMnre4YdWGqxwTMv6TiYkfBQ4CSoR6T",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUZALjqJvKDzZwJMnre4YdWGqxwTMv6TiYkfBQ4CSoR6T",
+                "name": "Music",
+                "slug": "music",
+                "description": "apps and protocols for music streaming and recording"
+            },
+            {
+                "id": "0x5c708ec62fe6eaf0858370468f8972cc1494f819",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "name": "Sports",
+                "slug": "sports",
+                "description": "sporting applications and tools"
+            },
+            {
+                "id": "0x3d8a4c63d25044709582f1ba2abfe17d633814ac",
+                "imageHash": "QmRRDqGZFGTYrCcNC1nAGwR3J1iDVgmQJ6NsxKL9YgMXd9",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmRRDqGZFGTYrCcNC1nAGwR3J1iDVgmQJ6NsxKL9YgMXd9",
+                "name": "Video",
+                "slug": "video",
+                "description": "apps and protocols for video streaming and recording"
+            },
+            {
+                "id": "0x0f660ae40d2769a13ab7f32560cd624e060d056b",
+                "imageHash": "QmZRihgmRJJtVJdttxKeJGxSJUdvhuDupa1b6zmKQYmQqj",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZRihgmRJJtVJdttxKeJGxSJUdvhuDupa1b6zmKQYmQqj",
+                "name": "Virtual Reality",
+                "slug": "virtual-reality",
+                "description": "PLACEHOLDER"
+            }
+        ]
+    },
+    {
+        "id": "0x71089462abcc4c36fcb5f54961166ed2d701c129",
+        "imageHash": "QmQVYcHjg2ALmZNTfuaUTZBDz5fTecSFURJLZYfyxg6dyU",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQVYcHjg2ALmZNTfuaUTZBDz5fTecSFURJLZYfyxg6dyU",
+        "name": "Environment",
+        "slug": "environment",
+        "description": "PLACEHOLDER"
+    },
+    {
+        "id": "0x80e63c7a9f77eb438307b34187eb862e7faa3ff0",
+        "imageHash": "QmRqYw53zLvVNZmHyCsvU5m8x8vFbmYjsDXTeBkyDvKmmS",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmRqYw53zLvVNZmHyCsvU5m8x8vFbmYjsDXTeBkyDvKmmS",
+        "name": "Governance",
+        "slug": "governance",
+        "description": "organizations focused on decentralized governance implementations and research, such as DAOs, voting tools and consensus mechanisms",
+        "subcategories": [
+            {
+                "id": "0x78e46c3a6e683bdb88ea1311f702829358117eb8",
+                "imageHash": "QmcsrzXKZqT7HoyQCfHbZN1ejctbbGymWVTw95TwXpvcZz",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcsrzXKZqT7HoyQCfHbZN1ejctbbGymWVTw95TwXpvcZz",
+                "name": "DAOs",
+                "slug": "daos",
+                "description": "decentralized autonomous organizations and projects focused on building frameworks and tooling for decentralized organizations"
+            },
+            {
+                "id": "0x46aff9a161267c2c01f5ce1b6e3b717a77f21480",
+                "imageHash": "QmUpn8TokxJdNn2nq3ABh4Dqdy9rdpk8gycjE3yNMg34e6",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUpn8TokxJdNn2nq3ABh4Dqdy9rdpk8gycjE3yNMg34e6",
+                "name": "Voting Tools",
+                "slug": "voting-tools",
+                "description": "decentralized voting and signalling tools for app and protocol governance"
+            }
+        ]
+    },
+    {
+        "id": "0xb4c3867219c1c6c9495d347b16f3117cbafd22b5",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+        "name": "Grants & Philanthropy",
+        "slug": "grants-and-philanthropy",
+        "description": "organizations distributing grant funding to other projects"
+    },
+    {
+        "id": "0x2c56864094e3f9ff6f3c6b273ae5226cbcacc81a",
+        "imageHash": "Qmb9NnNXmuStKwnWxdAnrKea8jZsPacZVBD2iw3tLTahwP",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmb9NnNXmuStKwnWxdAnrKea8jZsPacZVBD2iw3tLTahwP",
+        "name": "Hardware",
+        "slug": "hardware",
+        "description": "projects focused on developing hardware for Web3 apps and protocols"
+    },
+    {
+        "id": "0x91d747cbc7f58b7ed03eab308da9cb036bf32cf6",
+        "imageHash": "QmNuk54toRqhZFhz6wn5F76d7oVba7ndKC5qaP3LqGzEwU",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmNuk54toRqhZFhz6wn5F76d7oVba7ndKC5qaP3LqGzEwU",
+        "name": "Health & Wellness",
+        "slug": "health-and-wellness",
+        "description": "projects focused on health care, wellness and medicine"
+    },
+    {
+        "id": "0x6b3bbb886718a091c157cdee60e26c73532daff0",
+        "imageHash": "QmV4A3tcWMFgpRWMtWqqmW9rXgDyfQb3B29BqpjddMJ8nb",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmV4A3tcWMFgpRWMtWqqmW9rXgDyfQb3B29BqpjddMJ8nb",
+        "name": "Identity",
+        "slug": "identity",
+        "description": "projects focused on identity, reputation and user authentication solutions"
+    },
+    {
+        "id": "0xe1d47abe30e2a90ba047c82bd3109519a292ab7c",
+        "imageHash": "QmZX7ed6UCyEGf6PE6gbWL4mKtGi6wo4EC3v4PXXZuWt2N",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZX7ed6UCyEGf6PE6gbWL4mKtGi6wo4EC3v4PXXZuWt2N",
+        "name": "Marketplaces",
+        "slug": "marketplaces",
+        "description": "projects focused on providing venues of exchange for specific goods and services"
+    },
+    {
+        "id": "0xd6b71db807675ac6f35447c659142c2888d53275",
+        "imageHash": "QmVHbkujAFanmb68nzbhSGsCKSzCTqkzCzRSsEcMbVkHbG",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmVHbkujAFanmb68nzbhSGsCKSzCTqkzCzRSsEcMbVkHbG",
+        "name": "News & Media",
+        "slug": "news-and-media",
+        "description": "projects and outlets focused on providing news and media services"
+    },
+    {
+        "id": "0xa5928a8af6397d903a510b442e31870b61968ea3",
+        "imageHash": "QmTYCN5QbGBsiM1hKHL1gBPy4kWb9ZSkEUkdD8QvaM6w7n",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTYCN5QbGBsiM1hKHL1gBPy4kWb9ZSkEUkdD8QvaM6w7n",
+        "name": "Places",
+        "slug": "places",
+        "description": "apps and protocols focused on location services, like geographic positioning"
+    },
+    {
+        "id": "0x1589ade9587c05b428294132451e6ce80bcd42a8",
+        "imageHash": "QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk",
+        "name": "Research",
+        "slug": "research",
+        "description": "projects focused on Web3 development, including cryptoeconomics, distributed systems, consensus mechanisms, scalability and more"
+    },
+    {
+        "id": "0x68de8b452b8794c95168f196e3bf8ee4a9a63d14",
+        "imageHash": "QmWQCU4VxnpoRfpKSTs7h5zkH7Rxc7qMJPEapMv52ZyGpv",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWQCU4VxnpoRfpKSTs7h5zkH7Rxc7qMJPEapMv52ZyGpv",
+        "name": "Social",
+        "slug": "social",
+        "description": "projects providing social networking platforms and tools"
+    },
+    {
+        "id": "0x6650f6cbed0e806143597a99b7ac67f88c340d2b",
+        "imageHash": "QmdxpakY5uZsvnBPVkhtbRRABJiaYhNTZ9KcEEErSmhrZ6",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdxpakY5uZsvnBPVkhtbRRABJiaYhNTZ9KcEEErSmhrZ6",
+        "name": "Software",
+        "slug": "software",
+        "description": "projects focused on building software for developing Web3, including blockchains, cryptoeconomic systems and tokenized assets",
+        "subcategories": [
+            {
+                "id": "0x3bd4f6ce1e632d7f671373da4eb2aaa0b6c47624",
+                "imageHash": "QmUQ3ehvVrJrNQCKP5EtpdQNF1z9NvjvQn2duh6S3M6KEG",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUQ3ehvVrJrNQCKP5EtpdQNF1z9NvjvQn2duh6S3M6KEG",
+                "name": "APIs",
+                "slug": "apis",
+                "description": ""
+            },
+            {
+                "id": "0x69c6cd86f3328ed4f1c2bebea73a67fa98ec9887",
+                "imageHash": "QmZY6qmFWh2dEzw4A6PuFf6DDRe9Wt2A5t6gyAjNLWr1Wu",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZY6qmFWh2dEzw4A6PuFf6DDRe9Wt2A5t6gyAjNLWr1Wu",
+                "name": "Analytics",
+                "slug": "analytics",
+                "description": "projects focused on consuming and analyzing data from Web3 apps and protocols, including block explorers, analytics apps, data feeds"
+            },
+            {
+                "id": "0x7754746f6e72ae79375b982f26093d5b926fe8f0",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "name": "Blockchain Development",
+                "slug": "blockchain-development",
+                "description": "projects and teams focused on researching and building blockchains, distributed systems and sidechains"
+            },
+            {
+                "id": "0xe819b740790f9410a804a445f7a8959b306ccbf7",
+                "imageHash": "QmYSobWvAG3ienUmCWHPYMoK1b37HGQbGhNuuPmwyq9yC4",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmYSobWvAG3ienUmCWHPYMoK1b37HGQbGhNuuPmwyq9yC4",
+                "name": "Computation",
+                "slug": "computation",
+                "description": "projects focused on computation for Web3 protocols, such as researching computation, implementing computation sharing solutions"
+            },
+            {
+                "id": "0xc899a6c0d35f6ed89208ce4fcbd27743c8e8b124",
+                "imageHash": "QmQbJ1eE1bGdcc6o7bALkywLNqLEV1Mx5xb4EfEMik5tah",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQbJ1eE1bGdcc6o7bALkywLNqLEV1Mx5xb4EfEMik5tah",
+                "name": "Custody",
+                "slug": "custody",
+                "description": "projects focused on providing custody or delegate services, such as custody of user funds and private keys"
+            },
+            {
+                "id": "0x18c98c943fd9aab3e0a277b23350b8b975df85ff",
+                "imageHash": "QmdNAu3EvJj3gaCtLWUxkyN1CmWjEV5Bx15iDVczNcaG5g",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdNAu3EvJj3gaCtLWUxkyN1CmWjEV5Bx15iDVczNcaG5g",
+                "name": "Developer Tools",
+                "slug": "developer-tools",
+                "description": "projects focused on researching and building developer tooling for Web3 apps and protocols"
+            },
+            {
+                "id": "0x00b02151c6c591309ba75beca3975f144774219e",
+                "imageHash": "QmeaVMrvsYmCNrg2PfW64HthwvFXBYNuZAhcUcDTf14YGA",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmeaVMrvsYmCNrg2PfW64HthwvFXBYNuZAhcUcDTf14YGA",
+                "name": "Naming",
+                "slug": "naming",
+                "description": ""
+            },
+            {
+                "id": "0x3919638e4dc6b5341bbb93fde0312f4f92e714e6",
+                "imageHash": "QmSqE9aN64PXRTBf96N7UjK9NsEJnZad9kUCmBiuE6oUT9",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmSqE9aN64PXRTBf96N7UjK9NsEJnZad9kUCmBiuE6oUT9",
+                "name": "Networking",
+                "slug": "networking",
+                "description": "projects focused on networking between Web3 protocols, such as p2p networking"
+            },
+            {
+                "id": "0xb67fe430d7a4309dd0b42d85297e0dad8331fed1",
+                "imageHash": "QmPa3mnGkAB8DB1h3Qf6Lh7t3Dn3dVjvdwQTHXK9B4AZEH",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPa3mnGkAB8DB1h3Qf6Lh7t3Dn3dVjvdwQTHXK9B4AZEH",
+                "name": "Oracles",
+                "slug": "oracles",
+                "description": "projects researching or building oracle solutions for Web3 apps and protocols, including oracles for on-chain and off-chain data"
+            },
+            {
+                "id": "0x54fba2636de5b2db352a5c0483f18b1ce519c80a",
+                "imageHash": "QmNW7aUxSyjHx8h2DwmSMBGJe5X96t8iWTZKiHuvykCsRR",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmNW7aUxSyjHx8h2DwmSMBGJe5X96t8iWTZKiHuvykCsRR",
+                "name": "Privacy",
+                "slug": "privacy",
+                "description": "projects researching or building privacy solutions for Web3 apps and protocols, such as cryptography research, mixers"
+            },
+            {
+                "id": "0xc92c05e92a2dc53ef191538f5ebb5c283909d657",
+                "imageHash": "QmbvdLGmvMSbq9qBqvP2arA17bJa14GPPXtS58dZy6SNCY",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmbvdLGmvMSbq9qBqvP2arA17bJa14GPPXtS58dZy6SNCY",
+                "name": "Scaling",
+                "slug": "scaling",
+                "description": "projects researching or building blockchain scaling solutions, including layer 1 (mainnet) and layer 2 scalability"
+            },
+            {
+                "id": "0x2c67e43388783af95cdca4883311577a20de7093",
+                "imageHash": "QmfM4sa3pymDS4nRcbXXpEkS1KN2Hbc4hAnNCpXRAzDees",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmfM4sa3pymDS4nRcbXXpEkS1KN2Hbc4hAnNCpXRAzDees",
+                "name": "Security",
+                "slug": "security",
+                "description": "projects focused on providing software or hardware security, including code security, audits and testing and general security practices"
+            },
+            {
+                "id": "0x84038ebcd395899a08722fd8448fadd337d775a6",
+                "imageHash": "QmTWBLXUMrz5XKER91av2mLM8QMVwPqkQSrDzsYGQjYice",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTWBLXUMrz5XKER91av2mLM8QMVwPqkQSrDzsYGQjYice",
+                "name": "Storage",
+                "slug": "storage",
+                "description": "projects focused on storage for Web3 protocols, including file sharing, cloud storage and more"
+            }
+        ]
+    },
+    {
+        "id": "0x17ae0efe1032560c8f58f3b79889c76c13766d2a",
+        "imageHash": "QmZQRLfjrBZJA8AaPLUQDMs1y6YVT5jSrsXe9eMpGjqy29",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZQRLfjrBZJA8AaPLUQDMs1y6YVT5jSrsXe9eMpGjqy29",
+        "name": "Supply Chain",
+        "slug": "supply-chain",
+        "description": "apps and protocols focused on supply chain management, tracking and optimization"
+    },
+    {
+        "id": "0x6cdbe7c6514650392a97dc7edc0f173bf91d410d",
+        "imageHash": "Qmf7Ad5XavHJhtjuMyoebgpWgGngWPwe1BxJytdBtgAu8E",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmf7Ad5XavHJhtjuMyoebgpWgGngWPwe1BxJytdBtgAu8E",
+        "name": "Telecommunications",
+        "slug": "telecommunications",
+        "description": ""
+    },
+    {
+        "id": "0x99238b8767dd4ee336c80f4778318226a8fb3d4a",
+        "imageHash": "QmXqPHubfWvEtf6tdECMnpKevZ21BS3bkcyhpGKm5zFVmS",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXqPHubfWvEtf6tdECMnpKevZ21BS3bkcyhpGKm5zFVmS",
+        "name": "Work",
+        "slug": "work",
+        "description": "projects focused on gig economies, future of work and professional reputation"
+    }
+]

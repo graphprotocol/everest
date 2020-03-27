@@ -45,7 +45,7 @@ QmVHbkujAFanmb68nzbhSGsCKSzCTqkzCzRSsEcMbVkHbG News-and-media.jpg
 QmNfhKdPnqeSek3HtMLPEchEc5Fk3n8qs6er9ioZjcTZpX Philanthropy.jpg (NOT IN USE, we use the Grants one)
 QmTYCN5QbGBsiM1hKHL1gBPy4kWb9ZSkEUkdD8QvaM6w7n Places.jpg
 QmQvXC22pZj6hBsp6HHDGbQCzDFVbrRHWBBvoCAT65fzbk Research.jpg (Also used for Defi --> Research)
-QmWSa9uCqvQcTT12DjcxE2eStvHWNaRS8h87Tzijsxf7Qb Security.jpg
+QmWSa9uCqvQcTT12DjcxE2eStvHWNaRS8h87Tzijsxf7Qb Security.jpg (HAS BEEN REMOVED - security only under software now)
 QmWQCU4VxnpoRfpKSTs7h5zkH7Rxc7qMJPEapMv52ZyGpv Social.jpg
 QmUQ3ehvVrJrNQCKP5EtpdQNF1z9NvjvQn2duh6S3M6KEG Software - APIs.jpg
 QmZY6qmFWh2dEzw4A6PuFf6DDRe9Wt2A5t6gyAjNLWr1Wu Software - Analytics.jpg
