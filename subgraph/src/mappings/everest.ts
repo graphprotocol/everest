@@ -36,11 +36,15 @@ export function handleNewMember(event: NewMember): void {
 export function handleMemberExited(event: MemberExited): void {
   let id = event.params.member.toHexString()
   store.remove('Project', id)
+
+  let everest = Everest.load('1')
+  everest.projectCount = everest.projectCount -= 1
+  everest.save()
 }
 
 export function handleCharterUpdated(event: CharterUpdated): void {
   let everest = Everest.load('1')
-  everest.charter = event.params.data.toHexString()
+  everest.charter = event.params.data
   everest.save()
 
   parseCategoryDetails(event.params.data, event.block.timestamp)
@@ -173,6 +177,7 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
+  everest.projectCount = everest.projectCount -= 1
   everest.save()
 
   let challenge = Challenge.load(event.params.challengeID.toString())
