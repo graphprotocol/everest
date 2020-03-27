@@ -69,6 +69,8 @@ type Category @entity {
   parentCategory: Category
   "Time it was created in the Subgraph"
   createdAt: Int!
+  "Project count under this category. Includes subcategory projects for parent categories"
+  projectCount: Int!
 }
 
 type Challenge @entity {
@@ -124,6 +126,8 @@ type Everest @entity {
   createdAt: Int!
   "Total count of projects created on Everest"
   projectCount: Int!
+  "Projects that are currently in control by a representative"
+  claimedProjects: Int!
 }
 
 """
