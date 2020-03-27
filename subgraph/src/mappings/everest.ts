@@ -61,7 +61,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.applicationFee = event.params.applicationFee
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
-  everest.charter = event.params.charter.toHexString()
+  everest.charter = event.params.charter
   everest.createdAt = event.block.timestamp.toI32()
   everest.projectCount = 0
   everest.save()
@@ -76,7 +76,7 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   challenge.votesFor = 0 // Don't need to record one here, since a SubmitVote event will be emitted
   challenge.votesAgainst = 0
   challenge.project = event.params.member.toHexString()
-  challenge.owner = event.params.challenger
+  challenge.owner = event.params.challenger.toString()
   challenge.createdAt = event.block.timestamp.toI32()
   challenge.resolved = false
 

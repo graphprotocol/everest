@@ -5,6 +5,7 @@
     "abis": "rm -rf ./abis && mkdir ./abis/ && node ./scripts/extractAbis.js",
     "build": "yarn compile && yarn abis && yarn flatten",
     "compile": "truffle compile",
+    "deploy-ropsten": "truffle migrate --reset --network ropsten",
     "fix-js": "eslint ./ --fix",
     "fix-sol": "solium -d contracts/ --fix",
     "flatten": "bash scripts/flatten.sh",

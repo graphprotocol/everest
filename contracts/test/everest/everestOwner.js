@@ -32,6 +32,14 @@ contract('Everest', () => {
             assert.equal(updatedCharter, newCharter, 'Charter was not updated')
         })
 
+        it('should allow owner to update the categories', async () => {
+            const newCategories = '0x0123456789012345678901234567890123456789012345678901234567891111'
+            await everest.updateCategories(newCategories, { from: registryOwnerAddress })
+            const updatedCategories = await everest.categories()
+            assert.equal(updatedCategories, newCategories, 'Categories was not updated')
+        })
+
+
         it('should allow owner to withdraw DAI from reserve bank', async () => {
             // Apply one member so the reserve bank has 10 DAI
             await helpers.applySignedWithAttributeAndPermit(newMemberWallet, ownerWallet)

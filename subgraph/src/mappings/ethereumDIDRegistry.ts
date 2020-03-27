@@ -1,4 +1,4 @@
-import { json, ipfs, Bytes, JSONValueKind } from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValueKind, log } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,

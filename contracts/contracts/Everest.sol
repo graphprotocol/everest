@@ -36,6 +36,8 @@ contract Everest is Ownable {
     uint256 public applicationFee;
     // IPFS hash for off chain storage of the Everest Charter
     bytes32 public charter;
+    // IPFS hash for off chain storage of the Everest Categories
+    bytes32 public categories;
 
     // Approved token contract reference (i.e. DAI)
     Dai public approvedToken;
@@ -59,6 +61,7 @@ contract Everest is Ownable {
     event NewMember(address indexed member, uint256 startTime, uint256 fee);
     event MemberExited(address indexed member);
     event CharterUpdated(bytes32 indexed data);
+    event CategoriesUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
 
     event EverestDeployed(
@@ -68,6 +71,7 @@ contract Everest is Ownable {
         uint256 challengeDeposit,
         uint256 applicationFee,
         bytes32 charter,
+        bytes32 categories,
         address didRegistry,
         address reserveBank,
         address registry
@@ -184,6 +188,7 @@ contract Everest is Ownable {
         uint256 _challengeDeposit,
         uint256 _applicationFee,
         bytes32 _charter,
+        bytes32 _categories,
         address _DIDregistry,
         address _reserveBank,
         address _registry
@@ -199,6 +204,7 @@ contract Everest is Ownable {
         challengeDeposit = _challengeDeposit;
         applicationFee = _applicationFee;
         charter = _charter;
+        categories = _categories;
         erc1056Registry = EthereumDIDRegistry(_DIDregistry);
         reserveBank = ReserveBank(_reserveBank);
         registry = Registry(_registry);
@@ -210,6 +216,7 @@ contract Everest is Ownable {
             _challengeDeposit,
             _applicationFee,
             _charter,
+            _categories,
             _DIDregistry,
             _reserveBank,
             _registry
@@ -624,6 +631,15 @@ contract Everest is Ownable {
     function updateCharter(bytes32 _newCharter) external onlyOwner {
         charter = _newCharter;
         emit CharterUpdated(charter);
+    }
+
+    /**
+    @dev                Updates the categories for the Everest
+    @param _newCategories  The data that point to the new categories
+    */
+    function updateCategories(bytes32 _newCategories) external onlyOwner {
+        categories = _newCategories;
+        emit CategoriesUpdated(categories);
     }
 
     // -----------------
