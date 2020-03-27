@@ -6,7 +6,7 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project, User, Category } from '../types/schema'
+import { Project, User, Category, Everest } from '../types/schema'
 import { addQm } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
@@ -117,7 +117,29 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
         if (!data.get('isRepresentative').isNull()) {
           if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
-            project.isRepresentative = data.get('isRepresentative').toBool()
+            const newRepStatus = data.get('isRepresentative').toBool()
+            let everest = Everest.load('1')
+            // If we don't already have a rep status, we have to add to everest
+            if (project.isRepresentative == null) {
+              if (newRepStatus) {
+                everest.claimedProjects = everest.claimedProjects + 1
+                everest.save()
+              }
+              project.isRepresentative = newRepStatus
+
+              // In this case, isRep is already false or true
+              // true true do nothing. false false do nothing.
+            } else {
+              if (newRepStatus == true && project.isRepresentative == false) {
+                everest.claimedProjects = everest.claimedProjects + 1
+                everest.save()
+              }
+              if (newRepStatus == false && project.isRepresentative == true) {
+                everest.claimedProjects = everest.claimedProjects - 1
+                everest.save()
+              }
+              project.isRepresentative = newRepStatus
+            }
           }
         }
 

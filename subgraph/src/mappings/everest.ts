@@ -64,6 +64,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.charter = event.params.charter
   everest.createdAt = event.block.timestamp.toI32()
   everest.projectCount = 0
+  everest.claimedProjects = 0
   everest.save()
 
   parseCategoryDetails(event.params.charter, event.block.timestamp)
