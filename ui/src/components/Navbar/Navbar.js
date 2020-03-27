@@ -5,7 +5,6 @@ import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 import { isMobile } from 'react-device-detect'
-import ThreeBox from '3box'
 
 import { metamaskAccountChange } from '../../services/ethers'
 import { useAccount } from '../../utils/hooks'
@@ -19,6 +18,13 @@ import Plus from '../../images/close.svg'
 import Bars from '../../images/bars.svg'
 import Arrow from '../../images/arrow.svg'
 import Close from '../../images/close.svg'
+
+let ThreeBox
+try {
+  ThreeBox = require('3box').default
+} catch (e) {
+  console.log('error: ', e)
+}
 
 const Navbar = ({ location, setParentMobileOpen, ...props }) => {
   const { account } = useAccount()
@@ -38,15 +44,17 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
 
   useEffect(() => {
     async function getProfile() {
-      const threeBoxProfile = await ThreeBox.getProfile(userAccount)
-      let image
-      if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
-        image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
-      } else {
-        image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-          ''}/profile-default.png`
+      if (ThreeBox) {
+        const threeBoxProfile = await ThreeBox.getProfile(userAccount)
+        let image
+        if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
+          image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+        } else {
+          image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+            ''}/profile-default.png`
+        }
+        setUserImage(image)
       }
-      setUserImage(image)
     }
     getProfile()
   }, [userAccount])

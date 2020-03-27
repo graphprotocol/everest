@@ -146,11 +146,15 @@ export const PROJECTS_QUERY = gql`
     $orderBy: Project_orderBy
     $orderDirection: OrderDirection
     $where: Project_filter
+    $first: Int
+    $skip: Int
   ) {
     projects(
       orderBy: $orderBy
       orderDirection: $orderDirection
       where: $where
+      first: $first
+      skip: $skip
     ) {
       id
       name
