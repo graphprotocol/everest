@@ -33,9 +33,11 @@ dataSources:
           handler: handleMemberExited
         - event: CharterUpdated(indexed bytes32)
           handler: handleCharterUpdated
+        - event: CategoriesUpdated(indexed bytes32)
+          handler: handleCategoriesUpdated
         - event: Withdrawal(indexed address,uint256)
           handler: handleWithdrawal
-        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,address,address,address)
+        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address)
           handler: handleEverestDeployed
         - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
           handler: handleMemberChallenged

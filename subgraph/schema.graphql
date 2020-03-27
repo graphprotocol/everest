@@ -120,6 +120,8 @@ type Everest @entity {
   reserveBankAddress: Bytes!
   "Balance of the reserve bank (DAI)"
   reserveBankBalance: BigInt!
+  "IPFS hash pointing to the categories"
+  categories: Bytes!
   "IPFS hash pointing to the charter"
   charter: Bytes!
   "Time it was created on the blockchain"

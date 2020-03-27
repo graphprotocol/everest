@@ -42,12 +42,18 @@ export function handleMemberExited(event: MemberExited): void {
   everest.save()
 }
 
+export function handleCategoriesUpdated(event: CharterUpdated): void {
+  let everest = Everest.load('1')
+  everest.categories = event.params.data
+  everest.save()
+
+  parseCategoryDetails(event.params.data, event.block.timestamp)
+}
+
 export function handleCharterUpdated(event: CharterUpdated): void {
   let everest = Everest.load('1')
   everest.charter = event.params.data
   everest.save()
-
-  parseCategoryDetails(event.params.data, event.block.timestamp)
 }
 
 export function handleWithdrawal(event: Withdrawal): void {
@@ -66,6 +72,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
   everest.charter = event.params.charter
+  everest.categories = event.params.categories
   everest.createdAt = event.block.timestamp.toI32()
   everest.projectCount = 0
   everest.claimedProjects = 0

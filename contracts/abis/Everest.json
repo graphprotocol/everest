@@ -221,6 +221,20 @@
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [],
+      "name": "categories",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "name": "_approvedToken",
@@ -240,6 +254,10 @@
         },
         {
           "name": "_charter",
+          "type": "bytes32"
+        },
+        {
+          "name": "_categories",
           "type": "bytes32"
         },
         {
@@ -310,6 +328,18 @@
       "inputs": [
         {
           "indexed": true,
+          "name": "data",
+          "type": "bytes32"
+        }
+      ],
+      "name": "CategoriesUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "name": "receiver",
           "type": "address"
         },
@@ -353,6 +383,11 @@
         {
           "indexed": false,
           "name": "charter",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "categories",
           "type": "bytes32"
         },
         {
@@ -782,6 +817,20 @@
         }
       ],
       "name": "updateCharter",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newCategories",
+          "type": "bytes32"
+        }
+      ],
+      "name": "updateCategories",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
