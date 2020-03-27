@@ -99,7 +99,7 @@ contract Everest is Ownable {
         uint256 yesVotes,
         uint256 noVotes,
         uint256 voterCount,
-        uint256 reward
+        uint256 resolverReward
     );
 
     event ChallengeSucceeded(
@@ -108,7 +108,8 @@ contract Everest is Ownable {
         uint256 yesVotes,
         uint256 noVotes,
         uint256 voterCount,
-        uint256 reward
+        uint256 challengerReward,
+        uint256 resolverReward
     );
 
     // ------
@@ -402,10 +403,7 @@ contract Everest is Ownable {
             "challenge - Can't challenge self"
         );
         uint256 currentChallengeID = registry.getChallengeID(_challengee);
-        if(currentChallengeID > 0){
-            // Doing this allows the contract to never get stuck with unresolved challenges
-            resolveChallenge(currentChallengeID);
-        }
+        require(currentChallengeID == 0, "challenge - Existing challenge must be resolved first");
 
         uint256 newChallengeID = challengeCounter;
         Challenge memory newChallenge = Challenge({
@@ -530,7 +528,8 @@ contract Everest is Ownable {
 
     /**
     @dev                    Resolve a challenge A successful challenge means the member is removed.
-                            Anyone can call this function.
+                            Anyone can call this function. They will be rewarded with 1/10 of the
+                            challenge deposit
     @param _challengeID     The challenge ID
     */
     function resolveChallenge(uint256 _challengeID) public {
@@ -540,18 +539,23 @@ contract Everest is Ownable {
         bool didPass = storedChallenge.yesVotes > storedChallenge.noVotes;
         bool moreThanOneVote = storedChallenge.voterCount > 1;
         // Challenge reward is 1/10th the challenge deposit. This allows incentivization to
-        // always resolve the challenge, but also allows the reserveBank to accumlate value.
-        uint challengeReward = challengeDeposit.div(10);
+        // always resolve the challenge for the user that calls this function
+        uint256 resolverReward = challengeDeposit.div(10);
 
         if (didPass && moreThanOneVote) {
             address challengerOwner = erc1056Registry.identityOwner(storedChallenge.challenger);
 
             // The amount includes the applicationFee, which is the reward for challenging a project
-            // and getting it successfully removed.
-            uint256 amount = challengeReward + applicationFee;
+            // and getting it successfully removed. Minus the resolver reward
+            uint256 challengerReward = challengeDeposit + applicationFee - resolverReward;
             require(
-                reserveBank.withdraw(challengerOwner, amount),
+                reserveBank.withdraw(challengerOwner, challengerReward),
                 "resolveChallenge - Rewarding challenger failed"
+            );
+            // Transfer resolver reward
+            require(
+                reserveBank.withdraw(msg.sender, resolverReward),
+                "resolveChallenge - Rewarding resolver failed"
             );
 
             registry.deleteMember(storedChallenge.challengee);
@@ -561,15 +565,15 @@ contract Everest is Ownable {
                 storedChallenge.yesVotes,
                 storedChallenge.noVotes,
                 storedChallenge.voterCount,
-                amount
+                challengerReward,
+                resolverReward
             );
 
         } else {
-            address challengeeOwner = erc1056Registry.identityOwner(storedChallenge.challengee);
-            // Transfer challenge reward to challengee
+            // Transfer resolver reward
             require(
-                reserveBank.withdraw(challengeeOwner, challengeReward),
-                "resolveChallenge - Rewarding challenger failed"
+                reserveBank.withdraw(msg.sender, resolverReward),
+                "resolveChallenge - Rewarding resolver failed"
             );
 
             // Remove challenge ID from the Member in the registry
@@ -580,7 +584,7 @@ contract Everest is Ownable {
                 storedChallenge.yesVotes,
                 storedChallenge.noVotes,
                 storedChallenge.voterCount,
-                challengeReward
+                resolverReward
             );
         }
 

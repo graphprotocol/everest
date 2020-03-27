@@ -503,7 +503,7 @@
         },
         {
           "indexed": false,
-          "name": "reward",
+          "name": "resolverReward",
           "type": "uint256"
         }
       ],
@@ -540,7 +540,12 @@
         },
         {
           "indexed": false,
-          "name": "reward",
+          "name": "challengerReward",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "resolverReward",
           "type": "uint256"
         }
       ],
