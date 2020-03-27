@@ -39,7 +39,7 @@ const config = {
         // This points to the charter TODO - update mainnet
         charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0',
         // Point to IPFS hash of categories. TODO - update mainnnet
-        categories: '0xad5d2e08f7ed73b601a3f473c4ca6aef72e45448286be4ff804657bdb19f6b8b'
+        categories: '0xbd5cfc3cdfc67a341ad34276d5eafc674136307ed9b9d1bd51ecfa8c4e30d8a1'
     },
     ganacheParams: {
         chainID: 9545

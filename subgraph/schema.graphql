@@ -59,8 +59,14 @@ type Category @entity {
   id: ID!
   "The category description"
   description: String!
+  "The IPFS hash of the category image"
+  imageHash: String!
+  "The Url of the category image"
+  imageUrl: String!
   "The name of the category, case insensitive"
   name: String!
+  "The name used for the front end"
+  slug: String!
   "Projects with this category designation"
   projects: [Project!] @derivedFrom(field: "categories")
   "The subcategories of this Category"

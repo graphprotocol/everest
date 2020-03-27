@@ -79,7 +79,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.challengedProjects = 0
   everest.save()
 
-  parseCategoryDetails(event.params.charter, event.block.timestamp)
+  parseCategoryDetails(event.params.categories, event.block.timestamp)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {
@@ -218,12 +218,10 @@ function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
   let ipfsData = ipfs.cat(base58Hash)
 
   if (ipfsData != null) {
-    let data = json.fromBytes(ipfsData as Bytes).toObject()
-    let categories = data.get('bootstrap-categories')
+    let categories = json.fromBytes(ipfsData as Bytes).toArray()
     if (categories != null) {
-      let categoriesArray = categories.toArray()
-      for (let i = 0; i < categoriesArray.length; i++) {
-        createCategory(categoriesArray[i], timestamp)
+      for (let i = 0; i < categories.length; i++) {
+        createCategory(categories[i], timestamp)
       }
     }
   }
@@ -231,19 +229,29 @@ function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
 
 function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   let categoryData = categoryJSON.toObject()
-  let slug: string = categoryData.get('slug').isNull()
-    ? null
-    : categoryData.get('slug').toString()
 
-  let category = Category.load(slug)
+  let id: string = categoryData.get('id').isNull()
+    ? null
+    : categoryData.get('id').toString()
+
+  let category = Category.load(id)
   if (category == null) {
-    category = new Category(slug)
+    category = new Category(id)
     category.name = categoryData.get('name').isNull()
       ? null
       : categoryData.get('name').toString()
     category.description = categoryData.get('description').isNull()
       ? null
       : categoryData.get('description').toString()
+    category.slug = categoryData.get('slug').isNull()
+      ? null
+      : categoryData.get('slug').toString()
+    category.imageHash = categoryData.get('imageHash').isNull()
+      ? null
+      : categoryData.get('imageHash').toString()
+    category.imageUrl = categoryData.get('imageUrl').isNull()
+      ? null
+      : categoryData.get('imageUrl').toString()
     category.createdAt = timestamp.toI32()
 
     let subcategories = categoryData.get('subcategories')
@@ -251,25 +259,37 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
       let subCategoriesArray = subcategories.toArray()
       for (let i = 0; i < subCategoriesArray.length; i++) {
         let subCategoryData = subCategoriesArray[i].toObject()
-        let subSlug: string = subCategoryData.get('slug').isNull()
+        let subId: string = subCategoryData.get('id').isNull()
           ? null
-          : subCategoryData.get('slug').toString()
+          : subCategoryData.get('id').toString()
 
-        let subCategory = Category.load(subSlug)
+        let subCategory = Category.load(subId)
         if (subCategory == null) {
-          subCategory = new Category(subSlug)
+          subCategory = new Category(subId)
           subCategory.name = subCategoryData.get('name').isNull()
             ? null
             : subCategoryData.get('name').toString()
           subCategory.description = subCategoryData.get('description').isNull()
             ? null
             : subCategoryData.get('description').toString()
+          subCategory.slug = subCategoryData.get('slug').isNull()
+            ? null
+            : subCategoryData.get('slug').toString()
+          subCategory.imageHash = subCategoryData.get('imageHash').isNull()
+            ? null
+            : subCategoryData.get('imageHash').toString()
+          subCategory.imageUrl = subCategoryData.get('imageUrl').isNull()
+            ? null
+            : subCategoryData.get('imageUrl').toString()
+
           subCategory.createdAt = timestamp.toI32()
-          subCategory.parentCategory = slug
+          subCategory.parentCategory = id
+          subCategory.projectCount = 0
           subCategory.save()
         }
       }
     }
+    category.projectCount = 0
     category.save()
   }
 }

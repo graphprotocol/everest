@@ -117,7 +117,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
         if (!data.get('isRepresentative').isNull()) {
           if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
-            const newRepStatus = data.get('isRepresentative').toBool()
+            let newRepStatus = data.get('isRepresentative').toBool()
             let everest = Everest.load('1')
             // If we don't already have a rep status, we have to add to everest
             if (project.isRepresentative == null) {
@@ -153,7 +153,8 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
             // count for categories here
             if (projCategories != null) {
               for (let i = 0; i < projCategories.length; i++) {
-                let category = Category.load(projCategories[i])
+                let asArray = projCategories as Array<string>
+                let category = Category.load(asArray[i])
                 category.projectCount = category.projectCount - 1
                 category.save()
 
