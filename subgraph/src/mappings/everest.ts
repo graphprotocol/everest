@@ -29,7 +29,7 @@ export function handleNewMember(event: NewMember): void {
 
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(event.params.fee)
-  everest.projectCount = everest.projectCount += 1
+  everest.projectCount = everest.projectCount + 1
   everest.save()
 }
 
@@ -38,7 +38,7 @@ export function handleMemberExited(event: MemberExited): void {
   store.remove('Project', id)
 
   let everest = Everest.load('1')
-  everest.projectCount = everest.projectCount -= 1
+  everest.projectCount = everest.projectCount - 1
   everest.save()
 }
 
@@ -76,6 +76,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.createdAt = event.block.timestamp.toI32()
   everest.projectCount = 0
   everest.claimedProjects = 0
+  everest.challengedProjects = 0
   everest.save()
 
   parseCategoryDetails(event.params.charter, event.block.timestamp)
@@ -126,6 +127,7 @@ export function handleMemberChallenged(event: MemberChallenged): void {
 
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.plus(everest.challengeDeposit)
+  everest.challengedProjects = everest.challengedProjects + 1
   everest.save()
 
   let user = User.load(event.params.challenger.toHexString())
@@ -165,6 +167,7 @@ export function handleSubmitVote(event: SubmitVote): void {
 export function handleChallengeFailed(event: ChallengeFailed): void {
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
+  everest.challengedProjects = everest.challengedProjects - 1
   everest.save()
 
   let challenge = Challenge.load(event.params.challengeID.toString())
@@ -184,7 +187,8 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   let everest = Everest.load('1')
   everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
-  everest.projectCount = everest.projectCount -= 1
+  everest.projectCount = everest.projectCount - 1
+  everest.challengedProjects = everest.challengedProjects - 1
   everest.save()
 
   let challenge = Challenge.load(event.params.challengeID.toString())

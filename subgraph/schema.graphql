@@ -130,6 +130,8 @@ type Everest @entity {
   projectCount: Int!
   "Projects that are currently in control by a representative"
   claimedProjects: Int!
+  "Projects that are currently under challenge"
+  challengedProjects: Int!
 }
 
 """
