@@ -8,7 +8,7 @@ dataSources:
     name: Everest
     network: ropsten
     source:
-      address: '0xd107f2bF9b59aD9EEf52A0363dDB1706352152c4'
+      address: '0xF35e8C187eE8Dd7B2938AccB3f5A04811A3c9F1F'
       abi: Everest
       startBlock: 7300000
     mapping:
