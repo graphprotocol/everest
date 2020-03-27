@@ -121,7 +121,7 @@ async function deployProjectPages() {
   console.log('Deploying project pages from public/ to textile')
   const { error } = await child_process.spawnSync(
     'textile',
-    ['--debug', 'bucket', 'push', 'public/', 'everest-ui'],
+    ['--debug', 'bucket', 'push', 'public/', 'everest'],
     {
       input: '\n',
       encoding: 'utf-8',
