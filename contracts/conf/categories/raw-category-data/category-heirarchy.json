@@ -397,14 +397,6 @@
         "id": "",
         "imageHash": "",
         "imageUrl": "",
-        "name": "Security",
-        "slug": "security",
-        "description": ""
-    },
-    {
-        "id": "",
-        "imageHash": "",
-        "imageUrl": "",
         "name": "Social",
         "slug": "social",
         "description": "projects providing social networking platforms and tools"
@@ -510,7 +502,7 @@
                 "imageHash": "",
                 "imageUrl": "",
                 "name": "Security",
-                "slug": "software-security",
+                "slug": "security",
                 "description": "projects focused on providing software or hardware security, including code security, audits and testing and general security practices"
             },
             {
