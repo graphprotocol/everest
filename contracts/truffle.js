@@ -1,5 +1,4 @@
 const fs = require('fs')
-const path = require('path')
 const ethers = require('ethers')
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 
@@ -8,6 +7,19 @@ const HDWalletProvider = require('@truffle/hdwallet-provider')
 // Discussions in ethers here https://github.com/ethers-io/ethers.js/issues/147
 // and here https://github.com/ethers-io/ethers.js/issues/71 for potential ethers deployments
 // For now, we use HDWalletProvider, since it works.
+
+const mnemonic = fs
+    .readFileSync(__dirname + '/../../../private-keys/.privkey-metamask.txt')
+    .toString()
+    .trim()
+const mainnetProvider = `https://infura.io/v3/${fs
+    .readFileSync(__dirname + '/../../../private-keys/.infurakey.txt')
+    .toString()
+    .trim()}`
+const ropstenProvider = `https://ropsten.infura.io/v3/${fs
+    .readFileSync(__dirname + '/../../../private-keys/.infurakey.txt')
+    .toString()
+    .trim()}`
 
 module.exports = {
     networks: {
@@ -21,45 +33,17 @@ module.exports = {
         },
         ropsten: {
             // Note, this must use the syntax () => new... otherwise it hangs forever on tests.
-            provider: () =>
-                new HDWalletProvider(
-                    fs.readFileSync(path.join(__dirname, '.privkey.txt'), 'utf-8').trim(),
-                    `https://ropsten.infura.io/v3/${fs
-                        .readFileSync(path.join(__dirname, '/.infurakey.txt'), 'utf-8')
-                        .trim()}`,
-                    0,
-                    4 // Create 4 addresses, which are funded with MockDAI
-                ),
+            // 4 is for 4 addresses for mock dai
+            provider: () => new HDWalletProvider(mnemonic, ropstenProvider, 0, 4),
             network_id: 3,
-            gasPrice: ethers.utils.parseUnits('8', 'gwei'), 
-            skipDryRun: true
-        },
-        rinkeby: {
-            provider: () =>
-                new HDWalletProvider(
-                    fs.readFileSync(path.join(__dirname, '.privkey.txt'), 'utf-8').trim(),
-                    `https://ropsten.infura.io/v3/${fs
-                        .readFileSync(path.join(__dirname, '/.infurakey.txt'), 'utf-8')
-                        .trim()}`,
-                    0,
-                    4 // Create 4 addresses, which are funded with MockDAI
-                ),
-            network_id: 4,
-            gasPrice: ethers.utils.parseUnits('25', 'gwei'),
+            gasPrice: ethers.utils.parseUnits('8', 'gwei'),
             skipDryRun: true
         },
         mainnet: {
-            provider: () =>
-                new HDWalletProvider(
-                    fs.readFileSync(path.join(__dirname, '.privkey.txt'), 'utf-8').trim(),
-                    `https://infura.io/v3/${fs
-                        .readFileSync(path.join(__dirname, '/.infurakey.txt'), 'utf-8')
-                        .trim()}`,
-                    0,
-                    1 // Only need 1 address
-                ),
+            // one need one address in HD wallet
+            provider: () => new HDWalletProvider(mnemonic, mainnetProvider, 0, 1),
             network_id: 1,
-            gasPrice: ethers.utils.parseUnits('8', 'gwei'),
+            gasPrice: ethers.utils.parseUnits('8', 'gwei')
         }
     },
     compilers: {
