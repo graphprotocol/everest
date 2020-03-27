@@ -73,10 +73,6 @@ const EditProject = ({ location }) => {
 
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
 
-  if (loading && !error) {
-    return <Styled.p>Loading</Styled.p>
-  }
-
   if (error) {
     return (
       <Styled.h3>Something went wrong - can&apos;t find a project </Styled.h3>
@@ -135,6 +131,9 @@ const EditProject = ({ location }) => {
         </p>
       </Box>
       <Box sx={{ position: 'relative' }}>
+        {loading && (
+          <img src="/loading-dots-white.gif" sx={{ textAlign: 'center' }} />
+        )}
         {pendingTransaction && (
           <Box
             sx={{
