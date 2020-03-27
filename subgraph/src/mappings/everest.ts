@@ -166,7 +166,9 @@ export function handleSubmitVote(event: SubmitVote): void {
 // Note a failed challenge means the Project gets to stay on the list
 export function handleChallengeFailed(event: ChallengeFailed): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
+  everest.reserveBankBalance = everest.reserveBankBalance.minus(
+    event.params.resolverReward,
+  )
   everest.challengedProjects = everest.challengedProjects - 1
   everest.save()
 
@@ -186,7 +188,9 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 // Note a successful challenge means the project is removed from the list
 export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.reward)
+  everest.reserveBankBalance = everest.reserveBankBalance.minus(
+    event.params.challengerReward.plus(event.params.resolverReward),
+  )
   everest.projectCount = everest.projectCount - 1
   everest.challengedProjects = everest.challengedProjects - 1
   everest.save()
