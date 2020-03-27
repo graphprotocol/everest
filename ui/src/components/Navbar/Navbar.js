@@ -5,6 +5,7 @@ import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 import { isMobile } from 'react-device-detect'
+import ThreeBox from '3box'
 
 import { metamaskAccountChange } from '../../services/ethers'
 import { useAccount } from '../../utils/hooks'
@@ -34,6 +35,21 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
     }
     setShowModal(false)
   }
+
+  useEffect(() => {
+    async function getProfile() {
+      const threeBoxProfile = await ThreeBox.getProfile(userAccount)
+      let image
+      if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
+        image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
+      } else {
+        image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+          ''}/profile-default.png`
+      }
+      setUserImage(image)
+    }
+    getProfile()
+  }, [userAccount])
 
   // const handleSignOut = () => {
   //   if (connector) {
