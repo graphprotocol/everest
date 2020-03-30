@@ -43,7 +43,8 @@
             },
             {
                 "id": "0xadf09d6af89cac056427f2f88c2db73a128aa665",
-                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "imageHash": "QmVjj8Z6GQ6bgGMBt5gpmWYkYwNeqGWuqvDQA2749Xzu2h",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmVjj8Z6GQ6bgGMBt5gpmWYkYwNeqGWuqvDQA2749Xzu2h",
                 "name": "Human Resources",
                 "slug": "human-resources",
                 "description": "HR and professional services, including hiring, recruiting, people management and development"
@@ -179,7 +180,8 @@
             },
             {
                 "id": "0x4c3b457f5b9288d9a8f3852db95677c98e92c8b7",
-                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "imageHash": "QmWub9QzdmCQYrWn2fKx4DGfK2uj1AUe65WNzRvT3CJb1X",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWub9QzdmCQYrWn2fKx4DGfK2uj1AUe65WNzRvT3CJb1X",
                 "name": "Wallets",
                 "slug": "wallets",
                 "description": "wallet apps that support cryptocurrencies and tokenized assets and can provide other DeFi services"
@@ -268,7 +270,8 @@
             },
             {
                 "id": "0x5c708ec62fe6eaf0858370468f8972cc1494f819",
-                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "imageHash": "QmcyK2ZsozM6TV9g4eeYkrqSFSYbtVs47oJPbpxx9D7hm3",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcyK2ZsozM6TV9g4eeYkrqSFSYbtVs47oJPbpxx9D7hm3",
                 "name": "Sports",
                 "slug": "sports",
                 "description": "sporting applications and tools"
@@ -327,7 +330,8 @@
     },
     {
         "id": "0xb4c3867219c1c6c9495d347b16f3117cbafd22b5",
-        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+        "imageHash": "QmXy3urqtnzzn4YYTacS2noep7J16bBPFWoSrjZNJWgUpH",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXy3urqtnzzn4YYTacS2noep7J16bBPFWoSrjZNJWgUpH",
         "name": "Grants & Philanthropy",
         "slug": "grants-and-philanthropy",
         "description": "organizations distributing grant funding to other projects"
@@ -422,7 +426,8 @@
             },
             {
                 "id": "0x7754746f6e72ae79375b982f26093d5b926fe8f0",
-                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=undefined",
+                "imageHash": "QmQBDmkVX52zYzwGJLzUYbLBC34KmidXD1CxVWvFerdc9F",
+                "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQBDmkVX52zYzwGJLzUYbLBC34KmidXD1CxVWvFerdc9F",
                 "name": "Blockchain Development",
                 "slug": "blockchain-development",
                 "description": "projects and teams focused on researching and building blockchains, distributed systems and sidechains"

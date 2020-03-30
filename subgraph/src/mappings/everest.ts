@@ -242,6 +242,9 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   let category = Category.load(id)
   if (category == null) {
     category = new Category(id)
+    category.projectCount = 0
+    category.createdAt = timestamp.toI32()
+  }
     category.name = categoryData.get('name').isNull()
       ? null
       : categoryData.get('name').toString()
@@ -257,7 +260,6 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
     category.imageUrl = categoryData.get('imageUrl').isNull()
       ? null
       : categoryData.get('imageUrl').toString()
-    category.createdAt = timestamp.toI32()
 
     let subcategories = categoryData.get('subcategories')
     if (subcategories != null) {
@@ -271,6 +273,9 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
         let subCategory = Category.load(subId)
         if (subCategory == null) {
           subCategory = new Category(subId)
+          subCategory.projectCount = 0
+          subCategory.createdAt = timestamp.toI32()
+        }
           subCategory.name = subCategoryData.get('name').isNull()
             ? null
             : subCategoryData.get('name').toString()
@@ -287,17 +292,12 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
             ? null
             : subCategoryData.get('imageUrl').toString()
 
-          subCategory.createdAt = timestamp.toI32()
           subCategory.parentCategory = id
-          subCategory.projectCount = 0
           subCategory.save()
 
           everest.categoriesCount = everest.categoriesCount + 1
         }
       }
-    }
-    category.projectCount = 0
     category.save()
-  }
   everest.save()
 }

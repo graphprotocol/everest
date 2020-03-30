@@ -1,4 +1,6 @@
 const ethers = require('ethers')
+const base = require('base-x')
+const fs = require('fs')
 
 const ganacheMneumonic =
     'myth like bonus scare over problem client lizard pioneer submit female collect'
@@ -15,6 +17,22 @@ const walletPaths = {
     eight: "m/44'/60'/0'/0/8",
     nine: "m/44'/60'/0'/0/9",
     ten: "m/44'/60'/0'/0/10"
+}
+
+const categoriesIPFSHash = fs
+    .readFileSync(__dirname + '/ipfs-sync/categories.txt')
+    .toString()
+    .trim()
+
+const ipfsToBytes = ipfsHash => {
+    const base58 = base('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz')
+    const bytes32 =
+        '0x' +
+        base58
+            .decode(ipfsHash)
+            .slice(2)
+            .toString('hex')
+    return bytes32
 }
 
 const wallets = {
@@ -39,7 +57,7 @@ const config = {
         // This points to the charter TODO - update mainnet
         charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0',
         // Point to IPFS hash of categories. TODO - update mainnnet
-        categories: '0xbd5cfc3cdfc67a341ad34276d5eafc674136307ed9b9d1bd51ecfa8c4e30d8a1'
+        categories: ipfsToBytes(categoriesIPFSHash)
     },
     ganacheParams: {
         chainID: 9545

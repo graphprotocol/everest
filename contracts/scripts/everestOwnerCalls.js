@@ -15,7 +15,7 @@ const mnemonic = fs
     .toString()
     .trim()
 
-let ethereum = new ethers.providers.JsonRpcProvider(ropstenProvider);
+let ethereum = new ethers.providers.JsonRpcProvider(ropstenProvider)
 
 const everest = new ethers.Contract(addresses.ropsten.everest, abi, ethereum)
 
@@ -26,8 +26,8 @@ const everestWithSigner = everest.connect(connectedWallet)
 
 const overrides = {
     // The price (in wei) per unit of gas
-    gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
-};
+    gasPrice: ethers.utils.parseUnits('25.0', 'gwei')
+}
 
 const callEverest = async () => {
     const tx = await everestWithSigner.updateCategories(categories, overrides)
@@ -37,7 +37,7 @@ const callEverest = async () => {
 
     const newBytesValue = await everestWithSigner.categories()
     console.log(newBytesValue)
-    console.log("success")
+    console.log('success')
 }
 
 callEverest()

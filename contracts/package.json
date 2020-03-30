@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@truffle/hdwallet-provider": "1.0.28",
+    "base-x": "^3.0.8",
     "bn.js": "4.11.8",
     "chai": "4.2.0",
     "ethereumjs-util": "^6.2.0",

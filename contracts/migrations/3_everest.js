@@ -23,7 +23,7 @@ module.exports = async (deployer, network) => {
         owner = config.ropstenParams.ropstenOwner
         didAddress = config.ropstenParams.ethereumDIDRegistryAddress
         daiAddress = (await Token.deployed()).address
-    } else if (network === 'mainnet'){
+    } else if (network === 'mainnet') {
         daiAddress = config.mainnetParams.daiAddress
     }
 
@@ -52,7 +52,7 @@ module.exports = async (deployer, network) => {
 
     // Log all addresses of contracts
     network
-    console.log(`${network === 'mainnet'? "Mock": "Mainnet"} DAI Address: ${daiAddress}`)
+    console.log(`${network === 'mainnet' ? 'Mock' : 'Mainnet'} DAI Address: ${daiAddress}`)
     console.log(`Ethr DID Address: ${didAddress}`)
     console.log(`ReserveBank Address: ${reserveBank.address}`)
     console.log(`Registry Address: ${registry.address}`)
