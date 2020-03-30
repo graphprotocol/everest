@@ -56,11 +56,7 @@ const Category = ({ location }) => {
     <Grid>
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
-          <img
-            src={`${imagePrefix || ''}/cats/${category.id}.png`}
-            alt={category.id}
-            sx={imageStyles}
-          />
+          <img src={category.imageUrl} alt={category.id} sx={imageStyles} />
         </Box>
         <Box sx={{ mx: ['auto', 0], mt: [7, 0, 0] }}>
           <Styled.h2>{category.name}</Styled.h2>
@@ -77,12 +73,8 @@ const Category = ({ location }) => {
           items={category.subcategories.map(subcat => {
             return {
               name: subcat.name,
-              description: `${
-                subcat.projects ? subcat.projects.length : 0
-              } projects`,
-              image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
-                subcat.id
-              }.png`,
+              description: `${subcat.projectCount} projects`,
+              image: subcat.imageUrl,
               to: `/category/${subcat.id}`,
             }
           })}

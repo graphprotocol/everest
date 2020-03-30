@@ -122,6 +122,7 @@ TabView.propTypes = {
   icon: PropTypes.string,
   handleClick: PropTypes.func,
   showFilters: PropTypes.bool,
+  error: PropTypes.string,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.any,

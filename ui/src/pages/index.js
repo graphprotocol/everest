@@ -45,7 +45,10 @@ const Index = () => {
 
   const stats = [
     { title: 'Projects', value: everestStats && everestStats.projectCount },
-    { title: 'Categories', value: categories && categories.categories.length },
+    {
+      title: 'Categories',
+      value: everestStats && everestStats.categoriesCount,
+    },
     {
       title: 'Registry Value (DAI)',
       value:
