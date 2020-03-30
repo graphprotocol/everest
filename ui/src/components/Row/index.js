@@ -22,6 +22,7 @@ const Row = ({ item }) => {
               ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${item.image}`
               : `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}${defaultImage(
                   'profiles/profile',
+                  24,
                 )}`
           }
           sx={imageStyles}

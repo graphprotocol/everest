@@ -37,11 +37,12 @@ const MultiSelect = ({
   }, [setOpen])
 
   useEffect(() => {
+    console.log('selectedItems: ', selectedItems)
     setSelected(
       selectedItems
         ? selectedItems.map(selectedItem => ({
             ...selectedItem,
-            image: `cats/${selectedItem.id}.png`,
+            image: selectedItem.imageUrl,
           }))
         : [],
     )
@@ -53,14 +54,14 @@ const MultiSelect = ({
     let allCats = items.reduce((acc, current) => {
       acc.push({
         ...current,
-        image: `cats/${current.id}.png`,
+        image: current.imageUrl,
         name: current.name,
       })
       if (current.subcategories) {
         const cat = current.subcategories.map(subcat => ({
           ...subcat,
           parent: current,
-          image: `cats/${subcat.id}.png`,
+          image: subcat.imageUrl,
         }))
         acc.concat(cat)
       }

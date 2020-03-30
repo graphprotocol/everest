@@ -56,7 +56,7 @@ const Row = ({
         src={
           variant === 'project'
             ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${item.avatar}`
-            : `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${item.image}`
+            : item.image
         }
         alt={item.slug}
         sx={
@@ -67,11 +67,13 @@ const Row = ({
                 opacity: 0.8,
                 borderRadius: '50%',
                 ml: isSelected ? '7px' : 2,
+                objectFit: 'contain',
               }
             : {
                 height: isSelected ? '58px' : '60px',
-                width: isSelected ? '63px' : '64px',
+                width: '86px',
                 opacity: 0.8,
+                objectFit: 'contain',
               }
         }
       />
