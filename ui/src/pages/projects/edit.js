@@ -18,7 +18,6 @@ import ProjectForm from '../../components/ProjectForm'
 
 const EditProject = ({ location }) => {
   const queryParams = location ? queryString.parse(location.search) : null
-  const index = location ? location.pathname.indexOf('0x') : null
   const projectId = queryParams ? queryParams.id : null
 
   const [isDisabled, setIsDisabled] = useState(false)
@@ -63,9 +62,10 @@ const EditProject = ({ location }) => {
   const [editProject] = useMutation(EDIT_PROJECT, {
     client: client,
     onError: error => {
+      console.log(`Error with project ${projectId}: ${error.message}`)
       setPendingTransaction(false)
     },
-    onCompleted: dataaa => {
+    onCompleted: () => {
       setPendingTransaction(false)
       navigate(`/project/${projectId}`)
     },

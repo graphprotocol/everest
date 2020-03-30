@@ -266,7 +266,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             {renderActions()}
           </Grid>
         ) : (
-          <Box sx={{ height: '100vh', width: '100%' }}>
+          <Box sx={{ height: '100vh', width: '100vw' }}>
             <Close
               sx={{
                 fill: 'secondary',

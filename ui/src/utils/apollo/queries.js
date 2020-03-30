@@ -1,10 +1,5 @@
 import { gql } from 'apollo-boost'
 
-// TODO: categories should be
-// categories {
-//   id
-//   name
-// }
 export const PROJECT_QUERY = gql`
   query project($id: ID!) {
     project(id: $id) {
@@ -56,11 +51,21 @@ export const USER_PROJECTS_QUERY = gql`
 `
 
 export const CATEGORIES_QUERY = gql`
-  query categories($parentCategory: String) {
-    categories(where: { parentCategory: $parentCategory }) {
+  query categories(
+    $parentCategory: String
+    $orderBy: Category_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    categories(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { parentCategory: $parentCategory }
+    ) {
       id
       name
       description
+      imageUrl
+      projectCount
       subcategories {
         id
         projects {
@@ -84,6 +89,8 @@ export const ALL_CATEGORIES_QUERY = gql`
       id
       name
       description
+      projectCount
+      imageUrl
       subcategories {
         id
       }
@@ -101,10 +108,14 @@ export const CATEGORY_QUERY = gql`
       id
       name
       description
+      imageUrl
+      projectCount
       subcategories {
         id
         name
         description
+        imageUrl
+        projectCount
         projects {
           id
           name
@@ -269,6 +280,7 @@ export const EVEREST_QUERY = gql`
     everests {
       id
       projectCount
+      categoriesCount
       reserveBankBalance
     }
   }

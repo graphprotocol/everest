@@ -32,13 +32,9 @@ export default {
     },
     h1: {
       fontWeight: 'heading',
-      fontSize: '3.25rem',
-      lineHeight: '4rem',
+      fontSize: ['2.75rem', '3.25rem'],
+      lineHeight: ['3.25rem', '4rem'],
       letterSpacing: '-0.46px',
-      '@media (max-width: 640px)': {
-        fontSize: '2.75rem',
-        lineHeight: '3.25rem',
-      },
     },
     h2: {
       fontSize: ['2rem', '2.75', '2.75rem'],

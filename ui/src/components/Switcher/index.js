@@ -6,27 +6,28 @@ import { Grid } from '@theme-ui/components'
 import TableIcon from '../../images/table-icon.svg'
 import CardsIcon from '../../images/cards-icon.svg'
 
-const Switcher = ({ selected, setSelected }) => {
+const Switcher = ({ selected, setSelected, ...props }) => {
   return (
     <Grid
       columns={2}
       sx={{
         maxWidth: '60px',
         justifySelf: 'flex-end',
-        display: ['none', 'none', 'grid', 'grid']
+        display: ['none', 'none', 'grid', 'grid'],
       }}
+      {...props}
     >
       <TableIcon
         sx={{
           ...iconStyles,
-          fill: selected === 'table' ? 'secondary' : 'fill'
+          fill: selected === 'table' ? 'secondary' : 'fill',
         }}
         onClick={() => setSelected('table')}
       />
       <CardsIcon
         sx={{
           ...iconStyles,
-          fill: selected === 'cards' ? 'secondary' : 'fill'
+          fill: selected === 'cards' ? 'secondary' : 'fill',
         }}
         onClick={() => setSelected('cards')}
       />
@@ -38,7 +39,7 @@ const iconStyles = { cursor: 'pointer' }
 
 Switcher.propTypes = {
   selected: PropTypes.string,
-  setSelected: PropTypes.func
+  setSelected: PropTypes.func,
 }
 
 export default Switcher

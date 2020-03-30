@@ -365,6 +365,7 @@ const Profile = ({ location }) => {
                 setSelectedOrderDirection={setSelectedOrderDirection}
                 isSortingOpen={isSortingOpen}
                 setIsSortingOpen={setIsSortingOpen}
+                orderBy={ORDER_BY}
               />
               <Switcher
                 selected={selectedProjectsView}

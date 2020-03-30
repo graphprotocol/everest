@@ -135,8 +135,17 @@ const Projects = ({ location }) => {
             setSelectedOrderDirection={setSelectedOrderDirection}
             isSortingOpen={isSortingOpen}
             setIsSortingOpen={setIsSortingOpen}
+            orderBy={ORDER_BY}
           />
-          <Switcher selected={selected} setSelected={setSelected} />
+          <Switcher
+            selected={selected}
+            setSelected={setSelected}
+            sx={{
+              borderLeft: '1px solid',
+              borderColor: 'grey',
+              pl: 4,
+            }}
+          />
         </Grid>
       </Grid>
       <Box sx={{ position: 'relative' }}>

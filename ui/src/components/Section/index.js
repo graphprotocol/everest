@@ -78,7 +78,16 @@ const Section = ({
             </Styled.p>
           )}
         </Box>
-        <Grid columns={[2, 3, 6]} gap={2}>
+        <Grid
+          columns={[2, 3, 4, 6]}
+          gap={[2, 4]}
+          mt={2}
+          sx={{
+            '@media (max-width: 1190px) and (min-width: 1030px)': {
+              gridTemplateColumns: 'repeat(5, 1fr)',
+            },
+          }}
+        >
           {items.map((item, index) => (
             <Card
               key={index}
