@@ -78,6 +78,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.projectCount = 0
   everest.claimedProjects = 0
   everest.challengedProjects = 0
+  everest.categoriesCount = 0
   everest.save()
 
   // TODO - uncomment this on mainnet launch
@@ -231,6 +232,8 @@ function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
 
 function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   let categoryData = categoryJSON.toObject()
+  let everest = Everest.load('1')
+  everest.categoriesCount = everest.categoriesCount + 1
 
   let id: string = categoryData.get('id').isNull()
     ? null
@@ -288,10 +291,13 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
           subCategory.parentCategory = id
           subCategory.projectCount = 0
           subCategory.save()
+
+          everest.categoriesCount = everest.categoriesCount + 1
         }
       }
     }
     category.projectCount = 0
     category.save()
   }
+  everest.save()
 }

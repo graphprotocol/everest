@@ -34,8 +34,8 @@ const config = {
     everestParams: {
         owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
         votingPeriodDuration: 172800, // 2 days, in seconds
-        challengeDeposit: '10000000000000000000', // $10 DAI challenge fee 
-        applicationFee: '10000000000000000000', // $10 DAI application fee 
+        challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
+        applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
         // This points to the charter TODO - update mainnet
         charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0',
         // Point to IPFS hash of categories. TODO - update mainnnet

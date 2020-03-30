@@ -141,8 +141,8 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         if (categories != null) {
           if (categories.kind == JSONValueKind.ARRAY) {
             let categoriesArray = categories.toArray()
-
             let projCategories = project.categories
+
             // If it already exists, it means we are editing the project. We have to minus the
             // count for categories here
             if (projCategories != null) {
@@ -155,7 +155,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
                 // If it has a parent category, it must be removed there too.
                 if (category.parentCategory != null) {
                   let parent = Category.load(category.parentCategory)
-                  parent.projectCount = category.projectCount - 1
+                  parent.projectCount = parent.projectCount - 1
                   parent.save()
                 }
               }
@@ -166,23 +166,24 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
             // Push all of the values into the empty array
             for (let i = 0; i < categoriesArray.length; i++) {
-              if (categoriesArray[i].kind == JSONValueKind.STRING) {
-                projCategories.push(categoriesArray[i].toString())
+              let categoryObj = categoriesArray[i].toObject()
+              let categoryID = categoryObj.get('id').toString()
+              projCategories.push(categoryID)
 
-                // We add categories back. It might involve added and subtracting if categories
-                // were not changed, but send result is the same. Could be optimized in the future
-                let category = Category.load(categoriesArray[i].toString())
-                category.projectCount = category.projectCount + 1
-                category.save()
+              // We add categories back. It might involve added and subtracting if categories
+              // were not changed, but send result is the same. Could be optimized in the future
+              let category = Category.load(categoryID)
+              category.projectCount = category.projectCount + 1
+              category.save()
 
-                // If it has a parent category, it must be added there too.
-                if (category.parentCategory != null) {
-                  let parent = Category.load(category.parentCategory)
-                  parent.projectCount = category.projectCount + 1
-                  parent.save()
-                }
+              // If it has a parent category, it must be added there too.
+              if (category.parentCategory != null) {
+                let parent = Category.load(category.parentCategory)
+                parent.projectCount = parent.projectCount + 1
+                parent.save()
               }
             }
+            // }
 
             // Now deliberately set to the array
             project.categories = projCategories
