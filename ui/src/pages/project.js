@@ -603,7 +603,7 @@ const Project = ({ location }) => {
               />
             ) : (
               <img
-                src={defaultImage('profiles/profile')}
+                src={defaultImage('profiles/profile', 24)}
                 alt="Project avatar"
                 sx={projectLogoStyle}
               />

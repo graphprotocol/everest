@@ -14,6 +14,7 @@ import { useAccount } from '../../utils/hooks'
 import { ADD_PROJECT, DAI_BALANCE } from '../../utils/apollo/mutations'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 import { PROFILE_QUERY } from '../../utils/apollo/queries'
+import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
 import ProjectForm from '../../components/ProjectForm'
 
@@ -33,12 +34,17 @@ const NewProject = () => {
     categories: [],
   })
 
-  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
+  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY, {
+    variables: {
+      orderBy: ORDER_BY.Name,
+      orderDirection: ORDER_DIRECTION.ASC,
+    },
+  })
   const { data: profile } = useQuery(PROFILE_QUERY, {
     variables: {
       id: account,
-      orderBy: 'createdAt',
-      orderDirection: 'desc',
+      orderBy: ORDER_BY['Name'],
+      orderDirection: ORDER_DIRECTION.ASC,
     },
   })
 
@@ -61,8 +67,8 @@ const NewProject = () => {
         query: PROFILE_QUERY,
         variables: {
           id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
+          orderBy: ORDER_BY['Name'],
+          orderDirection: ORDER_DIRECTION.ASC,
         },
       },
     ],
@@ -94,8 +100,8 @@ const NewProject = () => {
           query: PROFILE_QUERY,
           variables: {
             id: account,
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
+            orderBy: ORDER_BY['Name'],
+            orderDirection: ORDER_DIRECTION.ASC,
           },
         }),
       )
@@ -104,8 +110,8 @@ const NewProject = () => {
         query: PROFILE_QUERY,
         variables: {
           id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
+          orderBy: ORDER_BY['Name'],
+          orderDirection: ORDER_DIRECTION.ASC,
         },
         data: {
           user: {
@@ -122,6 +128,22 @@ const NewProject = () => {
       })
     },
   })
+
+  const defaultImages = [
+    'QmbJvMyzrYUj5PmNWdhTTi9DmeHiuKRzsrme4FSSpyjFrR',
+    'QmXY6HVy7Srsvpr9yCZXH26rix3mvYbA2YgnniVGGkvAkH',
+    'QmXfa92BghDQ43FHp2yMdeWG8RCYVKtCpYyaNXHfP9UpRg',
+    'QmSA4XDRp99oZvvP23DqGvpumQYRCagiBjJRWVXv2vDb3U',
+    'QmcNeKgoexULU7SNbwngByE7nfRvgHFcFj5en1ffDvVBLQ',
+    'QmTmtdP8s5LpfQ1gmDDUGmitcHjV79PtouZFJU1qSTgfDw',
+    'QmY7jyrRT5py1TnSuFfWzHM2fh2wGevwiBJDJzLximGQY7',
+    'QmQLbJiUWsQaZHmTcRoCKsv7R2Krg12fJUzRAmvuhZErYZ',
+    'QmP1EoSu2ynjU7B6ADRPm47eQsqNmvYCsGvRo51vriQDtD',
+    'QmSPurhnbFzuRwcGVyd7G5RwjE4s6rvCTdnfAcL7HX7cdu',
+    'QmZ2MB3iuf6rcJfYvACX7qWXpbJvWHK4VDGVy8W93njQQF',
+    'QmWm3yuTUgdPrcBKTqZXzkF1u5KvJ4Ko1X4KCLPNJ9QKCQ',
+    'Qmc3f6XtthPSnoRDmPqKZoqTXMfiaJP8RnTHmZu8anWzdx',
+  ]
 
   useEffect(() => {
     if (account) {
@@ -170,7 +192,7 @@ const NewProject = () => {
     const data = {
       ...project,
       avatar: !project.avatar
-        ? 'QmaJe9Nw47wEEFRsuEp9ox3mmGJoUoK8ruAHKa247Nfet9'
+        ? defaultImages[Math.floor(Math.random() * 11 + 1)]
         : project.avatar,
     }
     addProject({

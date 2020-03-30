@@ -84,8 +84,11 @@ export const CATEGORIES_QUERY = gql`
 `
 
 export const ALL_CATEGORIES_QUERY = gql`
-  query categories {
-    categories {
+  query categories(
+    $orderBy: Category_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    categories(orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       name
       description

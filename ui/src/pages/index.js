@@ -134,9 +134,7 @@ const Index = () => {
                   description: category.projects
                     ? `${category.projects.length} projects`
                     : '0 projects',
-                  image: `${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/cats/${
-                    category.id
-                  }.png`,
+                  image: category.imageUrl,
                   to: `/category/${category.id}`,
                 }
               })
@@ -223,9 +221,7 @@ const Index = () => {
                 to: `/project/${project.id}`,
                 image: project.image,
                 category:
-                  project.categories.length > 0
-                    ? project.categories[0].name
-                    : '',
+                  project.categories.length > 0 ? project.f[0].name : '',
                 isChallenged: project.currentChallenge !== null,
               }
             })}

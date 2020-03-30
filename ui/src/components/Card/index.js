@@ -46,7 +46,7 @@ const Card = ({
               src={
                 image
                   ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${image}`
-                  : defaultImage('profiles/profile')
+                  : defaultImage('profiles/profile', 24)
               }
               alt={title}
               sx={{
@@ -77,23 +77,21 @@ const Card = ({
           {variant === 'project' && (
             <p sx={{ variant: 'text.tag' }}>{category}</p>
           )}
-          <Styled.p sx={styles.title}>{title}</Styled.p>
-
+          <Styled.p
+            sx={{
+              fontWeight: 'heading',
+              color: 'secondary',
+              pt: !isChallenged && 3,
+            }}
+          >
+            {title}
+          </Styled.p>
           {isChallenged ? (
             <Challenged sx={{ paddingTop: 1, height: '30px', width: 'auto' }} />
-          ) : variant === 'project' ? (
-            <Styled.p
-              sx={{
-                fontSize: '0.75rem',
-                lineHeight: '0.875rem',
-                color: 'blackFaded',
-                pt: 1,
-              }}
-            >
-              {description}
-            </Styled.p>
           ) : (
-            <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
+            variant !== 'project' && (
+              <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
+            )
           )}
         </Box>
       </Grid>
@@ -124,10 +122,6 @@ const styles = {
     width: '80px',
     height: '80px',
     margin: '0 auto',
-  },
-  title: {
-    fontWeight: 'heading',
-    color: 'secondary',
   },
 }
 
