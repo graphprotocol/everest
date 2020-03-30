@@ -25,6 +25,7 @@ export function handleNewMember(event: NewMember): void {
   project.membershipStartTime = event.params.startTime.toI32()
   project.createdAt = event.block.timestamp.toI32()
   project.updatedAt = event.block.timestamp.toI32()
+  project.isRepresentative = false
   project.save()
 
   let everest = Everest.load('1')
@@ -79,7 +80,8 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.challengedProjects = 0
   everest.save()
 
-  parseCategoryDetails(event.params.categories, event.block.timestamp)
+  // TODO - uncomment this on mainnet launch
+  // parseCategoryDetails(event.params.categories, event.block.timestamp)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {

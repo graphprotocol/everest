@@ -119,27 +119,21 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
             let newRepStatus = data.get('isRepresentative').toBool()
             let everest = Everest.load('1')
-            // If we don't already have a rep status, we have to add to everest
-            if (project.isRepresentative == null) {
+            // Proj was false
+            if (project.isRepresentative == false) {
+              // if true need to add to everest
               if (newRepStatus) {
                 everest.claimedProjects = everest.claimedProjects + 1
                 everest.save()
               }
-              project.isRepresentative = newRepStatus
-
-              // In this case, isRep is already false or true
-              // true true do nothing. false false do nothing.
+              // Else it is true. We have to count down if they revert the isRep
             } else {
-              if (newRepStatus == true && project.isRepresentative == false) {
-                everest.claimedProjects = everest.claimedProjects + 1
-                everest.save()
-              }
-              if (newRepStatus == false && project.isRepresentative == true) {
+              if (!newRepStatus) {
                 everest.claimedProjects = everest.claimedProjects - 1
                 everest.save()
               }
-              project.isRepresentative = newRepStatus
             }
+            project.isRepresentative = newRepStatus
           }
         }
 

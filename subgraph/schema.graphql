@@ -26,7 +26,7 @@ type Project @entity {
   "List of project categories"
   categories: [Category!]
   "True if a representative of the company owns this project"
-  isRepresentative: Boolean
+  isRepresentative: Boolean!
   "Time it was created at on the blockchain"
   createdAt: Int!
   "Time it was updated at on the blockchain"
