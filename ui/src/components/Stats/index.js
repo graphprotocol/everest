@@ -9,7 +9,19 @@ const Stats = ({ stats }) => {
       {stats.map((stat, index) => (
         <Box sx={{ textAlign: 'center' }} key={index}>
           <Styled.p>{stat.title}</Styled.p>
-          <Styled.h2 sx={{ color: 'secondary' }}>{stat.value}</Styled.h2>
+          <Styled.h2
+            sx={{
+              color: 'secondary',
+              '& span': {
+                fontSize: '1.85rem',
+                marginLeft: -3,
+                position: 'relative',
+                bottom: '5px',
+              },
+            }}
+          >
+            {stat.value}
+          </Styled.h2>
         </Box>
       ))}
     </Grid>

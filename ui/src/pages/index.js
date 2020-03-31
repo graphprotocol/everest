@@ -50,13 +50,20 @@ const Index = () => {
   const stats = [
     { title: 'Projects', value: everestStats && everestStats.projectCount },
     {
-      title: 'Categories',
-      value: everestStats && everestStats.categoriesCount,
+      title: 'Claimed',
+      value: everestStats && everestStats.claimedProjects,
     },
     {
-      title: 'Registry Value (DAI)',
-      value:
-        everestStats && utils.formatUnits(everestStats.reserveBankBalance, 18),
+      title: 'Registry Value',
+      value: (
+        <div>
+          {everestStats &&
+            parseInt(
+              utils.formatUnits(everestStats.reserveBankBalance, 18),
+            )}{' '}
+          <span>DAI</span>
+        </div>
+      ),
     },
   ]
 
@@ -118,7 +125,7 @@ const Index = () => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(./mountain.jpg)',
+            backgroundImage: 'url(/mountain.jpg)',
           }}
         />
       </Grid>
@@ -135,9 +142,7 @@ const Index = () => {
             ? categories.categories.slice(0, 12).map(category => {
                 return {
                   name: category.name,
-                  description: category.projects
-                    ? `${category.projects.length} projects`
-                    : '0 projects',
+                  description: `${category.projectCount} projects`,
                   image: category.imageUrl,
                   to: `/category/${category.id}`,
                 }
@@ -161,7 +166,7 @@ const Index = () => {
                       ? project.description.slice(0, 26) + '...'
                       : project.description,
                   to: `/project/${project.id}`,
-                  image: project.image,
+                  image: project.avatar,
                   category:
                     project.categories.length > 0
                       ? project.categories[0].name
@@ -186,7 +191,7 @@ const Index = () => {
             ...imageStyles,
             height: '246px',
             backgroundSize: 'contain',
-            backgroundImage: 'url(./binoculars.png)',
+            backgroundImage: 'url(/binoculars.png)',
             filter: 'none',
             boxShadow: 'none',
             order: [2, 1, 1],
@@ -223,7 +228,7 @@ const Index = () => {
                 name: project.name,
                 description: project.description.slice(0, 20) + '...',
                 to: `/project/${project.id}`,
-                image: project.image,
+                image: project.avatar,
                 category:
                   project.categories.length > 0
                     ? project.categories[0].name
@@ -242,7 +247,7 @@ const Index = () => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(./bottom.png)',
+            backgroundImage: 'url(/bottom.png)',
             order: 0,
           }}
         />

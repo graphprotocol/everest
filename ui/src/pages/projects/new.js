@@ -34,6 +34,24 @@ const NewProject = () => {
     categories: [],
   })
 
+  const defaultImages = [
+    'QmbJvMyzrYUj5PmNWdhTTi9DmeHiuKRzsrme4FSSpyjFrR',
+    'QmXY6HVy7Srsvpr9yCZXH26rix3mvYbA2YgnniVGGkvAkH',
+    'QmXfa92BghDQ43FHp2yMdeWG8RCYVKtCpYyaNXHfP9UpRg',
+    'QmSA4XDRp99oZvvP23DqGvpumQYRCagiBjJRWVXv2vDb3U',
+    'QmcNeKgoexULU7SNbwngByE7nfRvgHFcFj5en1ffDvVBLQ',
+    'QmTmtdP8s5LpfQ1gmDDUGmitcHjV79PtouZFJU1qSTgfDw',
+    'QmY7jyrRT5py1TnSuFfWzHM2fh2wGevwiBJDJzLximGQY7',
+    'QmQLbJiUWsQaZHmTcRoCKsv7R2Krg12fJUzRAmvuhZErYZ',
+    'QmP1EoSu2ynjU7B6ADRPm47eQsqNmvYCsGvRo51vriQDtD',
+    'QmSPurhnbFzuRwcGVyd7G5RwjE4s6rvCTdnfAcL7HX7cdu',
+    'QmZ2MB3iuf6rcJfYvACX7qWXpbJvWHK4VDGVy8W93njQQF',
+    'QmWm3yuTUgdPrcBKTqZXzkF1u5KvJ4Ko1X4KCLPNJ9QKCQ',
+    'Qmc3f6XtthPSnoRDmPqKZoqTXMfiaJP8RnTHmZu8anWzdx',
+  ]
+
+  const defaultImage = defaultImages[Math.floor(Math.random() * 11 + 1)]
+
   const { data: categories } = useQuery(ALL_CATEGORIES_QUERY, {
     variables: {
       orderBy: ORDER_BY.Name,
@@ -78,7 +96,7 @@ const NewProject = () => {
         id: '123',
         name: project.name,
         description: project.description,
-        avatar: project.avatar,
+        avatar: project.avatar ? project.avatar : defaultImage,
         image: project.image,
         website: project.website,
         github: project.github,
@@ -129,22 +147,6 @@ const NewProject = () => {
     },
   })
 
-  const defaultImages = [
-    'QmbJvMyzrYUj5PmNWdhTTi9DmeHiuKRzsrme4FSSpyjFrR',
-    'QmXY6HVy7Srsvpr9yCZXH26rix3mvYbA2YgnniVGGkvAkH',
-    'QmXfa92BghDQ43FHp2yMdeWG8RCYVKtCpYyaNXHfP9UpRg',
-    'QmSA4XDRp99oZvvP23DqGvpumQYRCagiBjJRWVXv2vDb3U',
-    'QmcNeKgoexULU7SNbwngByE7nfRvgHFcFj5en1ffDvVBLQ',
-    'QmTmtdP8s5LpfQ1gmDDUGmitcHjV79PtouZFJU1qSTgfDw',
-    'QmY7jyrRT5py1TnSuFfWzHM2fh2wGevwiBJDJzLximGQY7',
-    'QmQLbJiUWsQaZHmTcRoCKsv7R2Krg12fJUzRAmvuhZErYZ',
-    'QmP1EoSu2ynjU7B6ADRPm47eQsqNmvYCsGvRo51vriQDtD',
-    'QmSPurhnbFzuRwcGVyd7G5RwjE4s6rvCTdnfAcL7HX7cdu',
-    'QmZ2MB3iuf6rcJfYvACX7qWXpbJvWHK4VDGVy8W93njQQF',
-    'QmWm3yuTUgdPrcBKTqZXzkF1u5KvJ4Ko1X4KCLPNJ9QKCQ',
-    'Qmc3f6XtthPSnoRDmPqKZoqTXMfiaJP8RnTHmZu8anWzdx',
-  ]
-
   useEffect(() => {
     if (account) {
       daiBalance({
@@ -191,9 +193,7 @@ const NewProject = () => {
   const handleSubmit = async project => {
     const data = {
       ...project,
-      avatar: !project.avatar
-        ? defaultImages[Math.floor(Math.random() * 11 + 1)]
-        : project.avatar,
+      avatar: project.avatar ? project.avatar : defaultImage,
     }
     addProject({
       variables: data,

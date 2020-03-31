@@ -147,7 +147,7 @@ const EditProject = ({ location }) => {
             }}
           >
             <Styled.h6 sx={{ color: 'white', fontWeight: 'heading' }}>
-              Waiting for transaction to confirm{' '}
+              Waiting for transaction{' '}
             </Styled.h6>
             <img src="/loading-dots-white.gif" />
           </Box>

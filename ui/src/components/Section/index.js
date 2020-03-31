@@ -34,9 +34,14 @@ const Section = ({
       <Fragment>
         {items.length > 0 && (
           <Grid
-            gap={1}
+            gap={3}
             mt={7}
-            sx={{ gridTemplateColumns: '400px 1fr 1fr 1fr' }}
+            sx={{
+              gridTemplateColumns: '400px 1fr 1fr 1fr',
+              '@media (min-width: 830px) and (max-width: 1040px)': {
+                gridTemplateColumns: '250px 1fr 1fr 1fr',
+              },
+            }}
           >
             {['Name', 'Categories', 'Date Added', 'Challenged'].map(
               (entry, index) => (
@@ -59,7 +64,7 @@ const Section = ({
           </Grid>
         )}
         {items.map((item, index) => (
-          <Box key={index}>
+          <Box key={index} sx={{ py: 2 }}>
             <Row item={item} />
           </Box>
         ))}
