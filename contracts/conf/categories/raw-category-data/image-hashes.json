@@ -62,6 +62,12 @@
     "storage": "QmTWBLXUMrz5XKER91av2mLM8QMVwPqkQSrDzsYGQjYice",
     "software": "QmdxpakY5uZsvnBPVkhtbRRABJiaYhNTZ9KcEEErSmhrZ6",
     "supply-chain": "QmZQRLfjrBZJA8AaPLUQDMs1y6YVT5jSrsXe9eMpGjqy29",
-    "telecommunications": "Qmf7Ad5XavHJhtjuMyoebgpWgGngWPwe1BxJytdBtgAu8E",
-    "work": "QmXqPHubfWvEtf6tdECMnpKevZ21BS3bkcyhpGKm5zFVmS"
+    "telecom": "Qmf7Ad5XavHJhtjuMyoebgpWgGngWPwe1BxJytdBtgAu8E",
+    "work": "QmXqPHubfWvEtf6tdECMnpKevZ21BS3bkcyhpGKm5zFVmS",
+    "prediction-markets": "QmdX9YJntmFsB9EbXyYtB5fGPBNysnvzEHXRe5Fn5aim3f",
+    "securities": "QmY1VEfsy6R883q8xzonJ3TDq9ReZ3TsRB33aHCMAdkEfs",
+    "other": "QmRVLrqR2dyvJbBGpzDP3Dz2eysDhnXZo9GQv7eb9e6SNM",
+    "science-and-tech": "QmUgzU2xYEM35yXynhbj4WHSLz6Xq6ZUPuH4FxBtDesszF",
+    "browser": "QmREHNxCycZzrYE84KqbsSbjpEQBCP79qJHUGgniBGvRPN",
+    "software-analytics": "QmPNPDcmMQX6EgsJu7e2eVjhpqxQXZ5XsugdKToT2tasmU"   
 }

@@ -95,6 +95,22 @@
                 "id": "",
                 "imageHash": "",
                 "imageUrl": "",
+                "name": "Analytics",
+                "slug": "analytics",
+                "description": ""
+            },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
+                "name": "Custody",
+                "slug": "custody",
+                "description": "projects focused on providing custody or delegate services, such as custody of user funds and private keys"
+            },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
                 "name": "Currencies",
                 "slug": "currencies",
                 "description": "apps and protocols that issue a cryptocurrency, including stablecoins, ERC20s and non-fungible tokens"
@@ -175,6 +191,14 @@
                 "id": "",
                 "imageHash": "",
                 "imageUrl": "",
+                "name": "Securities",
+                "slug": "securities",
+                "description": ""
+            },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
                 "name": "Staking",
                 "slug": "staking",
                 "description": "projects focused on providing staking services, such as staking research, delegated staking or node operations"
@@ -225,8 +249,8 @@
                 "id": "",
                 "imageHash": "",
                 "imageUrl": "",
-                "name": "Art",
-                "slug": "art",
+                "name": "Art & Collectibles",
+                "slug": "art-and-collectibles",
                 "description": "projects focused art creation, exchange and hosting"
             },
             {
@@ -236,14 +260,6 @@
                 "name": "Books",
                 "slug": "books",
                 "description": "projects focused on writing and publishing books and formalized content"
-            },
-            {
-                "id": "",
-                "imageHash": "",
-                "imageUrl": "",
-                "name": "Collectibles",
-                "slug": "collectibles",
-                "description": "projects for collectibles issuance, exchange and hosting"
             },
             {
                 "id": "",
@@ -381,6 +397,14 @@
         "id": "",
         "imageHash": "",
         "imageUrl": "",
+        "name": "Other",
+        "slug": "Other",
+        "description": "Other"
+    },
+    {
+        "id": "",
+        "imageHash": "",
+        "imageUrl": "",
         "name": "Places",
         "slug": "places",
         "description": "apps and protocols focused on location services, like geographic positioning"
@@ -422,17 +446,25 @@
                 "imageHash": "",
                 "imageUrl": "",
                 "name": "Analytics",
-                "slug": "analytics",
+                "slug": "software-analytics",
                 "description": "projects focused on consuming and analyzing data from Web3 apps and protocols, including block explorers, analytics apps, data feeds"
             },
             {
                 "id": "",
                 "imageHash": "",
                 "imageUrl": "",
-                "name": "Blockchain Development",
-                "slug": "blockchain-development",
+                "name": "Blockchain",
+                "slug": "blockchain",
                 "description": "projects and teams focused on researching and building blockchains, distributed systems and sidechains"
             },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
+                "name": "Browser",
+                "slug": "browser",
+                "description": ""
+            },         
             {
                 "id": "",
                 "imageHash": "",
@@ -440,14 +472,6 @@
                 "name": "Computation",
                 "slug": "computation",
                 "description": "projects focused on computation for Web3 protocols, such as researching computation, implementing computation sharing solutions"
-            },
-            {
-                "id": "",
-                "imageHash": "",
-                "imageUrl": "",
-                "name": "Custody",
-                "slug": "custody",
-                "description": "projects focused on providing custody or delegate services, such as custody of user funds and private keys"
             },
             {
                 "id": "",
@@ -519,17 +543,51 @@
         "id": "",
         "imageHash": "",
         "imageUrl": "",
-        "name": "Supply Chain",
-        "slug": "supply-chain",
-        "description": "apps and protocols focused on supply chain management, tracking and optimization"
+        "name": "Science & Tech",
+        "slug": "science-and-tech",
+        "description": "",
+        "subcategories": [
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
+                "name": "Hardware",
+                "slug": "hardware",
+                "description": ""
+            },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
+                "name": "Research",
+                "slug": "research",
+                "description": ""
+            },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
+                "name": "Software",
+                "slug": "software",
+                "description": ""
+            },
+            {
+                "id": "",
+                "imageHash": "",
+                "imageUrl": "",
+                "name": "Telecom",
+                "slug": "telecom",
+                "description": ""
+            }
+        ]
     },
     {
         "id": "",
         "imageHash": "",
         "imageUrl": "",
-        "name": "Telecommunications",
-        "slug": "telecommunications",
-        "description": ""
+        "name": "Supply Chain",
+        "slug": "supply-chain",
+        "description": "apps and protocols focused on supply chain management, tracking and optimization"
     },
     {
         "id": "",

@@ -94,7 +94,7 @@ type Challenge @entity {
   votesAgainst: Int!
   "Project that is being challenged"
   project: Project!
-  "Owner of the challenge"
+  "Owner of the challenge, which is a project"
   owner: Project!
   "List of all created votes"
   votes: [Vote!] @derivedFrom(field: "challenge")

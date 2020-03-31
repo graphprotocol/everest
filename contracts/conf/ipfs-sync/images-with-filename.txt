@@ -64,3 +64,14 @@ QmdxpakY5uZsvnBPVkhtbRRABJiaYhNTZ9KcEEErSmhrZ6 Software.jpg
 QmZQRLfjrBZJA8AaPLUQDMs1y6YVT5jSrsXe9eMpGjqy29 Supply Chain.jpg
 Qmf7Ad5XavHJhtjuMyoebgpWgGngWPwe1BxJytdBtgAu8E Telecommunications.jpg
 QmXqPHubfWvEtf6tdECMnpKevZ21BS3bkcyhpGKm5zFVmS Work.jpg
+
+Newly added
+
+QmWy7CBqYk9YRR872RcHTNEj5pLCTCSszVgtrwTURfX447 Defi - Analytics.jpg
+QmdX9YJntmFsB9EbXyYtB5fGPBNysnvzEHXRe5Fn5aim3f DeFi - Prediction-markets.jpg
+QmSETouYKwNVY2SKWiJbxadrBPJ88ZoppbdLXrFFvpytja DeFi - Research.jpg
+QmY1VEfsy6R883q8xzonJ3TDq9ReZ3TsRB33aHCMAdkEfs DeFi - Securities.jpg
+QmRVLrqR2dyvJbBGpzDP3Dz2eysDhnXZo9GQv7eb9e6SNM Other.jpg
+QmUgzU2xYEM35yXynhbj4WHSLz6Xq6ZUPuH4FxBtDesszF Science-and-tech.jpg
+QmPNPDcmMQX6EgsJu7e2eVjhpqxQXZ5XsugdKToT2tasmU Software - Analytics.jpg
+QmREHNxCycZzrYE84KqbsSbjpEQBCP79qJHUGgniBGvRPN Software - Browser.jpg
