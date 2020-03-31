@@ -404,11 +404,11 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const challengeId = tx.events[0].args.member
+      const challengeId = tx.events[1].args.challengeID._hex
       const { challenge } = await queryGraphNode(
         context,
         'challenge',
-        challengeId,
+        String(Number(challengeId)),
         tx.blockHash,
       )
       return challenge
