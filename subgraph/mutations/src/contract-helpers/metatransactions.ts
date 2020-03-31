@@ -222,6 +222,61 @@ export const applySignedWithAttribute = async (
   owner,
   metadataIpfsHash,
   everestContract,
+  ethDIDContract
+) => {
+  const ownerAddress = owner
+  const memberAddress = await newMember.getAddress()
+
+  // Get the signature for changing ownership on ERC-1056 Registry
+  const applySignedSig = await applySigned(
+    newMember,
+    owner,
+    ethDIDContract,
+    newMemberSigningKey,
+  )
+
+  const metadataIpfsBytes = ipfsHexHash(metadataIpfsHash)
+
+  const setAttributeData =
+    Buffer.from('setAttribute').toString('hex') +
+    stringToBytes32(config.offChainDataName) +
+    stripHexPrefix(metadataIpfsBytes) +
+    config.maxValidity
+
+  // Get the signature for setting the attribute (i.e. Token data) on ERC-1056
+  const setAttributeSignedSig = await setAttributeSigned(
+    newMember,
+    owner,
+    setAttributeData,
+    ethDIDContract,
+    newMemberSigningKey,
+  )
+
+  // Send all three meta transactions to TokenRegistry to be executed in one tx
+  const tx = await everestContract.applySignedWithAttribute(
+    memberAddress,
+    [setAttributeSignedSig.v, applySignedSig.v],
+    [setAttributeSignedSig.r, applySignedSig.r],
+    [setAttributeSignedSig.s, applySignedSig.s],
+    ownerAddress,
+    '0x' + stringToBytes32(config.offChainDataName),
+    metadataIpfsBytes,
+    '0x' + config.maxValidity,
+    {
+      gasLimit: 1000000,
+      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
+    },
+  )
+  return tx
+}
+
+
+export const applySignedWithAttributeAndPermit = async (
+  newMember,
+  newMemberSigningKey,
+  owner,
+  metadataIpfsHash,
+  everestContract,
   ethDIDContract,
   daiContract,
   ethereum,
