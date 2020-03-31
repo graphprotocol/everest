@@ -289,6 +289,7 @@ export const EVEREST_QUERY = gql`
       projectCount
       categoriesCount
       reserveBankBalance
+      claimedProjects
     }
   }
 `

@@ -37,7 +37,6 @@ const MultiSelect = ({
   }, [setOpen])
 
   useEffect(() => {
-    console.log('selectedItems: ', selectedItems)
     setSelected(
       selectedItems
         ? selectedItems.map(selectedItem => ({

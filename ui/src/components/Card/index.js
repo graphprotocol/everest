@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
 
 import Challenged from '../../images/challenge.svg'
-import { defaultImage } from '../../utils/helpers/utils'
 
 const Card = ({
   title,
@@ -19,88 +18,98 @@ const Card = ({
 }) => {
   return (
     <Grid
-      sx={
-        pending
-          ? { ...styles.root, opacity: 0.32, pointerEvents: 'none' }
-          : styles.root
-      }
+      sx={pending ? { ...styles.root, pointerEvents: 'none' } : styles.root}
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
       onClick={() => navigate(to)}
-      gap={0}
     >
-      <Grid
-        gap={0}
-        pt={variant === 'project' ? 5 : 0}
-        pb={4}
-        sx={{
-          justifyContent: 'center',
-          pb: 4,
-          pt: variant === 'project' ? 6 : 0,
-          px: variant === 'project' ? 4 : 0,
-        }}
-      >
-        {variant === 'project' || pending ? (
-          <Box sx={{ textAlign: 'center' }}>
-            <img
-              src={
-                image
-                  ? `${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${image}`
-                  : defaultImage('profiles/profile', 24)
-              }
-              alt={title}
-              sx={{
-                height: '80px',
-                width: '80px',
-                borderRadius: '50%',
-              }}
-            />
-          </Box>
-        ) : (
-          <Box>
-            <img
-              src={image}
-              alt={title}
-              sx={{
-                height: '120px',
-                width: ['164px', '180px', '180px'],
-              }}
-            />
-          </Box>
-        )}
-        <Box
+      {pending && (
+        <img
+          src="/loading-dots-blue.gif"
           sx={{
-            textAlign: 'center',
-            padding: title && title.length > 16 ? 0 : 3,
+            position: 'absolute',
+            height: '40px',
+            left: 0,
+            right: 0,
+            margin: '0 auto',
+            top: 'calc(50% - 6px)',
+          }}
+        />
+      )}
+      <Box sx={{ opacity: pending ? 0.32 : 1 }}>
+        <Grid
+          gap={0}
+          pt={variant === 'project' ? 5 : 0}
+          pb={4}
+          sx={{
+            justifyContent: 'center',
+            pb: 4,
+            pt: variant === 'project' ? 6 : 0,
+            px: variant === 'project' ? 4 : 0,
           }}
         >
-          {variant === 'project' && (
-            <p sx={{ variant: 'text.tag' }}>{category}</p>
+          {variant === 'project' || pending ? (
+            <Box sx={{ textAlign: 'center' }}>
+              <img
+                src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${image}`}
+                alt={title}
+                sx={{
+                  height: '80px',
+                  width: '80px',
+                  borderRadius: '50%',
+                }}
+              />
+            </Box>
+          ) : (
+            <Box>
+              <img
+                src={image}
+                alt={title}
+                sx={{
+                  height: '120px',
+                  width: ['164px', '180px', '180px'],
+                }}
+              />
+            </Box>
           )}
-          <Styled.p
+          <Box
             sx={{
-              fontWeight: 'heading',
-              color: 'secondary',
-              pt: !isChallenged && 3,
+              textAlign: 'center',
+              padding: title && title.length > 16 ? 0 : 3,
+              position: 'relative',
             }}
           >
-            {title}
-          </Styled.p>
-          {isChallenged ? (
-            <Challenged sx={{ paddingTop: 1, height: '30px', width: 'auto' }} />
-          ) : (
-            variant !== 'project' && (
-              <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
-            )
-          )}
-        </Box>
-      </Grid>
+            {variant === 'project' && (
+              <p sx={{ variant: 'text.tag' }}>{category}</p>
+            )}
+            <Styled.p
+              sx={{
+                fontWeight: 'heading',
+                color: 'secondary',
+                pt: !isChallenged && 3,
+              }}
+            >
+              {title}
+            </Styled.p>
+            {isChallenged ? (
+              <Challenged
+                sx={{ paddingTop: 1, height: '30px', width: 'auto' }}
+              />
+            ) : (
+              variant !== 'project' && (
+                <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
+              )
+            )}
+          </Box>
+        </Grid>
+      </Box>
     </Grid>
   )
 }
 
 const styles = {
   root: {
+    position: 'relative',
     height: '216px',
     width: ['164px', '180px', '180px'],
     background: 'white',

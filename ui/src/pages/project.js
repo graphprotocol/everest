@@ -12,7 +12,6 @@ import moment from 'moment'
 import { isMobile } from 'react-device-detect'
 
 import { convertDate } from '../utils/helpers/date'
-import { defaultImage } from '../utils/helpers/utils'
 import { useAccount } from '../utils/hooks'
 import { remainingTime } from '../utils/helpers/date'
 import { metamaskAccountChange } from '../services/ethers'
@@ -594,20 +593,12 @@ const Project = ({ location }) => {
       >
         <Grid sx={{ gridTemplateColumns: ['1fr', '120px 1fr'] }}>
           <Box>
-            {project.avatar ? (
-              <img
-                src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project &&
-                  project.avatar}`}
-                alt="Project avatar"
-                sx={projectLogoStyle}
-              />
-            ) : (
-              <img
-                src={defaultImage('profiles/profile', 24)}
-                alt="Project avatar"
-                sx={projectLogoStyle}
-              />
-            )}
+            <img
+              src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project &&
+                project.avatar}`}
+              alt="Project avatar"
+              sx={projectLogoStyle}
+            />
           </Box>
           <Grid
             sx={
@@ -1105,7 +1096,7 @@ const Project = ({ location }) => {
                     <Styled.h6
                       sx={{ color: 'secondary', fontWeight: 'heading' }}
                     >
-                      Waiting for transaction to confirm{' '}
+                      Waiting for transaction{' '}
                     </Styled.h6>
                     <img src="/loading-dots-blue.gif" />
                   </Box>
