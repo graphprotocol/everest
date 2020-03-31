@@ -1,55 +1,31 @@
 const fs = require('fs')
 const { exec } = require('child_process')
-const HDWalletProvider = require('@truffle/hdwallet-provider')
 
-const mnemonic = fs
-    .readFileSync(__dirname + '/../../../../../private-keys/.categories-privkey.txt')
-    .toString()
-    .trim()
-const provider = `https://infura.io/v3/${fs
-    .readFileSync(__dirname + '/../../../../../private-keys/.infurakey.txt')
-    .toString()
-    .trim()}`
-const categories = require('./raw-category-data/category-heirarchy.json')
+const ids = require('./raw-category-data/ids.json')
 const ipfsHashes = require('./raw-category-data/image-hashes.json')
+const names = require('./raw-category-data/names.json')
+const descriptions = require('./raw-category-data/descriptions.json')
+const parents = require('./raw-category-data/parents.json')
 
-// Create an HD wallet connected to infura with 69 addresses
-const wallet = new HDWalletProvider(mnemonic, provider, 0, 69)
-// We use category ids as a set of addresses we will have access to in the future
-const ids = wallet.addresses
+let categories = []
+let categoryCount = Object.keys(ids).length
 
-// Next, let's seed categories.json with IDs for the 69 categories
-let countAssignedAddresses = 0
+for (let i = 0; i < categoryCount; i++) {
+    let category = {}
+    let key = Object.keys(ids)[i]
+    category.id = ids[key]
+    category.imageHash = ipfsHashes[key]
+    category.imageUrl = 'https://api.thegraph.com/ipfs/api/v0/cat?arg=' + ipfsHashes[key]
+    category.name = names[key]
+    category.slug = key
+    category.description = descriptions[key]
+    category.parent = parents[key]
 
-for (let i = 0; i < categories.length; i++) {
-    categories[i].id = ids[countAssignedAddresses]
-    categories[i].imageHash = ''
-    categories[i].imageUrl = ''
-    // categories[i].description = ""
-    countAssignedAddresses++
-
-    const slug = categories[i].slug
-    categories[i].imageHash = ipfsHashes[slug]
-    categories[i].imageUrl = 'https://api.thegraph.com/ipfs/api/v0/cat?arg=' + ipfsHashes[slug]
-
-    if (categories[i].subcategories != null) {
-        for (let j = 0; j < categories[i].subcategories.length; j++) {
-            categories[i].subcategories[j].id = ids[countAssignedAddresses]
-            categories[i].subcategories[j].imageHash = ''
-            categories[i].subcategories[j].imageUrl = ''
-            // categories[i].subcategories[j].description = ""
-            countAssignedAddresses++
-
-            const slug = categories[i].subcategories[j].slug
-            categories[i].subcategories[j].imageHash = ipfsHashes[slug]
-            categories[i].subcategories[j].imageUrl =
-                'https://api.thegraph.com/ipfs/api/v0/cat?arg=' + ipfsHashes[slug]
-        }
-    }
+    categories[i] = category
 }
 
 console.log(categories)
-console.log(`${countAssignedAddresses} addresses assigned to categories`)
+console.log(`${categoryCount} categories created`)
 
 const storeData = (data, path) => {
     try {
