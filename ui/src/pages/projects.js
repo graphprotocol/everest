@@ -21,6 +21,7 @@ const Projects = ({ location }) => {
 
   const [allProjects, setAllProjects] = useState([])
   const [projectCount, setProjectCount] = useState(0)
+  const [challengesCount, setChallengesCount] = useState(0)
   const [selected, setSelected] = useState('cards')
   const [selectedFilter, setSelectedFilter] = useState(
     queryParams && queryParams.view ? queryParams.view : FILTERS.all,
@@ -64,6 +65,11 @@ const Projects = ({ location }) => {
     setProjectCount(
       everestData && everestData.everests
         ? everestData.everests[0].projectCount
+        : 0,
+    )
+    setChallengesCount(
+      everestData && everestData.everests
+        ? everestData.everests[0].challengedProjects
         : 0,
     )
   }, [data, everestData])
@@ -115,10 +121,7 @@ const Projects = ({ location }) => {
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
             {projectCount} Projects -{' '}
             {allProjects.filter(p => p.currentChallenge !== null).length && (
-              <span>
-                {allProjects.filter(p => p.currentChallenge !== null).length}{' '}
-                Challenges
-              </span>
+              <span>{challengesCount} Challenges</span>
             )}
           </Styled.p>
         </Box>
