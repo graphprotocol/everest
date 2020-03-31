@@ -36,7 +36,7 @@ const callEverest = async () => {
     await tx.wait()
 
     const newBytesValue = await everestWithSigner.categories()
-    console.log(newBytesValue)
+    console.log(newBytesValue + "Should match " + categories)
     console.log('success')
 }
 

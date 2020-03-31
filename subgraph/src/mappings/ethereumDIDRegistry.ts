@@ -1,4 +1,4 @@
-import { json, ipfs, Bytes, JSONValueKind, log } from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValueKind } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -157,6 +157,13 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
                   let parent = Category.load(category.parentCategory)
                   parent.projectCount = parent.projectCount - 1
                   parent.save()
+
+                  // Goes two levels deep. If we add more, will make recursive
+                  if (parent.parentCategory != null) {
+                    let grandparent = Category.load(parent.parentCategory)
+                    grandparent.projectCount = grandparent.projectCount - 1
+                    grandparent.save()
+                  }
                 }
               }
             }
@@ -181,9 +188,15 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
                 let parent = Category.load(category.parentCategory)
                 parent.projectCount = parent.projectCount + 1
                 parent.save()
+
+                // Goes two levels deep. If we add more, will make recursive
+                if (parent.parentCategory != null) {
+                  let grandparent = Category.load(parent.parentCategory)
+                  grandparent.projectCount = grandparent.projectCount + 1
+                  grandparent.save()
+                }
               }
             }
-            // }
 
             // Now deliberately set to the array
             project.categories = projCategories

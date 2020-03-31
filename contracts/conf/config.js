@@ -69,7 +69,8 @@ const config = {
         // Note the DID address is the same for mainnet, ropsten, rinkeby, kovan and goerli
         ethereumDIDRegistryAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b',
         ropstenOwner: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd', // Daves metamask account 0
-        chainID: 3
+        chainID: 3,
+        daiAddress: "0x82a351cdfb726dafc8624d8bd6b0bc98d34ffec1" // Set to null if desired to deploy new dai
     },
     mainnetParams: {
         daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',

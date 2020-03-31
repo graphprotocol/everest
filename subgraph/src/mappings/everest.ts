@@ -81,8 +81,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.categoriesCount = 0
   everest.save()
 
-  // TODO - uncomment this on mainnet launch
-  // parseCategoryDetails(event.params.categories, event.block.timestamp)
+  parseCategoryDetails(event.params.categories, event.block.timestamp)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {
@@ -245,59 +244,24 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
     category.projectCount = 0
     category.createdAt = timestamp.toI32()
   }
-    category.name = categoryData.get('name').isNull()
-      ? null
-      : categoryData.get('name').toString()
-    category.description = categoryData.get('description').isNull()
-      ? null
-      : categoryData.get('description').toString()
-    category.slug = categoryData.get('slug').isNull()
-      ? null
-      : categoryData.get('slug').toString()
-    category.imageHash = categoryData.get('imageHash').isNull()
-      ? null
-      : categoryData.get('imageHash').toString()
-    category.imageUrl = categoryData.get('imageUrl').isNull()
-      ? null
-      : categoryData.get('imageUrl').toString()
-
-    let subcategories = categoryData.get('subcategories')
-    if (subcategories != null) {
-      let subCategoriesArray = subcategories.toArray()
-      for (let i = 0; i < subCategoriesArray.length; i++) {
-        let subCategoryData = subCategoriesArray[i].toObject()
-        let subId: string = subCategoryData.get('id').isNull()
-          ? null
-          : subCategoryData.get('id').toString()
-
-        let subCategory = Category.load(subId)
-        if (subCategory == null) {
-          subCategory = new Category(subId)
-          subCategory.projectCount = 0
-          subCategory.createdAt = timestamp.toI32()
-        }
-          subCategory.name = subCategoryData.get('name').isNull()
-            ? null
-            : subCategoryData.get('name').toString()
-          subCategory.description = subCategoryData.get('description').isNull()
-            ? null
-            : subCategoryData.get('description').toString()
-          subCategory.slug = subCategoryData.get('slug').isNull()
-            ? null
-            : subCategoryData.get('slug').toString()
-          subCategory.imageHash = subCategoryData.get('imageHash').isNull()
-            ? null
-            : subCategoryData.get('imageHash').toString()
-          subCategory.imageUrl = subCategoryData.get('imageUrl').isNull()
-            ? null
-            : subCategoryData.get('imageUrl').toString()
-
-          subCategory.parentCategory = id
-          subCategory.save()
-
-          everest.categoriesCount = everest.categoriesCount + 1
-        }
-      }
-    category.save()
+  category.name = categoryData.get('name').isNull()
+    ? null
+    : categoryData.get('name').toString()
+  category.description = categoryData.get('description').isNull()
+    ? null
+    : categoryData.get('description').toString()
+  category.slug = categoryData.get('slug').isNull()
+    ? null
+    : categoryData.get('slug').toString()
+  category.imageHash = categoryData.get('imageHash').isNull()
+    ? null
+    : categoryData.get('imageHash').toString()
+  category.imageUrl = categoryData.get('imageUrl').isNull()
+    ? null
+    : categoryData.get('imageUrl').toString()
+  category.parentCategory = categoryData.get('parent').isNull()
+    ? null
+    : categoryData.get('parent').toString()
+  category.save()
   everest.save()
 }
