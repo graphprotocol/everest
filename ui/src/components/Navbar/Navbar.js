@@ -13,6 +13,7 @@ import Link from '../../components/Link'
 import Button from '../../components/Button'
 import Modal from '../../components/Modal'
 import Menu from '../../components/Menu'
+import Search from '../../components/Search'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
 import Bars from '../../images/bars.svg'
@@ -33,6 +34,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
   const [showModal, setShowModal] = useState(false)
   const [userAccount, setUserAccount] = useState(account)
   const [userImage, setUserImage] = useState('')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
   const openModal = () => setShowModal(true)
 
   const closeModal = () => {
@@ -341,18 +344,26 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             position: 'absolute',
             right: '20px',
             alignItems: 'center',
-            gridTemplateColumns: 'max-content 1fr',
+            gridTemplateColumns: '1fr max-content max-content',
             height: '100%',
           }}
           gap={3}
         >
+          <Search
+            isSearchOpen={isSearchOpen}
+            setIsSearchOpen={setIsSearchOpen}
+            value={searchText}
+            setValue={setSearchText}
+          />
           <Link
             onClick={() =>
               userAccount ? navigate('/projects/new') : openModal()
             }
             sx={{
-              backgroundColor: isNewProjectPage ? 'secondary' : 'white',
+              backgroundColor: isNewProjectPage ? 'secondary' : 'transparent',
               padding: '12px 22px',
+              mr: 1,
+              mt: 1,
               '&:hover': {
                 svg: {
                   fill: isNewProjectPage ? 'white' : 'secondary',

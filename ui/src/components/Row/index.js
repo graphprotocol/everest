@@ -28,7 +28,7 @@ const Row = ({ item }) => {
             sx={{
               fontSize: '0.75rem',
               lineHeight: '0.875rem',
-              color: 'tertiary',
+              color: 'blackFaded',
             }}
           >
             {item.description}
