@@ -25,6 +25,7 @@ import {
 
 import {
   applySignedWithAttribute,
+  applySignedWithAttributeAndPermit,
   overrides,
   OFFCHAIN_DATANAME,
   VALIDITY_TIMESTAMP,
@@ -208,18 +209,37 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const ethereumDIDRegistryContract = await getContract(context, 'EthereumDIDRegistry')
   const daiContract = await getContract(context, 'Dai')
 
-  const transaction = await sendTransaction(
-    applySignedWithAttribute(
-      member,
-      memberSigningKey,
-      owner,
-      ipfsHash,
-      everestContract,
-      ethereumDIDRegistryContract,
-      daiContract,
-      ethereum,
-    ),
-  )
+  const permitBalance = await daiContract.allowance(owner, everestContract.address)
+
+  let transaction
+  if (
+    permitBalance._hex ==
+    '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+  ) {
+    transaction = await sendTransaction(
+      applySignedWithAttribute(
+        member,
+        memberSigningKey,
+        owner,
+        ipfsHash,
+        everestContract,
+        ethereumDIDRegistryContract,
+      ),
+    )
+  } else {
+    transaction = await sendTransaction(
+      applySignedWithAttributeAndPermit(
+        member,
+        memberSigningKey,
+        owner,
+        ipfsHash,
+        everestContract,
+        ethereumDIDRegistryContract,
+        daiContract,
+        ethereum,
+      ),
+    )
+  }
 
   return transaction
     .wait()
