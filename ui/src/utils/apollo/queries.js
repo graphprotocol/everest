@@ -106,14 +106,18 @@ export const ALL_CATEGORIES_QUERY = gql`
 `
 
 export const CATEGORY_QUERY = gql`
-  query category($id: ID!) {
+  query category(
+    $id: ID!
+    $orderBy: Category_orderBy
+    $orderDirection: OrderDirection
+  ) {
     category(id: $id) {
       id
       name
       description
       imageUrl
       projectCount
-      subcategories {
+      subcategories(orderBy: $orderBy, orderDirection: $orderDirection) {
         id
         name
         description

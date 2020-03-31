@@ -10,6 +10,7 @@ import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
 
 import { CATEGORY_QUERY } from '../utils/apollo/queries'
+import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 const Category = ({ location }) => {
   const pathParams = location.pathname.split('/')
@@ -20,23 +21,17 @@ const Category = ({ location }) => {
     categoryName = pathParams.slice(-1)[0]
   }
 
-  const [imagePrefix, setImagePrefix] = useState('')
-
   const [selected, setSelected] = useState('cards')
 
   const { loading, error, data } = useQuery(CATEGORY_QUERY, {
     variables: {
       id: categoryName,
+      orderBy: CATEGORIES_ORDER_BY.Name,
+      orderDirection: ORDER_DIRECTION.ASC,
     },
   })
 
   const viewRef = useRef()
-
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__)
-    }
-  }, [])
 
   if (loading) return <div>Loading</div>
   if (error) {

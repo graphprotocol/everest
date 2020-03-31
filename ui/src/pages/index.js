@@ -13,6 +13,7 @@ import {
   PROJECTS_QUERY,
   EVEREST_QUERY,
 } from '../utils/apollo/queries'
+import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Link from '../components/Link'
 import Stats from '../components/Stats'
@@ -27,11 +28,14 @@ const Index = () => {
   const openModal = () => setShowModal(true)
   const closeModal = () => {
     setShowModal(false)
-    // navigate('/projects/new')
   }
 
   const { data: categories } = useQuery(CATEGORIES_QUERY, {
-    variables: { parentCategory: null },
+    variables: {
+      parentCategory: null,
+      orderBy: CATEGORIES_ORDER_BY.Name,
+      orderDirection: ORDER_DIRECTION.ASC,
+    },
   })
   const { data: projects } = useQuery(PROJECTS_QUERY, {
     variables: {
@@ -128,7 +132,7 @@ const Index = () => {
       curated in a decentralized way."
         items={
           categories
-            ? categories.categories.slice(0, 10).map(category => {
+            ? categories.categories.slice(0, 12).map(category => {
                 return {
                   name: category.name,
                   description: category.projects
@@ -221,7 +225,9 @@ const Index = () => {
                 to: `/project/${project.id}`,
                 image: project.image,
                 category:
-                  project.categories.length > 0 ? project.f[0].name : '',
+                  project.categories.length > 0
+                    ? project.categories[0].name
+                    : '',
                 isChallenged: project.currentChallenge !== null,
               }
             })}
