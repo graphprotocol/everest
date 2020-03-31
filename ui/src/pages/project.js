@@ -951,11 +951,10 @@ const Project = ({ location }) => {
                     </Box>
                     <Box>
                       <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                      <Link to={`/project/${project.currentChallenge.owner}`}>
-                        {`${project.currentChallenge.owner.slice(
-                          0,
-                          6,
-                        )}-${project.currentChallenge.owner.slice(-6)}`}
+                      <Link
+                        to={`/project/${project.currentChallenge.owner.id}`}
+                      >
+                        {project.currentChallenge.owner.name}
                       </Link>
                     </Box>
                   </Grid>

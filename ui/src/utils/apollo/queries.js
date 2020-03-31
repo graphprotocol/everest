@@ -17,7 +17,10 @@ export const PROJECT_QUERY = gql`
       currentChallenge {
         id
         endTime
-        owner
+        owner {
+          id
+          name
+        }
         description
         resolved
         votesFor
