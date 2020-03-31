@@ -1,4 +1,4 @@
-import { json, ipfs, Bytes, JSONValueKind, log } from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValueKind } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -117,29 +117,23 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
         if (!data.get('isRepresentative').isNull()) {
           if (data.get('isRepresentative').kind == JSONValueKind.BOOL) {
-            const newRepStatus = data.get('isRepresentative').toBool()
+            let newRepStatus = data.get('isRepresentative').toBool()
             let everest = Everest.load('1')
-            // If we don't already have a rep status, we have to add to everest
-            if (project.isRepresentative == null) {
+            // Proj was false
+            if (project.isRepresentative == false) {
+              // if true need to add to everest
               if (newRepStatus) {
                 everest.claimedProjects = everest.claimedProjects + 1
                 everest.save()
               }
-              project.isRepresentative = newRepStatus
-
-              // In this case, isRep is already false or true
-              // true true do nothing. false false do nothing.
+              // Else it is true. We have to count down if they revert the isRep
             } else {
-              if (newRepStatus == true && project.isRepresentative == false) {
-                everest.claimedProjects = everest.claimedProjects + 1
-                everest.save()
-              }
-              if (newRepStatus == false && project.isRepresentative == true) {
+              if (!newRepStatus) {
                 everest.claimedProjects = everest.claimedProjects - 1
                 everest.save()
               }
-              project.isRepresentative = newRepStatus
             }
+            project.isRepresentative = newRepStatus
           }
         }
 
@@ -147,21 +141,29 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         if (categories != null) {
           if (categories.kind == JSONValueKind.ARRAY) {
             let categoriesArray = categories.toArray()
-
             let projCategories = project.categories
+
             // If it already exists, it means we are editing the project. We have to minus the
             // count for categories here
             if (projCategories != null) {
               for (let i = 0; i < projCategories.length; i++) {
-                let category = Category.load(projCategories[i])
+                let asArray = projCategories as Array<string>
+                let category = Category.load(asArray[i])
                 category.projectCount = category.projectCount - 1
                 category.save()
 
                 // If it has a parent category, it must be removed there too.
                 if (category.parentCategory != null) {
                   let parent = Category.load(category.parentCategory)
-                  parent.projectCount = category.projectCount - 1
+                  parent.projectCount = parent.projectCount - 1
                   parent.save()
+
+                  // Goes two levels deep. If we add more, will make recursive
+                  if (parent.parentCategory != null) {
+                    let grandparent = Category.load(parent.parentCategory)
+                    grandparent.projectCount = grandparent.projectCount - 1
+                    grandparent.save()
+                  }
                 }
               }
             }
@@ -171,20 +173,27 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
             // Push all of the values into the empty array
             for (let i = 0; i < categoriesArray.length; i++) {
-              if (categoriesArray[i].kind == JSONValueKind.STRING) {
-                projCategories.push(categoriesArray[i].toString())
+              let categoryObj = categoriesArray[i].toObject()
+              let categoryID = categoryObj.get('id').toString()
+              projCategories.push(categoryID)
 
-                // We add categories back. It might involve added and subtracting if categories
-                // were not changed, but send result is the same. Could be optimized in the future
-                let category = Category.load(categoriesArray[i].toString())
-                category.projectCount = category.projectCount + 1
-                category.save()
+              // We add categories back. It might involve added and subtracting if categories
+              // were not changed, but send result is the same. Could be optimized in the future
+              let category = Category.load(categoryID)
+              category.projectCount = category.projectCount + 1
+              category.save()
 
-                // If it has a parent category, it must be added there too.
-                if (category.parentCategory != null) {
-                  let parent = Category.load(category.parentCategory)
-                  parent.projectCount = category.projectCount + 1
-                  parent.save()
+              // If it has a parent category, it must be added there too.
+              if (category.parentCategory != null) {
+                let parent = Category.load(category.parentCategory)
+                parent.projectCount = parent.projectCount + 1
+                parent.save()
+
+                // Goes two levels deep. If we add more, will make recursive
+                if (parent.parentCategory != null) {
+                  let grandparent = Category.load(parent.parentCategory)
+                  grandparent.projectCount = grandparent.projectCount + 1
+                  grandparent.save()
                 }
               }
             }

@@ -25,6 +25,7 @@ export function handleNewMember(event: NewMember): void {
   project.membershipStartTime = event.params.startTime.toI32()
   project.createdAt = event.block.timestamp.toI32()
   project.updatedAt = event.block.timestamp.toI32()
+  project.isRepresentative = false
   project.save()
 
   let everest = Everest.load('1')
@@ -77,9 +78,10 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.projectCount = 0
   everest.claimedProjects = 0
   everest.challengedProjects = 0
+  everest.categoriesCount = 0
   everest.save()
 
-  parseCategoryDetails(event.params.charter, event.block.timestamp)
+  parseCategoryDetails(event.params.categories, event.block.timestamp)
 }
 
 export function handleMemberChallenged(event: MemberChallenged): void {
@@ -89,7 +91,7 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   challenge.votesFor = 0 // Don't need to record one here, since a SubmitVote event will be emitted
   challenge.votesAgainst = 0
   challenge.project = event.params.member.toHexString()
-  challenge.owner = event.params.challenger.toString()
+  challenge.owner = event.params.challenger.toHexString()
   challenge.createdAt = event.block.timestamp.toI32()
   challenge.resolved = false
 
@@ -218,12 +220,10 @@ function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
   let ipfsData = ipfs.cat(base58Hash)
 
   if (ipfsData != null) {
-    let data = json.fromBytes(ipfsData as Bytes).toObject()
-    let categories = data.get('bootstrap-categories')
+    let categories = json.fromBytes(ipfsData as Bytes).toArray()
     if (categories != null) {
-      let categoriesArray = categories.toArray()
-      for (let i = 0; i < categoriesArray.length; i++) {
-        createCategory(categoriesArray[i], timestamp)
+      for (let i = 0; i < categories.length; i++) {
+        createCategory(categories[i], timestamp)
       }
     }
   }
@@ -231,45 +231,37 @@ function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
 
 function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   let categoryData = categoryJSON.toObject()
-  let slug: string = categoryData.get('slug').isNull()
+  let everest = Everest.load('1')
+  everest.categoriesCount = everest.categoriesCount + 1
+
+  let id: string = categoryData.get('id').isNull()
+    ? null
+    : categoryData.get('id').toString()
+
+  let category = Category.load(id)
+  if (category == null) {
+    category = new Category(id)
+    category.projectCount = 0
+    category.createdAt = timestamp.toI32()
+  }
+  category.name = categoryData.get('name').isNull()
+    ? null
+    : categoryData.get('name').toString()
+  category.description = categoryData.get('description').isNull()
+    ? null
+    : categoryData.get('description').toString()
+  category.slug = categoryData.get('slug').isNull()
     ? null
     : categoryData.get('slug').toString()
-
-  let category = Category.load(slug)
-  if (category == null) {
-    category = new Category(slug)
-    category.name = categoryData.get('name').isNull()
-      ? null
-      : categoryData.get('name').toString()
-    category.description = categoryData.get('description').isNull()
-      ? null
-      : categoryData.get('description').toString()
-    category.createdAt = timestamp.toI32()
-
-    let subcategories = categoryData.get('subcategories')
-    if (subcategories != null) {
-      let subCategoriesArray = subcategories.toArray()
-      for (let i = 0; i < subCategoriesArray.length; i++) {
-        let subCategoryData = subCategoriesArray[i].toObject()
-        let subSlug: string = subCategoryData.get('slug').isNull()
-          ? null
-          : subCategoryData.get('slug').toString()
-
-        let subCategory = Category.load(subSlug)
-        if (subCategory == null) {
-          subCategory = new Category(subSlug)
-          subCategory.name = subCategoryData.get('name').isNull()
-            ? null
-            : subCategoryData.get('name').toString()
-          subCategory.description = subCategoryData.get('description').isNull()
-            ? null
-            : subCategoryData.get('description').toString()
-          subCategory.createdAt = timestamp.toI32()
-          subCategory.parentCategory = slug
-          subCategory.save()
-        }
-      }
-    }
-    category.save()
-  }
+  category.imageHash = categoryData.get('imageHash').isNull()
+    ? null
+    : categoryData.get('imageHash').toString()
+  category.imageUrl = categoryData.get('imageUrl').isNull()
+    ? null
+    : categoryData.get('imageUrl').toString()
+  category.parentCategory = categoryData.get('parent').isNull()
+    ? null
+    : categoryData.get('parent').toString()
+  category.save()
+  everest.save()
 }

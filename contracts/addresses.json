@@ -1,11 +1,11 @@
 {
-  "updated-on": "March 27th 2020",
+  "updated-on": "March 31st 2020",
   "ropsten": {
-    "everest": "0xF35e8C187eE8Dd7B2938AccB3f5A04811A3c9F1F",
+    "everest": "0xdF083e1221F7ed031a32E41665506E2104BB4542",
     "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
     "mockDAI": "0x82A351cdFB726DafC8624d8bD6B0bc98d34Ffec1",
-    "reserveBank": "0x958ECfFC4F473A9C0087658f5fFF7E2799f3Ee87",
-    "registry": "0x2304c2805324ACF1D5c452aaD44616D075571225"
+    "reserveBank": "0x1b5f3419F77F6b41737630B8ad2d3504C5BF755b",
+    "registry": "0x32C0Ff6bac0aa29acbba05cE9f3099F82708a906"
   },
   "ganache": {
       "everest": "0x9b1f7F645351AF3631a656421eD2e40f2802E6c0",

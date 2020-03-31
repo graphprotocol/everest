@@ -1,4 +1,6 @@
 const ethers = require('ethers')
+const base = require('base-x')
+const fs = require('fs')
 
 const ganacheMneumonic =
     'myth like bonus scare over problem client lizard pioneer submit female collect'
@@ -15,6 +17,22 @@ const walletPaths = {
     eight: "m/44'/60'/0'/0/8",
     nine: "m/44'/60'/0'/0/9",
     ten: "m/44'/60'/0'/0/10"
+}
+
+const categoriesIPFSHash = fs
+    .readFileSync(__dirname + '/ipfs-sync/categories.txt')
+    .toString()
+    .trim()
+
+const ipfsToBytes = ipfsHash => {
+    const base58 = base('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz')
+    const bytes32 =
+        '0x' +
+        base58
+            .decode(ipfsHash)
+            .slice(2)
+            .toString('hex')
+    return bytes32
 }
 
 const wallets = {
@@ -34,12 +52,12 @@ const config = {
     everestParams: {
         owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
         votingPeriodDuration: 172800, // 2 days, in seconds
-        challengeDeposit: '10000000000000000000', // $10 DAI challenge fee 
-        applicationFee: '10000000000000000000', // $10 DAI application fee 
+        challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
+        applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
         // This points to the charter TODO - update mainnet
         charter: '0xded1673e19c0ba227df50470ec7b6d5dee102d663efe08b177ef2a24c0d001f0',
         // Point to IPFS hash of categories. TODO - update mainnnet
-        categories: '0xad5d2e08f7ed73b601a3f473c4ca6aef72e45448286be4ff804657bdb19f6b8b'
+        categories: ipfsToBytes(categoriesIPFSHash)
     },
     ganacheParams: {
         chainID: 9545
@@ -51,7 +69,8 @@ const config = {
         // Note the DID address is the same for mainnet, ropsten, rinkeby, kovan and goerli
         ethereumDIDRegistryAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b',
         ropstenOwner: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd', // Daves metamask account 0
-        chainID: 3
+        chainID: 3,
+        daiAddress: "0x82a351cdfb726dafc8624d8bd6b0bc98d34ffec1" // Set to null if desired to deploy new dai
     },
     mainnetParams: {
         daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
