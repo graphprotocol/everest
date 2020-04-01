@@ -76,7 +76,7 @@ const Projects = ({ location }) => {
 
   return (
     <Grid>
-      <Grid columns={[1, 2, 2]} mb={6}>
+      <Grid columns={[1, 2, 2]}>
         <Box>
           <Grid
             sx={{
@@ -184,8 +184,10 @@ const Projects = ({ location }) => {
         )}
         {data &&
           data.projects &&
-          data.projects.length < projectCount &&
-          !loading && (
+          !loading &&
+          (selectedFilter === FILTERS.all
+            ? data.projects.length < projectCount
+            : data.projects.length < challengesCount) && (
             <Button
               variant="secondary"
               text="Load more"
