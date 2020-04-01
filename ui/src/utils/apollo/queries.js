@@ -35,6 +35,11 @@ export const PROJECT_QUERY = gql`
       categories {
         id
         name
+        imageUrl
+        parentCategory {
+          id
+          name
+        }
       }
     }
   }

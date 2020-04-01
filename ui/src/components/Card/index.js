@@ -75,7 +75,8 @@ const Card = ({
           <Box
             sx={{
               textAlign: 'center',
-              padding: title && title.length > 16 ? 0 : 3,
+              py: title && title.length > 16 ? 0 : 3,
+              px: 3,
               position: 'relative',
             }}
           >

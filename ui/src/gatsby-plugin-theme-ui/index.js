@@ -4,13 +4,11 @@ export default {
     primary: '#090610',
     text: '#090610',
     secondary: '#4C66FF',
-    tertiary: '#7D7D7D',
-    column: '#8A8A8A',
     fill: '#CFCFCF',
-    black: '#090610',
     blackFaded: 'rgba(9,6,16,0.64)',
     grey: 'rgba(30,37,44,0.16)',
     whiteFaded: 'rgba(255,255,255,0.4)',
+    placeholder: 'rgba(9,6,16,0.32)',
     linkHover: '#3043B2',
     error: '#ED4A6D',
   },
@@ -58,7 +56,7 @@ export default {
       fontSize: '1.5rem',
       lineHeight: '2rem',
       fontWeight: 'bold',
-      color: 'black',
+      color: 'primary',
     },
     h6: {
       fontSize: '1.125rem',
@@ -174,7 +172,7 @@ export default {
     huge: {
       fontSize: '1.5rem',
       lineHeight: '2rem',
-      color: 'black',
+      color: 'primary',
     },
     field: {
       fontSize: '0.875rem',
