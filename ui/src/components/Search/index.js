@@ -11,48 +11,27 @@ import Close from '../../images/close.svg'
 
 import { PROJECTS_QUERY } from '../../utils/apollo/queries'
 
-const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
-  const [term, setTerm] = useState(value)
-
-  console.log('term: ', term)
-
+const Search = ({
+  isSearchOpen,
+  setIsSearchOpen,
+  value,
+  setValue,
+  isMobile,
+}) => {
   const { loading, data } = useQuery(PROJECTS_QUERY, {
     variables: {
       where: {
-        name_contains: term,
+        name_contains: value,
       },
     },
   })
 
   console.log('data: ', data)
 
-  const testProjects = [
-    {
-      id: '123',
-      name: 'One',
-      avatar: 'QmYkDtGoesJxjVuG825CN9J7jGAeD8Sa5uvQKKjVq1Ubxz',
-      categories: [{ name: 'Test' }],
-      isChallenged: false,
-    },
-    {
-      id: '123',
-      name: 'Two',
-      avatar: 'QmYkDtGoesJxjVuG825CN9J7jGAeD8Sa5uvQKKjVq1Ubxz',
-      categories: [{ name: 'Test' }],
-      isChallenged: false,
-    },
-    {
-      id: '123',
-      name: 'Three',
-      avatar: 'QmYkDtGoesJxjVuG825CN9J7jGAeD8Sa5uvQKKjVq1Ubxz',
-      categories: [{ name: 'Test' }],
-      isChallenged: false,
-    },
-  ]
-
   useEffect(() => {
     const handleClick = () => {
       setIsSearchOpen(false)
+      setValue('')
     }
     window.addEventListener('click', handleClick)
 
@@ -66,9 +45,11 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
       sx={{
         boxShadow:
           '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
-        width: '620px',
-        position: 'relative',
+        width: ['calc(100vw - 20px)', '480px', '620px'],
+        position: ['absolute', 'relative', 'relative'],
         backgroundColor: 'white',
+        mx: ['10px', 0, 0],
+        right: 0,
       }}
     >
       <Grid
@@ -96,9 +77,9 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               outline: 'none',
             },
           }}
+          autoFocus
           onChange={e => {
             const value = e.target ? e.target.value : ''
-            setTerm(value)
             setValue(value)
           }}
           value={value}
@@ -142,8 +123,9 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
       {value && value.length > 0 && (
         <Box
           sx={{
-            height: '480px',
-            width: '626px',
+            height: '536px',
+            maxHeight: '100vh',
+            width: ['calc(100vw - 15px)', '485px', '626px'],
             borderTop: '1px solid',
             borderColor: 'grey',
             backgroundColor: 'white',
@@ -155,16 +137,16 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
           }}
         >
-          {term !== '' && testProjects && (
+          {value !== '' && data && data.projects && (
             <Grid
               sx={{
-                gridTemplateColumns: '1fr 1fr 1fr',
+                gridTemplateColumns: ['1fr 1fr', '1fr 1fr', 'repeat(3, 1fr)'],
                 margin: '0 auto',
                 maxWidth: '570px',
               }}
               gap={4}
             >
-              {testProjects.map((project, index) => (
+              {data.projects.map((project, index) => (
                 <Card
                   key={index}
                   title={project.name}
@@ -187,7 +169,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
         height: '25px',
         width: '25px',
         cursor: 'pointer',
-        mr: 3,
+        mr: [4, 3, 3],
       }}
       onClick={e => {
         e.stopPropagation()

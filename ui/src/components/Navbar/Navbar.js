@@ -250,8 +250,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
           <Grid
             sx={{
               gridTemplateColumns: userAccount
-                ? 'max-content max-content max-content'
-                : '1fr 1fr max-content',
+                ? '1fr 1fr max-content max-content'
+                : '1fr 1fr max-content max-content',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
@@ -263,9 +263,16 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                 setParentMobileOpen(true)
               }}
             />
-            <Link to="/" sx={{ '&:hover': { svg: { marginLeft: 0 } } }}>
+            <Link to="/" sx={{ ml: 4, '&:hover': { svg: { marginLeft: 0 } } }}>
               <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
             </Link>
+            <Search
+              isSearchOpen={isSearchOpen}
+              setIsSearchOpen={setIsSearchOpen}
+              value={searchText}
+              setValue={setSearchText}
+              isMobile
+            />
             {renderActions()}
           </Grid>
         ) : (
