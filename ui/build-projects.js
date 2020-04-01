@@ -6,6 +6,7 @@ const child_process = require('child_process')
 const fetch = require('isomorphic-fetch')
 
 let state = {
+  assetsUploaded: false,
   lastUpdatedAt: 0,
   queuedProjects: [],
 }
@@ -119,9 +120,20 @@ function generateProjectPage(project, oldContent) {
 
 async function deployProjectPages() {
   console.log('Deploying project pages from public/ to textile')
+  console.log(
+    state.assetsUploaded
+      ? 'Assets have already been uploaded, just deploying project pages'
+      : "Assets haven't been uploaded yet, deploying everything",
+  )
+
   const { error } = await child_process.spawnSync(
     'textile',
-    ['--debug', 'bucket', 'push', 'public/', 'everest'],
+
+    // Upload everything if the assets haven't been uploaded yet;
+    // if they have, just upload the project pages
+    !state.assetsUploaded
+      ? ['--debug', 'bucket', 'push', 'public/', 'everest/']
+      : ['--debug', 'bucket', 'push', 'public/project/', 'everest/project/'],
     {
       input: '\n',
       encoding: 'utf-8',
@@ -131,6 +143,9 @@ async function deployProjectPages() {
   if (error) {
     throw error
   }
+
+  // Mark the assets as uploaded
+  state.assetsUploaded = true
 }
 
 async function fetchProjectsLoop() {

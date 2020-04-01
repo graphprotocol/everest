@@ -1,0 +1,49 @@
+images:
+  - gcr.io/$PROJECT_ID/everest:$SHORT_SHA
+options:
+  machineType: N1_HIGHCPU_32
+timeout: 900s
+steps:
+  # Build Docker image
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg
+      - TEXTILE_TOKEN=$_TEXTILE_TOKEN
+      - --build-arg
+      - GATSBY_IPFS_HTTP_URI=https://api.staging.thegraph.com/ipfs/api/v0/
+      - --build-arg
+      - GATSBY_NETWORK_CONNECTOR_URI=https://ropsten.infura.io/v3/$_INFURA_ID
+      - --build-arg
+      - GATSBY_INFURA_ID=$_INFURA_ID
+      - --build-arg
+      - GATSBY_NETWORK_URI=https://api.staging.thegraph.com
+      - --build-arg
+      - GATSBY_GRAPHQL_HTTP_URI=https://api.staging.thegraph.com/subgraphs/name/graphprotocol/everest
+      - -t
+      - gcr.io/$PROJECT_ID/everest:$SHORT_SHA
+      - -f
+      - Dockerfile
+      - .
+
+  # Inject image into the k8s config
+  - name: gcr.io/$PROJECT_ID/kustomize
+    args:
+      - edit
+      - set
+      - image
+      - everest=gcr.io/$PROJECT_ID/everest:$SHORT_SHA
+    dir: k8s
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER
+
+  # Apply k8s changes
+  - name: gcr.io/$PROJECT_ID/kustomize
+    dir: k8s
+    args:
+      - build
+    env:
+      - APPLY=true
+      - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER

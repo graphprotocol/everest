@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: everest
+  labels:
+    app: everest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: everest
+  template:
+    metadata:
+      labels:
+        app: everest
+    spec:
+      containers:
+        - name: everest
+          image: everest:to-be-replaced-by-kustomize
