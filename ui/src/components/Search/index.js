@@ -26,8 +26,6 @@ const Search = ({
     },
   })
 
-  console.log('data: ', data)
-
   useEffect(() => {
     const handleClick = () => {
       setIsSearchOpen(false)
