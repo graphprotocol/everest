@@ -1,0 +1,4 @@
+api_target: api.textile.io:443
+log:
+  debug: false
+project: everest
