@@ -1,6 +1,6 @@
 {
-  "updated-on": "March 31st 2020",
   "ropsten": {
+    "updated-on": "March 31st 2020",
     "everest": "0xdF083e1221F7ed031a32E41665506E2104BB4542",
     "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
     "mockDAI": "0x82A351cdFB726DafC8624d8bD6B0bc98d34Ffec1",

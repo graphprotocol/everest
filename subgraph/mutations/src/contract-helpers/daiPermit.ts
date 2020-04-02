@@ -7,10 +7,10 @@ const addresses = require('everest-contracts/addresses.json')
 //////////////////////////
 
 export const config = {
-  chainID: '3', // ROPSTEN ONLY, MUST BE CHANGED IF ON ANOTHER NETWORK
   offChainDataName: 'ProjectData',
   maxValidity: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  verifyingDAIContract: addresses.ropsten.mockDAI,
+  daiContractRopsten: addresses.ropsten.mockDAI,
+  daiContractMainnet: addresses.mainnet.dai,
 }
 
 const domainSchema = [
@@ -86,13 +86,23 @@ async function signPermit(provider, domain, message) {
 }
 
 export const daiPermit = async (holder, spenderAddress, daiContract, ethereum) => {
+  console.log('WHAT IS ETH: ', ethereum)
+  console.log('WHAT IS ETH: ', ethereum._network.chainId)
+
+  let daiAddress
+  if (ethereum._network.chainId == 1) {
+    daiAddress = config.daiContractMainnet
+  } else if (ethereum._network.chainId == 3) {
+    daiAddress = config.daiContractRopsten
+  }
+
   const holderAddress = holder
   const nonce = (await daiContract.nonces(holderAddress)).toString()
   const domain = {
     name: 'Dai Stablecoin',
     version: '1',
-    chainId: config.chainID,
-    verifyingContract: config.verifyingDAIContract,
+    chainId: String(ethereum._network.chainId),
+    verifyingContract: daiAddress,
   }
 
   const message = {

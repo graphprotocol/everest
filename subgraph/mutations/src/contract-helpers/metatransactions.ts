@@ -115,10 +115,8 @@ const stripHexPrefix = str => {
 //////////////////////////
 
 export const config = {
-  chainID: '3', // ROPSTEN ONLY, MUST BE CHANGED IF ON ANOTHER NETWORK
   offChainDataName: 'ProjectData',
   maxValidity: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  verifyingDAIContract: addresses.ropsten.mockDAI,
 }
 
 export const setAttribute = async (
@@ -222,7 +220,7 @@ export const applySignedWithAttribute = async (
   owner,
   metadataIpfsHash,
   everestContract,
-  ethDIDContract
+  ethDIDContract,
 ) => {
   const ownerAddress = owner
   const memberAddress = await newMember.getAddress()
@@ -269,7 +267,6 @@ export const applySignedWithAttribute = async (
   )
   return tx
 }
-
 
 export const applySignedWithAttributeAndPermit = async (
   newMember,

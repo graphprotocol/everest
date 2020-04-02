@@ -30,11 +30,14 @@
     ]
   },
   "scripts": {
+    "prepare:mainnet": "mustache ./config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:ropsten": "mustache ./config/ropsten.json subgraph.template.yaml > subgraph.yaml",
     "start:env": "docker-compose up",
     "reset:env": "yarn stop && sudo rm -rf ./data",
     "stop": "docker-compose down",
     "codegen": "graph codegen --output-dir src/types/",
-    "build": "graph build",
+    "build-ropsten": "yarn prepare:ropsten && graph build",
+    "build-mainnet": "yarn prepare:mainnet && graph build",
     "create": "graph create graphprotocol/everest --node https://api.thegraph.com/deploy/",
     "create:local": "graph create graphprotocol/everest --node http://127.0.0.1:8020",
     "deploy": "graph deploy graphprotocol/everest --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
@@ -42,6 +45,7 @@
     "deploy:local": "graph deploy graphprotocol/everest --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "watch:local": "graph deploy graphprotocol/everest --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001",
     "deploy-staging": "graph deploy graphprotocol/everest --ipfs https://api.staging.thegraph.com/ipfs/ --node https://api.staging.thegraph.com/deploy/",
-    "deploy-ropsten": "graph deploy graphprotocol/everest --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+    "deploy-ropsten": "graph deploy graphprotocol/everest --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-mainnet": "graph deploy davekaj/everest --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
   }
 }
