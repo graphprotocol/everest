@@ -13,5 +13,12 @@
       "mockDAI": "0xCfEB869F69431e42cdB54A4F4f105C19C080A601",
       "reserveBank": "0x4C65804f4b00a50e0750293973D7EAf32602587E"
   },
-  "mainnet": {}
+  "mainnet": {
+    "updated-on": "April 1st 2020",
+    "everest": "0x5f13fd6F27bF007d62A3D04a3080F113bD05fA54",
+    "ethereumDIDRegistry": "0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B",
+    "dai": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "reserveBank": "0x0b5da6Dda6569Ab79300AeEe6b30F86cBA347E3a",
+    "registry": "0xccbCD50214832EA50C426631187b0b646615E92f"
+  }
 }

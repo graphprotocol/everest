@@ -27,14 +27,13 @@ module.exports = async (deployer, network) => {
             0,
             config.ropstenParams.amountToEachAccount.length - parseInt(18, 10)
         )
-        // eslint-disable-next-line no-console
         console.log(`Allocating ${displayAmt} DAI tokens to ` + `${tokenHolder}.`)
         await token.transfer(tokenHolder, config.ropstenParams.amountToEachAccount)
         giveTokensTo(tokenHolders.slice(1))
     }
 
     // Set up didAddress and owner depending on the network
-    if (network === 'development') {
+    if (network == 'development') {
         tokenHolders = [
             // Zero is minter, starts with 100M, so skip it
             config.wallets.one().signingKey.address,
@@ -45,25 +44,22 @@ module.exports = async (deployer, network) => {
         tokenMinter = config.wallets.zero().signingKey.address
         chainID = 9545
 
-        // eslint-disable-next-line no-console
         console.log('Deploying token to a test network and minting 100M DAI.....')
         await deployer.deploy(Token, chainID)
 
-        // eslint-disable-next-line no-console
         console.log(`Giving tokens to ${tokenHolders.length} accounts`)
         const token = await Token.deployed()
 
         await token.mint(tokenMinter, config.ropstenParams.supply)
         await giveTokensTo(tokenHolders)
 
-        owner = params.owner
+        owner = config.ganacheParams.owner
         // We must deploy our own DID registry for ganache
         await deployer.deploy(EthereumDIDRegistry)
         const edr = await EthereumDIDRegistry.deployed()
         didAddress = edr.address
         daiAddress = (await Token.deployed()).address
-
-    } else if (network === 'ropsten') {
+    } else if (network == 'ropsten' || network == 'ropsten-fork') {
         chainID = 3
         owner = config.ropstenParams.ropstenOwner
         didAddress = config.ropstenParams.ethereumDIDRegistryAddress
@@ -77,11 +73,9 @@ module.exports = async (deployer, network) => {
                 config.metamaskAddresses.four
             ]
             tokenMinter = config.metamaskAddresses.zero
-            // eslint-disable-next-line no-console
             console.log('Deploying token to a test network and minting 100M DAI.....')
             await deployer.deploy(Token, chainID)
 
-            // eslint-disable-next-line no-console
             console.log(`Giving tokens to ${tokenHolders.length} accounts`)
             const token = await Token.deployed()
 
@@ -94,12 +88,11 @@ module.exports = async (deployer, network) => {
             console.log(`Using existing ropsten DAI address at ${config.ropstenParams.daiAddress}`)
             daiAddress = config.ropstenParams.daiAddress
         }
-    } else if (network === 'mainnet') {
-        console.log(
-            'Deploying to mainnet, so skipping token deploy, and using token at ' +
-                `${config.mainnetParams.daiAddress}.`
-        )
+    } else if (network == 'mainnet' || network == 'mainnet-fork') {
+        owner = config.mainnetParams.owner
+        didAddress = config.mainnetParams.ethereumDIDRegistryAddress
         daiAddress = config.mainnetParams.daiAddress
+        console.log('Deploying to mainnet, using mainnet DAI at ' + `${daiAddress}.`)
     }
 
     // Deploy the dependant contracts that must exist before Everest
