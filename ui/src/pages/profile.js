@@ -427,7 +427,11 @@ const Profile = ({ location }) => {
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
-              <Styled.h5>Projects Delegated to You</Styled.h5>
+              {isOwner() ? (
+                <Styled.h5>Projects Delegated to You</Styled.h5>
+              ) : (
+                <Styled.h5>Projects Delegated to Them</Styled.h5>
+              )}
               <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                 <span>{user.delegatorProjects.length} Delegated Projects</span>
               </Styled.p>
@@ -462,7 +466,11 @@ const Profile = ({ location }) => {
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>
-              <Styled.h5>Projects You're Challenging</Styled.h5>
+              {isOwner() ? (
+                <Styled.h5>Projects You're Challenging</Styled.h5>
+              ) : (
+                <Styled.h5>Projects They're Challenging</Styled.h5>
+              )}
               <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
                 <span>
                   {userChallenges ? userChallenges.challenges.length : ''}{' '}

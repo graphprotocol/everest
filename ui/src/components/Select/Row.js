@@ -115,6 +115,9 @@ Row.propTypes = {
     avatar: PropTypes.string,
     slug: PropTypes.string,
     disabled: PropTypes.bool,
+    parentCategory: PropTypes.shape({
+      name: PropTypes.string,
+    }),
   }),
   selected: PropTypes.any,
   setSelected: PropTypes.func,

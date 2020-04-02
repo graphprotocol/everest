@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/react-hooks'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
+import Link from '../components/Link'
 
 import { CATEGORY_QUERY } from '../utils/apollo/queries'
 import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
@@ -33,7 +34,12 @@ const Category = ({ location }) => {
 
   const viewRef = useRef()
 
-  if (loading) return <div>Loading</div>
+  if (loading)
+    return (
+      <Box sx={{ textAlign: 'center' }}>
+        <img src="/loading-dots-blue.gif" />
+      </Box>
+    )
   if (error) {
     console.error(`Error getting the category: ${error.message}`)
     return
@@ -47,6 +53,19 @@ const Category = ({ location }) => {
     p => p.currentChallenge !== null,
   )
 
+  const getBreadcrumbs = () => {
+    let breadcrumbs = []
+    let parent = category && category.parentCategory
+    while (parent) {
+      breadcrumbs = breadcrumbs.concat({
+        name: parent.name,
+        url: `/category/${parent.id}`,
+      })
+      parent = parent.parentCategory
+    }
+    return breadcrumbs
+  }
+
   return (
     <Grid>
       <Grid sx={topStyles} gap={[1, 4, 7]}>
@@ -54,6 +73,52 @@ const Category = ({ location }) => {
           <img src={category.imageUrl} alt={category.id} sx={imageStyles} />
         </Box>
         <Box sx={{ mx: ['auto', 0], mt: [7, 0, 0] }}>
+          <Grid
+            sx={{
+              gridTemplateColumns: `repeat(${
+                getBreadcrumbs().length
+              }, max-content)`,
+              alignItems: 'center',
+            }}
+          >
+            {getBreadcrumbs().length > 0 &&
+              getBreadcrumbs()
+                .reverse()
+                .map((breadcrumb, index) => (
+                  <Grid
+                    sx={{
+                      gridTemplateColumns: `repeat(2, max-content)`,
+                      alignItems: 'center',
+                    }}
+                    key={index}
+                  >
+                    <Link to={breadcrumb.url}>
+                      <p
+                        sx={{
+                          variant: 'text.large',
+                          color: 'secondary',
+                          fontWeight: 'heading',
+                        }}
+                      >
+                        {breadcrumb.name}
+                      </p>
+                    </Link>
+                    <Box
+                      sx={{
+                        height: '9px',
+                        width: '9px',
+                        borderTop: '2px solid',
+                        borderRight: '2px solid',
+                        borderColor: 'secondary',
+                        transform: 'rotate(45deg)',
+                        display: 'block',
+                        cursor: 'pointer',
+                        mt: 1,
+                      }}
+                    />
+                  </Grid>
+                ))}
+          </Grid>
           <Styled.h2>{category.name}</Styled.h2>
           <Styled.p sx={{ maxWidth: ['100%', '70%', '70%'] }}>
             {category.description}

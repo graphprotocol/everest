@@ -253,6 +253,13 @@ Field.propTypes = {
       parent: PropTypes.any,
     }),
   ),
+  selectedItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      parent: PropTypes.any,
+    }),
+  ),
+  error: PropTypes.string,
 }
 
 export default Field

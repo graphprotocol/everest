@@ -2,9 +2,6 @@
 import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import { navigate } from 'gatsby'
-
-import Link from '../Link'
 
 const DataRow = ({ name, value, href }) => (
   <Grid

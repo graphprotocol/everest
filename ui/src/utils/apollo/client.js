@@ -26,13 +26,13 @@ try {
 
           provider = walletlink.makeWeb3Provider(
             process.env.GATSBY_NETWORK_CONNECTOR_URI,
-            3,
+            process.env.GATSBY_CHAIN_ID,
           )
         }
       } else if (walletConnector.name === 'walletconnect') {
         provider = new WalletConnectProvider({
           infuraId: process.env.GATSBY_INFURA_ID,
-          chainId: 3,
+          chainId: process.env.GATSBY_CHAIN_ID,
         })
       } else if (walletConnector.name === 'injected') {
         provider = window.web3.currentProvider

@@ -19,13 +19,7 @@ import Plus from '../../images/close.svg'
 import Bars from '../../images/bars.svg'
 import Arrow from '../../images/arrow.svg'
 import Close from '../../images/close.svg'
-
-let ThreeBox
-try {
-  ThreeBox = require('3box').default
-} catch (e) {
-  console.log('error: ', e)
-}
+import ThreeBox from '3box'
 
 const Navbar = ({ location, setParentMobileOpen, ...props }) => {
   const { account } = useAccount()
@@ -129,7 +123,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                 {
                   text: (
                     <Box
-                      onClick={e =>
+                      onClick={() =>
                         userAccount ? navigate('/projects/new') : openModal()
                       }
                     >

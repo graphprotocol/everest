@@ -17,7 +17,6 @@ export default {
     description: 'Connect to Coinbase Wallet on your phone',
     href: null,
   },
-  // TODO: Enable when you get it to work
   WALLET_CONNECT: {
     name: 'Wallet Connect',
     connector: walletconnect,
