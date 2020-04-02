@@ -9,14 +9,27 @@ import Card from '../Card'
 import SearchIcon from '../../images/search.svg'
 import Close from '../../images/close.svg'
 
-import { PROJECTS_QUERY } from '../../utils/apollo/queries'
+import { PROJECT_SEARCH } from '../../utils/apollo/queries'
 
 const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
-  const { data } = useQuery(PROJECTS_QUERY, {
+  // sea:* | bird:*
+  let param = ''
+  if (value.length > 0) {
+    let terms = value.trim().split(' ')
+    console.log('terms: ', terms)
+    terms.forEach((term, index) => {
+      param += `${term}:*`
+      if (index !== terms.length - 1) {
+        param += ' | '
+      }
+    })
+  }
+
+  console.log('param: ', param)
+
+  const { data } = useQuery(PROJECT_SEARCH, {
     variables: {
-      where: {
-        name_contains: value,
-      },
+      text: param,
     },
   })
 

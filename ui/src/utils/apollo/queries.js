@@ -245,6 +245,16 @@ export const PROJECTS_QUERY = gql`
   }
 `
 
+export const PROJECT_SEARCH = gql`
+  query projectSearch($text: String) {
+    projectSearch(text: $text)
+    id
+    ipfsHash
+    name
+    description
+  }
+`
+
 export const PROFILE_QUERY = gql`
   query profile(
     $id: ID!
