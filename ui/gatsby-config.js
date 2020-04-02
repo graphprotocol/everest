@@ -3,9 +3,15 @@
  *
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
-let env = process.env.CI ? 'development' : process.env.NODE_ENV
+
+const activeEnv =
+  process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
+
+console.log('process.env.GATSBY_ACTIVE_ENV: ', process.env.GATSBY_ACTIVE_ENV)
+console.log('activeEnv: ', activeEnv)
+
 require('dotenv').config({
-  path: `.env.${env}`,
+  path: `.env.${activeEnv}`,
 })
 
 module.exports = {
