@@ -42,7 +42,7 @@ try {
     provider = window.web3.currentProvider
   }
 } catch (e) {
-  console.log('Error importing provider: ', e)
+  provider
 }
 
 const networkURI = process.env.GATSBY_NETWORK_URI
