@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { jsx, Styled, Box } from 'theme-ui'
+import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
@@ -11,14 +11,8 @@ import Close from '../../images/close.svg'
 
 import { PROJECTS_QUERY } from '../../utils/apollo/queries'
 
-const Search = ({
-  isSearchOpen,
-  setIsSearchOpen,
-  value,
-  setValue,
-  isMobile,
-}) => {
-  const { loading, data } = useQuery(PROJECTS_QUERY, {
+const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
+  const { data } = useQuery(PROJECTS_QUERY, {
     variables: {
       where: {
         name_contains: value,
@@ -177,6 +171,11 @@ const Search = ({
   )
 }
 
-Search.propTypes = {}
+Search.propTypes = {
+  isSearchOpen: PropTypes.bool,
+  setIsSearchOpen: PropTypes.func,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+}
 
 export default Search

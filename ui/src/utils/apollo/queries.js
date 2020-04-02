@@ -146,6 +146,14 @@ export const CATEGORY_QUERY = gql`
           }
         }
       }
+      parentCategory {
+        id
+        name
+        parentCategory {
+          id
+          name
+        }
+      }
       projects {
         id
         name

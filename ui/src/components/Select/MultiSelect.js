@@ -262,6 +262,12 @@ MultiSelect.propTypes = {
       parent: PropTypes.any,
     }),
   ),
+  selectedItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      parent: PropTypes.any,
+    }),
+  ),
 }
 
 export default MultiSelect

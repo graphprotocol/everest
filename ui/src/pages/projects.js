@@ -21,7 +21,7 @@ const Projects = ({ location }) => {
 
   const [allProjects, setAllProjects] = useState([])
   const [projectCount, setProjectCount] = useState(0)
-  const [challengesCount, setChallengesCount] = useState(0)
+  const [challengesCount, setChallengesCount] = useState(null)
   const [selected, setSelected] = useState('cards')
   const [selectedFilter, setSelectedFilter] = useState(
     queryParams && queryParams.view ? queryParams.view : FILTERS.all,
@@ -87,7 +87,7 @@ const Projects = ({ location }) => {
           >
             <Styled.h2
               sx={{
-                borderRight: '1px solid',
+                borderRight: challengesCount !== 0 ? '1px solid' : 'none',
                 borderColor: 'grey',
                 pr: 5,
                 mb: 2,
@@ -95,28 +95,30 @@ const Projects = ({ location }) => {
             >
               Projects
             </Styled.h2>
-            <Filters
-              items={[
-                {
-                  text: 'All projects',
-                  handleSelect: () => {
-                    setSelectedFilter(FILTERS.all)
-                    navigate(`?view=${FILTERS.all}`)
+            {challengesCount !== 0 && (
+              <Filters
+                items={[
+                  {
+                    text: 'All projects',
+                    handleSelect: () => {
+                      setSelectedFilter(FILTERS.all)
+                      navigate(`?view=${FILTERS.all}`)
+                    },
                   },
-                },
-                {
-                  text: 'Challenged projects',
-                  handleSelect: () => {
-                    setSelectedFilter(FILTERS.challenged)
-                    navigate(`?view=${FILTERS.challenged}`)
+                  {
+                    text: 'Challenged projects',
+                    handleSelect: () => {
+                      setSelectedFilter(FILTERS.challenged)
+                      navigate(`?view=${FILTERS.challenged}`)
+                    },
                   },
-                },
-              ]}
-              menuStyles={{ left: 0, width: '280px', top: '60px' }}
-              setIsFilterOpen={setIsFilterOpen}
-              isFilterOpen={isFilterOpen}
-              selectedFilter={selectedFilter}
-            />
+                ]}
+                menuStyles={{ left: 0, width: '280px', top: '60px' }}
+                setIsFilterOpen={setIsFilterOpen}
+                isFilterOpen={isFilterOpen}
+                selectedFilter={selectedFilter}
+              />
+            )}
           </Grid>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
             {projectCount} Projects -{' '}

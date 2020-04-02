@@ -23,8 +23,7 @@ const Modal = ({ children, showModal, closeModal }) => {
   const { activate } = useWeb3React()
   const { account } = useAccount()
 
-  // TODO: refactor this logic
-  const [walletError, setWalletError] = useState(false)
+  // TODO: Add wallet error
   const [selectedWallet, setSelectedWallet] = useState(null)
   const [showAccountView, setShowAccountView] = useState(false)
   const [showPendingView, setShowPendingView] = useState(false)
@@ -94,7 +93,6 @@ const Modal = ({ children, showModal, closeModal }) => {
           activate(wallet.connector)
         } else {
           console.error(`Error activating the wallet ${wallet.name}: `, error)
-          setWalletError(true)
         }
       })
       .then(async () => {

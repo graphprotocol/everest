@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 
@@ -106,6 +106,16 @@ const Sorting = ({
       </Box>
     </Menu>
   )
+}
+
+Sorting.propTypes = {
+  selectedOrderBy: PropTypes.string,
+  setSelectedOrderBy: PropTypes.func,
+  selectedOrderDirection: PropTypes.string,
+  setSelectedOrderDirection: PropTypes.func,
+  isSortingOpen: PropTypes.bool,
+  setIsSortingOpen: PropTypes.func,
+  orderBy: PropTypes.any,
 }
 
 export default Sorting
