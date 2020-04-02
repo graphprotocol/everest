@@ -74,8 +74,6 @@ const Projects = ({ location }) => {
     )
   }, [data, everestData])
 
-  console.log('ChallengesCount: ', challengesCount)
-
   return (
     <Grid>
       <Grid columns={[1, 2, 2]}>
