@@ -16,7 +16,7 @@ const Stats = ({ stats }) => {
                 fontSize: '1.85rem',
                 marginLeft: -3,
                 position: 'relative',
-                bottom: '5px',
+                bottom: [0, '5px', '5px'],
               },
             }}
           >

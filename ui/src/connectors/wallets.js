@@ -15,7 +15,8 @@ export default {
     type: 'walletlink',
     icon: '/coinbase-wallet.png',
     description: 'Connect to Coinbase Wallet on your phone',
-    href: null,
+    href: 'https://go.cb-w.com/mtUDhEZPy1',
+    mobileName: 'Open in Coinbase Wallet',
   },
   WALLET_CONNECT: {
     name: 'Wallet Connect',
@@ -24,6 +25,8 @@ export default {
     icon: '/wallet-connect.png',
     description:
       'Connect to Trust Wallet, Rainbow Wallet and others on your phone.',
-    href: null,
+    href:
+      'https://link.trustwallet.com/open_url?coin_id=60&url=http://everest.link',
+    mobileName: 'Open in Trust Wallet',
   },
 }

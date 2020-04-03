@@ -80,11 +80,12 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         setUserAccount(account)
       }
     }
-    metamaskAccountChange(accounts => {
-      if (accounts && accounts.length > 0) {
-        setUserAccount(accounts[0])
-        if (typeof window !== undefined) {
-          if (walletConnector && walletConnector.name === 'injected') {
+
+    if (walletConnector && walletConnector.name === 'injected') {
+      metamaskAccountChange(accounts => {
+        if (accounts && accounts.length > 0) {
+          setUserAccount(accounts[0])
+          if (typeof window !== undefined) {
             const newWalletConnector = JSON.stringify({
               ...walletConnector,
               accounts: accounts,
@@ -92,8 +93,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             window.localStorage.setItem('WALLET_CONNECTOR', newWalletConnector)
           }
         }
-      }
-    })
+      })
+    }
   }, [account])
 
   const isNewProjectPage =
@@ -148,12 +149,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
               ]}
             >
               <img
-                src={
-                  userImage
-                    ? userImage
-                    : `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-                        ''}/profile-default.png`
-                }
+                src={userImage ? userImage : `/profile-default.png`}
                 alt="profile"
                 sx={imgStyles}
               />
@@ -175,12 +171,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                 }}
               >
                 <img
-                  src={
-                    userImage
-                      ? userImage
-                      : `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-                          ''}/profile-default.png`
-                  }
+                  src={userImage ? userImage : `/profile-default.png`}
                   alt="profile"
                   sx={imgStyles}
                 />
@@ -211,8 +202,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                     borderRight: '2px solid',
                     borderColor: 'secondary',
                     transform: 'rotate(135deg)',
-                    display: 'block',
                     cursor: 'pointer',
+                    display: ['none', 'block', 'block'],
                   }}
                 />
               </Menu>
@@ -239,150 +230,144 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
 
   return (
     <Grid {...props} sx={{ height: '96px', alignItems: 'center' }}>
-      {isMobile ? (
-        !isMobileOpen ? (
-          <Grid
-            sx={{
-              gridTemplateColumns: userAccount
-                ? '1fr 1fr max-content max-content'
-                : '1fr 1fr max-content max-content',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-            gap={0}
-          >
-            <Bars
-              onClick={() => {
-                setIsMobileOpen(true)
-                setParentMobileOpen(true)
-              }}
-            />
-            <Link to="/" sx={{ ml: 4, '&:hover': { svg: { marginLeft: 0 } } }}>
-              <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
-            </Link>
-            <Search
-              isSearchOpen={isSearchOpen}
-              setIsSearchOpen={setIsSearchOpen}
-              value={searchText}
-              setValue={setSearchText}
-              isMobile
-            />
-            {renderActions()}
-          </Grid>
-        ) : (
-          <Box sx={{ height: '100vh', width: '100vw' }}>
-            <Close
-              sx={{
-                fill: 'secondary',
-                position: 'absolute',
-                zIndex: 12,
-                top: 6,
-                width: '15px',
-              }}
-              onClick={() => {
-                setIsMobileOpen(false)
-                setParentMobileOpen(false)
-              }}
-            />
-            <Box
-              sx={{
-                position: 'relative',
-                width: '100%',
-                backgroundColor: 'white',
-                height: '100%',
-                overflow: 'hidden',
-                zIndex: 10,
-                px: 6,
-                pt: 8,
-                '& a': {
-                  py: 3,
-                },
-              }}
-            >
-              <Styled.a href="/">
-                Home <Arrow sx={{ ml: 1, fill: 'secondary' }} />
-              </Styled.a>
-              <Styled.a href="/projects">
-                Projects <Arrow sx={{ ml: 1, fill: 'secondary' }} />
-              </Styled.a>
-              <Styled.a href="/categories">
-                Categories <Arrow sx={{ ml: 1, fill: 'secondary' }} />
-              </Styled.a>
-              <Styled.a href="/charter">
-                Charter <Arrow sx={{ ml: 1, fill: 'secondary' }} />
-              </Styled.a>
-            </Box>
-          </Box>
-        )
-      ) : (
+      {!isMobileOpen ? (
         <Grid
           sx={{
-            gridTemplateColumns: [
-              '1fr 1fr max-content',
-              '30px repeat(4, max-content)',
-            ],
-            width: '100%',
+            gridTemplateColumns: '1fr 1fr max-content max-content',
+            justifyContent: 'space-between',
             alignItems: 'center',
+            display: ['grid', 'none', 'none'],
           }}
-          gap={6}
+          gap={0}
         >
-          <Link to="/" sx={{ '&:hover': { svg: { marginLeft: 0 } } }}>
+          <Bars
+            onClick={() => {
+              setIsMobileOpen(true)
+              setParentMobileOpen(true)
+            }}
+          />
+          <Link to="/" sx={{ ml: 4, '&:hover': { svg: { marginLeft: 0 } } }}>
             <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
           </Link>
-
-          <Link to="/">
-            <span>Everest</span>
-          </Link>
-          <Link to="/projects">Projects</Link>
-          <Link to="/categories">Categories</Link>
-          <Link to="/charter">Charter</Link>
-        </Grid>
-      )}
-
-      {!isMobile && (
-        <Grid
-          sx={{
-            position: 'absolute',
-            right: '20px',
-            alignItems: 'center',
-            gridTemplateColumns: '1fr max-content max-content',
-            height: '100%',
-          }}
-          gap={3}
-        >
           <Search
             isSearchOpen={isSearchOpen}
             setIsSearchOpen={setIsSearchOpen}
             value={searchText}
             setValue={setSearchText}
+            isMobile
           />
-          <Link
-            onClick={() =>
-              userAccount ? navigate('/projects/new') : openModal()
-            }
+          {renderActions()}
+        </Grid>
+      ) : (
+        <Box sx={{ height: '100vh', width: '100vw' }}>
+          <Close
             sx={{
-              backgroundColor: isNewProjectPage ? 'secondary' : 'transparent',
-              padding: '12px 22px',
-              mr: 1,
-              mt: 1,
-              '&:hover': {
-                svg: {
-                  fill: isNewProjectPage ? 'white' : 'secondary',
-                  marginLeft: 'inherit',
-                },
+              fill: 'secondary',
+              position: 'absolute',
+              zIndex: 12,
+              top: 6,
+              width: '15px',
+            }}
+            onClick={() => {
+              setIsMobileOpen(false)
+              setParentMobileOpen(false)
+            }}
+          />
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              backgroundColor: 'white',
+              height: '100%',
+              overflow: 'hidden',
+              zIndex: 10,
+              px: 6,
+              pt: 8,
+              '& a': {
+                py: 3,
               },
             }}
           >
-            <Plus
-              sx={{
-                transform: 'rotate(45deg)',
-                fill: isNewProjectPage ? 'white' : 'secondary',
-              }}
-            />
-          </Link>
-          {renderActions()}
-        </Grid>
+            <Styled.a href="/">
+              Home <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+            </Styled.a>
+            <Styled.a href="/projects">
+              Projects <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+            </Styled.a>
+            <Styled.a href="/categories">
+              Categories <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+            </Styled.a>
+            <Styled.a href="/charter">
+              Charter <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+            </Styled.a>
+          </Box>
+        </Box>
       )}
+      <Grid
+        sx={{
+          gridTemplateColumns: [
+            '1fr 1fr max-content',
+            '30px repeat(4, max-content)',
+          ],
+          width: '100%',
+          alignItems: 'center',
+          display: ['none', 'grid', 'grid'],
+        }}
+        gap={6}
+      >
+        <Link to="/" sx={{ '&:hover': { svg: { marginLeft: 0 } } }}>
+          <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
+        </Link>
+        <Link to="/">
+          <span>Everest</span>
+        </Link>
+        <Link to="/projects">Projects</Link>
+        <Link to="/categories">Categories</Link>
+        <Link to="/charter">Charter</Link>
+      </Grid>
+      <Grid
+        sx={{
+          position: 'absolute',
+          right: '20px',
+          alignItems: 'center',
+          gridTemplateColumns: '1fr max-content max-content',
+          height: '100%',
+          display: ['none', 'grid', 'grid'],
+        }}
+        gap={3}
+      >
+        <Search
+          isSearchOpen={isSearchOpen}
+          setIsSearchOpen={setIsSearchOpen}
+          value={searchText}
+          setValue={setSearchText}
+        />
+        <Link
+          onClick={() =>
+            userAccount ? navigate('/projects/new') : openModal()
+          }
+          sx={{
+            backgroundColor: isNewProjectPage ? 'secondary' : 'transparent',
+            padding: '12px 22px',
+            mr: 1,
+            mt: 1,
+            '&:hover': {
+              svg: {
+                fill: isNewProjectPage ? 'white' : 'secondary',
+                marginLeft: 'inherit',
+              },
+            },
+          }}
+        >
+          <Plus
+            sx={{
+              transform: 'rotate(45deg)',
+              fill: isNewProjectPage ? 'white' : 'secondary',
+            }}
+          />
+        </Link>
+        {renderActions()}
+      </Grid>
       {showModal && (
         <Modal showModal={showModal} closeModal={closeModal}></Modal>
       )}
