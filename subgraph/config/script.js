@@ -14,14 +14,29 @@ readAndWriteFile(
   __dirname + '/../../contracts/addresses.json',
   content => {
     const addresses = JSON.parse(content)
-    console.log(addresses)
     fs.writeFileSync(
-      'mainnet.json',
-      JSON.stringify({ network: 'mainnet', address: addresses.mainnet.everest }, null, 2),
+      __dirname + '/mainnet.json',
+      JSON.stringify(
+        {
+          network: 'mainnet',
+          address: addresses.mainnet.everest,
+          blockNumber: '9780000',
+        },
+        null,
+        2,
+      ),
     )
     fs.writeFileSync(
-      'ropsten.json',
-      JSON.stringify({ network: 'ropsten', address: addresses.ropsten.everest }, null, 2),
+      __dirname + '/ropsten.json',
+      JSON.stringify(
+        {
+          network: 'ropsten',
+          address: addresses.ropsten.everest,
+          blockNumber: '7300000',
+        },
+        null,
+        2,
+      ),
     )
   },
   err => {

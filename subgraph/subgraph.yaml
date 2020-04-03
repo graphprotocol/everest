@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Everest
-    network: mainnet
+    network: ropsten
     source:
-      address: '0x5f13fd6F27bF007d62A3D04a3080F113bD05fA54'
+      address: '0xdF083e1221F7ed031a32E41665506E2104BB4542'
       abi: Everest
-      startBlock: 9780000
+      startBlock: 7300000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -49,11 +49,11 @@ dataSources:
           handler: handleChallengeSucceeded
   - kind: ethereum/contract
     name: EthereumDIDRegistry
-    network: mainnet
+    network: ropsten
     source:
       address: '0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B'
       abi: EthereumDIDRegistry
-      startBlock: 9780000
+      startBlock: 7300000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3

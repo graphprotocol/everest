@@ -145,6 +145,7 @@ const addressMap = {
 
 async function getContract(context: Context, contract: string) {
   const { ethereum } = context.graph.config
+  console.log('ETH :', ethereum)
 
   const abi = abis[contract]
 
@@ -167,6 +168,8 @@ async function getContract(context: Context, contract: string) {
 
   const address = networkAddresses[addressMap[contract]]
 
+  console.log('ADDRESS: ', address)
+
   if (!address) {
     throw new Error(
       `Missing contract address for '${contract}' on network '${networkName}'`,
@@ -187,6 +190,7 @@ const uploadImage = async (_: any, { image }: any, context: Context) => {
 
 const daiBalance = async (_: any, args: any, context: Context) => {
   const daiContract = await getContract(context, 'Dai')
+  console.log(daiContract)
   const balance = await daiContract.balanceOf(args.account)
   const formattedBalance = ethers.utils.formatUnits(balance, 18)
   return formattedBalance

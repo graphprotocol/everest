@@ -13,29 +13,20 @@
     ]
   },
   "scripts": {
-    "start:dev:ropsten": "yarn build:mutations && GATSBY_ACTIVE_ENV=staging yarn start:ui",
-    "start:dev:mainnet": "yarn build:mutations && GATSBY_ACTIVE_ENV=production yarn start:ui",
-    "build": "yarn build:contracts && yarn build:mutations && yarn build:subgraph",
-    "build-ropsten": "yarn build:contracts && yarn build:mutations && yarn build:subgraph-ropsten",
-    "build-mainnet": "yarn build:contracts && yarn build:mutations && yarn build:subgraph-mainnet",
-    "build:contracts": "lerna exec --scope everest-contracts -- yarn build",
-    "build:mutations": "lerna exec --scope everest-mutations -- yarn build",
-    "build:subgraph-ropsten": "lerna exec --scope everest -- 'yarn codegen && yarn build-ropsten'",
-    "build:subgraph-mainnet": "lerna exec --scope everest -- 'yarn codegen && yarn build-mainnet'",
-    "build:ui": "lerna exec --scope everest-ui -- yarn build",
-    "start": "concurrently \"yarn:start:ui\" \"yarn:start:env\"",
-    "start:ui": "lerna exec --scope everest-ui -- yarn start",
-    "start:env": "concurrently \"yarn:start:subgraph\" \"yarn:deploy\"",
-    "start:subgraph": "lerna exec --scope everest -- yarn start:env",
-    "deploy": "wait-on tcp:8020 && sleep 20 && yarn create:subgraph && sleep 10 && yarn deploy:subgraph",
-    "deploy:subgraph": "lerna exec --scope everest -- yarn deploy:local",
-    "create:subgraph": "lerna exec --scope everest -- yarn create:local",
-    "stop:env": "lerna exec --scope everest -- yarn stop",
-    "reset:env": "lerna exec --scope everest -- yarn reset:env"
+    "build:contracts":          "lerna exec --scope everest-contracts -- yarn build",
+    "build:mutations":          "lerna exec --scope everest-mutations -- yarn build",
+    "build:subgraph-ropsten":   "lerna exec --scope everest-subgraph -- yarn build-ropsten",
+    "build:subgraph-mainnet":   "lerna exec --scope everest-subgraph -- yarn build-mainnet",
+    "deploy:subgraph-ropsten":  "lerna exec --scope everest-subgraph -- yarn deploy-ropsten",
+    "deploy:subgraph-mainnet":  "lerna exec --scope everest-subgraph -- yarn deploy-mainnet",
+    "build:ui":                 "lerna exec --scope everest-ui -- yarn build",
+    "start:ui":                 "lerna exec --scope everest-ui -- yarn start",
+    "build-ropsten":            "yarn build:contracts && yarn build:subgraph-ropsten && yarn build:mutations",
+    "build-mainnet":            "yarn build:contracts && yarn build:subgraph-mainnet && yarn build:mutations",
+    "start:dev-ropsten":        "yarn build-ropsten && yarn deploy:subgraph-ropsten && GATSBY_ACTIVE_ENV=staging yarn start:ui",
+    "start:dev-mainnet":        "yarn build-mainnet && yarn deploy:subgraph-mainnet && GATSBY_ACTIVE_ENV=production yarn start:ui"
   },
   "devDependencies": {
-    "concurrently": "5.1.0",
-    "lerna": "3.20.2",
-    "wait-on": "4.0.0"
+    "lerna": "3.20.2"
   }
 }
