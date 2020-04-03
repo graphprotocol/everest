@@ -7,6 +7,7 @@ import { Dialog } from '@reach/dialog'
 import '@reach/dialog/styles.css'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import { URI_AVAILABLE } from '@web3-react/walletconnect-connector'
+import { isMobile } from 'react-device-detect'
 
 import { walletExists } from '../../services/ethers'
 import wallets from '../../connectors/wallets'
@@ -134,7 +135,8 @@ const Modal = ({ children, showModal, closeModal }) => {
           position: 'relative',
           maxWidth: '660px',
           width: '100%',
-          padding: 7,
+          px: [3, 7, 7],
+          py: [5, 7, 7],
           boxShadow:
             '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
         }}
@@ -173,11 +175,14 @@ const Modal = ({ children, showModal, closeModal }) => {
           )
         ) : (
           <Fragment>
-            <Styled.h2>Sign in</Styled.h2>
-            <Styled.h6>Connect to a Wallet</Styled.h6>
+            <Box sx={{ px: [4, 0, 0] }}>
+              <Styled.h2>Sign in</Styled.h2>
+              <Styled.h6>Connect to a Wallet</Styled.h6>
+            </Box>
             <Divider mt={6} mb={6} />
             {Object.keys(wallets).map(key => {
               const wallet = wallets[key]
+              if (isMobile && wallet.name === 'MetaMask') return null
               return (
                 <Grid
                   key={wallet.name}
@@ -192,13 +197,22 @@ const Modal = ({ children, showModal, closeModal }) => {
                     <img src={wallet.icon} sx={iconStyles} alt="Wallet icon" />
                   </Box>
                   <Box>
-                    <Styled.h5 sx={{ color: 'secondary' }}>
-                      {!isWalletEnabled && wallet.name === 'MetaMask'
+                    <Styled.h5
+                      sx={{
+                        color: 'secondary',
+                        fontSize: ['1.25rem', '1.5rem', '1.5rem'],
+                      }}
+                    >
+                      {isMobile && wallet.mobileName
+                        ? wallet.mobileName
+                        : !isWalletEnabled && wallet.name === 'MetaMask'
                         ? 'Install MetaMask '
                         : wallet.name}
-                      <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+                      {!isMobile && <Arrow sx={{ ml: 1, fill: 'secondary' }} />}
                     </Styled.h5>
-                    <p sx={{ variant: 'text.small' }}>{wallet.description}</p>
+                    {!isMobile && (
+                      <p sx={{ variant: 'text.small' }}>{wallet.description}</p>
+                    )}
                   </Box>
                 </Grid>
               )
@@ -235,6 +249,7 @@ const gridStyles = {
 const iconStyles = {
   height: '44px',
   width: '44px',
+  verticalAlign: 'middle',
   objectFit: 'contain',
   mr: 3,
 }

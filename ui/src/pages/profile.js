@@ -71,15 +71,27 @@ const Profile = ({ location }) => {
         setProfile({ image: image })
       }
     }
-    metamaskAccountChange(accounts => {
-      if (accounts && accounts.length > 0) {
-        navigate(`/profile?id=${accounts[0]}`)
-      } else {
-        navigate('/')
-      }
-    })
     getProfile()
   }, [profileId])
+
+  useEffect(() => {
+    let walletConnector
+    if (typeof window !== undefined) {
+      const storage = window.localStorage.getItem('WALLET_CONNECTOR')
+      if (storage) {
+        walletConnector = JSON.parse(storage)
+        if (walletConnector && walletConnector.name === 'injected') {
+          metamaskAccountChange(accounts => {
+            if (accounts && accounts.length > 0) {
+              navigate(`/profile?id=${accounts[0]}`)
+            } else {
+              navigate('/')
+            }
+          })
+        }
+      }
+    }
+  }, [])
 
   const variables = {
     id: profileId,

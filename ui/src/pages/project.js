@@ -372,7 +372,6 @@ const Project = ({ location }) => {
   })
 
   useEffect(() => {
-    metamaskAccountChange(() => window.location.reload())
     async function getProfile() {
       if (data && data.project) {
         const threeBoxProfile = await ThreeBox.getProfile(data.project.owner.id)
@@ -383,6 +382,18 @@ const Project = ({ location }) => {
     }
     getProfile()
   }, [data])
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const storage = window.localStorage.getItem('WALLET_CONNECTOR')
+      if (storage) {
+        walletConnector = JSON.parse(storage)
+        if (walletConnector && walletConnector.name === 'injected') {
+          metamaskAccountChange(() => window.location.reload())
+        }
+      }
+    }
+  }, [])
 
   if (loading && !error) {
     return <Styled.p>Loading</Styled.p>
