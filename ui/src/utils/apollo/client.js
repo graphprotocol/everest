@@ -46,7 +46,6 @@ try {
 }
 
 const ipfsURI = process.env.GATSBY_IPFS_HTTP_URI
-
 const mutations = createMutations({
   mutations: {
     resolvers: everestMutations.resolvers,

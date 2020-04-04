@@ -22,29 +22,34 @@ Run these commands from the root directory:
 
 # Commands
 
-This repository can be seen as having two ways of deploying the code - one that ties in everything
-to work with ropsten, and one with mainnet. The two main commands are:
+This repository can be seen as having two ways of deploying and runningthe code - one that ties 
+in everything to work with ropsten, and one with mainnet. The main commands  for each
+network are:
 
 ```bash
+yarn deploy-ropsten
+yarn deploy-mainnet
+
 yarn start:dev-ropsten
 yarn start:dev-mainnet
 ```
 
-Those two commands do the following:
+Generally, you won't need to run any of the other node scripts.
+
+`yarn deploy-ropsten` and `yarn deploy-mainnet` do the following:
   - Building the `./contracts` sub repository
   - Building the `./subgraph` sub repository
   - Building the `./subgraph/mutations` sub repository
-  - Deploying the subgraph to the respective network on the hosted service for the graph
-  - Starting the UI based on all of the above. The UI takes a different `.env` file for each network
-  - Note the command should be specifically ran in this order, as many of the sub repositories
-    depend on each other.
+  - Once all builds are successful, it will deploy the subgraph to the respective network on the hosted service for the graph
 
-Once you run these commands, you get the following setup:
-- The subgraph is deployed to the hosted service with the latest contracts and subgraph and mutations
-- The UI is running at localhost:4000, where you can do testing on ropsten, or interact with the
-  real contracts on mainnet
+Normally the development of the subgraph and the front end can be done on their own. You
+should deploy the subgraph to the hosted service, and then run the UI.
+
+To run the UI, use either `start:dev-ropsten` or `start:dev-mainnet`. These do the following
+  - Starts the UI at `localhost:4000` after a subgraph is already deployed to the hosted service. (They each take a different different `.env` file for each network
 
 To deploy to an actual website, there is a setup with Docker and google cloud. This process depends
+
 on the following two commands:
 ```bash
 yarn build:mutations

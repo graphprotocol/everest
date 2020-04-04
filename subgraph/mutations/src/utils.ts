@@ -3,12 +3,14 @@ import gql from 'graphql-tag'
 export const uploadToIpfs = async (ipfs: any, data: any): Promise<string> => {
   let result
 
-  for await (const returnedValue of ipfs.add(data)) {
-    result = returnedValue
+  try {
+    for await (const returnedValue of ipfs.add(data)) {
+      result = returnedValue
+    }
+  } catch (e) {
+    console.log('ipfs error: ', e)
   }
-
   if (!result) throw new Error(`IPFS upload failed for data: '${data}'`)
-
   return result.path
 }
 

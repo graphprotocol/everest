@@ -86,9 +86,6 @@ async function signPermit(provider, domain, message) {
 }
 
 export const daiPermit = async (holder, spenderAddress, daiContract, ethereum) => {
-  console.log('WHAT IS ETH: ', ethereum)
-  console.log('WHAT IS ETH: ', ethereum._network.chainId)
-
   let daiAddress
   if (ethereum._network.chainId == 1) {
     daiAddress = config.daiContractMainnet
