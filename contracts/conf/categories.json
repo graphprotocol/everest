@@ -5,16 +5,16 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdUkt56CH6a649YxuHiAg7XR9T14h1p71pvsFvsSbmLPZ",
         "name": "Asset Management",
         "slug": "asset-management",
-        "description": "Manage crypto financial and investment assets.",
+        "description": "Funds that manage crypto financial and investment assets.",
         "parent": null
     },
     {
         "id": "0x2f5981f4bc479a7d333af677580c2d2d44701e00",
         "imageHash": "QmTj8vqyZbmqhBvvPEXVQMxLtkbD5jUS6JHzKry74FnF2e",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTj8vqyZbmqhBvvPEXVQMxLtkbD5jUS6JHzKry74FnF2e",
-        "name": "Hedge Fund",
-        "slug": "asset-management-hedge-fund",
-        "description": "Hold and trade liquid crypto assets.",
+        "name": "Hedge Funds",
+        "slug": "asset-management-hedge-funds",
+        "description": "Funds that purchase and trade crypto assets.",
         "parent": "0x2790729af79695ea8ce2c1ec0caf84df38501ca2"
     },
     {
@@ -23,7 +23,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTYPqQTUXTncAACX7hrXBrnLaSQdKUtyAH6N1oA4t4QVN",
         "name": "Venture Capital",
         "slug": "asset-management-venture-capital",
-        "description": "Invest in crypto projects through SAFT, SAFE or equity deals.",
+        "description": "Funds that invest in crypto projects through SAFT, SAFE or equity deals.",
         "parent": "0x2790729af79695ea8ce2c1ec0caf84df38501ca2"
     },
     {
@@ -32,7 +32,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQFrCVBbeipxcERFgvKUJHqSsDopjSPgCZv9vUDcQ8YwJ",
         "name": "Business Services",
         "slug": "business-services",
-        "description": "Professional services for crypto clients.",
+        "description": "Professional services that support business operations.",
         "parent": null
     },
     {
@@ -50,7 +50,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmU2TjWDyjDC7gR4RD1mHcrcrkG8zxPW5rKLwjbrart97Q",
         "name": "Human Resources",
         "slug": "business-services-human-resources",
-        "description": "HR software, human resources and professional services, including hiring, recruiting, people management.",
+        "description": "Software and services for hiring, recruiting, and people management.",
         "parent": "0x9d078dab4fdb9f2be33cb7f0c693b12cc131b338"
     },
     {
@@ -67,8 +67,8 @@
         "imageHash": "QmaxiEEwXwN494JGvLP3YR6dT4yufXWVWLkdbh5QRUSKUq",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmaxiEEwXwN494JGvLP3YR6dT4yufXWVWLkdbh5QRUSKUq",
         "name": "Marketing",
-        "slug": "business-services-marketing",
-        "description": "Marketing and sales services for promoting the reputation and general knowledge of an organization, community or product.",
+        "slug": "business-services-marketing-and-advertising",
+        "description": "Services for promoting the reputation and general knowledge of an organization, community or product.",
         "parent": "0x9d078dab4fdb9f2be33cb7f0c693b12cc131b338"
     },
     {
@@ -77,7 +77,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmapYnHmkSrGij17igK8tjhETXjG9EQsQPKvjyXuTnHLQA",
         "name": "Public Relations",
         "slug": "business-services-public-relations",
-        "description": "Services and tools for building favorable public images for projects.",
+        "description": "Services and tools for building a favorable public image for projects.",
         "parent": "0x9d078dab4fdb9f2be33cb7f0c693b12cc131b338"
     },
     {
@@ -95,7 +95,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdikmwvCSozVmgUovhExRtLQG5jsTWRvsnQzjrAMxn8Fq",
         "name": "DeFi",
         "slug": "defi",
-        "description": "",
+        "description": "Tools and services focused on decentralized or open finance, including issuing, managing and exchanging crypto assets in an open and verifiable way.",
         "parent": null
     },
     {
@@ -104,7 +104,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWy7CBqYk9YRR872RcHTNEj5pLCTCSszVgtrwTURfX447",
         "name": "Analytics",
         "slug": "defi-analytics",
-        "description": "",
+        "description": "Tools and services that consume or analyze data and present statistical patterns and trends in DeFi.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -113,7 +113,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmULYWKKWwRECa5hWDxsdF7kc8XnNfi9atWyj8FWKvisVk",
         "name": "Currencies",
         "slug": "defi-currencies",
-        "description": "",
+        "description": "Issuers and maintainers of cryptocurrencies or tokenized assets that manage asset supply and monetary policy, like minting, burning and inflation.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -122,7 +122,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmeijShPVFZ9nhjhNECBukCZeQ3FPHHKgxzyR7jQTA2S8S",
         "name": "Custody",
         "slug": "defi-custody",
-        "description": "",
+        "description": "Qualified custodians of digital assets that provide custody, delegate or exchange services.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -131,7 +131,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdNonHta91rYy6eSBFd3VNy4SSZFkZUMWNMKdno27FDig",
         "name": "Derivatives",
         "slug": "defi-derivatives",
-        "description": "",
+        "description": "Issuers and maintainers of digital derivative assets that manage asset supply and financial contracts.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -140,7 +140,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmad71iyZdhusZiEqdH6DHhLyLU3cMAJDox98bJpdnH74P",
         "name": "Exchanges",
         "slug": "defi-exchanges",
-        "description": "",
+        "description": "Centralized and decentralized exchanges, and liquidity networks that facilitate trading and selling digital assets.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -149,7 +149,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmNot5sAg22rYUo6VrDJCqznJyAcBrEMJtWvEixRW58tFb",
         "name": "Insurance",
         "slug": "defi-insurance",
-        "description": "",
+        "description": "Markets and tools for facilitating the provision of insurance, supporting claims and transfer of payouts and insurance-based products.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -158,7 +158,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPHb4f3jABdLkRbtnmx8bTAkgkymZ3nAFeSNWCbuzqtFe",
         "name": "Investing",
         "slug": "defi-investing",
-        "description": "",
+        "description": "DeFi investment tools and services, including investment and wealth management, investment accounts, ETFs, robo-advisory, retail investing, private equity and more for DeFi assets, apps and protocols.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -167,7 +167,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmS7eHcH7Zf6icxw4hmZBwu3mZ7fnr2bMrkyBo2quy9v2e",
         "name": "Lending",
         "slug": "defi-lending",
-        "description": "",
+        "description": "Lending and borrowing cryptocurrencies, tokens and stablecoins, as well as debt markets, collateral tokenization, margin calls, leverage and more.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -176,7 +176,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUS6u9uV6XJaiTrdwbtFhxD6HHFf5LkEmEsiSE5yGRL6F",
         "name": "Payments",
         "slug": "defi-payments",
-        "description": "",
+        "description": "Value transfer for cryptocurrencies including on/off-ramps for crypto to fiat, payment and settlement solutions, micropayments and more.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -185,7 +185,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdX9YJntmFsB9EbXyYtB5fGPBNysnvzEHXRe5Fn5aim3f",
         "name": "Prediction Markets",
         "slug": "defi-prediction-markets",
-        "description": "",
+        "description": "Markets for speculating on the outcome of events.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -194,7 +194,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmNnuL2pHzLtBVF6FtcpjW7QcTnYQvucB4W3rkPRkpZNA2",
         "name": "Ratings",
         "slug": "defi-ratings",
-        "description": "",
+        "description": "Credit scores and financial ratings on assets, apps, protocols, oracles, users and more derived from underlying risk and past activity.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -203,7 +203,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmSETouYKwNVY2SKWiJbxadrBPJ88ZoppbdLXrFFvpytja",
         "name": "Research",
         "slug": "defi-research",
-        "description": "",
+        "description": "DeFi research and mechanism design, including cryptoeconomics, monetary policy, game theory, technical design and more.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -212,7 +212,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmY1VEfsy6R883q8xzonJ3TDq9ReZ3TsRB33aHCMAdkEfs",
         "name": "Securities",
         "slug": "defi-securities",
-        "description": "",
+        "description": "Platforms and tools for issuing, managing, or exchanging tokenized securities.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -221,7 +221,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXtTWcpftLuW31K51My7iWk64iYQN5MRa1k5zs3ETZCpG",
         "name": "Staking",
         "slug": "defi-staking",
-        "description": "",
+        "description": "Services and tools for staking, delegating, and running nodes.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -230,7 +230,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWub9QzdmCQYrWn2fKx4DGfK2uj1AUe65WNzRvT3CJb1X",
         "name": "Wallets",
         "slug": "defi-wallets",
-        "description": "",
+        "description": "Account providers for holding, transfering or exchanging cryptocurrencies via a mobile or web account or hardware devices.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -239,16 +239,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmV7d6ZC6Tz4zn5zCwYrkseg558JxsRHZpe1xtzXBmrygm",
         "name": "Education",
         "slug": "education",
-        "description": "",
-        "parent": null
-    },
-    {
-        "id": "0x42422f37b9b9b8ca5e08fcff8a02d6f0ab9ba79d",
-        "imageHash": "Qma5FbqpJwMQfDEMjDzvH3cTXxzLEyUHaNcQHyVkauEBDZ",
-        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qma5FbqpJwMQfDEMjDzvH3cTXxzLEyUHaNcQHyVkauEBDZ",
-        "name": "Energy",
-        "slug": "energy",
-        "description": "",
+        "description": "Educational services, tools and learning materials, including academia, training programs, technical skills resources, blogs and more.",
         "parent": null
     },
     {
@@ -257,7 +248,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmaue78eCnAy9HZ8AJ31YHo5YLGYi6iKmkNPyhnta8yZS6",
         "name": "Entertainment",
         "slug": "entertainment",
-        "description": "",
+        "description": "Activities, services, and platforms for having fun.",
         "parent": null
     },
     {
@@ -266,7 +257,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQfS8bZJt1CeXtA3FPWPiDuRLQigsgEJUN5PnmL9Dg1dF",
         "name": "Adult",
         "slug": "entertainment-adult",
-        "description": "",
+        "description": "Entertainment services and content creation for the adult industry.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -275,7 +266,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmd2eUaT9En4XBJmctZjbbspPa9KB7hNQj8StZ6GvYU6SX",
         "name": "Art & Collectibles",
         "slug": "entertainment-art-and-collectibles",
-        "description": "",
+        "description": "Creators and issuers of arts and collectibles, platforms for hosting or exchange of tokenized art and collectibles.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -284,16 +275,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmbtmTALa3v5WrGyZmDFC8ipKtK79XFwL9qLBMQD3KBCN5",
         "name": "Books",
         "slug": "entertainment-books",
-        "description": "",
-        "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
-    },
-    {
-        "id": "0xa0ffa221bcbe89a8ba2114adb84442f707b19538",
-        "imageHash": "QmY5gSpk5qcrwVKdKsPDERTaZnN83maHJ8ikkZrXiMRuc5",
-        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmY5gSpk5qcrwVKdKsPDERTaZnN83maHJ8ikkZrXiMRuc5",
-        "name": "Events",
-        "slug": "entertainment-events",
-        "description": "",
+        "description": "Book writers, publishers, distributors and other service providers related to book content creation.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -302,7 +284,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmbriUBudRNxfPv2fM6pUNRLxAYcTiJmzwnEFGvJ8xJZNY",
         "name": "Gaming",
         "slug": "entertainment-gaming",
-        "description": "",
+        "description": "Games and services related to video and computer games, lotteries, gambling and more.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -311,7 +293,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUZALjqJvKDzZwJMnre4YdWGqxwTMv6TiYkfBQ4CSoR6T",
         "name": "Music",
         "slug": "entertainment-music",
-        "description": "",
+        "description": "Music artists and service providers, such as streaming, recording, distribution, licensing, payments and more.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -320,7 +302,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcyK2ZsozM6TV9g4eeYkrqSFSYbtVs47oJPbpxx9D7hm3",
         "name": "Sports",
         "slug": "entertainment-sports",
-        "description": "",
+        "description": "Sports applications related to sporting games, activities, events and services including betting, statistics, and fantasy sports.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -329,7 +311,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmRRDqGZFGTYrCcNC1nAGwR3J1iDVgmQJ6NsxKL9YgMXd9",
         "name": "Video",
         "slug": "entertainment-video",
-        "description": "",
+        "description": "Video content, streaming, recording, and sharing tools.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
     },
     {
@@ -338,8 +320,17 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZRihgmRJJtVJdttxKeJGxSJUdvhuDupa1b6zmKQYmQqj",
         "name": "Virtual Reality",
         "slug": "entertainment-virtual-reality",
-        "description": "",
+        "description": "Virtual reality experiences and tools, including VR games, videos, places and more.",
         "parent": "0x65120b5a7841d7b0f80570d3b0e621fbed330ce3"
+    },
+    {
+        "id": "0xa0ffa221bcbe89a8ba2114adb84442f707b19538",
+        "imageHash": "QmY5gSpk5qcrwVKdKsPDERTaZnN83maHJ8ikkZrXiMRuc5",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmY5gSpk5qcrwVKdKsPDERTaZnN83maHJ8ikkZrXiMRuc5",
+        "name": "Events",
+        "slug": "events",
+        "description": "Event tools and services for ticketing, sponsorships, payments and planning.",
+        "parent": null
     },
     {
         "id": "0x78e46c3a6e683bdb88ea1311f702829358117eb8",
@@ -347,7 +338,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmQVYcHjg2ALmZNTfuaUTZBDz5fTecSFURJLZYfyxg6dyU",
         "name": "Environment",
         "slug": "environment",
-        "description": "",
+        "description": "Environmental conservation and sustainability services and supporters of causes like climate change, clean energy, natural reservation.",
         "parent": null
     },
     {
@@ -356,7 +347,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmRqYw53zLvVNZmHyCsvU5m8x8vFbmYjsDXTeBkyDvKmmS",
         "name": "Governance",
         "slug": "governance",
-        "description": "",
+        "description": "Decentralized autonomous organizations (DAOs), voting tools, evolving consensus mechanisms and more.",
         "parent": null
     },
     {
@@ -365,7 +356,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcsrzXKZqT7HoyQCfHbZN1ejctbbGymWVTw95TwXpvcZz",
         "name": "DAOs",
         "slug": "governance-daos",
-        "description": "",
+        "description": "Decentralized autonomous organizations or providers of DAO tools and services.",
         "parent": "0x46aff9a161267c2c01f5ce1b6e3b717a77f21480"
     },
     {
@@ -374,7 +365,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmbr5gZbtPpMJw8LjuhYGYJLRa76cycPtvPWRTFcjsT6vS",
         "name": "Voting Tools",
         "slug": "governance-voting-tools",
-        "description": "",
+        "description": "Voting tools that support decentralized governance, including signalling tools, coinvotes, evoting, and other voting mechanisms.",
         "parent": "0x46aff9a161267c2c01f5ce1b6e3b717a77f21480"
     },
     {
@@ -383,7 +374,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXy3urqtnzzn4YYTacS2noep7J16bBPFWoSrjZNJWgUpH",
         "name": "Grants & Philanthropy",
         "slug": "grants-and-philanthropy",
-        "description": "",
+        "description": "Grants programs, funds, foundations, non-profit and other philanthropic organizations.",
         "parent": null
     },
     {
@@ -392,7 +383,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcA5Peci7bCLpjMSrAoAkbJ8cSF8xxwgUXMAzs6KZuavj",
         "name": "Health & Wellness",
         "slug": "health-and-wellness",
-        "description": "",
+        "description": "Health care, medicine, pharmaceuticals, mental health, wellness, exercise and more.",
         "parent": null
     },
     {
@@ -401,7 +392,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXM8qUQaB4iLPo5PNBswD7VVYQoVni7kWaS96RHmJ9qad",
         "name": "Identity",
         "slug": "identity",
-        "description": "",
+        "description": "Identity, reputation and user authentication providers.",
         "parent": null
     },
     {
@@ -410,16 +401,16 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZX7ed6UCyEGf6PE6gbWL4mKtGi6wo4EC3v4PXXZuWt2N",
         "name": "Marketplaces",
         "slug": "marketplaces",
-        "description": "",
+        "description": "Marketplaces that facilitate venues of exchange, auction or sale of specific goods and services.",
         "parent": null
     },
     {
         "id": "0xa5928a8af6397d903a510b442e31870b61968ea3",
         "imageHash": "QmVHbkujAFanmb68nzbhSGsCKSzCTqkzCzRSsEcMbVkHbG",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmVHbkujAFanmb68nzbhSGsCKSzCTqkzCzRSsEcMbVkHbG",
-        "name": "News and Media",
+        "name": "News & Media",
         "slug": "news-and-media",
-        "description": "",
+        "description": "Marketplaces that facilitate venues of exchange, auction or sale of specific goods and services.",
         "parent": null
     },
     {
@@ -428,7 +419,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmRVLrqR2dyvJbBGpzDP3Dz2eysDhnXZo9GQv7eb9e6SNM",
         "name": "Other",
         "slug": "other",
-        "description": "",
+        "description": "Projects focused on Other sectors or services that are not listed.",
         "parent": null
     },
     {
@@ -437,7 +428,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTYCN5QbGBsiM1hKHL1gBPy4kWb9ZSkEUkdD8QvaM6w7n",
         "name": "Places",
         "slug": "places",
-        "description": "",
+        "description": "Place and location-based services and tools, like geographic positioning, location tags, travel destinations and more.",
         "parent": null
     },
     {
@@ -446,8 +437,17 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmUgzU2xYEM35yXynhbj4WHSLz6Xq6ZUPuH4FxBtDesszF",
         "name": "Science & Tech",
         "slug": "science-and-tech",
-        "description": "",
+        "description": "Scientific research, product development, and contributing to technological advancements.",
         "parent": null
+    },
+    {
+        "id": "0x42422f37b9b9b8ca5e08fcff8a02d6f0ab9ba79d",
+        "imageHash": "Qma5FbqpJwMQfDEMjDzvH3cTXxzLEyUHaNcQHyVkauEBDZ",
+        "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qma5FbqpJwMQfDEMjDzvH3cTXxzLEyUHaNcQHyVkauEBDZ",
+        "name": "Energy",
+        "slug": "science-and-tech-energy",
+        "description": "Services and tools for energy and oil sectors, including production, distribution, sale or exchange of energy and energy-based services.",
+        "parent": "0x6650f6cbed0e806143597a99b7ac67f88c340d2b"
     },
     {
         "id": "0x3bd4f6ce1e632d7f671373da4eb2aaa0b6c47624",
@@ -455,7 +455,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmb9NnNXmuStKwnWxdAnrKea8jZsPacZVBD2iw3tLTahwP",
         "name": "Hardware",
         "slug": "science-and-tech-hardware",
-        "description": "",
+        "description": "Groups that build or manufacture hardware like computers, mining hardware, IoT devices and more.",
         "parent": "0x6650f6cbed0e806143597a99b7ac67f88c340d2b"
     },
     {
@@ -464,7 +464,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcBG6u6wKB2ooXzYTPERKG4F1MCsK6brzfvhPmn4Kr8z9",
         "name": "Research",
         "slug": "science-and-tech-research",
-        "description": "",
+        "description": "Organizations dedicated to scientific and technological research and development.",
         "parent": "0x6650f6cbed0e806143597a99b7ac67f88c340d2b"
     },
     {
@@ -473,7 +473,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPCvibyVgVcKqCVkiZ5xUiAk5k9k9T8TQE3ZajgR6y5UK",
         "name": "Software",
         "slug": "science-and-tech-software",
-        "description": "",
+        "description": "Software for decentralized applications, blockchain protocols, cryptocurrencies and other Web3 technologies.",
         "parent": "0x6650f6cbed0e806143597a99b7ac67f88c340d2b"
     },
     {
@@ -482,7 +482,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcgQ57tzB95jMmZRS1XXwdHJcXZcu1GVXcEstzua8kSUt",
         "name": "Analytics",
         "slug": "science-and-tech-software-analytics",
-        "description": "",
+        "description": "Diagnostics, network statistics, block explorers, gas market analytics, data feeds and more.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -491,7 +491,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPNPDcmMQX6EgsJu7e2eVjhpqxQXZ5XsugdKToT2tasmU",
         "name": "APIs",
         "slug": "science-and-tech-software-apis",
-        "description": "",
+        "description": "API and data providers for decentralized applications and blockchain protocols.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -500,7 +500,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmbGqsY8w5gZmxvp1CqySmbxBY9KT93NPYf796xWSHg6Aa",
         "name": "Blockchain",
         "slug": "science-and-tech-software-blockchain",
-        "description": "",
+        "description": "Blockchains and other decentralized consensus networks.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -509,16 +509,16 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmREHNxCycZzrYE84KqbsSbjpEQBCP79qJHUGgniBGvRPN",
         "name": "Browser",
         "slug": "science-and-tech-software-browser",
-        "description": "",
+        "description": "Web and mobile browsers providing access to Web3.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
         "id": "0x3919638e4dc6b5341bbb93fde0312f4f92e714e6",
         "imageHash": "QmV3imZS5KA7Z1YeTCU8rBi9rboTshVBKWSPUsPAs29JNh",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmV3imZS5KA7Z1YeTCU8rBi9rboTshVBKWSPUsPAs29JNh",
-        "name": "Computation",
-        "slug": "science-and-tech-software-computation",
-        "description": "",
+        "name": "Computing",
+        "slug": "science-and-tech-software-computing",
+        "description": "Decentralized computing and markets for computation.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -527,7 +527,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmb6AviyyrPQmRgntaBzubcmDNKLRAqu7HR4dzZezcc5Hw",
         "name": "Developer Tools",
         "slug": "science-and-tech-software-developer-tools",
-        "description": "",
+        "description": "Tools for protocol and decentralized application development.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -536,7 +536,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPwJgF8CLVYsFW5PcyyUMTt3J6iUoUD5Lsdpk4tq7GeEp",
         "name": "Naming",
         "slug": "science-and-tech-software-naming",
-        "description": "",
+        "description": "Name and domain services, tools and markets.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -545,7 +545,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmPyp7XtHt8UZjm5dzQKRe5bakUqAkq1M4KpJiUDE9V2hd",
         "name": "Networking",
         "slug": "science-and-tech-software-networking",
-        "description": "",
+        "description": "P2P networking and messaging for distributed systems and blockchains.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -554,7 +554,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTPKhBtbtL9YyYeixJP548KAH3wphukMESgfNDdogefYj",
         "name": "Orcales",
         "slug": "science-and-tech-software-oracles",
-        "description": "",
+        "description": "Oracle providers for decentralized applications and blockchain protocols.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -563,7 +563,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWJcsbvqNMJafBgxZYA9KqdaSLZsBRXyLjwUWL5pxnREj",
         "name": "Privacy",
         "slug": "science-and-tech-software-privacy",
-        "description": "",
+        "description": "Cryptography, zero-knowledge proof, secure multi-party computation, and other privacy technology.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -572,7 +572,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXYYnCk9dsHKp2dc543sXU1YUkPfiTxkQtp6CU5PE9VL3",
         "name": "Scaling",
         "slug": "science-and-tech-software-scaling",
-        "description": "",
+        "description": "Layer 1 and layer 2 blockchain scaling solutions.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -581,7 +581,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmcJes2ySkV4uddW5GqYNqp7UM417cdkpFQfFyGgWD4UeG",
         "name": "Security",
         "slug": "science-and-tech-software-security",
-        "description": "",
+        "description": "Encryption, technical and economic auditing, testing, debugging and sharing general security practices.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -590,7 +590,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmdZzyGBGzWFUi9fWfcys9mgbecvGKuy3vm3BTDZGb9YTW",
         "name": "Storage",
         "slug": "science-and-tech-software-storage",
-        "description": "",
+        "description": "Decentralized storage and file sharing providers.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
     },
     {
@@ -599,7 +599,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmXkeUucC4Qc58KfN6YUEMssRrjPURLFqJPPvmcqiEhKpA",
         "name": "Telecom",
         "slug": "science-and-tech-telecom",
-        "description": "",
+        "description": "Telecommunications and internet providers, including mesh networks, cellular and more.",
         "parent": "0x6650f6cbed0e806143597a99b7ac67f88c340d2b"
     },
     {
@@ -608,7 +608,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWQCU4VxnpoRfpKSTs7h5zkH7Rxc7qMJPEapMv52ZyGpv",
         "name": "Social",
         "slug": "social",
-        "description": "",
+        "description": "Social media, email, messaging, blogs, content creation and other social sharing activities.",
         "parent": null
     },
     {
@@ -617,7 +617,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZQRLfjrBZJA8AaPLUQDMs1y6YVT5jSrsXe9eMpGjqy29",
         "name": "Supply Chain",
         "slug": "supply-chain",
-        "description": "",
+        "description": "Supply chain participants and supporters, including sourcing, supply chain management, tracking, payments and more.",
         "parent": null
     },
     {
@@ -626,7 +626,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmRJnRdBbhqW6ojvoz8iMQ2wagxfahE6rksz9pdXR9YAC7",
         "name": "Work",
         "slug": "work",
-        "description": "",
+        "description": "Productivity, gig economy, professional development, job search, recruitment and more.",
         "parent": null
     }
 ]

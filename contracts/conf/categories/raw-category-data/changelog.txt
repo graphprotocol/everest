@@ -1,0 +1,4 @@
+April 6th 2020
+- Events was moved from Entertainment subcategory to its own category. It is not out of order
+ with the ID generation script, so the IDs should no longer be changed
+- Energy, a top level category, was moved to a sub category of Science and Tech
