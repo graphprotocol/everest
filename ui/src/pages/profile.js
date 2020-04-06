@@ -129,6 +129,70 @@ const Profile = ({ location }) => {
     return <div />
   }
 
+  const renderHeaders = () => {
+    return (
+      <Box>
+        <Grid
+          sx={{
+            gridTemplateColumns: 'max-content 1fr ',
+            alignItems: 'center',
+          }}
+          gap={4}
+        >
+          {isOwner() ? (
+            <Styled.h5
+              sx={{
+                borderRight: '1px solid',
+                borderColor: 'grey',
+                pr: 5,
+                mb: 2,
+              }}
+            >
+              Your Projects
+            </Styled.h5>
+          ) : (
+            <Styled.h5
+              sx={{
+                borderRight: '1px solid',
+                borderColor: 'grey',
+                pr: 5,
+                mb: 2,
+              }}
+            >
+              Projects
+            </Styled.h5>
+          )}
+          <Filters
+            items={[
+              {
+                text: 'All projects',
+                handleSelect: () => {
+                  setSelectedFilter(FILTERS.all)
+                },
+              },
+              {
+                text: 'Challenged projects',
+                handleSelect: () => {
+                  setSelectedFilter(FILTERS.challenged)
+                },
+              },
+            ]}
+            menuStyles={{ left: 0, top: '60px' }}
+            width="280px"
+            setIsFilterOpen={setIsFilterOpen}
+            isFilterOpen={isFilterOpen}
+            selectedFilter={selectedFilter}
+          />
+        </Grid>
+        <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+          {user && user.projects && (
+            <span>{user.projects.length} Projects</span>
+          )}
+        </Styled.p>
+      </Box>
+    )
+  }
+
   const isOwner = () => account === profileId || account === profileId
 
   const user = data ? data.user : {}
@@ -306,64 +370,7 @@ const Profile = ({ location }) => {
       {user && user.projects && user.projects.length > 0 ? (
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
-            <Box>
-              <Grid
-                sx={{
-                  gridTemplateColumns: 'max-content 1fr ',
-                  alignItems: 'center',
-                }}
-                gap={4}
-              >
-                {isOwner() ? (
-                  <Styled.h5
-                    sx={{
-                      borderRight: '1px solid',
-                      borderColor: 'grey',
-                      pr: 5,
-                      mb: 2,
-                    }}
-                  >
-                    Your Projects
-                  </Styled.h5>
-                ) : (
-                  <Styled.h5
-                    sx={{
-                      borderRight: '1px solid',
-                      borderColor: 'grey',
-                      pr: 5,
-                      mb: 2,
-                    }}
-                  >
-                    Projects
-                  </Styled.h5>
-                )}
-                <Filters
-                  items={[
-                    {
-                      text: 'All projects',
-                      handleSelect: () => {
-                        setSelectedFilter(FILTERS.all)
-                      },
-                    },
-                    {
-                      text: 'Challenged projects',
-                      handleSelect: () => {
-                        setSelectedFilter(FILTERS.challenged)
-                      },
-                    },
-                  ]}
-                  menuStyles={{ left: 0, width: '280px', top: '60px' }}
-                  setIsFilterOpen={setIsFilterOpen}
-                  isFilterOpen={isFilterOpen}
-                  selectedFilter={selectedFilter}
-                />
-              </Grid>
-              <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-                {user && user.projects && user.projects.length > 0 && (
-                  <span>{user.projects.length} Projects</span>
-                )}
-              </Styled.p>
-            </Box>
+            {renderHeaders()}
             <Grid
               sx={{
                 gridTemplateColumns: '1fr max-content',
@@ -404,6 +411,10 @@ const Profile = ({ location }) => {
             selected={selectedProjectsView}
           />
         </Fragment>
+      ) : selectedFilter === FILTERS.challenged ? (
+        <Grid columns={[1, 2, 2]} mb={1} mt={6}>
+          {renderHeaders()}
+        </Grid>
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
           <img
@@ -474,7 +485,7 @@ const Profile = ({ location }) => {
         </Fragment>
       )}
 
-      {user && user.delegatorProjects && user.delegatorProjects.length > 0 && (
+      {userChallenges && userChallenges.length > 0 && (
         <Fragment>
           <Grid columns={[1, 2, 2]} mb={1} mt={6}>
             <Box>

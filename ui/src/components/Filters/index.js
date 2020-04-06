@@ -6,18 +6,27 @@ import { Grid, Box } from '@theme-ui/components'
 import Menu from '../Menu'
 import Arrow from '../../images/arrow.svg'
 
-const Filters = ({ items, isFilterOpen, setIsFilterOpen, selectedFilter }) => {
+const Filters = ({
+  items,
+  isFilterOpen,
+  setIsFilterOpen,
+  selectedFilter,
+  width,
+}) => {
   return (
     <Menu
       items={items.map(item => ({
         text: (
           <Box sx={menuItemStyles}>
-            {item.text} <Arrow sx={{ fill: 'secondary' }} />
+            {item.text}{' '}
+            <Arrow
+              sx={{ fill: 'secondary', display: ['none', 'inline', 'inline'] }}
+            />
           </Box>
         ),
         handleSelect: item.handleSelect,
       }))}
-      menuStyles={{ left: 0, width: '280px', top: '60px' }}
+      menuStyles={{ left: 0, top: '60px', width: width }}
       setOpen={setIsFilterOpen}
     >
       <Grid
@@ -26,7 +35,7 @@ const Filters = ({ items, isFilterOpen, setIsFilterOpen, selectedFilter }) => {
           width: 'fit-content',
           alignItems: 'center',
           cursor: 'pointer',
-          padding: 4,
+          padding: [2, 4, 4],
           backgroundColor: isFilterOpen ? 'secondary' : 'white',
         }}
       >
@@ -49,7 +58,7 @@ const Filters = ({ items, isFilterOpen, setIsFilterOpen, selectedFilter }) => {
             borderColor: isFilterOpen ? 'white' : 'secondary',
             transition: 'all 0.2s ease',
             transform: isFilterOpen ? 'rotate(-45deg)' : 'rotate(135deg)',
-            display: ['none', 'block'],
+            display: 'block',
           }}
         />
       </Grid>
@@ -75,6 +84,7 @@ Filters.propTypes = {
   isFilterOpen: PropTypes.bool,
   setIsFilterOpen: PropTypes.func,
   selectedFilter: PropTypes.any,
+  width: PropTypes.string,
 }
 
 export default Filters

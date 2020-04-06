@@ -109,7 +109,7 @@ const MultiSelect = ({
               position: 'absolute',
               background: 'white',
               width: '100%',
-              height: '100%',
+              height: 'inherit',
               maxHeight: '540px',
               overflowY: 'scroll',
               zIndex: 5,

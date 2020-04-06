@@ -6,6 +6,7 @@ import { Grid, Box } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import { navigate } from '@reach/router'
+import { isMobile } from 'react-device-detect'
 
 import { PROJECTS_QUERY, EVEREST_QUERY } from '../utils/apollo/queries'
 import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
@@ -83,13 +84,13 @@ const Projects = ({ location }) => {
               gridTemplateColumns: 'min-content 1fr ',
               alignItems: 'center',
             }}
-            gap={4}
+            gap={[3, 4, 4]}
           >
             <Styled.h2
               sx={{
                 borderRight: challengesCount !== 0 ? '1px solid' : 'none',
                 borderColor: 'grey',
-                pr: 5,
+                pr: [3, 5, 5],
                 mb: 2,
               }}
             >
@@ -99,21 +100,22 @@ const Projects = ({ location }) => {
               <Filters
                 items={[
                   {
-                    text: 'All projects',
+                    text: isMobile ? 'All' : 'All projects',
                     handleSelect: () => {
                       setSelectedFilter(FILTERS.all)
                       navigate(`?view=${FILTERS.all}`)
                     },
                   },
                   {
-                    text: 'Challenged projects',
+                    text: isMobile ? 'Challenged' : 'Challenged projects',
                     handleSelect: () => {
                       setSelectedFilter(FILTERS.challenged)
                       navigate(`?view=${FILTERS.challenged}`)
                     },
                   },
                 ]}
-                menuStyles={{ left: 0, width: '280px', top: '60px' }}
+                menuStyles={{ left: 0, top: '60px' }}
+                width={['initial', '280px', '280px']}
                 setIsFilterOpen={setIsFilterOpen}
                 isFilterOpen={isFilterOpen}
                 selectedFilter={selectedFilter}

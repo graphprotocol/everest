@@ -921,7 +921,6 @@ const Project = ({ location }) => {
         <Box
           sx={{
             margin: ['32px auto', '32px auto', 0],
-            opacity: pendingVotes ? 0.32 : 1,
           }}
         >
           {project.currentChallenge &&
@@ -931,7 +930,9 @@ const Project = ({ location }) => {
                 <Box
                   sx={{
                     opacity:
-                      project.currentChallenge.id === '123' || pendingResolve
+                      project.currentChallenge.id === '123' ||
+                      pendingResolve ||
+                      pendingVotes
                         ? 0.22
                         : 1,
                     pointerEvents:
@@ -1098,7 +1099,9 @@ const Project = ({ location }) => {
                     ''
                   )}
                 </Box>
-                {(project.currentChallenge.id === '123' || pendingResolve) && (
+                {(project.currentChallenge.id === '123' ||
+                  pendingResolve ||
+                  pendingVotes) && (
                   <Box
                     sx={{
                       position: 'absolute',
