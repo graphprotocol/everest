@@ -41,11 +41,9 @@ const Modal = ({ children, showModal, closeModal }) => {
         if (walletConnector && walletConnector.accounts) {
           setUserAccount(walletConnector.accounts[0])
         }
-      } else {
-        setUserAccount(account)
       }
     }
-  }, [account])
+  }, [])
 
   // set up uri listener for walletconnect
   useEffect(() => {
@@ -75,9 +73,8 @@ const Modal = ({ children, showModal, closeModal }) => {
             name: wallet.type,
             accounts: [mmAccount],
           })
-          if (typeof window !== undefined) {
+          if (typeof window !== undefined && mmAccount) {
             window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
-            window.location.reload()
           }
           return
         }
@@ -107,14 +104,12 @@ const Modal = ({ children, showModal, closeModal }) => {
           ? provider.accounts[0]
           : provider.selectedAddress
         setUserAccount(address)
-
-        const connnectData = JSON.stringify({
-          name: wallet.type,
-          accounts: [address],
-        })
-        if (typeof window !== undefined) {
+        if (typeof window !== undefined && address) {
+          const connnectData = JSON.stringify({
+            name: wallet.type,
+            accounts: [address],
+          })
           window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
-          window.location.reload()
         }
       })
   }
