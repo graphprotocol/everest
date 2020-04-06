@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 import { navigate } from 'gatsby'
-import { isMobile } from 'react-device-detect'
 
 import { metamaskAccountChange } from '../../services/ethers'
 import { useAccount } from '../../utils/hooks'
@@ -105,34 +104,29 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
     if (userAccount) {
       return (
         <Fragment>
-          {isMobile ? (
+          <Grid
+            sx={{
+              gridTemplateColumns: 'max-content max-content',
+              alignItems: 'center',
+            }}
+            gap={5}
+          >
+            <Link
+              to={`/profile?id=${userAccount}`}
+              sx={{
+                lineHeight: 'inherit',
+                '&:hover': { svg: { marginLeft: 0 } },
+                textAlign: 'right',
+              }}
+            >
+              <img
+                src={userImage ? userImage : `/profile-default.png`}
+                alt="profile"
+                sx={imgStyles}
+              />
+            </Link>
             <Menu
               items={[
-                {
-                  text: (
-                    <Box
-                      onClick={e => {
-                        e.preventDefault()
-                        navigate(`/profile?id=${userAccount}`)
-                      }}
-                    >
-                      Profile
-                    </Box>
-                  ),
-                  icon: '/profile-default.png',
-                },
-                {
-                  text: (
-                    <Box
-                      onClick={() =>
-                        userAccount ? navigate('/projects/new') : openModal()
-                      }
-                    >
-                      Add Project
-                    </Box>
-                  ),
-                  icon: '/plus.png',
-                },
                 {
                   text: (
                     <Box
@@ -147,68 +141,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                   icon: '/share.png',
                 },
               ]}
-            >
-              <img
-                src={userImage ? userImage : `/profile-default.png`}
-                alt="profile"
-                sx={imgStyles}
-              />
-            </Menu>
-          ) : (
-            <Grid
-              sx={{
-                gridTemplateColumns: 'max-content max-content',
-                alignItems: 'center',
-              }}
-              gap={5}
-            >
-              <Link
-                to={`/profile?id=${userAccount}`}
-                sx={{
-                  lineHeight: 'inherit',
-                  '&:hover': { svg: { marginLeft: 0 } },
-                  textAlign: 'right',
-                }}
-              >
-                <img
-                  src={userImage ? userImage : `/profile-default.png`}
-                  alt="profile"
-                  sx={imgStyles}
-                />
-              </Link>
-              <Menu
-                items={[
-                  {
-                    text: (
-                      <Box
-                        onClick={e => {
-                          e.preventDefault()
-                          openModal()
-                        }}
-                      >
-                        Change wallet
-                      </Box>
-                    ),
-                    icon: '/share.png',
-                  },
-                ]}
-              >
-                <Box
-                  sx={{
-                    justifySelf: 'end',
-                    height: '9px',
-                    width: '9px',
-                    borderTop: '2px solid',
-                    borderRight: '2px solid',
-                    borderColor: 'secondary',
-                    transform: 'rotate(135deg)',
-                    cursor: 'pointer',
-                    display: ['none', 'block', 'block'],
-                  }}
-                />
-              </Menu>
-            </Grid>
-          )}
+            ></Menu>
+          </Grid>
         </Fragment>
       )
     } else {
@@ -256,7 +190,6 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             setValue={setSearchText}
             isMobile
           />
-          {renderActions()}
         </Grid>
       ) : (
         <Box sx={{ height: '100vh', width: '100vw' }}>
