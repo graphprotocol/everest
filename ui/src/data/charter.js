@@ -2,34 +2,20 @@ import React from 'react'
 
 export default [
   {
-    heading: 'Scope',
+    heading: '',
     body: (
       <p>
-        Everest is a shared registry of projects that is curated by registry
-        members.
+        Everest’s mission is to catalyze the shift to Web3 by organizing all the
+        projects that are working toward this common goal. Decentralization will
+        create transparency and opportunity, enabling anyone in the world to
+        contribute their talents to a global economy.
         <br />
         <br />
-        Created to serve the Web3 ecosystem, Everest aims to provide
-        transparency about organizations and communities and to be the go-to
-        source for verifiable information. This will include project details,
-        links, job postings, events and more. As Everest grows, so will its
-        utility as other decentralized applications and on-chain data is
-        integrated with registry projects.
-        <br />
-        <br />
-        Projects to be listed on Everest include any organizations building on
-        decentralized technology, integrating cryptocurrencies or supporting the
-        growth of Web3. Everest will be composed of but is not limited to
-        decentralized applications, protocols, NGOs, research organizations,
-        venture and hedge funds. Web3 can include distributed systems, p2p
-        networking or blockchain technology. Projects can be mapped to
-        categories and sub-categories to allow for easy search and clear
-        categorization of projects across Web3 verticals.
-        <br />
-        <br />
-        The Everest Registry uses the ERC-1056 identity standard for projects to
-        enable composability of project identity across other decentralized
-        applications.
+        The Everest Registry will include any organization that believes in the
+        goals of decentralization and the spirit of discovering and building
+        radically new ways for humans to cooperate and organize. The registry
+        uses the ERC-1056 identity standard for interoperability to allow
+        project identities to be used across applications.
       </p>
     ),
   },
@@ -37,75 +23,118 @@ export default [
     heading: 'Project Listing Guidelines',
     body: (
       <p>
-        Everest's mission is to curate a shared registry of projects that are
-        operational and high-quality. The value of Everest to the broader
-        ecosystem depends on the integrity and accuracy of information in
-        project listings.
-        <br />
-        <br />
-        Everest is composed of the community's efforts to create a reliable
-        tracker of organizations working together.
-        <br />
-        <br />
-        Projects should have accurate details: name, description, project logo
-        and image and correct links to the website, Github and Twitter. Projects
-        should also be assigned categories and sub-categories based on the
-        verticals they belong to.
-        <br />
-        <br />
-        At all times, the Everest registry is being curated. If projects have
-        inaccurate information or are being fraudulently misrepresented, a
-        registry member can challenge the project requiring other members to
-        vote on the validity of the listing.
+        Everest depends on the community's efforts to maintain an accurate and
+        useful registry. If a project has inaccurate information or is being
+        misrepresented, a registry member should challenge the listing. Members
+        are encouraged to vote or delegate their votes to someone who will
+        actively participate.
       </p>
     ),
   },
   {
     heading: 'Everest Curation',
     body: (
+      <div>
+        <p>
+          <strong>Adding a Project</strong> Anyone can add a project to Everest
+          by paying a 10 DAI listing fee to the Reserve Bank. The listing fees
+          are used to pay rewards for successful challenges and to pay for
+          development and curation of the list.
+          <br />
+          <br />
+          <strong>Project Owners and Delegates</strong> The creator of the
+          listing is the default owner. The owner can edit the project, vote on
+          behalf of the project and challenge other projects. Owners can
+          transfer ownership at any time.
+          <br />
+          Project owners can delegate their vote to another user, who can vote
+          on and create challenges but cannot edit project details or transfer
+          ownership. Users can be delegates and owners for multiple projects at
+          the same time.
+          <br />
+          <br />
+          <strong>Project Representatives</strong> If you are an employee or
+          play a key role in the project, you should claim the project by
+          selecting the “Project representative” option when creating the
+          listing. If the organization is hierarchical, employees higher in the
+          hierarchy take precedence over others in the organization. It’s
+          preferable to have Project Representatives maintaining listings over
+          community members to increase the authenticity of the data.
+          <br />
+          <br />
+          Owners who are not representatives may see their projects challenged
+          and removed. To mitigate the need to forcibly remove projects,
+          non-representative owners should transfer ownership to Project
+          Representatives upon request.
+          <br />
+          <br />
+          <strong>Challenging Projects Owners</strong> and delegates can
+          challenge listings on behalf of their projects if they believe the
+          listing is conveying fraudulent or inaccurate information.
+          <br />
+          <br />
+        </p>
+        <div>
+          Registry listings should only be challenged if there is reasonable
+          belief that the project does not belong on the registry because of
+          these reasons:
+          <ol type="a" style={{ margin: '32px 0 32px 32px' }}>
+            <li>
+              The project details are inaccurate (eg. outdated information,
+              broken links).
+            </li>
+            <li>The project's categories or sub-categories are inaccurate.</li>
+            <li>
+              The project is being misrepresented (eg. inaccurate data,
+              fraudulent information about the project details or activities).
+            </li>
+            <li>
+              The project is not, in a broad sense, working toward
+              decentralization.
+            </li>
+          </ol>
+          A description of the dispute must be included in the challenge to
+          ensure that voters have sufficient information about the claim. For
+          example: "Website link is incorrect", "Project owner is not a
+          representative and refuses to transfer ownership", "Project is in the
+          wrong category".
+        </div>
+      </div>
+    ),
+  },
+  {
+    heading: 'Challenge Reward',
+    body: (
       <p>
-        All users are incentivized to maintain the list's quality since there is
-        limited advantage to...
-        <br />
-        <br /> Everest is building toward a decentralized future where no
-        privileged group has control over public data. The Everest registry aims
-        to be a public dataset about projects, that is maintained by diverse
-        stakeholders who agree on the contents of the shared registry with
-        neutrality.
-        <br />
-        <br />
-        Anyone can add a project to Everest by paying a 10 DAI listing fee to
-        the Everest Reserve Bank. The listing fee helps ensure skin in the game
-        for maintaining the registry's quality. If a project representative (eg.
-        an employee, contractor, investor) adds the project, makes sure to claim
-        the project so others know that the listing will be maintained by the
-        native project.
+        Anyone can challenge a listing by staking 10 DAI against the dispute. If
+        the challenge is successful, the stake is returned and the challenger is
+        additionally awarded 9 DAI. If the challenge is unsuccessful, the
+        challenger loses their stake and it's added to the Reserve Bank. Once a
+        challenge is complete, any user can click to resolve the challenge.
+        Performing this action updates the state in the registry. Since this
+        consumes gas, resolvers are awarded 1 DAI for resolving a challenge.
         <br />
         <br />
-        Once a project is added, the project owner can help maintain Everest's
-        quality by challenging existing projects on the registry or voting on
-        challenges, on behalf of the project. Registry listings should only be
-        challenged if there is reasonable belief that the project does not
-        belong on the Everest registry:
+        <strong>Voting Rules</strong> Registry members can vote on active
+        challenges to other projects to keep or remove them from the registry.
+        Each project has one vote but votes are time-weighted based on how long
+        the project has been a part of the registry.
         <br />
         <br />
-        a) the project details are inaccurate (eg. outdated information, broken
-        links)
-        <br /> b) the project's categories or sub-categories are inaccurate
-        <br /> c) the project is being fraudulently misrepresented
+        Project owners or delegates will have up to 2 days after a challenge has
+        been initiated to vote on the challenge and they can vote on behalf of
+        multiple projects. A challenge is successful if there is at least one
+        vote and the number of votes to remove the project exceeds the number of
+        votes to keep the project. If there is a tie vote, the challenge is not
+        successful.
         <br />
         <br />
-        Anyone can challenge a listing by staking 10 DAI. If the challenge is
-        successful, the stake is returned and the challenger is awarded 1 DAI.
-        If the challenge is unsuccessful, the challenger loses their stake and
-        it's added to the Everest Reserve Bank. Once a challenge is complete,
-        any user can also resolve a challenge and earn 1 DAI for resolving
-        complete challenges.
-        <br />
-        <br /> Owners can vote on behalf of multiple projects or they can
-        delegate their voting rights. Each project's vote is weighted by time,
-        derived from how long the project has been a part of the Everest
-        registry.
+        <strong>Reserve Bank</strong> The Reserve Bank holds the deposits of all
+        added projects. Any successful challengers and challenge resolvers are
+        also rewarded DAI from the Reserve Bank. The funds accrued in the
+        Reserve Bank will be used to support continued development of Everest
+        and its ecosystem, to grow the registry’s utility to projects. The Graph
+        currently holds the keys to the Reserve Bank.
       </p>
     ),
   },
@@ -113,20 +142,31 @@ export default [
     heading: 'Community Maintenance',
     body: (
       <p>
-        Everest was developed by The Graph and MetaCartel and will be maintained
-        by the community. The goal of Everest is to integrate project identities
-        with other useful applications and protocols. As a result, the Everest
-        Reserve Bank and community grants will be used to fund bounties to build
-        greater functionality into the Everest registry.
-        <br />
-        <br />
-        Check out the{' '}
+        Everest was developed by{' '}
+        <a
+          href="https://thegraph.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          The Graph
+        </a>{' '}
+        and{' '}
+        <a
+          href="https://www.metacartel.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          MetaCartel
+        </a>{' '}
+        and will be maintained by the community through grants and bounties,
+        paid by the Reserve Bank. Community members can contribute by adding and
+        claiming projects and submitting pull requests to the Everest{' '}
         <a
           href="https://github.com/graphprotocol/everest"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Everest Monorepo
+          Github repo
         </a>{' '}
         to learn more and contribute.
       </p>
