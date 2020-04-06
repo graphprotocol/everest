@@ -61,3 +61,7 @@ You can build all the sub repositories from to top level root folder with node s
 recommended for development to do everything here. Lerna allows for this, and it is a smooth
 process. Only run node scripts from the sub modules if you are doing updates to core functionality
 and you know what you are doing.
+
+If you want to build and edit the contracts, you should go directly into that sub repo and do it
+and there, and run tests on ganache there. It is configured to work with a locally stored private
+key, which is a 12 word mneumonic.
