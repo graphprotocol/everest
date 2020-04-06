@@ -45,9 +45,7 @@ try {
   provider
 }
 
-const networkURI = process.env.GATSBY_NETWORK_URI
 const ipfsURI = process.env.GATSBY_IPFS_HTTP_URI
-
 const mutations = createMutations({
   mutations: {
     resolvers: everestMutations.resolvers,
@@ -71,7 +69,7 @@ const mutations = createMutations({
 })
 
 const queryLink = createHttpLink({
-  uri: `${networkURI}/subgraphs/name/graphprotocol/everest`,
+  uri: process.env.GATSBY_GRAPHQL_HTTP_URI,
 })
 
 const mutationLink = createMutationsLink({ mutations })

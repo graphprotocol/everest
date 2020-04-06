@@ -2,17 +2,11 @@ const fs = require('fs')
 const ethers = require('ethers')
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 
-// There seems to be no easy way to avoid deploying with truffle and having
-// to use HDWallerProvider. This package has  yarn errors, but still works with the errors
-// Discussions in ethers here https://github.com/ethers-io/ethers.js/issues/147
-// and here https://github.com/ethers-io/ethers.js/issues/71 for potential ethers deployments
-// For now, we use HDWalletProvider, since it works.
-
 const mnemonic = fs
     .readFileSync(__dirname + '/../../../private-keys/.privkey-metamask.txt')
     .toString()
     .trim()
-const mainnetProvider = `https://infura.io/v3/${fs
+const mainnetProvider = `https://mainnet.infura.io/v3/${fs
     .readFileSync(__dirname + '/../../../private-keys/.infurakey.txt')
     .toString()
     .trim()}`
@@ -37,13 +31,12 @@ module.exports = {
             provider: () => new HDWalletProvider(mnemonic, ropstenProvider, 0, 4),
             network_id: 3,
             gasPrice: ethers.utils.parseUnits('110', 'gwei'),
-            skipDryRun: true
         },
         mainnet: {
             // one need one address in HD wallet
             provider: () => new HDWalletProvider(mnemonic, mainnetProvider, 0, 1),
             network_id: 1,
-            gasPrice: ethers.utils.parseUnits('8', 'gwei')
+            gasPrice: ethers.utils.parseUnits('3', 'gwei')
         }
     },
     compilers: {

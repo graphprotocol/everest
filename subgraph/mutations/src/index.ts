@@ -137,7 +137,7 @@ const abis = {
 const addresses = require('everest-contracts/addresses.json')
 
 const addressMap = {
-  Dai: 'mockDAI',
+  Dai: 'dai',
   EthereumDIDRegistry: 'ethereumDIDRegistry',
   ReserveBank: 'reserveBank',
   Everest: 'everest',
@@ -145,7 +145,6 @@ const addressMap = {
 
 async function getContract(context: Context, contract: string) {
   const { ethereum } = context.graph.config
-
   const abi = abis[contract]
 
   if (!abi) {
@@ -155,8 +154,16 @@ async function getContract(context: Context, contract: string) {
   const network = await ethereum.getNetwork()
 
   let networkName = network.name
+  // When running on ganache, networkName is dev or unknown
   if (networkName === 'dev' || networkName === 'unknown') {
     networkName = 'ganache'
+  }
+
+  // We look for the chainID when figuring out the network of ropsten or mainnet
+  if (network.chainId === 1) {
+    networkName = 'mainnet'
+  } else if (network.chainId === 3) {
+    networkName = 'ropsten'
   }
 
   const networkAddresses = addresses[networkName]
@@ -181,7 +188,6 @@ async function getContract(context: Context, contract: string) {
 
 const uploadImage = async (_: any, { image }: any, context: Context) => {
   const { ipfs } = context.graph.config
-
   return await uploadToIpfs(ipfs, image)
 }
 
@@ -195,18 +201,20 @@ const daiBalance = async (_: any, args: any, context: Context) => {
 const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const { ethereum, ipfs } = context.graph.config
 
-  const { state } = context.graph
-
   const metadata = Buffer.from(JSON.stringify(args))
+
   const ipfsHash = await uploadToIpfs(ipfs, metadata)
 
   const owner = await ethereum.getSigner().getAddress()
+
   const member = await ethers.Wallet.createRandom().connect(ethereum)
 
   const memberSigningKey = new utils.SigningKey(member.privateKey)
 
   const everestContract = await getContract(context, 'Everest')
+
   const ethereumDIDRegistryContract = await getContract(context, 'EthereumDIDRegistry')
+
   const daiContract = await getContract(context, 'Dai')
 
   const permitBalance = await daiContract.allowance(owner, everestContract.address)

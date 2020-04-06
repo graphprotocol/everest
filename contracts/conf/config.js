@@ -50,7 +50,6 @@ const wallets = {
 }
 const config = {
     everestParams: {
-        owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
         votingPeriodDuration: 172800, // 2 days, in seconds
         challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
         applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
@@ -60,7 +59,8 @@ const config = {
         categories: ipfsToBytes(categoriesIPFSHash)
     },
     ganacheParams: {
-        chainID: 9545
+        chainID: 9545,
+        owner: wallets.zero().signingKey.address, // Ganache deterministic account 0
     },
     ropstenParams: {
         supply: '100000000000000000000000000', // $100M DAI supply
@@ -73,8 +73,9 @@ const config = {
         daiAddress: "0x82a351cdfb726dafc8624d8bd6b0bc98d34ffec1" // Set to null if desired to deploy new dai
     },
     mainnetParams: {
-        daiAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
-        ethereumDIDRegistryAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
+        daiAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+        ethereumDIDRegistryAddress: '0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B',
+        owner: '0x93606b27cB5e4c780883eC4F6b7Bed5f6572d1dd', // Daves metamask account 0
     },
     // Used for deploying and interacting on testnets
     metamaskAddresses: {
