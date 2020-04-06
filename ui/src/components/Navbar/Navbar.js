@@ -37,6 +37,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
       setUserAccount(account)
     }
     setShowModal(false)
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -73,11 +74,10 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
       const storage = window.localStorage.getItem('WALLET_CONNECTOR')
       if (storage) {
         walletConnector = JSON.parse(storage)
+        console.log('walletConnector: ', walletConnector)
         if (walletConnector && walletConnector.accounts) {
           setUserAccount(walletConnector.accounts[0])
         }
-      } else {
-        setUserAccount(account)
       }
     }
 
@@ -85,7 +85,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
       metamaskAccountChange(accounts => {
         if (accounts && accounts.length > 0) {
           setUserAccount(accounts[0])
-          if (typeof window !== undefined) {
+          if (typeof window !== undefined && accounts[0]) {
             const newWalletConnector = JSON.stringify({
               ...walletConnector,
               accounts: accounts,
@@ -95,7 +95,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         }
       })
     }
-  }, [account])
+  }, [])
 
   const isNewProjectPage =
     location &&

@@ -384,6 +384,7 @@ const Project = ({ location }) => {
   }, [data])
 
   useEffect(() => {
+    let walletConnector
     if (typeof window !== undefined) {
       const storage = window.localStorage.getItem('WALLET_CONNECTOR')
       if (storage) {
