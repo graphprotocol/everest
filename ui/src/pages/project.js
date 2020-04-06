@@ -596,7 +596,11 @@ const Project = ({ location }) => {
     remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
 
   return (
-    <Grid sx={{ pb: project && project.currentChallenge ? '400px' : 0 }}>
+    <Grid
+      sx={{
+        pb: project && project.currentChallenge ? ['200', '400', '400px'] : 0,
+      }}
+    >
       <Grid
         columns={[1, 1, 2]}
         gap={0}
@@ -983,27 +987,29 @@ const Project = ({ location }) => {
                         . Resolve this challenge to update the registry&apos;s
                         state and earn a reward.
                       </Styled.h6>
-                      <Grid
-                        columns={2}
-                        sx={{
-                          mt: 4,
-                          mb: 6,
-                          gridTemplateColumns: 'max-content max-content',
-                        }}
-                      >
-                        <Button
-                          variant="secondary"
-                          text="Resolve"
+                      {!isMobile && (
+                        <Grid
+                          columns={2}
                           sx={{
-                            border: '1px solid #4C66FF',
-                            cursor: pendingResolve ? 'auto' : 'pointer',
-                            '&:hover': {
-                              boxShadow: pendingResolve && 'none',
-                            },
+                            mt: 4,
+                            mb: 6,
+                            gridTemplateColumns: 'max-content max-content',
                           }}
-                          onClick={handleResolveChallenge}
-                        />
-                      </Grid>
+                        >
+                          <Button
+                            variant="secondary"
+                            text="Resolve"
+                            sx={{
+                              border: '1px solid #4C66FF',
+                              cursor: pendingResolve ? 'auto' : 'pointer',
+                              '&:hover': {
+                                boxShadow: pendingResolve && 'none',
+                              },
+                            }}
+                            onClick={handleResolveChallenge}
+                          />
+                        </Grid>
+                      )}
                     </Fragment>
                   ) : userProjects.length > 0 &&
                     project.currentChallenge.id !== '123' &&

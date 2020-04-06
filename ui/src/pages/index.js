@@ -5,6 +5,7 @@ import { navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { utils } from 'ethers'
+import { isMobile } from 'react-device-detect'
 
 import { useAccount } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
@@ -94,32 +95,37 @@ const Index = () => {
             shift to Web3 by creating the first decentralized registry to
             provide ongoing utility to the crypto community.
           </Styled.h6>
-          <Grid
-            columns={1}
-            mt={[7, 7, 5]}
-            mb={[6, 6, 5]}
-            sx={{ justifyContent: ['center', 'start', 'start'] }}
-          >
-            {showModal ? (
-              <Modal showModal={showModal} closeModal={closeModal}>
+          {!isMobile && (
+            <Grid
+              columns={1}
+              mt={[7, 7, 5]}
+              mb={[6, 6, 5]}
+              sx={{
+                justifyContent: 'start',
+                display: ['none', 'grid', 'grid'],
+              }}
+            >
+              {showModal ? (
+                <Modal showModal={showModal} closeModal={closeModal}>
+                  <Button
+                    onClick={openModal}
+                    text="Add a project"
+                    variant="primary"
+                  />
+                </Modal>
+              ) : (
                 <Button
-                  onClick={openModal}
+                  onClick={async () =>
+                    account || (await getAddress())
+                      ? navigate('/projects/new')
+                      : setShowModal(true)
+                  }
                   text="Add a project"
                   variant="primary"
                 />
-              </Modal>
-            ) : (
-              <Button
-                onClick={async () =>
-                  account || (await getAddress())
-                    ? navigate('/projects/new')
-                    : setShowModal(true)
-                }
-                text="Add a project"
-                variant="primary"
-              />
-            )}
-          </Grid>
+              )}
+            </Grid>
+          )}
         </Box>
         <Divider sx={{ display: ['block', 'none', 'none'], mb: 0 }} />
         <Box
@@ -257,27 +263,34 @@ const Index = () => {
             Having a complete and up-to-date list of projects is a major
             achievement on the road to decentralization.
           </Styled.p>
-          <Grid columns={['max-content', 1]} mt={[6, 6, 5]} mb={[6, 6, 5]}>
-            {showModal ? (
-              <Modal showModal={showModal} closeModal={closeModal}>
+          {!isMobile && (
+            <Grid
+              columns={['max-content', 1]}
+              mt={[6, 6, 5]}
+              mb={[6, 6, 5]}
+              sx={{ display: ['none', 'grid', 'grid'] }}
+            >
+              {showModal ? (
+                <Modal showModal={showModal} closeModal={closeModal}>
+                  <Button
+                    onClick={openModal}
+                    text="Add a project"
+                    variant="primary"
+                  />
+                </Modal>
+              ) : (
                 <Button
-                  onClick={openModal}
+                  onClick={async () =>
+                    account || (await getAddress())
+                      ? navigate('/projects/new')
+                      : setShowModal(true)
+                  }
                   text="Add a project"
                   variant="primary"
                 />
-              </Modal>
-            ) : (
-              <Button
-                onClick={async () =>
-                  account || (await getAddress())
-                    ? navigate('/projects/new')
-                    : setShowModal(true)
-                }
-                text="Add a project"
-                variant="primary"
-              />
-            )}
-          </Grid>
+              )}
+            </Grid>
+          )}
         </Box>
       </Grid>
     </Grid>
