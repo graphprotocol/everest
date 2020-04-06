@@ -41,8 +41,6 @@ const Modal = ({ children, showModal, closeModal }) => {
         if (walletConnector && walletConnector.accounts) {
           setUserAccount(walletConnector.accounts[0])
         }
-      } else {
-        // setUserAccount(account)
       }
     }
   }, [])
