@@ -22,7 +22,7 @@ Run these commands from the root directory:
 
 # Commands
 
-This repository can be seen as having two ways of deploying and runningthe code - one that ties 
+This repository can be seen as having two ways of deploying and running the code - one that ties 
 in everything to work with ropsten, and one with mainnet. The main commands  for each
 network are:
 
@@ -36,14 +36,19 @@ yarn start:dev-mainnet
 
 Generally, you won't need to run any of the other node scripts.
 
+You can also deploy the everest subgraph from the root folder. Currently it is configured
+to only work with the subgraph named `graphprotocol/everest`. If you are not a member
+of graphprotocol on github, you can't deploy. You would have to change the code to deploy
+to a subgraph under your own github name.
+
 `yarn deploy-ropsten` and `yarn deploy-mainnet` do the following:
   - Building the `./contracts` sub repository
   - Building the `./subgraph` sub repository
   - Building the `./subgraph/mutations` sub repository
   - Once all builds are successful, it will deploy the subgraph to the respective network on the hosted service for the graph
 
-Normally the development of the subgraph and the front end can be done on their own. You
-should deploy the subgraph to the hosted service, and then run the UI.
+Normally the development of the subgraph and the front end can be done on their own.
+You can run UI independently, and decide whether it should use the ropsten subgraph or contracts, or mainnet. For local development, we want to use ropsten.
 
 To run the UI, use either `start:dev-ropsten` or `start:dev-mainnet`. These do the following
   - Starts the UI at `localhost:4000` after a subgraph is already deployed to the hosted service. (They each take a different different `.env` file for each network
