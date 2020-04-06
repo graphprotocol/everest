@@ -5,7 +5,45 @@ import charter from '../data/charter'
 const Charter = () => {
   return (
     <Box>
-      <Styled.h1 sx={{ textAlign: 'center', mb: 4 }}>Everest Charter</Styled.h1>
+      <Box
+        sx={{
+          width: '100%',
+          height: '400px',
+          backgroundColor: 'rgba(30,37,44,0.04)',
+          marginTop: [-6, -6, -9],
+          position: 'relative',
+        }}
+      >
+        <img
+          src={`/mountain-empty.png`}
+          sx={{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '325px',
+            display: ['none', 'block', 'block'],
+          }}
+        />
+        <Box
+          sx={{
+            margin: '0 auto',
+            px: [3, 0, 0],
+            maxWidth: '620px',
+            width: '100%',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          <Styled.h1 sx={{ mb: 4 }}>Everest Charter</Styled.h1>
+          <Styled.h6>
+            Everest is a shared registry of projects that is curated by members
+            of the registry.
+          </Styled.h6>
+        </Box>
+      </Box>
       {charter.map((entry, index) => (
         <Box
           key={index}
