@@ -39,8 +39,8 @@ const Charter = () => {
         >
           <Styled.h1 sx={{ mb: 4 }}>Everest Charter</Styled.h1>
           <Styled.h6>
-            Everest is a shared registry of projects that is curated by members
-            of the registry.
+            Everest is a shared registry of projects that is curated by its
+            members.
           </Styled.h6>
         </Box>
       </Box>

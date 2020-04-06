@@ -86,7 +86,7 @@ const Sorting = ({
   return (
     <Menu
       items={menuItems}
-      menuStyles={{ width: 'fit-content', top: '40px' }}
+      menuStyles={{ width: 'inherit', top: '40px' }}
       sx={{ justifyContent: 'flex-end' }}
       setOpen={setIsSortingOpen}
     >

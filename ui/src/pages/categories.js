@@ -32,6 +32,11 @@ const Categories = () => {
     return <div />
   }
 
+  let other
+  if (data && data.categories) {
+    other = data.categories.find(cat => cat.name === 'Other')
+  }
+
   return (
     <Box>
       <Box>
@@ -64,14 +69,17 @@ const Categories = () => {
       )}
       {data && (
         <Section
-          items={data.categories.map(cat => {
-            return {
-              name: cat.name,
-              description: `${cat.projectCount} PROJECTS`,
-              image: cat.imageUrl,
-              to: `/category/${cat.id}`,
-            }
-          })}
+          items={data.categories
+            .filter(category => category.name !== 'Other')
+            .concat(other)
+            .map(cat => {
+              return {
+                name: cat.name,
+                description: `${cat.projectCount} PROJECTS`,
+                image: cat.imageUrl,
+                to: `/category/${cat.id}`,
+              }
+            })}
           variant="category"
         />
       )}

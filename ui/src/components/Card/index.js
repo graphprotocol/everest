@@ -76,7 +76,12 @@ const Card = ({
             sx={{
               textAlign: 'center',
               py: title && title.length > 15 ? 0 : 3,
-              px: title && title.length === 16 ? 4 : 3,
+              px:
+                variant === 'project'
+                  ? 0
+                  : title && title.length === 16
+                  ? 4
+                  : [2, 3, 3],
               position: 'relative',
             }}
           >
