@@ -7,15 +7,13 @@
 const activeEnv =
   process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
 
-console.log('process.env.GATSBY_ACTIVE_ENV: ', process.env.GATSBY_ACTIVE_ENV)
-console.log('activeEnv: ', activeEnv)
+console.log(`Using environment config: '${activeEnv}'`)
 
 require('dotenv').config({
   path: `.env.${activeEnv}`,
 })
 
 module.exports = {
-  pathPrefix: '__GATSBY_IPFS_PATH_PREFIX__',
   plugins: [
     'gatsby-plugin-react-helmet',
     // 'gatsby-plugin-webpack-bundle-analyser-v2',
@@ -83,7 +81,6 @@ module.exports = {
         },
       },
     },
-    'gatsby-plugin-ipfs',
   ],
   siteMetadata: {
     title: 'Everest',

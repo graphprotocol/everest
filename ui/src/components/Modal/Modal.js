@@ -62,13 +62,10 @@ const Modal = ({ children, showModal, closeModal }) => {
   const handleWalletActivation = async wallet => {
     setSelectedWallet(wallet)
     if (wallet.name === 'MetaMask') {
-      const mmAccount = await getAddress()
       if (await walletExists()) {
+        const mmAccount = await getAddress()
         if (mmAccount) {
-          setShowWalletsView(false)
-          setShowAccountView(true)
           setUserAccount(mmAccount)
-
           const connnectData = JSON.stringify({
             name: wallet.type,
             accounts: [mmAccount],
@@ -77,6 +74,8 @@ const Modal = ({ children, showModal, closeModal }) => {
             window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
           }
           return
+        } else {
+          window.ethereum.enable()
         }
       } else {
         return window.open('https://metamask.io/', '_blank')
@@ -113,6 +112,13 @@ const Modal = ({ children, showModal, closeModal }) => {
         }
       })
   }
+
+  useEffect(() => {
+    if (userAccount) {
+      setShowWalletsView(false)
+      setShowAccountView(true)
+    }
+  }, [userAccount])
 
   const handleGoBack = () => {
     setShowPendingView(false)

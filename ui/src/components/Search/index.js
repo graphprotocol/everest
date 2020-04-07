@@ -161,7 +161,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
         height: '25px',
         width: '25px',
         cursor: 'pointer',
-        mr: [4, 3, 3],
+        mr: [0, 3, 3],
       }}
       onClick={e => {
         e.stopPropagation()
