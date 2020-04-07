@@ -55,6 +55,7 @@ const Charter = () => {
             '& a': {
               textDecoration: 'none',
               color: 'secondary',
+              fontWeight:'bold'
             },
           }}
         >
