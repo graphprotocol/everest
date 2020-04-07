@@ -1,10 +1,30 @@
 /** @jsx jsx */
 import { jsx, Box } from 'theme-ui'
+import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 
-const Footer = ({ ...props }) => {
+const Footer = ({ location }) => {
+  const isNewProjectPage =
+    location &&
+    (location.pathname.includes('new') || location.pathname.includes('edit'))
+
+  const rootStyles = {
+    display: `${isNewProjectPage ? 'none' : 'grid'}`,
+    gridColumnGap: '20px',
+    justifyContent: ['center', 'space-between', 'space-between'],
+    gridTemplateColumns: ['1fr', '1fr 1fr', '1fr 1fr'],
+    alignItems: 'center',
+    height: '96px',
+    my: [7, 0, 0],
+  }
+
+  const iconStyles = {
+    width: '26px',
+    height: 'auto',
+  }
+    
   return (
-    <div sx={rootStyles} {...props}>
+    <div sx={rootStyles}>
       <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
         <a
@@ -63,19 +83,8 @@ const Footer = ({ ...props }) => {
   )
 }
 
-const rootStyles = {
-  display: 'grid',
-  gridColumnGap: '20px',
-  justifyContent: ['center', 'space-between', 'space-between'],
-  gridTemplateColumns: ['1fr', '1fr 1fr', '1fr 1fr'],
-  alignItems: 'center',
-  height: '96px',
-  my: [7, 0, 0],
-}
-
-const iconStyles = {
-  width: '26px',
-  height: 'auto',
+Footer.propTypes = {
+  location: PropTypes.any,
 }
 
 export default Footer

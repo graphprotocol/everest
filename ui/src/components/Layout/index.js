@@ -84,7 +84,7 @@ const LayoutTemplate = ({ children, ...props }) => {
             {childrenWithProps}
           </main>
         </Box>
-        <Footer sx={styles} />
+        <Footer location={props.location} sx={styles} />
       </section>
     </ReactContext.Provider>
   )
