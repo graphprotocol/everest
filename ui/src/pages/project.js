@@ -996,7 +996,8 @@ const Project = ({ location }) => {
                       <Styled.h6>
                         This challenge has ended and the project will be{' '}
                         {project.currentChallenge.votesFor >
-                        project.currentChallenge.votesAgainst ? (
+                          project.currentChallenge.votesAgainst &&
+                        project.currentChallenge.votes.length > 1 ? (
                           <span>removed</span>
                         ) : (
                           <span>kept</span>
