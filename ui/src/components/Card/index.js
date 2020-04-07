@@ -86,7 +86,7 @@ const Card = ({
             }}
           >
             {variant === 'project' && (
-              <p sx={{ variant: 'text.tag' }}>{category}</p>
+              <p sx={{ variant: 'text.tag', fontSize: '10px' }}>{category}</p>
             )}
             <Styled.p
               sx={{

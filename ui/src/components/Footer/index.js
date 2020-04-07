@@ -1,8 +1,28 @@
 /** @jsx jsx */
 import { jsx, Box } from 'theme-ui'
+import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 
-const Footer = ({ ...props }) => {
+const Footer = ({ location, ...props }) => {
+  const isNewProjectPage =
+    location &&
+    (location.pathname.includes('new') || location.pathname.includes('edit'))
+
+  const rootStyles = {
+    display: `${isNewProjectPage ? 'none' : 'grid'}`,
+    gridColumnGap: '20px',
+    justifyContent: ['center', 'space-between', 'space-between'],
+    gridTemplateColumns: ['1fr', '1fr 1fr', '1fr 1fr'],
+    alignItems: 'center',
+    height: '96px',
+    my: [7, 0, 0],
+  }
+
+  const iconStyles = {
+    width: '26px',
+    height: 'auto',
+  }
+    
   return (
     <div sx={rootStyles} {...props}>
       <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
@@ -46,36 +66,25 @@ const Footer = ({ ...props }) => {
           />
         </a>
         <img
-          src={`/graph.png`}
+          src={`/graph-gray.png`}
           alt="The Graph"
           title="The Graph"
           sx={iconStyles}
         />
         <img
-          src={`/ethereum.png`}
+          src={`/ethereum-gray.png`}
           alt="Ethereum"
           title="Ethereum"
           sx={iconStyles}
         />
-        <img src={`/ipfs.png`} alt="IPFS" title="IPFS" sx={iconStyles} />
+        <img src={`/ipfs-gray.png`} alt="IPFS" title="IPFS" sx={iconStyles} />
       </Grid>
     </div>
   )
 }
 
-const rootStyles = {
-  display: 'grid',
-  gridColumnGap: '20px',
-  justifyContent: ['center', 'space-between', 'space-between'],
-  gridTemplateColumns: ['1fr', '1fr 1fr', '1fr 1fr'],
-  alignItems: 'center',
-  height: '96px',
-  my: [7, 0, 0],
-}
-
-const iconStyles = {
-  width: '26px',
-  height: 'auto',
+Footer.propTypes = {
+  location: PropTypes.any,
 }
 
 export default Footer

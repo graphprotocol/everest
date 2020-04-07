@@ -64,7 +64,7 @@ const Section = ({
           </Grid>
         )}
         {items.map((item, index) => (
-          <Box key={index} sx={{ py: 2 }}>
+          <Box key={index} sx={{ py: .75 }}>
             <Row item={item} />
           </Box>
         ))}
