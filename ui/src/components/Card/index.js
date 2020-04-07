@@ -2,8 +2,8 @@
 import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import PropTypes from 'prop-types'
-import { navigate } from 'gatsby'
 
+import Link from '../Link'
 import Challenged from '../../images/challenge.svg'
 
 const Card = ({
@@ -17,11 +17,11 @@ const Card = ({
   pending,
 }) => {
   return (
-    <Grid
+    <Link
+      to={to}
       sx={pending ? { ...styles.root, pointerEvents: 'none' } : styles.root}
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
-      onClick={() => navigate(to)}
     >
       {pending && (
         <img
@@ -109,7 +109,7 @@ const Card = ({
           </Box>
         </Grid>
       </Box>
-    </Grid>
+    </Link>
   )
 }
 
