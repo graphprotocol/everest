@@ -204,7 +204,7 @@ const styles = {
       backgroundColor: 'white',
     },
     '& input:checked + span:before': {
-      transform: 'translateX(16px)',
+      transform: 'translateX(14px)',
       backgroundColor: 'secondary',
     },
   },
@@ -219,8 +219,10 @@ const styles = {
     border: '1px solid rgba(255,255,255,0.5)',
     borderRadius: '14px',
     transition: '.4s',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 5px',
     '&:before': {
-      position: 'absolute',
       content: 'close-quote',
       height: '16px',
       width: '24px',
