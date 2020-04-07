@@ -66,18 +66,18 @@ const Footer = ({ location }) => {
           />
         </a>
         <img
-          src={`/graph.png`}
+          src={`/graph-gray.png`}
           alt="The Graph"
           title="The Graph"
           sx={iconStyles}
         />
         <img
-          src={`/ethereum.png`}
+          src={`/ethereum-gray.png`}
           alt="Ethereum"
           title="Ethereum"
           sx={iconStyles}
         />
-        <img src={`/ipfs.png`} alt="IPFS" title="IPFS" sx={iconStyles} />
+        <img src={`/ipfs-gray.png`} alt="IPFS" title="IPFS" sx={iconStyles} />
       </Grid>
     </div>
   )
