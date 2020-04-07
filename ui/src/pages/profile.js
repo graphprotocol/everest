@@ -238,7 +238,7 @@ const Profile = ({ location }) => {
                   sx={{
                     pt: 1,
                     pl: 2,
-                    width: '24px',
+                    width: '32px',
                     transform: 'rotate(90deg)',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -316,7 +316,7 @@ const Profile = ({ location }) => {
                 sx={{
                   pt: 1,
                   pl: 2,
-                  width: '24px',
+                  width: '32px',
                   transform: 'rotate(90deg)',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
