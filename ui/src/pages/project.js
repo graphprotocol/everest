@@ -138,6 +138,7 @@ const Project = ({ location }) => {
   })
 
   const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE, {
+    client: client,
     onError: error => {
       console.error('Error voting on a challenge: ', error)
       setPendingResolve(false)
@@ -996,9 +997,9 @@ const Project = ({ location }) => {
                         This challenge has ended and the project will be{' '}
                         {project.currentChallenge.votesFor >
                         project.currentChallenge.votesAgainst ? (
-                          <span>kept</span>
-                        ) : (
                           <span>removed</span>
+                        ) : (
+                          <span>kept</span>
                         )}
                         . Resolve this challenge to update the registry&apos;s
                         state and earn a reward.

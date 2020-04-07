@@ -132,7 +132,6 @@ export const RESOLVE_CHALLENGE = gql`
   mutation resolveChallenge($challengeId: ID!) {
     resolveChallenge(challengeId: $challengeId) @client {
       id
-      description
     }
   }
 `
