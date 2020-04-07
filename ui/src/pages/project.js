@@ -677,7 +677,7 @@ const Project = ({ location }) => {
                   </Box>
                 ) : (
                   <img
-                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                    src={`/dots.png`}
                     sx={{
                       pt: 1,
                       pl: 2,
@@ -772,7 +772,7 @@ const Project = ({ location }) => {
                 </Box>
               ) : (
                 <img
-                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                  src={`/dots.png`}
                   sx={{
                     pt: 1,
                     pl: 2,

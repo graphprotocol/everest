@@ -1,17 +1,8 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
 const Footer = ({ ...props }) => {
-  const [imagePrefix, setImagePrefix] = useState('')
-
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
-    }
-  }, [])
-
   return (
     <div sx={rootStyles} {...props}>
       <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
@@ -48,30 +39,25 @@ const Footer = ({ ...props }) => {
           }}
         >
           <img
-            src={`${imagePrefix}/github.png`}
+            src={`/github.png`}
             alt="Github Everest"
             title="Github Everest"
             sx={iconStyles}
           />
         </a>
         <img
-          src={`${imagePrefix}/graph.png`}
+          src={`/graph.png`}
           alt="The Graph"
           title="The Graph"
           sx={iconStyles}
         />
         <img
-          src={`${imagePrefix}/ethereum.png`}
+          src={`/ethereum.png`}
           alt="Ethereum"
           title="Ethereum"
           sx={iconStyles}
         />
-        <img
-          src={`${imagePrefix}/ipfs.png`}
-          alt="IPFS"
-          title="IPFS"
-          sx={iconStyles}
-        />
+        <img src={`/ipfs.png`} alt="IPFS" title="IPFS" sx={iconStyles} />
       </Grid>
     </div>
   )

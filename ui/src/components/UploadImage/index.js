@@ -119,8 +119,7 @@ const UploadImage = ({ parentImage, setParentImage }) => {
           <span>Upload image</span>
           {loadingImage && (
             <img
-              src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-                ''}/loading-dots-white.gif`}
+              src={`/loading-dots-white.gif`}
               alt="Uploading"
               sx={{ height: '24px', width: 'auto' }}
             />

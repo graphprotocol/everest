@@ -54,8 +54,7 @@ const Profile = ({ location }) => {
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
       } else {
-        image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-          ''}/profile-default.png`
+        image = `/profile-default.png`
       }
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
@@ -235,7 +234,7 @@ const Profile = ({ location }) => {
                 ]}
               >
                 <img
-                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                  src={`/dots.png`}
                   sx={{
                     pt: 1,
                     pl: 2,
@@ -313,7 +312,7 @@ const Profile = ({ location }) => {
               ]}
             >
               <img
-                src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
+                src={`/dots.png`}
                 sx={{
                   pt: 1,
                   pl: 2,

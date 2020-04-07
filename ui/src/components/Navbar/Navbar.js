@@ -47,8 +47,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
           image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
         } else {
-          image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-            ''}/profile-default.png`
+          image = `/profile-default.png`
         }
         setUserImage(image)
       }
@@ -73,7 +72,6 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
       const storage = window.localStorage.getItem('WALLET_CONNECTOR')
       if (storage) {
         walletConnector = JSON.parse(storage)
-        console.log('walletConnector: ', walletConnector)
         if (walletConnector && walletConnector.accounts) {
           setUserAccount(walletConnector.accounts[0])
         }
@@ -91,6 +89,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             })
             window.localStorage.setItem('WALLET_CONNECTOR', newWalletConnector)
           }
+        } else {
+          window.localStorage.removeItem('WALLET_CONNECTOR')
         }
       })
     }
@@ -180,7 +180,10 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
               setParentMobileOpen(true)
             }}
           />
-          <Link to="/" sx={{ ml: 4, '&:hover': { svg: { marginLeft: 0 } } }}>
+          <Link
+            to="/"
+            sx={{ ml: [0, 4, 4], '&:hover': { svg: { marginLeft: 0 } } }}
+          >
             <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
           </Link>
           <Search
