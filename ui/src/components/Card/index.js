@@ -92,7 +92,6 @@ const Card = ({
               sx={{
                 fontWeight: 'heading',
                 color: 'secondary',
-                pt: !isChallenged && 3,
               }}
             >
               {title}

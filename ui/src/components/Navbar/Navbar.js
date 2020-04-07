@@ -243,20 +243,26 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         sx={{
           gridTemplateColumns: [
             '1fr 1fr max-content',
-            '30px repeat(4, max-content)',
+            '114px repeat(3, max-content)',
           ],
           width: '100%',
           alignItems: 'center',
           display: ['none', 'grid', 'grid'],
         }}
-        gap={6}
+        gap={7}
       >
-        <Link to="/" sx={{ '&:hover': { svg: { marginLeft: 0 } } }}>
+        <Link
+          to="/"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            '&:hover': { svg: { marginLeft: 0 } },
+          }}
+        >
           <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
+          <span sx={{ pl: 3 }}>Everest</span>
         </Link>
-        <Link to="/">
-          <span>Everest</span>
-        </Link>
+
         <Link to="/projects">Projects</Link>
         <Link to="/categories">Categories</Link>
         <Link to="/charter">Charter</Link>

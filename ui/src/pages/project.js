@@ -397,7 +397,11 @@ const Project = ({ location }) => {
   }, [])
 
   if (loading && !error) {
-    return <Styled.p>Loading</Styled.p>
+    return (
+      <Styled.p sx={{ textAlign: 'center' }}>
+        <img src="/loading-dots-blue.gif" />
+      </Styled.p>
+    )
   }
 
   if (error) {
@@ -572,6 +576,17 @@ const Project = ({ location }) => {
           }
         },
         icon: '/challenge.png',
+      },
+      {
+        text: 'Request ownership',
+        handleSelect: () => {
+          window.open(
+            `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
+        ${window.location.href}`,
+            '_blank',
+          )
+        },
+        icon: '/share.png',
       },
     ])
   } else {
