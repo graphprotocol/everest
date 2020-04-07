@@ -87,6 +87,9 @@ const MultiSelect = ({
             borderBottom: '1px solid rgba(255,255,255,0.32)',
             pb: 2,
             ...styles,
+            '&:hover':{
+              borderBottom: '1px solid rgba(255,255,255,1)',
+            }
           }}
           gap={1}
           onClick={e => {
