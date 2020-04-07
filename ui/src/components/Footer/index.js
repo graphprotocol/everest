@@ -3,7 +3,7 @@ import { jsx, Box } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 
-const Footer = ({ location }) => {
+const Footer = ({ location, ...props }) => {
   const isNewProjectPage =
     location &&
     (location.pathname.includes('new') || location.pathname.includes('edit'))
@@ -16,8 +16,6 @@ const Footer = ({ location }) => {
     alignItems: 'center',
     height: '96px',
     my: [7, 0, 0],
-    maxWidth: '1260px',
-    margin: 'auto'
   }
 
   const iconStyles = {
@@ -26,7 +24,7 @@ const Footer = ({ location }) => {
   }
     
   return (
-    <div sx={rootStyles}>
+    <div sx={rootStyles} {...props}>
       <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
         Made by{' '}
         <a
