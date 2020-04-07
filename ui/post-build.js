@@ -30,7 +30,7 @@ function replaceTags(text, oldTag, newTag) {
   return text.replace(oldTag, newTag)
 }
 
-fetch('https://api.staging.thegraph.com/subgraphs/name/graphprotocol/everest', {
+fetch('https://api.thegraph.com/subgraphs/name/graphprotocol/everest', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -65,7 +65,7 @@ fetch('https://api.staging.thegraph.com/subgraphs/name/graphprotocol/everest', {
             const newTags = getMetaTags(
               project.name,
               project.description,
-              `https://api.staging.thegraph.com/ipfs/api/v0/cat?arg=${project.avatar}`,
+              `https://api.thegraph.com/ipfs/api/v0/cat?arg=${project.avatar}`,
               `https://everest.link/project/${project.id}`,
             )
             Object.keys(oldTags).forEach(function(tag) {
