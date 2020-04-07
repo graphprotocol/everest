@@ -29,7 +29,7 @@ Run these commands from the root directory:
 
 #### Run Everest locally with contracts deployed to Ropsten
 
-1. Create an `.env.development` file inside of the UI folder with the following content:
+1. Create an `.env.development` file inside of the `ui` folder with the following content:
 
 ```
 GATSBY_IPFS_HTTP_URI=https://api.thegraph.com/ipfs/api/v0/
@@ -52,7 +52,7 @@ This will build mutations, and bring up the UI on port `4000`.
 
 #### Run Everest locally with contracts deployed to Ethereum Mainnet
 
-1. Create an `.env.development` file inside of the UI folder with the following content:
+1. Create an `.env.development` file inside of the `ui` folder with the following content:
 
 ```
 GATSBY_IPFS_HTTP_URI=https://api.thegraph.com/ipfs/api/v0/
