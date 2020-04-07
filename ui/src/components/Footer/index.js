@@ -16,6 +16,8 @@ const Footer = ({ location }) => {
     alignItems: 'center',
     height: '96px',
     my: [7, 0, 0],
+    maxWidth: '1260px',
+    margin: 'auto'
   }
 
   const iconStyles = {
