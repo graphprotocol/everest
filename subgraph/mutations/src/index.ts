@@ -252,7 +252,12 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   return transaction
     .wait()
     .then(async (tx: any) => {
-      const projectId = tx.events[0].args.member
+      let projectId
+      if(tx.events.length == 4){
+        projectId = tx.events[0].args.member
+      } else {
+        projectId = tx.events[1].args.member
+      }
       const { project } = await queryGraphNode(
         context,
         'project',
