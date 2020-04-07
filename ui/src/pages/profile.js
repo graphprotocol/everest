@@ -197,7 +197,7 @@ const Profile = ({ location }) => {
   const user = data ? data.user : {}
 
   return (
-    <Grid>
+    <Box>
       <Grid columns={[1, 1, 2]} gap={0} sx={{ alignItems: 'center' }}>
         <Grid
           sx={{
@@ -530,7 +530,7 @@ const Profile = ({ location }) => {
           />
         </Fragment>
       )}
-    </Grid>
+    </Box>
   )
 }
 
