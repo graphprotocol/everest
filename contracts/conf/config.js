@@ -59,7 +59,7 @@ const config = {
         challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
         applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
         // This points to the charter TODO - update mainnet
-        charter: charterIPFShash,
+        charter: ipfsToBytes(charterIPFShash),
         // Point to IPFS hash of categories. TODO - update mainnnet
         categories: ipfsToBytes(categoriesIPFSHash)
     },
