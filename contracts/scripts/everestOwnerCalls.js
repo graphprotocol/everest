@@ -22,7 +22,7 @@ const mnemonic = fs
 
 const wallet = new ethers.Wallet.fromMnemonic(mnemonic)
 
-const setup = async (provider, everestAddress) => {
+const setup = (provider, everestAddress) => {
     let ethereum = new ethers.providers.JsonRpcProvider(provider)
     const everest = new ethers.Contract(everestAddress, abi, ethereum)
     const connectedWallet = new ethers.Wallet(wallet.signingKey.privateKey, ethereum)
@@ -50,12 +50,12 @@ const updateCategories = async (provider, everestAddress) => {
 
 const withdrawReserveBank = async (provider, everestAddress) => {
     const signer = setup(provider, everestAddress)
-    const tx = await signer.withdraw(wallet.signingKey.address, overrides)
-    console.log(tx)
+    const tx = await signer.withdraw(wallet.signingKey.address, "2000000000000000000", overrides)
+    console.log("TX: ", tx)
 
     const res = await tx.wait()
 
-    console.log(res)
+    console.log("RES: ", res)
 }
 
 // updateCategories(ropstenProvider, addresses.ropsten.everest)
