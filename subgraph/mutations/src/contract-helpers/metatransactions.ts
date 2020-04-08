@@ -19,12 +19,26 @@ export const changeOwnerSignedData = (projectId, owner) => {
   )
 }
 
-export const overrides = async () => {
+export const overrides = async (funcName, votesLength) => {
   const ethGast = await fetch('https://ethgasstation.info/json/ethgasAPI.json')
   const ethGasJson = await ethGast.json()
-  const gasPrice = ethGasJson && ethGasJson.average ? ethGasJson.average / 10 : 10
+  const gasPrice = ethGasJson && ethGasJson.fast ? ethGasJson.fast / 10 : 10
+
+  const safetyMultiplier = 1.75 // it failed at 1.5 in testing, so using 1.75
+  const gasLimits = {
+    addDelegate: 52237,
+    applySigned: 245328, // for both applySigned and applySignedWithPermit
+    approve: 43970,
+    challenge: 291455,
+    changeOwner: 36784,
+    memberExit: 30540,
+    resolveChallenge: 62684,
+    setAttribute: 33792,
+    submitVotes: 102957 * votesLength, // for vote and submitVote
+  }
+
   return {
-    gasLimit: 1000000,
+    gasLimit: gasLimits[funcName] * safetyMultiplier,
     gasPrice: ethers.utils.parseUnits(gasPrice.toString(), 'gwei'),
   }
 }
@@ -264,7 +278,7 @@ export const applySignedWithAttribute = async (
     '0x' + stringToBytes32(config.offChainDataName),
     metadataIpfsBytes,
     '0x' + config.maxValidity,
-    await overrides(),
+    await overrides('applySigned', null),
   )
   return tx
 }
@@ -320,7 +334,7 @@ export const applySignedWithAttributeAndPermit = async (
     '0x' + stringToBytes32(config.offChainDataName),
     metadataIpfsBytes,
     '0x' + config.maxValidity,
-    await overrides(),
+    await overrides('applySigned', null),
   )
 
   return tx

@@ -31,6 +31,7 @@ module.exports = {
             provider: () => new HDWalletProvider(mnemonic, ropstenProvider, 0, 4),
             network_id: 3,
             gasPrice: ethers.utils.parseUnits('110', 'gwei'),
+            skipDryRun: true
         },
         mainnet: {
             // one need one address in HD wallet
