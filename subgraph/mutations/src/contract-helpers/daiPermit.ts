@@ -9,7 +9,7 @@ const addresses = require('everest-contracts/addresses.json')
 export const config = {
   offChainDataName: 'ProjectData',
   maxValidity: 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-  daiContractRopsten: addresses.ropsten.mockDAI,
+  daiContractRopsten: addresses.ropsten.dai,
   daiContractMainnet: addresses.mainnet.dai,
 }
 

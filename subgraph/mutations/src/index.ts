@@ -152,7 +152,6 @@ async function getContract(context: Context, contract: string) {
   }
 
   const network = await ethereum.getNetwork()
-
   let networkName = network.name
   // When running on ganache, networkName is dev or unknown
   if (networkName === 'dev' || networkName === 'unknown') {
@@ -218,23 +217,16 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const daiContract = await getContract(context, 'Dai')
 
   const permitBalance = await daiContract.allowance(owner, everestContract.address)
+  // If it is wallet link, we do a direct approval of Everest to transfer users dai
+  const eth: any = ethereum // cast to any because it thinks it is an Ethers object
+  if (eth.provider.isWalletLink) {
+    if (permitBalance._hex == '0x00')
+      await daiContract.approve(everestContract.address, '1000000000000000000000')
+  }
 
   let transaction
-  if (
-    permitBalance._hex ==
-    '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-  ) {
-    transaction = await sendTransaction(
-      applySignedWithAttribute(
-        member,
-        memberSigningKey,
-        owner,
-        ipfsHash,
-        everestContract,
-        ethereumDIDRegistryContract,
-      ),
-    )
-  } else {
+  // If allowance is zero and we are on metamask, we can ask for signature
+  if (permitBalance._hex == '0x00' && eth.provider._metamask) {
     transaction = await sendTransaction(
       applySignedWithAttributeAndPermit(
         member,
@@ -245,6 +237,18 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
         ethereumDIDRegistryContract,
         daiContract,
         ethereum,
+      ),
+    )
+    // Otherwise, permit is maxed out, or we approved DAI with wallet link
+  } else {
+    transaction = await sendTransaction(
+      applySignedWithAttribute(
+        member,
+        memberSigningKey,
+        owner,
+        ipfsHash,
+        everestContract,
+        ethereumDIDRegistryContract,
       ),
     )
   }
