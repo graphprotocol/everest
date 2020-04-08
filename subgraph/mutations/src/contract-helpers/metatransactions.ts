@@ -1,10 +1,9 @@
 import { ethers, utils } from 'ethers'
 import { keccak_256 } from 'js-sha3'
+import fetch from 'isomorphic-fetch'
 
 import { ipfsHexHash } from './ipfs'
 import { daiPermit } from './daiPermit'
-
-const addresses = require('everest-contracts/addresses.json')
 
 const ETHEREUM_DID_REGISTRY = '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b'
 export const DELEGATE_TYPE =
@@ -20,9 +19,14 @@ export const changeOwnerSignedData = (projectId, owner) => {
   )
 }
 
-export const overrides = {
-  gasLimit: 1000000,
-  gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
+export const overrides = async () => {
+  const ethGast = await fetch('https://ethgasstation.info/json/ethgasAPI.json')
+  const ethGasJson = await ethGast.json()
+  const gasPrice = ethGasJson && ethGasJson.average ? ethGasJson.average / 10 : 10
+  return {
+    gasLimit: 1000000,
+    gasPrice: ethers.utils.parseUnits(gasPrice.toString(), 'gwei'),
+  }
 }
 
 export const setAttributeData = (projectId, ipfsHash, offChainDataName) => {
@@ -260,10 +264,7 @@ export const applySignedWithAttribute = async (
     '0x' + stringToBytes32(config.offChainDataName),
     metadataIpfsBytes,
     '0x' + config.maxValidity,
-    {
-      gasLimit: 1000000,
-      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
-    },
+    await overrides(),
   )
   return tx
 }
@@ -319,10 +320,7 @@ export const applySignedWithAttributeAndPermit = async (
     '0x' + stringToBytes32(config.offChainDataName),
     metadataIpfsBytes,
     '0x' + config.maxValidity,
-    {
-      gasLimit: 1000000,
-      gasPrice: ethers.utils.parseUnits('25.0', 'gwei'),
-    },
+    await overrides(),
   )
 
   return tx

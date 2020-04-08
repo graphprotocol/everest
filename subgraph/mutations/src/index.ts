@@ -253,7 +253,7 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
     .wait()
     .then(async (tx: any) => {
       let projectId
-      if(tx.events.length == 4){
+      if (tx.events.length == 4) {
         projectId = tx.events[0].args.member
       } else {
         projectId = tx.events[1].args.member
@@ -275,7 +275,7 @@ const removeProject = async (_: any, args: RemoveProjectArgs, context: Context) 
   const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    await everest.memberExit(projectId, overrides),
+    await everest.memberExit(projectId, await overrides()),
   )
 
   return transaction
@@ -305,7 +305,7 @@ const editProject = async (_: any, args: EditProjectArgs, context: Context) => {
       OFFCHAIN_DATANAME,
       hexIpfsHash,
       VALIDITY_TIMESTAMP,
-      overrides,
+      await overrides(),
     ),
   )
 
@@ -336,7 +336,7 @@ const transferOwnership = async (
   const ethereumDIDRegistry = await getContract(context, 'EthereumDIDRegistry')
 
   const transaction = await sendTransaction(
-    ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, overrides),
+    ethereumDIDRegistry.changeOwner(projectId, newOwnerAddress, await overrides()),
   )
 
   return transaction
@@ -374,7 +374,7 @@ const delegateOwnership = async (
       delegateType,
       delegateAddress,
       validity,
-      overrides,
+      await overrides(),
     ),
   )
 
@@ -410,7 +410,7 @@ const challengeProject = async (_: any, args: ChallengeProjectArgs, context: Con
       challengingProjectAddress,
       challengedProjectAddress,
       hexIpfsHash,
-      overrides,
+      await overrides(),
     ),
   )
 
@@ -438,7 +438,7 @@ const voteChallenge = async (_: any, args: VoteChallengeArgs, context: Context) 
   const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    everest.submitVotes(challengeId, voteChoice, voters, overrides),
+    everest.submitVotes(challengeId, voteChoice, voters, await overrides()),
   )
 
   return transaction
@@ -464,7 +464,7 @@ const resolveChallenge = async (_: any, args: ResolveChallengeArgs, context: Con
   const everest = await getContract(context, 'Everest')
 
   const transaction = await sendTransaction(
-    await everest.resolveChallenge(challengeId, overrides),
+    await everest.resolveChallenge(challengeId, await overrides()),
   )
 
   return transaction
