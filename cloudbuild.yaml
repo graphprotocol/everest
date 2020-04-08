@@ -52,16 +52,6 @@ steps:
       - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
       - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER
 
-  # Make sure the namespace exists
-  - name: gcr.io/cloud-builders/kubectl
-    args:
-      - create
-      - namespace
-      - everest-$_KUBERNETES_NAMESPACE
-    env:
-      - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
-      - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER
-
   # Apply k8s changes
   - name: gcr.io/$PROJECT_ID/kustomize
     dir: k8s
