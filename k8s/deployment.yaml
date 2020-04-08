@@ -17,3 +17,29 @@ spec:
       containers:
         - name: everest
           image: everest:to-be-replaced-by-kustomize
+          env:
+            - name: TEXTILE_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: everest-textile-bucket
+                  key: bucket
+            - name: CLOUDFLARE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare
+                  key: token
+            - name: CLOUDFLARE_ZONE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare
+                  key: zone-id
+            - name: CLOUDFLARE_RECORD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare
+                  key: record-name
+            - name: CLOUDFLARE_RECORD_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare
+                  key: record-domain
