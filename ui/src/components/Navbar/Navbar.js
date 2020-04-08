@@ -108,6 +108,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             sx={{
               gridTemplateColumns: 'max-content max-content',
               alignItems: 'center',
+              display: 'block'
             }}
             gap={5}
           >
