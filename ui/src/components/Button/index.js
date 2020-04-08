@@ -29,6 +29,7 @@ const Button = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        whiteSpace: 'nowrap'
       }}
       onClick={e => (onClick ? onClick(e) : to ? navigate(to) : '')}
       {...props}

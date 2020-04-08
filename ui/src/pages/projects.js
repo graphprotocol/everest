@@ -115,7 +115,7 @@ const Projects = ({ location }) => {
                   },
                 ]}
                 menuStyles={{ left: 0, top: '60px' }}
-                width={['initial', '280px', '280px']}
+                width={'initial'}
                 setIsFilterOpen={setIsFilterOpen}
                 isFilterOpen={isFilterOpen}
                 selectedFilter={selectedFilter}
@@ -129,10 +129,15 @@ const Projects = ({ location }) => {
             )}
           </Styled.p>
         </Box>
-        <Grid
+        <div
           sx={{
-            gridTemplateColumns: '1fr max-content',
             alignItems: 'baseline',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            '> * > * ': {
+              display: 'block',
+              width: 'auto',
+            },
           }}
         >
           <Sorting
@@ -144,16 +149,24 @@ const Projects = ({ location }) => {
             setIsSortingOpen={setIsSortingOpen}
             orderBy={ORDER_BY}
           />
-          <Switcher
-            selected={selected}
-            setSelected={setSelected}
+          <div
             sx={{
               borderLeft: '1px solid',
               borderColor: 'grey',
-              pl: 4,
+              height: '20px',
+              width: '0',
+              margin: '0 13px 0 10px',
+              '@media (max-width: 600px)': {
+                display: 'none'
+              }
             }}
+          ></div>
+          <Switcher
+            selected={selected}
+            setSelected={setSelected}
+            sx={{ maxWidth: 'initial' }}
           />
-        </Grid>
+        </div>
       </Grid>
       <Box sx={{ position: 'relative' }}>
         <Section

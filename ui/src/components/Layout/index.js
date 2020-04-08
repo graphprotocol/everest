@@ -16,7 +16,7 @@ const LayoutTemplate = ({ children, ...props }) => {
     maxWidth: '1260px',
     mx: 'auto',
     px: 4,
-    boxSizing: 'content-box',
+    boxSizing: 'border-box',
     position: 'relative',
   }
 

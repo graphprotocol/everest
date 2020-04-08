@@ -20,8 +20,6 @@ const Card = ({
     <Link
       to={to}
       sx={pending ? { ...styles.root, pointerEvents: 'none' } : styles.root}
-      ml={['auto', 'auto', 0]}
-      mr={['auto', 'auto', 0]}
     >
       {pending && (
         <img
@@ -67,7 +65,7 @@ const Card = ({
                 alt={title}
                 sx={{
                   height: '120px',
-                  width: ['164px', '180px', '180px'],
+                  width: '100%',
                 }}
               />
             </Box>
@@ -116,7 +114,7 @@ const styles = {
   root: {
     position: 'relative',
     height: '216px',
-    width: ['164px', '180px', '180px'],
+    width: '100%',
     background: 'white',
     boxShadow: '0 4px 24px 0 rgba(30,37,44,0.16)',
     marginTop: '8px',

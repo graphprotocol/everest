@@ -42,6 +42,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
         backgroundColor: 'white',
         mx: ['10px', 0, 0],
         right: 0,
+        left: 0,
       }}
     >
       <Grid
@@ -106,6 +107,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               fill: 'white',
               height: '25px',
               width: '25px',
+              minWidth: '25px',
               marginTop: '50%',
               transform: 'translateY(-50%)',
             }}
@@ -160,6 +162,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
         fill: 'secondary',
         height: '25px',
         width: '25px',
+        minWidth: '25px',
         cursor: 'pointer',
         mr: [0, 3, 3],
       }}

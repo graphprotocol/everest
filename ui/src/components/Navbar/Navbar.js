@@ -150,7 +150,6 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         <Button
           variant="primary"
           sx={{
-            maxWidth: '140px',
             px: [3, 6, 6],
             height: ['40px', '48px', '48px'],
             fontSize: ['0.85rem', '1rem', '1rem'],
@@ -163,7 +162,13 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
   }
 
   return (
-    <Grid {...props} sx={{ height: '96px', alignItems: 'center' }}>
+    <Grid {...props} sx={{
+      minHeight: '96px',
+      alignItems: 'center',
+      boxSizing: 'border-box',
+      display: 'flex',
+      justifyContent: 'space-between'
+    }}>
       {!isMobileOpen ? (
         <Grid
           sx={{
@@ -171,6 +176,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             display: ['grid', 'none', 'none'],
+            flex: 1
           }}
           gap={0}
         >
@@ -269,12 +275,11 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
       </Grid>
       <Grid
         sx={{
-          position: 'absolute',
-          right: '20px',
+          minWidth: 'initial', 
           alignItems: 'center',
           gridTemplateColumns: '1fr max-content max-content',
           height: '100%',
-          display: ['none', 'grid', 'grid'],
+          display: ['none', 'flex', 'flex'],
         }}
         gap={3}
       >
