@@ -84,7 +84,7 @@ Filters.propTypes = {
   isFilterOpen: PropTypes.bool,
   setIsFilterOpen: PropTypes.func,
   selectedFilter: PropTypes.any,
-  width: PropTypes.string,
+  width: PropTypes.any,
 }
 
 export default Filters
