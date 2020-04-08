@@ -11,15 +11,17 @@ steps:
       - --build-arg
       - TEXTILE_TOKEN=$_TEXTILE_TOKEN
       - --build-arg
-      - GATSBY_IPFS_HTTP_URI=https://api.staging.thegraph.com/ipfs/api/v0/
+      - GATSBY_IPFS_HTTP_URI=https://api.thegraph.com/ipfs/api/v0/
       - --build-arg
-      - GATSBY_NETWORK_CONNECTOR_URI=https://ropsten.infura.io/v3/$_INFURA_ID
+      - GATSBY_NETWORK_CONNECTOR_URI=https://$_ETHEREUM_NETWORK.infura.io/v3/$_INFURA_ID
       - --build-arg
       - GATSBY_INFURA_ID=$_INFURA_ID
       - --build-arg
-      - GATSBY_NETWORK_URI=https://api.staging.thegraph.com
+      - GATSBY_NETWORK_URI=https://api.thegraph.com
       - --build-arg
-      - GATSBY_GRAPHQL_HTTP_URI=https://api.staging.thegraph.com/subgraphs/name/graphprotocol/everest
+      - GATSBY_GRAPHQL_HTTP_URI=https://api.thegraph.com/subgraphs/name/$_SUBGRAPH_NAME
+      - --build-arg
+      - GATSBY_CHAIN_ID=$_ETHEREUM_CHAIN_ID
       - -t
       - gcr.io/$PROJECT_ID/everest:$SHORT_SHA
       - -f
@@ -34,6 +36,22 @@ steps:
       - image
       - everest=gcr.io/$PROJECT_ID/everest:$SHORT_SHA
     dir: k8s
+
+  # Change the k8s deployment namespace
+  - name: gcr.io/$PROJECT_ID/kustomize
+    args:
+      - edit
+      - set
+      - namespace
+      - everest-$_KUBERNETES_NAMESPACE
+    dir: k8s
+
+  # Make sure the namespace exists
+  - name: gcr.io/cloud-builders/kubectl
+    args:
+      - create
+      - namespace
+      - everest-$_KUBERNETES_NAMESPACE
     env:
       - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
       - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER
