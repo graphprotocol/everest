@@ -83,7 +83,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
             sx={{
               fill: 'secondary',
               position: 'absolute',
-              right: '80px',
+              right: '20px',
               top: '50%',
               transform: 'translateY(-50%)',
               cursor: 'pointer',
@@ -94,7 +94,9 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
             }}
           />
         )}
-        <Box
+        {
+          !value && (
+<Box
           sx={{
             height: '60px',
             width: '60px',
@@ -113,6 +115,9 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
             }}
           />
         </Box>
+          )
+        }
+        
       </Grid>
       {value && value.length > 0 && (
         <Box
@@ -120,7 +125,6 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
             height: '536px',
             maxHeight: '100vh',
             width: ['calc(100vw - 15px)', '485px', '626px'],
-            borderTop: '1px solid',
             borderColor: 'grey',
             backgroundColor: 'white',
             position: 'absolute',

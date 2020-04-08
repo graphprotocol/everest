@@ -659,7 +659,24 @@ const Project = ({ location }) => {
               <Styled.h2>
                 {project.name}{' '}
                 {project.isRepresentative && (
-                  <img src="/verified.png" sx={{ width: '24px', ml: -3 }} />
+                  <div sx={{
+                    ml: -3,
+                    position: 'relative',
+                    display: 'inline-block',
+                    '&:after':{
+                      display: 'block',
+                      content: `'Verified project'`,
+                      position: 'absolute',
+                      top: '50%',
+                      left: '100%',
+                      fontSize: '10px',
+                      width: '200px',
+                      lineHeight: 1,
+                    }
+                  }}>
+                    <img src="/verified.png" sx={{ width: '24px'}} />
+                  </div>
+                  
                 )}
               </Styled.h2>
             </Box>
