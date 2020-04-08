@@ -73,6 +73,9 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         window.localStorage.removeItem(
           '-walletlink:https://www.walletlink.org:session:secret',
         )
+        window.localStorage.removeItem(
+          '-walletlink:https://www.walletlink.org:session:linked',
+        )
         window.localStorage.removeItem('WALLET_CONNECTOR')
       }
       window.location.reload()
@@ -165,7 +168,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                       Sign Out
                     </Box>
                   ),
-                  icon: '/share.png',
+                  icon: '/delegate.png',
                 },
               ]}
             >

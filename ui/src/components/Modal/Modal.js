@@ -143,7 +143,10 @@ const Modal = ({ children, showModal, closeModal }) => {
                 <Box>
                   <Styled.h5
                     sx={{
-                      color: 'secondary',
+                      color:
+                        wallet.type !== 'walletconnect'
+                          ? 'secondary'
+                          : 'blackFaded',
                       fontSize: ['1.25rem', '1.5rem', '1.5rem'],
                     }}
                   >
@@ -152,7 +155,17 @@ const Modal = ({ children, showModal, closeModal }) => {
                       <Arrow sx={{ ml: 1, fill: 'secondary' }} />
                     )}
                   </Styled.h5>
-                  <p sx={{ variant: 'text.small' }}>{wallet.description}</p>
+                  <p
+                    sx={{
+                      variant: 'text.small',
+                      color:
+                        wallet.type !== 'walletconnect'
+                          ? 'primary'
+                          : 'blackFaded',
+                    }}
+                  >
+                    {wallet.description}
+                  </p>
                 </Box>
               </Grid>
             )
