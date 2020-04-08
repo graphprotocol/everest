@@ -221,7 +221,11 @@ const addProject = async (_: any, args: AddProjectArgs, context: Context) => {
   const eth: any = ethereum // cast to any because it thinks it is an Ethers object
   if (eth.provider.isWalletLink) {
     if (permitBalance._hex == '0x00')
-      await daiContract.approve(everestContract.address, '1000000000000000000000')
+      await daiContract.approve(
+        everestContract.address,
+        '1000000000000000000000',
+        await overrides(),
+      )
   }
 
   let transaction
