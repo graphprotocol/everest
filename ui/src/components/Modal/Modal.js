@@ -5,13 +5,10 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { Dialog } from '@reach/dialog'
 import '@reach/dialog/styles.css'
-import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
-import { URI_AVAILABLE } from '@web3-react/walletconnect-connector'
-import { isMobile } from 'react-device-detect'
+import { useWeb3React } from '@web3-react/core'
 
 import { walletExists } from '../../services/ethers'
 import wallets from '../../connectors/wallets'
-import { walletconnect } from '../../connectors'
 import { useAccount } from '../../utils/hooks'
 import { getAddress } from '../../services/ethers'
 
@@ -24,14 +21,15 @@ const Modal = ({ children, showModal, closeModal }) => {
   const { activate } = useWeb3React()
   const { account } = useAccount()
 
+  const VIEWS = {
+    WALLETS: 'wallets',
+    QRCODE: 'qrcode',
+    ACCOUNT: 'account',
+  }
   // TODO: Add wallet error
   const [selectedWallet, setSelectedWallet] = useState(null)
-  const [showAccountView, setShowAccountView] = useState(false)
-  const [showPendingView, setShowPendingView] = useState(false)
-  const [showWalletsView, setShowWalletsView] = useState(true)
-  const [uri, setUri] = useState('')
-  const [userAccount, setUserAccount] = useState(account)
-  const [isWalletEnabled, setIsWalletEnabled] = useState(false)
+  const [modalView, setModalView] = useState(VIEWS.WALLETS)
+  const [userAccount, setUserAccount] = useState('')
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -45,64 +43,37 @@ const Modal = ({ children, showModal, closeModal }) => {
     }
   }, [])
 
-  // set up uri listener for walletconnect
-  useEffect(() => {
-    if (walletExists()) {
-      setIsWalletEnabled(true)
-    }
-    const activateWalletConnect = uri => {
-      setUri(uri)
-    }
-    walletconnect.on(URI_AVAILABLE, activateWalletConnect)
-    return () => {
-      walletconnect.off(URI_AVAILABLE, activateWalletConnect)
-    }
-  }, [])
-
   const handleWalletActivation = async wallet => {
     setSelectedWallet(wallet)
     if (wallet.name === 'MetaMask') {
+      // if it's injected
       if (await walletExists()) {
-        const mmAccount = await getAddress()
-        if (mmAccount) {
-          setUserAccount(mmAccount)
-          const connnectData = JSON.stringify({
-            name: wallet.type,
-            accounts: [mmAccount],
-          })
-          if (typeof window !== undefined && mmAccount) {
-            window.localStorage.setItem('WALLET_CONNECTOR', connnectData)
-          }
-          return
-        } else {
+        if (!(await getAddress())) {
+          // if not signed in - show MM popup
           window.ethereum.enable()
         }
       } else {
         return window.open('https://metamask.io/', '_blank')
       }
-    } else if (wallet.name !== 'MetaMask') {
-      setShowPendingView(true)
-      setShowWalletsView(false)
+    } else {
+      setModalView(VIEWS.QRCODE)
     }
+
+    // activate the connector
     activate(wallet.connector, undefined, true)
       .catch(error => {
-        if (error instanceof UnsupportedChainIdError) {
-          activate(wallet.connector)
-        } else {
-          console.error(`Error activating the wallet ${wallet.name}: `, error)
-        }
+        console.error(`Error activating the wallet ${wallet.name}: `, error)
       })
       .then(async () => {
-        setShowWalletsView(false)
-        setShowAccountView(true)
-
         const provider = await wallet.connector.getProvider()
         const address = provider._addresses
           ? provider._addresses[0]
-          : provider.accounts
-          ? provider.accounts[0]
           : provider.selectedAddress
+
         setUserAccount(address)
+        setModalView(VIEWS.ACCOUNT)
+
+        // Store the data in the local storage
         if (typeof window !== undefined && address) {
           const connnectData = JSON.stringify({
             name: wallet.type,
@@ -113,16 +84,82 @@ const Modal = ({ children, showModal, closeModal }) => {
       })
   }
 
-  useEffect(() => {
-    if (userAccount) {
-      setShowWalletsView(false)
-      setShowAccountView(true)
-    }
-  }, [userAccount])
-
   const handleGoBack = () => {
-    setShowPendingView(false)
-    setShowWalletsView(true)
+    setModalView(VIEWS.WALLETS)
+  }
+
+  const renderView = () => {
+    if (userAccount && modalView === VIEWS.ACCOUNT && selectedWallet) {
+      return (
+        <Grid>
+          <Styled.p>You are logged in with {selectedWallet.name}</Styled.p>
+          <Styled.p>{userAccount}</Styled.p>
+        </Grid>
+      )
+    } else if (modalView === VIEWS.QRCODE) {
+      return <QRCodeData size={240} />
+    } else {
+      return (
+        <Fragment>
+          <Box sx={{ px: [4, 0, 0] }}>
+            <Styled.h2>Sign in</Styled.h2>
+            <Styled.h6>Connect to a Wallet</Styled.h6>
+          </Box>
+          <Divider mt={6} mb={6} />
+          {Object.keys(wallets).map(key => {
+            const wallet = wallets[key]
+            return (
+              <Grid
+                key={wallet.name}
+                columns={2}
+                gap={2}
+                sx={
+                  wallet.type !== 'walletconnect'
+                    ? {
+                        ...gridStyles,
+                        cursor: 'pointer',
+                        '&:hover': {
+                          h5: {
+                            color: 'linkHover',
+                          },
+                          svg: {
+                            transition: 'all 0.2s ease',
+                            fill: 'linkHover',
+                            marginLeft: 3,
+                          },
+                        },
+                      }
+                    : gridStyles
+                }
+                onClick={() => {
+                  if (wallet.type !== 'walletconnect') {
+                    handleWalletActivation(wallet)
+                  }
+                }}
+              >
+                <Box>
+                  <img src={wallet.icon} sx={iconStyles} alt="Wallet icon" />
+                </Box>
+                <Box>
+                  <Styled.h5
+                    sx={{
+                      color: 'secondary',
+                      fontSize: ['1.25rem', '1.5rem', '1.5rem'],
+                    }}
+                  >
+                    {wallet.name}
+                    {wallet.type !== 'walletconnect' && (
+                      <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+                    )}
+                  </Styled.h5>
+                  <p sx={{ variant: 'text.small' }}>{wallet.description}</p>
+                </Box>
+              </Grid>
+            )
+          })}
+        </Fragment>
+      )
+    }
   }
 
   return (
@@ -130,7 +167,12 @@ const Modal = ({ children, showModal, closeModal }) => {
       {children}
       <Dialog
         isOpen={showModal}
-        onDismiss={closeModal}
+        onDismiss={() => {
+          if (modalView === VIEWS.ACCOUNT) {
+            window.location.reload()
+          }
+          closeModal()
+        }}
         aria-label="Connect to a wallet dialog"
         sx={{
           position: 'relative',
@@ -142,7 +184,7 @@ const Modal = ({ children, showModal, closeModal }) => {
             '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
         }}
       >
-        {showPendingView && !showWalletsView && (
+        {(modalView === VIEWS.ACCOUNT || modalView === VIEWS.QRCODE) && (
           <Arrow
             onClick={handleGoBack}
             sx={{
@@ -156,7 +198,12 @@ const Modal = ({ children, showModal, closeModal }) => {
           />
         )}
         <Close
-          onClick={closeModal}
+          onClick={() => {
+            if (modalView === VIEWS.ACCOUNT) {
+              window.location.reload()
+            }
+            closeModal()
+          }}
           sx={{
             position: 'absolute',
             right: 5,
@@ -165,61 +212,7 @@ const Modal = ({ children, showModal, closeModal }) => {
             cursor: 'pointer',
           }}
         />
-        {!showWalletsView ? (
-          userAccount && showAccountView ? (
-            <Grid>
-              <Styled.p>You are logged in with {selectedWallet.name}</Styled.p>
-              <Styled.p>{userAccount}</Styled.p>
-            </Grid>
-          ) : (
-            <QRCodeData size={240} uri={uri} />
-          )
-        ) : (
-          <Fragment>
-            <Box sx={{ px: [4, 0, 0] }}>
-              <Styled.h2>Sign in</Styled.h2>
-              <Styled.h6>Connect to a Wallet</Styled.h6>
-            </Box>
-            <Divider mt={6} mb={6} />
-            {Object.keys(wallets).map(key => {
-              const wallet = wallets[key]
-              if (isMobile && wallet.name === 'MetaMask') return null
-              return (
-                <Grid
-                  key={wallet.name}
-                  columns={2}
-                  gap={2}
-                  sx={gridStyles}
-                  onClick={() => {
-                    handleWalletActivation(wallet)
-                  }}
-                >
-                  <Box>
-                    <img src={wallet.icon} sx={iconStyles} alt="Wallet icon" />
-                  </Box>
-                  <Box>
-                    <Styled.h5
-                      sx={{
-                        color: 'secondary',
-                        fontSize: ['1.25rem', '1.5rem', '1.5rem'],
-                      }}
-                    >
-                      {isMobile && wallet.mobileName
-                        ? wallet.mobileName
-                        : !isWalletEnabled && wallet.name === 'MetaMask'
-                        ? 'Install MetaMask '
-                        : wallet.name}
-                      {!isMobile && <Arrow sx={{ ml: 1, fill: 'secondary' }} />}
-                    </Styled.h5>
-                    {!isMobile && (
-                      <p sx={{ variant: 'text.small' }}>{wallet.description}</p>
-                    )}
-                  </Box>
-                </Grid>
-              )
-            })}
-          </Fragment>
-        )}
+        {renderView()}
       </Dialog>
     </div>
   )
@@ -230,20 +223,8 @@ const gridStyles = {
   alignItems: 'center',
   padding: '16px',
   mt: 4,
-  cursor: 'pointer',
-  transition: 'all 0.2s ease',
   svg: {
     transition: 'all 0.2s ease',
-  },
-  '&:hover': {
-    h5: {
-      color: 'linkHover',
-    },
-    svg: {
-      transition: 'all 0.2s ease',
-      fill: 'linkHover',
-      marginLeft: 3,
-    },
   },
 }
 

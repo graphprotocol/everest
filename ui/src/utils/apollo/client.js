@@ -11,7 +11,6 @@ let provider
 
 try {
   const WalletLink = require('walletlink')
-  const WalletConnectProvider = require('@walletconnect/web3-provider').default
 
   if (typeof window !== undefined) {
     const storage = window.localStorage.getItem('WALLET_CONNECTOR')
@@ -29,11 +28,6 @@ try {
             process.env.GATSBY_CHAIN_ID,
           )
         }
-      } else if (walletConnector.name === 'walletconnect') {
-        provider = new WalletConnectProvider({
-          infuraId: process.env.GATSBY_INFURA_ID,
-          chainId: process.env.GATSBY_CHAIN_ID,
-        })
       } else if (walletConnector.name === 'injected') {
         provider = window.web3.currentProvider
       }

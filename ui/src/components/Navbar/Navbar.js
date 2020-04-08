@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
 import { navigate } from 'gatsby'
+import { useWeb3React } from '@web3-react/core'
 
 import { metamaskAccountChange } from '../../services/ethers'
 import { useAccount } from '../../utils/hooks'
@@ -22,6 +23,7 @@ import ThreeBox from '3box'
 
 const Navbar = ({ location, setParentMobileOpen, ...props }) => {
   const { account } = useAccount()
+  const { connector } = useWeb3React()
 
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [showModal, setShowModal] = useState(false)
@@ -36,7 +38,6 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
       setUserAccount(account)
     }
     setShowModal(false)
-    window.location.reload()
   }
 
   useEffect(() => {
@@ -55,16 +56,28 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
     getProfile()
   }, [userAccount])
 
-  // const handleSignOut = () => {
-  //   if (connector) {
-  //     connector.deactivate()
-  //     if (typeof window !== undefined) {
-  //       window.localStorage.removeItem(
-  //         '__WalletLink__:https://www.walletlink.org:Addresses',
-  //       )
-  //     }
-  //   }
-  // }
+  const handleSignOut = () => {
+    if (connector) {
+      connector.deactivate()
+      if (typeof window !== undefined) {
+        // clean up local storage
+        window.localStorage.removeItem(
+          '__WalletLink__:https://www.walletlink.org:Addresses',
+        )
+        window.localStorage.removeItem(
+          '__WalletLink__:https://www.walletlink.org:SessionId',
+        )
+        window.localStorage.removeItem(
+          '-walletlink:https://www.walletlink.org:session:id',
+        )
+        window.localStorage.removeItem(
+          '-walletlink:https://www.walletlink.org:session:secret',
+        )
+        window.localStorage.removeItem('WALLET_CONNECTOR')
+      }
+      window.location.reload()
+    }
+  }
 
   useEffect(() => {
     let walletConnector
@@ -91,6 +104,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
           }
         } else {
           window.localStorage.removeItem('WALLET_CONNECTOR')
+          setUserAccount(null)
         }
       })
     }
@@ -138,10 +152,37 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                       Change wallet
                     </Box>
                   ),
+                  icon: '/transfer.png',
+                },
+                {
+                  text: (
+                    <Box
+                      onClick={e => {
+                        e.preventDefault()
+                        handleSignOut()
+                      }}
+                    >
+                      Sign Out
+                    </Box>
+                  ),
                   icon: '/share.png',
                 },
               ]}
-            ></Menu>
+            >
+              <Box
+                sx={{
+                  justifySelf: 'end',
+                  height: '9px',
+                  width: '9px',
+                  borderTop: '2px solid',
+                  borderRight: '2px solid',
+                  borderColor: 'secondary',
+                  transform: 'rotate(135deg)',
+                  cursor: 'pointer',
+                  display: ['none', 'block', 'block'],
+                }}
+              />
+            </Menu>
           </Grid>
         </Fragment>
       )
