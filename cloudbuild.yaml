@@ -36,6 +36,9 @@ steps:
       - image
       - everest=gcr.io/$PROJECT_ID/everest:$SHORT_SHA
     dir: k8s
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER
 
   # Change the k8s deployment namespace
   - name: gcr.io/$PROJECT_ID/kustomize
@@ -45,6 +48,9 @@ steps:
       - namespace
       - everest-$_KUBERNETES_NAMESPACE
     dir: k8s
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=$_GCLOUD_KUBERNETES_CLUSTER
 
   # Make sure the namespace exists
   - name: gcr.io/cloud-builders/kubectl
