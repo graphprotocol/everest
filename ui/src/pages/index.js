@@ -168,7 +168,7 @@ const Index = () => {
                 return {
                   name: project.name,
                   description:
-                    project.description.length > 30
+                    project.description && project.description.length > 30
                       ? project.description.slice(0, 26) + '...'
                       : project.description,
                   to: `/project/${project.id}`,
@@ -232,7 +232,9 @@ const Index = () => {
             items={challengedProjects.slice(0, 6).map(project => {
               return {
                 name: project.name,
-                description: project.description.slice(0, 20) + '...',
+                description: project.description
+                  ? project.description.slice(0, 20) + '...'
+                  : '',
                 to: `/project/${project.id}`,
                 image: project.avatar,
                 category:

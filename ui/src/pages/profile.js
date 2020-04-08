@@ -395,7 +395,9 @@ const Profile = ({ location }) => {
             items={user.projects.map(project => {
               return {
                 ...project,
-                description: project.description.slice(0, 30) + '...',
+                description: project.description
+                  ? project.description.slice(0, 30) + '...'
+                  : '',
                 to: `/project/${project.id}`,
                 image: project.avatar,
                 pending: project.id.indexOf('0x') < 0,
