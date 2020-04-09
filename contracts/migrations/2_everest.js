@@ -5,6 +5,7 @@ const Token = artifacts.require('./lib/Dai.sol')
 const EthereumDIDRegistry = artifacts.require('EthereumDIDRegistry.sol')
 const config = require('../conf/config.js')
 const params = config.everestParams
+const ethers = require('ethers')
 
 module.exports = async (deployer, network) => {
     let tokenHolders
@@ -118,9 +119,11 @@ module.exports = async (deployer, network) => {
     )
 
     // The ownership of Registry and ReserveBank must be transferred to Everest
-    await registry.transferOwnership(everest.address)
-    await reserveBank.transferOwnership(everest.address)
+    const ownership1 = await registry.transferOwnership(everest.address, {gasPrice: ethers.utils.parseUnits('8', 'gwei')})
+    const ownership2 = await reserveBank.transferOwnership(everest.address, {gasPrice: ethers.utils.parseUnits('8', 'gwei')})
 
+    console.log(ownership1)
+    console.log(ownership2)
     // Log all addresses of contracts
     network
     console.log(`${network == 'mainnet' ? 'Mainnet' : 'mock'} DAI Address: ${daiAddress}`)
