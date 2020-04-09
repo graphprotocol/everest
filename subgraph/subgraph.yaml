@@ -8,7 +8,7 @@ dataSources:
     name: Everest
     network: mainnet
     source:
-      address: '0xf80f4a382a5321ef8e60b2695080674fee7f8dce'
+      address: '0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C'
       abi: Everest
       startBlock: 9780000
     mapping:
