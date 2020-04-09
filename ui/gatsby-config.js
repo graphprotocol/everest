@@ -84,8 +84,8 @@ module.exports = {
   ],
   siteMetadata: {
     title: 'Everest',
-    description: 'Repository of crypto projects',
+    description: 'A shared registry of crypto projects curated by its members.',
     url: 'https://everest.link', // No trailing slash allowed!
-    image: '/mountain.jpg', // Path to your image you placed in the 'static' folder
+    image: 'https://everest.link/mountain.jpg', // Path to your image you placed in the 'static' folder
   },
 }

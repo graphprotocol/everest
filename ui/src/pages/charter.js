@@ -2,9 +2,12 @@
 import { Styled, jsx, Box } from 'theme-ui'
 import charter from '../data/charter'
 
+import Seo from '../components/Seo'
+
 const Charter = () => {
   return (
     <Box>
+      <Seo description="Everest Charter to guide registry curation." />
       <Box
         sx={{
           width: '100%',
@@ -55,7 +58,7 @@ const Charter = () => {
             '& a': {
               textDecoration: 'none',
               color: 'secondary',
-              fontWeight:'bold'
+              fontWeight: 'bold',
             },
           }}
         >

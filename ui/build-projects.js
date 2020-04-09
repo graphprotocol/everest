@@ -12,6 +12,9 @@ function bail(msg) {
 const TEXTILE_BUCKET =
   process.env.TEXTILE_BUCKET || bail('TEXTILE_BUCKET is not defined')
 
+const SUBGRAPH_NAME =
+  process.env.SUBGRAPH_NAME || 'graphprotocol/everest-ropsten'
+
 let state = {
   assetsUploaded: false,
   lastUpdatedAt: 0,
@@ -36,16 +39,13 @@ async function getLatestProjects(updatedAt) {
 
   let projects
 
-  await fetch(
-    'https://api.staging.thegraph.com/subgraphs/name/graphprotocol/everest',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: query,
-      }),
-    },
-  )
+  await fetch(`https://api.thegraph.com/subgraphs/name/${SUBGRAPH_NAME}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      query: query,
+    }),
+  })
     .then(res => {
       return res.json()
     })
@@ -108,14 +108,14 @@ function generateProjectPage(project, oldContent) {
     let data = oldContent
     const oldTags = getMetaTags(
       'Everest',
-      'Repository of crypto projects',
+      'A shared registry of crypto projects curated by its members.',
       'https://everest.link/mountain.jpg',
       'https://everest.link/',
     )
     const newTags = getMetaTags(
       project.name,
       project.description,
-      `https://api.staging.thegraph.com/ipfs/api/v0/cat?arg=${project.avatar}`,
+      `https://api.thegraph.com/ipfs/api/v0/cat?arg=${project.avatar}`,
       `https://everest.link/project/${project.id}`,
     )
     Object.keys(oldTags).forEach(function(tag) {

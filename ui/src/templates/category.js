@@ -4,16 +4,18 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
+import { graphql } from 'gatsby'
 
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
 import Link from '../components/Link'
+import Seo from '../components/Seo'
 
 import { CATEGORY_QUERY } from '../utils/apollo/queries'
 import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
-const Category = ({ location }) => {
+const Category = ({ location, pageContext }) => {
   const pathParams = location.pathname.split('/')
   let categoryName
   if (pathParams.slice(-1)[0] === '') {
@@ -68,6 +70,12 @@ const Category = ({ location }) => {
 
   return (
     <Grid>
+      <Seo
+        title={pageContext ? pageContext.name : ''}
+        description={pageContext ? pageContext.description : ''}
+        image={pageContext ? pageContext.imageUrl : ''}
+        pathname={`/category/${pageContext ? pageContext.id : ''}`}
+      />
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
           <img src={category.imageUrl} alt={category.id} sx={imageStyles} />
@@ -192,6 +200,7 @@ const imageStyles = {
 
 Category.propTypes = {
   location: PropTypes.any,
+  pageContext: PropTypes.any,
 }
 
 export default Category

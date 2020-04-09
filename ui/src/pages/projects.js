@@ -16,6 +16,7 @@ import Switcher from '../components/Switcher'
 import Filters from '../components/Filters'
 import Sorting from '../components/Sorting'
 import Button from '../components/Button'
+import Seo from '../components/Seo'
 
 const Projects = ({ location }) => {
   const queryParams = queryString.parse(location.search)
@@ -77,6 +78,10 @@ const Projects = ({ location }) => {
 
   return (
     <Grid>
+      <Seo
+        description="Projects on the Everest registry."
+        pathname="/projects"
+      />
       <Grid columns={[1, 2, 2]}>
         <Box>
           <Grid
