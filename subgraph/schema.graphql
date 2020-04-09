@@ -93,9 +93,9 @@ type Challenge @entity {
   "Votes against (in weight)"
   votesAgainst: Int!
   "Project that is being challenged"
-  project: Project!
+  project: Project # Can be null since projects get deleted upon challenge
   "Owner of the challenge, which is a project"
-  owner: Project!
+  owner: Project # Can be null since projects get deleted upon challenge
   "List of all created votes"
   votes: [Vote!] @derivedFrom(field: "challenge")
   # This is when the challenge is resolved, which is different from end time. When we are past
@@ -149,7 +149,7 @@ type Vote @entity {
   "Concatenation of challenge ID and voter address"
   id: ID!
   "Project that voted on the challenge"
-  voter: Project!
+  voter: Project
   "Challenge the vote is for"
   challenge: Challenge!
   "Vote choice"
