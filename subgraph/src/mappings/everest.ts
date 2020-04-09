@@ -180,7 +180,10 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 
   let project = Project.load(event.params.member.toHexString())
   let pastChallenges = project.pastChallenges
-  pastChallenges.push(project.currentChallenge)
+  if (pastChallenges == null) {
+    pastChallenges = []
+  }
+  pastChallenges.push(event.params.challengeID.toString())
   project.pastChallenges = pastChallenges
   project.updatedAt = event.block.timestamp.toI32()
   project.currentChallenge = null
