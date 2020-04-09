@@ -12,8 +12,7 @@ function bail(msg) {
 const TEXTILE_BUCKET =
   process.env.TEXTILE_BUCKET || bail('TEXTILE_BUCKET is not defined')
 
-const SUBGRAPH_NAME =
-  process.env.SUBGRAPH_NAME || 'graphprotocol/everest-ropsten'
+const SUBGRAPH_NAME = process.env.SUBGRAPH_NAME || 'graphprotocol/everest'
 
 let state = {
   assetsUploaded: false,
