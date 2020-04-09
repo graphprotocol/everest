@@ -12,6 +12,7 @@ exports.createPages = async ({ page, actions }) => {
     categories {
       id
       name
+      imageUrl
       description
       subcategories {
         id

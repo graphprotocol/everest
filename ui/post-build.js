@@ -58,7 +58,7 @@ fetch('https://api.thegraph.com/subgraphs/name/graphprotocol/everest', {
             let newData = contents
             const oldTags = getMetaTags(
               'Everest',
-              'Repository of crypto projects',
+              'A shared registry of crypto projects curated by its members.',
               'https://everest.link/mountain.jpg',
               'https://everest.link/',
             )

@@ -9,6 +9,7 @@ import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Section from '../components/Section'
 import Sorting from '../components/Sorting'
+import Seo from '../components/Seo'
 
 const Categories = () => {
   const [selectedOrderBy, setSelectedOrderBy] = useState(
@@ -39,6 +40,10 @@ const Categories = () => {
 
   return (
     <Box>
+      <Seo
+        description="Categories for projects on the Everest registry."
+        pathname="/categories"
+      />
       <Box>
         <Grid
           sx={{
