@@ -25,7 +25,7 @@ const categoriesIPFSHash = fs
     .trim()
 
 const charterIPFShash = fs
-    .readFileSync(__dirname + '/charter.txt')
+    .readFileSync(__dirname + '/ipfs-sync/charter.txt')
     .toString()
     .trim()
 
@@ -56,8 +56,8 @@ const wallets = {
 const config = {
     everestParams: {
         votingPeriodDuration: 172800, // 2 days, in seconds
-        challengeDeposit: '1000000000000000000', // $10 DAI challenge fee TODO - has been reduced to $1. Need to update for mainnet real launch
-        applicationFee: '1000000000000000000', // $10 DAI application fee TODO - has been reduced to $1. Need to update for mainnet real launch
+        challengeDeposit: '10000000000000000000', // $10 DAI challenge fee
+        applicationFee: '10000000000000000000', // $10 DAI application fee
         // This points to the charter TODO - update mainnet
         charter: ipfsToBytes(charterIPFShash),
         // Point to IPFS hash of categories. TODO - update mainnnet
