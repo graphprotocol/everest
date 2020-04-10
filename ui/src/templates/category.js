@@ -140,7 +140,7 @@ const Category = ({ location, pageContext }) => {
           items={category.subcategories.map(subcat => {
             return {
               name: subcat.name,
-              description: `${subcat.projectCount} projects`,
+              description: `${subcat.projects.length} projects`,
               image: subcat.imageUrl,
               to: `/category/${subcat.id}`,
             }

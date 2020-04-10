@@ -6,7 +6,7 @@ export const FILTERS = {
 
 export const CATEGORIES_ORDER_BY = {
   Name: 'name',
-  'Nr of projects': 'projectCount',
+  // 'Nr of projects': 'projectCount',
 }
 
 export const ORDER_BY = {
