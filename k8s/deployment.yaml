@@ -43,3 +43,8 @@ spec:
                 secretKeyRef:
                   name: everest-cloudflare
                   key: record-domain
+            - name: SUBGRAPH_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: everest-subgraph
+                  key: name
