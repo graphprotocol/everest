@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
-import { graphql } from 'gatsby'
 
 import Section from '../components/Section'
 import Divider from '../components/Divider'
