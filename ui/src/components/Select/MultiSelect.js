@@ -28,7 +28,6 @@ const MultiSelect = ({
     const handleClick = () => {
       setIsOpen(false)
       setOpen && setOpen(false)
-      setValue([])
     }
     window.addEventListener('click', handleClick)
 
@@ -48,19 +47,25 @@ const MultiSelect = ({
     )
   }, [selectedItems])
 
+  const addSubcategories = (allCats, item) => {
+    let newCategories = allCats
+    if (allCats.lengts === items.length) {
+      return newCategories
+    }
+    if (item.subcategories) {
+      newCategories = newCategories.concat(item.subcategories)
+      for (const subItem of item.subcategories) {
+        newCategories = addSubcategories(newCategories, subItem)
+      }
+    }
+    return newCategories
+  }
+
   const allCategories = () => {
     let allCats = []
     for (const item of items) {
-      const subs = item.subcategories
       allCats.push(item)
-      if (subs.length > 0) {
-        allCats = allCats.concat(subs)
-        for (const itemSub of subs) {
-          if (itemSub.subcategories.length > 0) {
-            allCats = allCats.concat(itemSub.subcategories)
-          }
-        }
-      }
+      allCats = addSubcategories(allCats, item)
     }
     if (searchText) {
       allCats = allCats.filter(

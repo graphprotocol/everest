@@ -79,7 +79,7 @@ const ProjectForm = ({
         field="github"
         value={project.github}
         type="input"
-        placeholder="Github url"
+        placeholder="Github username"
         setValue={value => setValue('github', value)}
       />
       <Field
@@ -87,7 +87,7 @@ const ProjectForm = ({
         field="twitter"
         value={project.twitter}
         type="input"
-        placeholder="Twitter url"
+        placeholder="Twitter username"
         setValue={value => setValue('twitter', value)}
       />
       <Field

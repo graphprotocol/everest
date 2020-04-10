@@ -124,6 +124,9 @@ Row.propTypes = {
     disabled: PropTypes.bool,
     parentCategory: PropTypes.shape({
       name: PropTypes.string,
+      parentCategory: PropTypes.shape({
+        name: PropTypes.string,
+      }),
     }),
   }),
   selected: PropTypes.any,

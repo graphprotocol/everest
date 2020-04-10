@@ -225,6 +225,7 @@ const Project = ({ location }) => {
     client: client,
     onError: error => {
       console.error('Error voting on a challenge: ', error)
+      setPendingVotes(false)
     },
     onCompleted: () => {
       setPendingVotes(false)
