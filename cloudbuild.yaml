@@ -1,5 +1,5 @@
 images:
-  - gcr.io/$PROJECT_ID/everest:$SHORT_SHA
+  - gcr.io/$PROJECT_ID/everest-$_KUBERNETES_NAMESPACE:$SHORT_SHA
 options:
   machineType: N1_HIGHCPU_32
 timeout: 900s
@@ -34,7 +34,7 @@ steps:
       - edit
       - set
       - image
-      - everest=gcr.io/$PROJECT_ID/everest:$SHORT_SHA
+      - everest=gcr.io/$PROJECT_ID/everest-$_KUBERNETES_NAMESPACE:$SHORT_SHA
     dir: k8s
     env:
       - CLOUDSDK_COMPUTE_ZONE=$_GCLOUD_ZONE
