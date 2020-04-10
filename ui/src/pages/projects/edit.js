@@ -13,6 +13,7 @@ import client from '../../utils/apollo/client'
 import { EDIT_PROJECT } from '../../utils/apollo/mutations'
 import { PROJECT_QUERY } from '../../utils/apollo/queries'
 import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
+import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
 import ProjectForm from '../../components/ProjectForm'
 
@@ -71,7 +72,12 @@ const EditProject = ({ location }) => {
     },
   })
 
-  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY)
+  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY, {
+    variables: {
+      orderBy: ORDER_BY.Name,
+      orderDirection: ORDER_DIRECTION.ASC,
+    },
+  })
 
   if (error) {
     return (
