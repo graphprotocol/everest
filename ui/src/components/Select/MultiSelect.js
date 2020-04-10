@@ -28,6 +28,7 @@ const MultiSelect = ({
     const handleClick = () => {
       setIsOpen(false)
       setOpen && setOpen(false)
+      setValue([])
     }
     window.addEventListener('click', handleClick)
 
@@ -47,34 +48,30 @@ const MultiSelect = ({
     )
   }, [selectedItems])
 
-  let allItems = items
-
-  if (type === 'categories') {
-    let allCats = items.reduce((acc, current) => {
-      acc.push({
-        ...current,
-        image: current.imageUrl,
-        name: current.name,
-      })
-      if (current.subcategories) {
-        const cat = current.subcategories.map(subcat => ({
-          ...subcat,
-          parent: current,
-          image: subcat.imageUrl,
-        }))
-        acc.concat(cat)
+  const allCategories = () => {
+    let allCats = []
+    for (const item of items) {
+      const subs = item.subcategories
+      allCats.push(item)
+      if (subs.length > 0) {
+        allCats = allCats.concat(subs)
+        for (const itemSub of subs) {
+          if (itemSub.subcategories.length > 0) {
+            allCats = allCats.concat(itemSub.subcategories)
+          }
+        }
       }
-      return acc
-    }, [])
-
+    }
     if (searchText) {
       allCats = allCats.filter(
         allCat =>
           allCat.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1,
       )
     }
-    allItems = allCats
+    return allCats
   }
+
+  const allItems = type === 'categories' ? allCategories() : items
 
   return (
     <Box>
@@ -87,9 +84,9 @@ const MultiSelect = ({
             borderBottom: '1px solid rgba(255,255,255,0.32)',
             pb: 2,
             ...styles,
-            '&:hover':{
+            '&:hover': {
               borderBottom: '1px solid rgba(255,255,255,1)',
-            }
+            },
           }}
           gap={1}
           onClick={e => {
@@ -198,7 +195,10 @@ const MultiSelect = ({
               {allItems.map((item, index) => (
                 <Row
                   key={`${item.name}${index}`}
-                  item={item}
+                  item={{
+                    ...item,
+                    image: item.image || item.imageUrl,
+                  }}
                   parent={item.parent}
                   selected={selected}
                   setSelected={setSelected}
@@ -226,7 +226,7 @@ const MultiSelect = ({
                     boxSizing: 'border-box',
                     opacity: selected && selected.length > 0 ? 1 : 0.64,
                   }}
-                  disabled={allItems.every(it => it.disabled === true)}
+                  disabled={items.every(it => it.disabled === true)}
                 />
               </Box>
             )}
@@ -236,7 +236,10 @@ const MultiSelect = ({
           selected.map((item, index) => (
             <Row
               key={index}
-              item={item}
+              item={{
+                ...item,
+                image: item.image || item.imageUrl,
+              }}
               parent={item.parent}
               selected={selected}
               setSelected={setSelected}

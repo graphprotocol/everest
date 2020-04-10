@@ -31,7 +31,8 @@ const Row = ({
         opacity: item.disabled ? 0.32 : 1,
         pointerEvents: item.disabled ? 'none' : 'all',
       }}
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation()
         if (close) return
         if (multiselect) {
           const sel = selected.find(sel => sel.name === item.name)
@@ -79,7 +80,12 @@ const Row = ({
       />
       <Box>
         {item.parentCategory && (
-          <p sx={{ variant: 'text.smaller' }}>{item.parentCategory.name} ></p>
+          <p sx={{ variant: 'text.smaller' }}>
+            <span>{item.parentCategory.name} > </span>
+            {item.parentCategory.parentCategory && (
+              <span>{item.parentCategory.parentCategory.name} > </span>
+            )}
+          </p>
         )}
         <p sx={{ variant: 'text.emphasis' }}>{item.name}</p>
       </Box>
@@ -87,6 +93,7 @@ const Row = ({
         <Close
           onClick={e => {
             e.preventDefault()
+            e.stopPropagation()
             if (multiselect) {
               const selectedItem = selected.find(sel => sel.name === item.name)
               const index = selected.indexOf(selectedItem)

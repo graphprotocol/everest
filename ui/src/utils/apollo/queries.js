@@ -96,7 +96,11 @@ export const ALL_CATEGORIES_QUERY = gql`
     $orderBy: Category_orderBy
     $orderDirection: OrderDirection
   ) {
-    categories(orderBy: $orderBy, orderDirection: $orderDirection) {
+    categories(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { parentCategory: null }
+    ) {
       id
       name
       description
@@ -104,10 +108,25 @@ export const ALL_CATEGORIES_QUERY = gql`
       imageUrl
       subcategories {
         id
-      }
-      parentCategory {
-        id
         name
+        imageUrl
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+          name
+          imageUrl
+          parentCategory {
+            id
+            name
+            parentCategory {
+              id
+              name
+            }
+          }
+        }
       }
     }
   }

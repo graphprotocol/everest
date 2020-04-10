@@ -350,7 +350,7 @@ const Profile = ({ location }) => {
                   {profile.accounts.twitter && (
                     <DataRow
                       name="Twitter"
-                      value={`twitter.com/${profile.accounts.twitter.username}`}
+                      value={`@${profile.accounts.twitter.username}`}
                       href={`https://twitter.com/${profile.accounts.twitter.username}`}
                     />
                   )}
