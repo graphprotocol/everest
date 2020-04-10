@@ -540,21 +540,27 @@ const Project = ({ location }) => {
     if (project.currentChallenge) {
       items = items.concat([
         {
-          text: 'Edit',
-          handleSelect: () => {
-            navigate(`/projects/edit?id=${projectId}`)
-          },
-          icon: '/edit.png',
+          text: (
+            <Box>
+              <Link to={`/projects/edit?id=${projectId}`}>
+                <img src="/edit.png" sx={iconStyles} />
+                Edit
+              </Link>
+            </Box>
+          ),
         },
       ])
     } else {
       items = items.concat([
         {
-          text: 'Edit',
-          handleSelect: () => {
-            navigate(`/projects/edit?id=${projectId}`)
-          },
-          icon: '/edit.png',
+          text: (
+            <Box>
+              <Link to={`/projects/edit?id=${projectId}`}>
+                <img src="/edit.png" sx={iconStyles} />
+                Edit
+              </Link>
+            </Box>
+          ),
         },
         {
           text: 'Remove',
@@ -1170,6 +1176,13 @@ const imageStyles = {
   width: '100%',
   maxWidth: ['540px', '540px', '612px'],
   height: ['280px', '318px'],
+}
+
+const iconStyles = {
+  width: '20px',
+  height: '20px',
+  verticalAlign: 'middle',
+  marginRight: 4,
 }
 
 const buttonStyles = {
