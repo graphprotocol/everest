@@ -23,7 +23,7 @@ steps:
       - --build-arg
       - GATSBY_CHAIN_ID=$_ETHEREUM_CHAIN_ID
       - -t
-      - gcr.io/$PROJECT_ID/everest:$SHORT_SHA
+      - gcr.io/$PROJECT_ID/everest-$_KUBERNETES_NAMESPACE:$SHORT_SHA
       - -f
       - Dockerfile
       - .
