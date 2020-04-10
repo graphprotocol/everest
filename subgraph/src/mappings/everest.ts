@@ -244,7 +244,6 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   let category = Category.load(id)
   if (category == null) {
     category = new Category(id)
-    category.projectCount = 0
     category.createdAt = timestamp.toI32()
   }
   category.name = categoryData.get('name').isNull()

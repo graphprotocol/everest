@@ -7,7 +7,7 @@ import {
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
 import { Project, User, Category, Everest } from '../types/schema'
-import { addQm } from './helpers'
+import { addQm, recursiveCategories } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
 // If a project is null, it was not added to everest and we want to ignore it
@@ -142,59 +142,18 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
           if (categories.kind == JSONValueKind.ARRAY) {
             let categoriesArray = categories.toArray()
             let projCategories = project.categories
-
-            // If it already exists, it means we are editing the project. We have to minus the
-            // count for categories here
-            if (projCategories != null) {
-              for (let i = 0; i < projCategories.length; i++) {
-                let asArray = projCategories as Array<string>
-                let category = Category.load(asArray[i])
-                category.projectCount = category.projectCount - 1
-                category.save()
-
-                // If it has a parent category, it must be removed there too.
-                if (category.parentCategory != null) {
-                  let parent = Category.load(category.parentCategory)
-                  parent.projectCount = parent.projectCount - 1
-                  parent.save()
-
-                  // Goes two levels deep. If we add more, will make recursive
-                  if (parent.parentCategory != null) {
-                    let grandparent = Category.load(parent.parentCategory)
-                    grandparent.projectCount = grandparent.projectCount - 1
-                    grandparent.save()
-                  }
-                }
-              }
-            }
-
             // We reset the project categories, because the IPFS file will always have a new
             projCategories = []
 
-            // Push all of the values into the empty array
+            // Push all of the values into the empty array, including parent IDs
             for (let i = 0; i < categoriesArray.length; i++) {
               let categoryObj = categoriesArray[i].toObject()
               let categoryID = categoryObj.get('id').toString()
-              projCategories.push(categoryID)
-
-              // We add categories back. It might involve added and subtracting if categories
-              // were not changed, but send result is the same. Could be optimized in the future
-              let category = Category.load(categoryID)
-              category.projectCount = category.projectCount + 1
-              category.save()
-
-              // If it has a parent category, it must be added there too.
-              if (category.parentCategory != null) {
-                let parent = Category.load(category.parentCategory)
-                parent.projectCount = parent.projectCount + 1
-                parent.save()
-
-                // Goes two levels deep. If we add more, will make recursive
-                if (parent.parentCategory != null) {
-                  let grandparent = Category.load(parent.parentCategory)
-                  grandparent.projectCount = grandparent.projectCount + 1
-                  grandparent.save()
-                }
+              let category = Category.load(categoryID) as Category
+              let categoryIDsWithParents = recursiveCategories(category, [categoryID])
+              for (let i = 0; i < categoryIDsWithParents.length; i++) {
+                projCategories.push(categoryIDsWithParents[i])
+                // projCategories.push(...categoryIDsWithParents) won't work in assembly script
               }
             }
 
