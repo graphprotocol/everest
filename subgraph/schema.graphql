@@ -24,7 +24,7 @@ type Project @entity {
   "Project image"
   image: String
   "List of project categories"
-  categories: [Category!]
+  categories: [Category!]!
   "True if a representative of the company owns this project"
   isRepresentative: Boolean!
   "Time it was created at on the blockchain"
@@ -68,13 +68,15 @@ type Category @entity {
   "The name used for the front end"
   slug: String!
   "Projects with this category designation"
-  projects: [Project!] @derivedFrom(field: "categories")
+  projects: [Project!]!
   "The subcategories of this Category"
   subcategories: [Category!] @derivedFrom(field: "parentCategory")
   "Parent category of this category. Null if it is a top level category"
   parentCategory: Category
   "Time it was created in the Subgraph"
   createdAt: Int!
+  "Number of projects in this category and all of its subcategories"
+  projectCount: Int!
 }
 
 type Challenge @entity {

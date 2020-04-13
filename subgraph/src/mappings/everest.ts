@@ -26,6 +26,7 @@ export function handleNewMember(event: NewMember): void {
   project.createdAt = event.block.timestamp.toI32()
   project.updatedAt = event.block.timestamp.toI32()
   project.isRepresentative = false
+  project.categories = []
   project.save()
 
   let everest = Everest.load('1')
@@ -245,6 +246,7 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   if (category == null) {
     category = new Category(id)
     category.createdAt = timestamp.toI32()
+    category.projectCount = 0
   }
   category.name = categoryData.get('name').isNull()
     ? null
@@ -264,6 +266,7 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   category.parentCategory = categoryData.get('parent').isNull()
     ? null
     : categoryData.get('parent').toString()
+  category.projects = []
   category.save()
   everest.save()
 }
