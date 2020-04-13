@@ -13,14 +13,26 @@ export function addQm(a: ByteArray): ByteArray {
   return out as ByteArray
 }
 
+// Returns a list of all category IDs and all of its parents, and its grandparents, etc.
 export function recursiveCategories(
   category: Category,
   categoryIDs: Array<string>,
+  projectID: string,
 ): Array<string> {
   if (category.parentCategory != null) {
     let parentCategory = Category.load(category.parentCategory) as Category
-    categoryIDs.push(category.parentCategory)
-    return recursiveCategories(parentCategory, categoryIDs)
+    if (!parentCategory.projects.includes(projectID)) {
+      let parentCategoryProjects = parentCategory.projects
+      parentCategoryProjects.push(projectID)
+      parentCategory.projects = parentCategoryProjects
+      parentCategory.projectCount = category.projects.length
+      parentCategory.save()
+    }
+    // The returned list could have parent categories twice, so we must de-dep
+    if (!categoryIDs.includes(category.parentCategory)) {
+      categoryIDs.push(category.parentCategory)
+    }
+    return recursiveCategories(parentCategory, categoryIDs, projectID)
   } else {
     return categoryIDs
   }

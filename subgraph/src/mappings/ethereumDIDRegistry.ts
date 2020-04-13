@@ -1,4 +1,4 @@
-import { json, ipfs, Bytes, JSONValueKind } from '@graphprotocol/graph-ts'
+import { json, ipfs, Bytes, JSONValueKind, log } from '@graphprotocol/graph-ts'
 
 import {
   DIDOwnerChanged,
@@ -141,16 +141,46 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
         if (categories != null) {
           if (categories.kind == JSONValueKind.ARRAY) {
             let categoriesArray = categories.toArray()
-            let projCategories = project.categories
-            // We reset the project categories, because the IPFS file will always have a new
+
+            // Load the projects previous categories
+            let projCategories = project.categories //as Array<string>
+
+            // Remove the project from its old categories
+            for (let i = 0; i < projCategories.length; i++) {
+              let category = Category.load(projCategories[i])
+              // Filter out the project, and return the array without it
+              let projectIsInCategory = category.projects.indexOf(project.id)
+              if (projectIsInCategory != -1) {
+                let categoryProjects = category.projects
+                let temp = categoryProjects.splice(projectIsInCategory, 1)
+                category.projects = categoryProjects
+                category.projectCount = category.projects.length
+                category.save()
+              }
+            }
+
+            // We reset the project categories, because the IPFS file will always have a new values
             projCategories = []
 
+            // Start handling the new categories added to the project
             // Push all of the values into the empty array, including parent IDs
             for (let i = 0; i < categoriesArray.length; i++) {
               let categoryObj = categoriesArray[i].toObject()
               let categoryID = categoryObj.get('id').toString()
               let category = Category.load(categoryID) as Category
-              let categoryIDsWithParents = recursiveCategories(category, [categoryID])
+              if (!category.projects.includes(project.id)) {
+                let categoryProjects = category.projects
+                categoryProjects.push(project.id)
+                category.projects = categoryProjects
+                category.projectCount = category.projects.length
+                category.save()
+              }
+
+              let categoryIDsWithParents = recursiveCategories(
+                category,
+                [categoryID],
+                project.id,
+              )
               for (let i = 0; i < categoryIDsWithParents.length; i++) {
                 projCategories.push(categoryIDsWithParents[i])
                 // projCategories.push(...categoryIDsWithParents) won't work in assembly script
