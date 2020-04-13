@@ -15,7 +15,8 @@
     "prettier-js": "prettier -c '**/*.js'",
     "prettier-sol": "prettier -c '**/*.sol'",
     "prettier-write-js": "prettier --write '**/*.js'",
-    "prettier-write-sol": "prettier --write '**/*.sol'"
+    "prettier-write-sol": "prettier --write '**/*.sol'",
+    "test": "truffle test"
   },
   "dependencies": {
     "@truffle/hdwallet-provider": "1.0.28",

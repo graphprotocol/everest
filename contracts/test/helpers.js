@@ -344,49 +344,51 @@ const helpers = {
     },
 
     /// @dev helper function to resolve a challenge, and do checks
-    resolveChallenge: async (challengeID, challengerOwner, challengeeOwner, everest) => {
+    resolveChallenge: async (challengeID, challengerOwner, caller) => {
+        const everest = await Everest.deployed()
         const token = await Token.deployed()
         const reserveBankAddress = await everest.reserveBank()
         const reserveBankBalanceAfterChallenge = await token.balanceOf(reserveBankAddress)
         const challengerBalanceAfterChallenge = await token.balanceOf(challengerOwner)
-        const challengeeBalanceAfterChallenge = await token.balanceOf(challengeeOwner)
+        const callerBalanceAfterChallenge = await token.balanceOf(caller)
 
         // Increase time so challenge can be resolved
         await utils.increaseTime(utils.votePeriod + 1)
-        // We call from challengeeOwner, to show that anyone can challenge
-        const result = await everest.resolveChallenge(challengeID, { from: challengeeOwner })
+        // We call from caller, to show that anyone can challenge
+        const result = await everest.resolveChallenge(challengeID, { from: caller })
         const challengeResult = result.logs[0].event
 
         // Check balances
         const reserveBankBalanceAfterResolve = await token.balanceOf(reserveBankAddress)
+        const callerBalanceAfterResolve = await token.balanceOf(caller)
+
 
         if (challengeResult === 'ChallengeSucceeded') {
             const challengerBalanceAfterResolve = await token.balanceOf(challengerOwner)
             assert.equal(
                 reserveBankBalanceAfterChallenge
-                    .sub(utils.challengeRewardBN.add(utils.applyFeeBN))
+                    .sub(utils.challengeDepositBN.add(utils.applyFeeBN))
                     .toString(),
                 reserveBankBalanceAfterResolve.toString(),
                 'Reserve bank did not send out challenge deposit and application fee'
             )
             assert.equal(
                 challengerBalanceAfterChallenge
-                    .add(utils.challengeRewardBN.add(utils.applyFeeBN))
+                    .add(utils.challengeDepositBN.add(utils.applyFeeBN).sub(utils.challengeRewardBN))
                     .toString(),
                 challengerBalanceAfterResolve.toString(),
                 'Challenger did not get their deposit and challengees application fee'
             )
         } else if (challengeResult === 'ChallengeFailed') {
-            const challengeeBalanceAfterResolve = await token.balanceOf(challengeeOwner)
             assert.equal(
                 reserveBankBalanceAfterChallenge.sub(utils.challengeRewardBN).toString(),
                 reserveBankBalanceAfterResolve.toString(),
-                'Reserve bank did not send out challenge deposit and application fee'
+                'Reserve bank did not send out caller fee'
             )
             assert.equal(
-                challengeeBalanceAfterChallenge.add(utils.challengeRewardBN).toString(),
-                challengeeBalanceAfterResolve.toString(),
-                'Challenger did not get their deposit and challengees application fee'
+                callerBalanceAfterChallenge.add(utils.challengeRewardBN).toString(),
+                callerBalanceAfterResolve.toString(),
+                'Caller did not get caller fee'
             )
         }
     }

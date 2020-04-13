@@ -29,6 +29,7 @@ contract('everest', () => {
     const owner5Address = owner5Wallet.signingKey.address
 
     const nonMemberWallet = utils.wallets.ten()
+    console.log
     const nonMemberAddress = nonMemberWallet.signingKey.address
 
     const voteChoice = {
@@ -103,12 +104,7 @@ contract('everest', () => {
                         `submitVote - Member can't vote on their own challenge`
                     )
 
-                    await helpers.resolveChallenge(
-                        challengeID,
-                        owner1Address,
-                        owner5Address,
-                        everest
-                    )
+                    await helpers.resolveChallenge(challengeID, owner1Address, owner4Address)
 
                     // Check member has been removed
                     assert(!(await everest.isMember(member5Address)), 'Member was not removed')
@@ -140,7 +136,7 @@ contract('everest', () => {
                     from: owner3Address
                 })
 
-                await helpers.resolveChallenge(challengeID, owner1Address, owner4Address, everest)
+                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address)
 
                 // Check member still exists
                 assert(
@@ -167,7 +163,7 @@ contract('everest', () => {
                     everest
                 )
 
-                await helpers.resolveChallenge(challengeID, owner1Address, owner4Address, everest)
+                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address)
 
                 // Check member still exists, since only one vote happened
                 assert(
@@ -226,7 +222,7 @@ contract('everest', () => {
                     everest.challenge(member1Address, member4Address, fakeDetails, {
                         from: owner1Address
                     }),
-                    `challengeCanBeResolved - Current challenge is not ready to be resolved`
+                    'challenge - Existing challenge must be resolved first'
                 )
 
                 // Expect member can't exit when challenged

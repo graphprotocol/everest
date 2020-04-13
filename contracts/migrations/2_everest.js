@@ -94,6 +94,8 @@ module.exports = async (deployer, network) => {
         didAddress = config.mainnetParams.ethereumDIDRegistryAddress
         daiAddress = config.mainnetParams.daiAddress
         console.log('Deploying to mainnet, using mainnet DAI at ' + `${daiAddress}.`)
+    } else {
+        console.log("Unknown network. No addresses or owner set")
     }
 
     // Deploy the dependant contracts that must exist before Everest
