@@ -18,7 +18,6 @@ const ProjectForm = ({
     <form sx={{ maxWidth: '504px', width: '100%', mt: [5, 0, 0] }} {...props}>
       <Field
         title="Name *"
-        field="name"
         type="input"
         value={project.name}
         charsCount={35}
@@ -30,7 +29,6 @@ const ProjectForm = ({
       />
       <Field
         title="Description *"
-        field="description"
         value={project.description}
         type="textarea"
         charsCount={300}
@@ -42,7 +40,6 @@ const ProjectForm = ({
       />
       <Field
         title="Categories *"
-        field="category"
         type="filters"
         setValue={async value => {
           await setValue('categories', value)
@@ -55,20 +52,17 @@ const ProjectForm = ({
       <Field
         title="Project logo"
         type="upload"
-        field="logo"
         image={project.avatar}
         setImage={data => setValue('avatar', data)}
       />
       <Field
         title="Project image"
         type="upload"
-        field="image"
         image={project.image}
         setImage={data => setValue('image', data)}
       />
       <Field
         title="Website"
-        field="website"
         value={project.website}
         type="input"
         placeholder="Project website"
@@ -76,25 +70,22 @@ const ProjectForm = ({
       />
       <Field
         title="Github"
-        field="github"
         value={project.github}
         type="input"
-        placeholder="Github username"
+        placeholder="Github username without the @ mark"
         setValue={value => setValue('github', value)}
       />
       <Field
         title="Twitter"
-        field="twitter"
         value={project.twitter}
         type="input"
-        placeholder="Twitter username"
+        placeholder="Twitter username without the @ mark"
         setValue={value => setValue('twitter', value)}
       />
       <Field
         title="Project representative"
         text="If you contribute to the project, verify that you are a project representative."
         value={project.isRepresentative}
-        field="isRepresentative"
         type="checkbox"
         setValue={value => setValue('isRepresentative', value)}
       />

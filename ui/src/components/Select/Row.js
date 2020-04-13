@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 
+import { getBreadcrumbs } from '../../utils/helpers'
 import Close from '../../images/close-small.svg'
 
 const Row = ({
@@ -79,12 +80,13 @@ const Row = ({
         }
       />
       <Box>
-        {item.parentCategory && (
+        {getBreadcrumbs(item).length > 0 && (
           <p sx={{ variant: 'text.smaller' }}>
-            <span>{item.parentCategory.name} > </span>
-            {item.parentCategory.parentCategory && (
-              <span>{item.parentCategory.parentCategory.name} > </span>
-            )}
+            {getBreadcrumbs(item)
+              .reverse()
+              .map((breadcrumb, index) => (
+                <span key={index}>{breadcrumb.name} > </span>
+              ))}
           </p>
         )}
         <p sx={{ variant: 'text.emphasis' }}>{item.name}</p>

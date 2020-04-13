@@ -22,6 +22,7 @@ const EditProject = ({ location }) => {
   const projectId = queryParams ? queryParams.id : null
 
   const [isDisabled, setIsDisabled] = useState(false)
+  const [pendingTransaction, setPendingTransaction] = useState(false)
   const [project, setProject] = useState({
     id: projectId,
     name: '',
@@ -34,7 +35,6 @@ const EditProject = ({ location }) => {
     isRepresentative: false,
     categories: [],
   })
-  const [pendingTransaction, setPendingTransaction] = useState(false)
 
   const { loading, error, data } = useQuery(PROJECT_QUERY, {
     variables: {
@@ -143,13 +143,13 @@ const EditProject = ({ location }) => {
         {pendingTransaction && (
           <Box
             sx={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
+              position: 'fixed',
+              width: '420px',
+              height: '80px',
               textAlign: 'center',
-              top: '100px',
-              maxWidth: '504px',
+              margin: '0 auto',
+              top: '50%',
+              transform: 'translateY(-50%)',
             }}
           >
             <Styled.h6 sx={{ color: 'white', fontWeight: 'heading' }}>

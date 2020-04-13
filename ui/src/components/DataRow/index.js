@@ -23,6 +23,7 @@ const DataRow = ({ name, value, href }) => (
           fontWeight: 'heading',
           color: 'blackFaded',
           fontSize: ['0.85rem', '1rem ', '1rem'],
+          lineHeight: '2.375rem',
         }}
       >
         {value}

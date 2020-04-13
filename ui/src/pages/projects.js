@@ -128,10 +128,7 @@ const Projects = ({ location }) => {
             )}
           </Grid>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {projectCount} Projects -{' '}
-            {allProjects.filter(p => p.currentChallenge !== null).length && (
-              <span>{challengesCount} Challenges</span>
-            )}
+            {projectCount} Projects - <span>{challengesCount} Challenges</span>
           </Styled.p>
         </Box>
         <Grid
