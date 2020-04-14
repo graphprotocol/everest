@@ -184,18 +184,10 @@ type User @entity {
   createdAt: Int!
 }
 
-# TODO: uncomment this when you upgrade graph-ts and graph-cli
-# type _Schema_ @fulltext(
-#   name: "projectSearch"
-#   language: en
-#   algorithm: rank
-#   include: [
-#     {
-#       entity: "Project",
-#       fields: [
-#         { name: "name" },
-#         { name: "description" },
-#       ]
-#     }
-#   ]
-# )
+type _Schema_
+  @fulltext(
+    name: "projectSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Project", fields: [{ name: "name" }, { name: "description" }] }]
+  )
