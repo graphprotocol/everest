@@ -247,11 +247,24 @@ export const PROJECTS_QUERY = gql`
 
 export const PROJECT_SEARCH = gql`
   query projectSearch($text: String) {
-    projectSearch(text: $text)
-    id
-    ipfsHash
-    name
-    description
+    projectSearch(text: $text) {
+      id
+      ipfsHash
+      name
+      avatar
+      description
+      categories {
+        id
+        name
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+        }
+      }
+    }
   }
 `
 
