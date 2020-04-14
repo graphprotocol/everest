@@ -27,9 +27,8 @@ const setup = (provider, everestAddress) => {
     const everest = new ethers.Contract(everestAddress, abi, ethereum)
     const connectedWallet = new ethers.Wallet(wallet.signingKey.privateKey, ethereum)
     const everestWithSigner = everest.connect(connectedWallet)
-    return everestWithSigner    
+    return everestWithSigner
 }
-
 
 const overrides = {
     // The price (in wei) per unit of gas
@@ -44,18 +43,18 @@ const updateCategories = async (provider, everestAddress) => {
     await tx.wait()
 
     const newBytesValue = await signer.categories()
-    console.log(newBytesValue + "Should match " + categories)
+    console.log(newBytesValue + 'Should match ' + categories)
     console.log('success')
 }
 
 const withdrawReserveBank = async (provider, everestAddress) => {
     const signer = setup(provider, everestAddress)
-    const tx = await signer.withdraw(wallet.signingKey.address, "2000000000000000000", overrides)
-    console.log("TX: ", tx)
+    const tx = await signer.withdraw(wallet.signingKey.address, '2000000000000000000', overrides)
+    console.log('TX: ', tx)
 
     const res = await tx.wait()
 
-    console.log("RES: ", res)
+    console.log('RES: ', res)
 }
 
 // updateCategories(ropstenProvider, addresses.ropsten.everest)

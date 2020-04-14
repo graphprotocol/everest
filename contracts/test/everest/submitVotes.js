@@ -44,11 +44,11 @@ contract('everest', () => {
         // Set up 5 Tokens
         before(async () => {
             // Note one address owns 4 of these tokens
-            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner1Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner1Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner1Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner1Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet, everest)
         })
         it('submitVotes() works as intended, and fails with unequal arrays', async () => {
             // Member 4 challenges Member 5
@@ -57,7 +57,8 @@ contract('everest', () => {
                 member4Address,
                 member5Address,
                 fakeDetails,
-                owner4Address
+                owner4Address,
+                everest
             )
 
             // First we ensure arrays must be equal lengths

@@ -42,7 +42,7 @@ contract('Everest', () => {
 
         it('should allow owner to withdraw DAI from reserve bank', async () => {
             // Apply one member so the reserve bank has 10 DAI
-            await helpers.applySignedWithAttributeAndPermit(newMemberWallet, ownerWallet)
+            await helpers.applySignedWithAttributeAndPermit(newMemberWallet, ownerWallet, everest)
 
             const reserveBankAddress = await everest.reserveBank()
 

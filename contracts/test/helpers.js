@@ -17,10 +17,10 @@ const helpers = {
     /// @dev    Helper function to test everest.applySignedWithAttributeAndPermit(). It calls
     ///         many other functions in helpers.js to get the three signatures needed, and
     ///         then submits the transaction to everest
-    applySignedWithAttributeAndPermit: async (newMemberWallet, ownerWallet) => {
+    applySignedWithAttributeAndPermit: async (newMemberWallet, ownerWallet, everest) => {
         const ownerAddress = ownerWallet.signingKey.address
         const newMemberAddress = newMemberWallet.signingKey.address
-        const everest = await Everest.deployed()
+        // const everest = await Everest.deployed()
         const token = await Token.deployed()
         const registry = await Registry.deployed()
 
@@ -310,8 +310,7 @@ const helpers = {
     },
 
     /// @dev Helper function to challenge a Member, and do checks
-    challenge: async (challenger, challengee, details, challengerOwner) => {
-        const everest = await Everest.deployed()
+    challenge: async (challenger, challengee, details, challengerOwner, everest) => {
         const token = await Token.deployed()
         const reserveBankAddress = await everest.reserveBank()
         const reserveBankBalanceStart = await token.balanceOf(reserveBankAddress)
@@ -345,8 +344,7 @@ const helpers = {
     },
 
     /// @dev helper function to resolve a challenge, and do checks
-    resolveChallenge: async (challengeID, challengerOwner, challengeeOwner) => {
-        const everest = await Everest.deployed()
+    resolveChallenge: async (challengeID, challengerOwner, challengeeOwner, everest) => {
         const token = await Token.deployed()
         const reserveBankAddress = await everest.reserveBank()
         const reserveBankBalanceAfterChallenge = await token.balanceOf(reserveBankAddress)
