@@ -11,9 +11,13 @@ import cloneDeep from 'lodash.clonedeep'
 import moment from 'moment'
 import { isMobile } from 'react-device-detect'
 
-import { convertDate } from '../utils/helpers/date'
+import {
+  convertDate,
+  remainingTime,
+  stripPrefix,
+  socialUrl,
+} from '../utils/helpers'
 import { useAccount } from '../utils/hooks'
-import { remainingTime } from '../utils/helpers/date'
 import { metamaskAccountChange } from '../services/ethers'
 
 import {
@@ -451,7 +455,6 @@ const Project = ({ location }) => {
       },
     })
     setShowChallenge(false)
-    // window.location.reload()
   }
 
   const handleVoting = (projects, choice) => {
@@ -618,6 +621,24 @@ const Project = ({ location }) => {
     project.currentChallenge &&
     remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
 
+  const pickCategories = () => {
+    let projectCategories = project.categories ? [...project.categories] : []
+    if (projectCategories.length > 0) {
+      for (const pc of project.categories) {
+        if (pc.parentCategory) {
+          // if there is a parent of a selected category, remove it from the list
+          const parentIndex = projectCategories.findIndex(
+            pcat => pcat.id === pc.parentCategory.id,
+          )
+          if (parentIndex > -1) {
+            projectCategories.splice(parentIndex, 1)
+          }
+        }
+      }
+    }
+    return projectCategories
+  }
+
   return (
     <Grid
       sx={{
@@ -652,16 +673,14 @@ const Project = ({ location }) => {
           >
             <Box>
               <p sx={{ variant: 'text.large' }}>
-                {project.categories && project.categories.length > 0
-                  ? project.categories.map((cat, index) => (
-                      <Link to={`/category/${cat.id}`} key={index}>
-                        {cat.name}
-                        {index !== project.categories.length - 1 && (
-                          <span>,&nbsp;</span>
-                        )}
-                      </Link>
-                    ))
-                  : ''}
+                {pickCategories().map((cat, index) => (
+                  <Link to={`/category/${cat.id}`} key={index}>
+                    {cat.name}
+                    {index !== pickCategories().length - 1 && (
+                      <span>,&nbsp;</span>
+                    )}
+                  </Link>
+                ))}
               </p>
               <Styled.h2>
                 {project.name}{' '}
@@ -925,18 +944,18 @@ const Project = ({ location }) => {
                 href={project.website}
               />
             )}
-            {project.twitter && (
-              <DataRow
-                name="Twitter"
-                value={project.twitter}
-                href={project.twitter}
-              />
-            )}
             {project.github && (
               <DataRow
                 name="Github"
-                value={project.github}
-                href={project.github}
+                value={stripPrefix(project.github, 'github.com/')}
+                href={socialUrl(project.github, 'github.com/')}
+              />
+            )}
+            {project.twitter && (
+              <DataRow
+                name="Twitter"
+                value={stripPrefix(project.twitter, 'twitter.com/')}
+                href={socialUrl(project.twitter, 'twitter.com/')}
               />
             )}
           </Box>

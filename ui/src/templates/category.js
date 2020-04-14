@@ -5,14 +5,15 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
+import { CATEGORY_QUERY } from '../utils/apollo/queries'
+import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
+import { getBreadcrumbs } from '../utils/helpers'
+
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
 import Link from '../components/Link'
 import Seo from '../components/Seo'
-
-import { CATEGORY_QUERY } from '../utils/apollo/queries'
-import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 const Category = ({ location, pageContext }) => {
   const pathParams = location.pathname.split('/')
@@ -54,19 +55,6 @@ const Category = ({ location, pageContext }) => {
     p => p.currentChallenge !== null,
   )
 
-  const getBreadcrumbs = () => {
-    let breadcrumbs = []
-    let parent = category && category.parentCategory
-    while (parent) {
-      breadcrumbs = breadcrumbs.concat({
-        name: parent.name,
-        url: `/category/${parent.id}`,
-      })
-      parent = parent.parentCategory
-    }
-    return breadcrumbs
-  }
-
   return (
     <Grid>
       <Seo
@@ -83,13 +71,13 @@ const Category = ({ location, pageContext }) => {
           <Grid
             sx={{
               gridTemplateColumns: `repeat(${
-                getBreadcrumbs().length
+                getBreadcrumbs(category).length
               }, max-content)`,
               alignItems: 'center',
             }}
           >
-            {getBreadcrumbs().length > 0 &&
-              getBreadcrumbs()
+            {getBreadcrumbs(category).length > 0 &&
+              getBreadcrumbs(category)
                 .reverse()
                 .map((breadcrumb, index) => (
                   <Grid

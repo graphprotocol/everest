@@ -12,7 +12,7 @@ import moment from 'moment'
 
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
-import { convertDate } from '../utils/helpers/date'
+import { convertDate } from '../utils/helpers'
 import { PROFILE_QUERY, USER_CHALLENGES_QUERY } from '../utils/apollo/queries'
 import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
@@ -347,18 +347,18 @@ const Profile = ({ location }) => {
               profile.accounts &&
               Object.keys(profile.accounts).length > 0 && (
                 <Fragment>
-                  {profile.accounts.twitter && (
-                    <DataRow
-                      name="Twitter"
-                      value={`${profile.accounts.twitter.username}`}
-                      href={`https://twitter.com/${profile.accounts.twitter.username}`}
-                    />
-                  )}
                   {profile.accounts && profile.accounts.github && (
                     <DataRow
                       name="Github"
                       value={`${profile.accounts.github.username}`}
                       href={`https://github.com/${profile.accounts.github.username}`}
+                    />
+                  )}
+                  {profile.accounts.twitter && (
+                    <DataRow
+                      name="Twitter"
+                      value={`${profile.accounts.twitter.username}`}
+                      href={`https://twitter.com/${profile.accounts.twitter.username}`}
                     />
                   )}
                 </Fragment>

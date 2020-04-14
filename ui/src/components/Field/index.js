@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
@@ -26,6 +26,34 @@ const Field = ({
   variant,
   error,
 }) => {
+  const [invalidTwitter, setInvalidTwitter] = useState(false)
+  const [invalidGithub, setInvalidGithub] = useState(false)
+
+  useEffect(() => {
+    if (title.toLowerCase() === 'twitter') {
+      setInvalidTwitter(
+        value.includes('https://') ||
+          value.includes('http://') ||
+          value.startsWith('/') ||
+          value.includes('twitter.com') ||
+          value.includes('www.') ||
+          value.includes('.com') ||
+          value.includes('@'),
+      )
+    }
+    if (title.toLowerCase() === 'github') {
+      setInvalidGithub(
+        value.includes('https://') ||
+          value.includes('http://') ||
+          value.startsWith('/') ||
+          value.includes('github.com') ||
+          value.includes('www.') ||
+          value.includes('.com') ||
+          value.includes('@'),
+      )
+    }
+  }, [value])
+
   const charRef = useRef()
 
   if (value && value.length === charsCount) {
@@ -37,121 +65,135 @@ const Field = ({
     }, 500)
   }
 
+  let color =
+    invalidTwitter || invalidGithub
+      ? '#fd8a45'
+      : error
+      ? '#ED4A6D'
+      : 'rgba(255,255,255,0.32)'
+
   return (
-    <Box
-      sx={{
-        ...styles.field,
-        borderBottom:
-          type === 'input' || type === 'textarea'
-            ? error
-              ? '1px solid #ED4A6D'
-              : '1px solid rgba(255,255,255,0.32)'
-            : 'none',
-      }}
-    >
-      <p>{title}</p>
-      {text && <p sx={{ opacity: 0.64 }}>{text}</p>}
-      <Grid
+    <Box sx={{ mb: '40px' }}>
+      <Box
         sx={{
-          gridTemplateColumns: ['1fr', '1fr max-content', '1fr max-content'],
+          ...styles.field,
+          borderBottom:
+            type === 'input' || type === 'textarea' ? '1px solid' : 'none',
+          borderColor: color,
+          '&:hover': {
+            borderColor:
+              invalidTwitter || invalidGithub
+                ? '#fd8a45'
+                : error
+                ? '#ED4A6D'
+                : 'white',
+          },
         }}
       >
-        {type === 'input' ? (
-          <input
-            placeholder={placeholder}
-            onChange={e => {
-              const value = e.target ? e.target.value : ''
-              setValue(value)
-            }}
-            maxLength={charsCount}
-            value={value}
-          />
-        ) : type === 'textarea' ? (
-          <TextareaAutosize
-            minRows={1}
-            maxRows={6}
-            placeholder={placeholder}
-            onChange={e => {
-              const value = e.target ? e.target.value : ''
-              setValue(value)
-            }}
-            maxLength={charsCount}
-            value={value}
-          />
-        ) : type === 'filters' ? (
-          multiselect === true ? (
-            <MultiSelect
-              setValue={setValue}
-              title={title}
-              type="categories"
-              items={categories}
-              selectedItems={selectedItems}
-            >
-              <p
-                sx={{
-                  color: 'white',
-                  opacity: 0.64,
-                  variant: 'text.large',
-                }}
-              >
-                <span>Select all categories that apply</span>
-              </p>
-              <Box
-                sx={{
-                  justifySelf: 'end',
-                  height: '9px',
-                  width: '9px',
-                  borderTop: '2px solid',
-                  borderRight: '2px solid',
-                  borderColor: 'white',
-                  transform: 'rotate(135deg)',
-                }}
-              />
-            </MultiSelect>
-          ) : (
-            <Select items={items} variant={variant} setValue={setValue} />
-          )
-        ) : type === 'upload' ? (
-          <UploadImage setParentImage={setImage} parentImage={image} />
-        ) : (
-          <label sx={styles.toggle}>
-            <input
-              type="checkbox"
-              onChange={e => {
-                const value = e.target.checked
-                setValue(value)
-              }}
-              checked={value}
-            />
-            <span sx={styles.slider}></span>
-          </label>
-        )}
-        {charsCount && (
-          <p
-            sx={{
-              variant: 'text.field',
-              color: 'white',
-              alignSelf: 'end',
-              opacity: 0.4,
-            }}
-            ref={charRef}
-          >
-            {value.length}/{charsCount}
-          </p>
-        )}
-      </Grid>
-      {error && (
-        <p
+        <p>{title}</p>
+        {text && <p sx={{ opacity: 0.64 }}>{text}</p>}
+        <Grid
           sx={{
-            variant: 'text.smaller',
-            color: '#ED4A6D !important',
-            position: 'relative',
-            bottom: '-42px',
+            gridTemplateColumns: ['1fr', '1fr max-content', '1fr max-content'],
           }}
         >
-          {error}
-        </p>
-      )}
+          {type === 'input' ? (
+            <input
+              placeholder={placeholder}
+              onChange={e => {
+                const value = e.target ? e.target.value : ''
+                setValue(value)
+              }}
+              maxLength={charsCount}
+              value={value}
+            />
+          ) : type === 'textarea' ? (
+            <TextareaAutosize
+              minRows={1}
+              maxRows={6}
+              placeholder={placeholder}
+              onChange={e => {
+                const value = e.target ? e.target.value : ''
+                setValue(value)
+              }}
+              maxLength={charsCount}
+              value={value}
+            />
+          ) : type === 'filters' ? (
+            multiselect === true ? (
+              <MultiSelect
+                setValue={setValue}
+                title={title}
+                type="categories"
+                items={categories}
+                selectedItems={selectedItems}
+              >
+                <p
+                  sx={{
+                    color: 'white',
+                    opacity: 0.64,
+                    variant: 'text.large',
+                  }}
+                >
+                  <span>Select all categories that apply</span>
+                </p>
+                <Box
+                  sx={{
+                    justifySelf: 'end',
+                    height: '9px',
+                    width: '9px',
+                    borderTop: '2px solid',
+                    borderRight: '2px solid',
+                    borderColor: 'white',
+                    transform: 'rotate(135deg)',
+                  }}
+                />
+              </MultiSelect>
+            ) : (
+              <Select items={items} variant={variant} setValue={setValue} />
+            )
+          ) : type === 'upload' ? (
+            <UploadImage setParentImage={setImage} parentImage={image} />
+          ) : (
+            <label sx={styles.toggle}>
+              <input
+                type="checkbox"
+                onChange={e => {
+                  const value = e.target.checked
+                  setValue(value)
+                }}
+                checked={value}
+              />
+              <span sx={styles.slider}></span>
+            </label>
+          )}
+          {charsCount && (
+            <p
+              sx={{
+                variant: 'text.field',
+                color: 'white',
+                alignSelf: 'end',
+                opacity: 0.4,
+              }}
+              ref={charRef}
+            >
+              {value.length}/{charsCount}
+            </p>
+          )}
+        </Grid>
+      </Box>
+      {error ||
+        ((invalidTwitter || invalidGithub) && (
+          <p
+            sx={{
+              variant: 'text.smaller',
+              color: color,
+              pt: 2,
+            }}
+          >
+            {error || 'Please enter a valid username.'}
+          </p>
+        ))}
     </Box>
   )
 }
@@ -159,7 +201,6 @@ const Field = ({
 const styles = {
   field: {
     width: '100%',
-    mb: '40px',
     pb: 2,
     transition: 'all 0.3s ease',
     '&>p': {
@@ -186,7 +227,7 @@ const styles = {
       resize: 'none',
     },
     '&:hover': {
-      borderColor: 'white',
+      borderColor: 'white !important',
       transition: 'all 0.3s ease',
     },
   },

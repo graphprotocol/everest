@@ -53,8 +53,8 @@ const MultiSelect = ({
       return newCategories
     }
     if (item.subcategories) {
-      newCategories = newCategories.concat(item.subcategories)
-      for (const subItem of item.subcategories) {
+      for (const subItem of item.subcategories.sort(compare)) {
+        newCategories = newCategories.concat(subItem)
         newCategories = addSubcategories(newCategories, subItem)
       }
     }
@@ -74,6 +74,14 @@ const MultiSelect = ({
       )
     }
     return allCats
+  }
+
+  const compare = (a, b) => {
+    if (a.name > b.name) {
+      return 1
+    } else {
+      return -1
+    }
   }
 
   const allItems = type === 'categories' ? allCategories() : items

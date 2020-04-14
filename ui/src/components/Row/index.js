@@ -4,7 +4,7 @@ import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { navigate } from 'gatsby'
 
-import { convertDate } from '../../utils/helpers/date'
+import { convertDate } from '../../utils/helpers'
 import Challenged from '../../images/challenged.svg'
 
 const Row = ({ item }) => {
