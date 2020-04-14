@@ -29,17 +29,7 @@ const Sorting = ({
       >
         <Styled.p sx={{ color: 'secondary' }}>
           {selectedOrderBy === orderBy[order] && (
-            <span
-              sx={{
-                display: 'inline-block',
-                backgroundColor: 'secondary',
-                borderRadius: '50%',
-                width: '6px',
-                height: '6px',
-                mb: '2px',
-                mr: 1,
-              }}
-            />
+            <img src="/dot.svg" sx={{ ml: -4, pr: 2 }} alt="dot" />
           )}
           {order}
         </Styled.p>
@@ -83,10 +73,11 @@ const Sorting = ({
     },
     delay: 500,
   }))
+
   return (
     <Menu
       items={menuItems}
-      menuStyles={{ width: 'inherit', top: '40px' }}
+      menuStyles={{ width: 'inherit', top: '40px', pl: '40px' }}
       sx={{ justifyContent: 'flex-end' }}
       setOpen={setIsSortingOpen}
     >

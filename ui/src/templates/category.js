@@ -128,7 +128,7 @@ const Category = ({ location, pageContext }) => {
           items={category.subcategories.map(subcat => {
             return {
               name: subcat.name,
-              description: `${subcat.projects.length} projects`,
+              description: `${subcat.projectCount} projects`,
               image: subcat.imageUrl,
               to: `/category/${subcat.id}`,
             }
@@ -140,7 +140,7 @@ const Category = ({ location, pageContext }) => {
         <Box ref={viewRef}>
           <Styled.h3>Projects</Styled.h3>
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {categoryProjects.length} Projects -{' '}
+            {category.projectCount} Projects -{' '}
             {challengedProjects && (
               <span>{challengedProjects.length} Challenges</span>
             )}

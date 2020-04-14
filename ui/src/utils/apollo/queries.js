@@ -76,6 +76,7 @@ export const CATEGORIES_QUERY = gql`
       name
       description
       imageUrl
+      projectCount
       subcategories {
         id
         projects {
@@ -107,6 +108,7 @@ export const ALL_CATEGORIES_QUERY = gql`
       name
       description
       imageUrl
+      projectCount
       subcategories {
         id
         name
@@ -144,11 +146,13 @@ export const CATEGORY_QUERY = gql`
       name
       description
       imageUrl
+      projectCount
       subcategories(orderBy: $orderBy, orderDirection: $orderDirection) {
         id
         name
         description
         imageUrl
+        projectCount
         projects {
           id
           name

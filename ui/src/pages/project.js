@@ -16,6 +16,7 @@ import {
   remainingTime,
   stripPrefix,
   socialUrl,
+  pickCategories,
 } from '../utils/helpers'
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
@@ -427,9 +428,8 @@ const Project = ({ location }) => {
     )
   }
 
-  // If you are the owner of the current project
-  // you can't vote on behalf of that project
-  // if you already voted - you can't vote again
+  // If you are the owner of the current project - you can't vote on behalf of that project
+  // If you already voted - you can't vote again
   let hideVoting
   if (project && project.currentChallenge) {
     let votes = []
@@ -621,24 +621,6 @@ const Project = ({ location }) => {
     project.currentChallenge &&
     remainingTime(project.currentChallenge.endTime) === '0d 0h 0m'
 
-  const pickCategories = () => {
-    let projectCategories = project.categories ? [...project.categories] : []
-    if (projectCategories.length > 0) {
-      for (const pc of project.categories) {
-        if (pc.parentCategory) {
-          // if there is a parent of a selected category, remove it from the list
-          const parentIndex = projectCategories.findIndex(
-            pcat => pcat.id === pc.parentCategory.id,
-          )
-          if (parentIndex > -1) {
-            projectCategories.splice(parentIndex, 1)
-          }
-        }
-      }
-    }
-    return projectCategories
-  }
-
   return (
     <Grid
       sx={{
@@ -673,10 +655,11 @@ const Project = ({ location }) => {
           >
             <Box>
               <p sx={{ variant: 'text.large' }}>
-                {pickCategories().map((cat, index) => (
+                {pickCategories(project.categories).map((cat, index) => (
                   <Link to={`/category/${cat.id}`} key={index}>
                     {cat.name}
-                    {index !== pickCategories().length - 1 && (
+                    {index !==
+                      pickCategories(project.categories).length - 1 && (
                       <span>,&nbsp;</span>
                     )}
                   </Link>
