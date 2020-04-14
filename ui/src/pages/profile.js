@@ -402,10 +402,7 @@ const Profile = ({ location }) => {
                 image: project.avatar,
                 pending: project.id.indexOf('0x') < 0,
                 isChallenged: project.currentChallenge !== null,
-                category:
-                  project.categories.length > 0
-                    ? project.categories[0].name
-                    : '',
+                categories: project.categories,
               }
             })}
             variant="project"
@@ -474,10 +471,7 @@ const Profile = ({ location }) => {
                 image: project.avatar,
                 pending: project.id.indexOf('0x') < 0,
                 isChallenged: project.currentChallenge !== null,
-                category:
-                  project.categories.length > 0
-                    ? project.categories[0].name
-                    : '',
+                categories: project.categories,
               }
             })}
             variant="project"
@@ -519,10 +513,7 @@ const Profile = ({ location }) => {
                       image: project.avatar,
                       pending: project.id.indexOf('0x') < 0,
                       isChallenged: project.currentChallenge !== null,
-                      category:
-                        project.categories.length > 0
-                          ? project.categories[0].name
-                          : '',
+                      categories: project.categories,
                     }
                   })
                 : []

@@ -101,7 +101,7 @@ const Section = ({
               variant={variant}
               image={item.image}
               to={item.to}
-              category={item.category}
+              categories={item.categories}
               isChallenged={item.isChallenged}
               pending={item.pending}
             />

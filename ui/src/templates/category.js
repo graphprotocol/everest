@@ -159,8 +159,7 @@ const Category = ({ location, pageContext }) => {
             ...project,
             description: project.description.slice(0, 40) + '...',
             to: `/project/${project.id}`,
-            category:
-              project.categories.length > 0 ? project.categories[0].name : '',
+            categories: project.categories,
             isChallenged: project.currentChallenge !== null,
             image: project.avatar,
           }

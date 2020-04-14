@@ -191,6 +191,13 @@ export const CATEGORY_QUERY = gql`
           id
           name
           description
+          parentCategory {
+            id
+            name
+          }
+          subcategories {
+            id
+          }
         }
       }
     }
@@ -226,6 +233,13 @@ export const PROJECTS_QUERY = gql`
         id
         name
         description
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+        }
       }
     }
   }
@@ -264,6 +278,13 @@ export const PROFILE_QUERY = gql`
         categories {
           id
           name
+          parentCategory {
+            id
+            name
+          }
+          subcategories {
+            id
+          }
         }
       }
       delegatorProjects {
@@ -277,6 +298,13 @@ export const PROFILE_QUERY = gql`
         categories {
           id
           name
+          parentCategory {
+            id
+            name
+          }
+          subcategories {
+            id
+          }
         }
       }
     }
