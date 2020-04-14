@@ -80,7 +80,7 @@ const Categories = () => {
             .map(cat => {
               return {
                 name: cat.name,
-                description: `${cat.projects.length} PROJECTS`,
+                description: `${cat.projectCount} PROJECTS`,
                 image: cat.imageUrl,
                 to: `/category/${cat.id}`,
               }

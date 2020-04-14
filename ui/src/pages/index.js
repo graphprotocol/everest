@@ -173,10 +173,7 @@ const Index = () => {
                       : project.description,
                   to: `/project/${project.id}`,
                   image: project.avatar,
-                  category:
-                    project.categories.length > 0
-                      ? project.categories[0].name
-                      : '',
+                  categories: project.categories,
                   isChallenged: project.currentChallenge !== null,
                 }
               })
@@ -237,10 +234,7 @@ const Index = () => {
                   : '',
                 to: `/project/${project.id}`,
                 image: project.avatar,
-                category:
-                  project.categories.length > 0
-                    ? project.categories[0].name
-                    : '',
+                categories: project.categories,
                 isChallenged: project.currentChallenge !== null,
               }
             })}

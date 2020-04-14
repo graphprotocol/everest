@@ -72,3 +72,21 @@ export const getBreadcrumbs = item => {
   }
   return breadcrumbs
 }
+
+export const pickCategories = categories => {
+  let projectCategories = categories ? [...categories] : []
+  if (projectCategories.length > 0) {
+    for (const pc of categories) {
+      if (pc.parentCategory) {
+        // if there is a parent of a selected category, remove it from the list
+        const parentIndex = projectCategories.findIndex(
+          pcat => pcat.id === pc.parentCategory.id,
+        )
+        if (parentIndex > -1) {
+          projectCategories.splice(parentIndex, 1)
+        }
+      }
+    }
+  }
+  return projectCategories
+}

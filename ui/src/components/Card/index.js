@@ -3,6 +3,8 @@ import { jsx, Styled, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import PropTypes from 'prop-types'
 
+import { pickCategories } from '../../utils/helpers'
+
 import Link from '../Link'
 import Challenged from '../../images/challenge.svg'
 
@@ -10,12 +12,13 @@ const Card = ({
   title,
   description,
   image,
-  category,
+  categories,
   isChallenged,
   variant,
   to,
   pending,
 }) => {
+  const category = pickCategories(categories)[0]
   return (
     <Link
       to={to}
@@ -86,7 +89,9 @@ const Card = ({
             }}
           >
             {variant === 'project' && (
-              <p sx={{ variant: 'text.tag', fontSize: '10px' }}>{category}</p>
+              <p sx={{ variant: 'text.tag', fontSize: '10px' }}>
+                {category ? category.name : ''}
+              </p>
             )}
             <Styled.p
               sx={{
@@ -143,7 +148,7 @@ Card.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   image: PropTypes.string,
-  category: PropTypes.string,
+  categories: PropTypes.any,
   isChallenged: PropTypes.bool,
   variant: PropTypes.string,
   to: PropTypes.string,
