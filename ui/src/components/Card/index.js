@@ -29,6 +29,17 @@ const Card = ({
     >
       {pending && <Loading variant="blue" sx={{ top: 'calc(50% - 6px)' }} />}
       <Box sx={{ opacity: pending ? 0.32 : 1 }}>
+        {variant === 'project' && isChallenged && (
+          <Challenged
+            sx={{
+              position: 'absolute',
+              top: 3,
+              right: 4,
+              height: '30px',
+              width: 'auto',
+            }}
+          />
+        )}
         <Grid
           gap={0}
           pt={variant === 'project' ? 5 : 0}
@@ -41,7 +52,7 @@ const Card = ({
           }}
         >
           {variant === 'project' || pending ? (
-            <Box sx={{ textAlign: 'center' }}>
+            <Box sx={{ textAlign: 'center', position: 'relative' }}>
               <img
                 src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${image}`}
                 alt={title}
@@ -67,7 +78,12 @@ const Card = ({
           <Box
             sx={{
               textAlign: 'center',
-              py: title && title.length > 15 ? 0 : 3,
+              py:
+                variant !== 'project'
+                  ? title && title.length > 15
+                    ? 0
+                    : 3
+                  : 3,
               px:
                 variant === 'project'
                   ? 0
@@ -90,14 +106,8 @@ const Card = ({
             >
               {title}
             </Styled.p>
-            {isChallenged ? (
-              <Challenged
-                sx={{ paddingTop: 1, height: '30px', width: 'auto' }}
-              />
-            ) : (
-              variant !== 'project' && (
-                <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
-              )
+            {variant !== 'project' && (
+              <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
             )}
           </Box>
         </Grid>
