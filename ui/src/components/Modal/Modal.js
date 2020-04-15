@@ -229,6 +229,10 @@ const Modal = ({ children, showModal, closeModal }) => {
             top: 5,
             fill: '#bebebe',
             cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              opacity: 0.64,
+            },
           }}
         />
         {renderView()}

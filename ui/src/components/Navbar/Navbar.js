@@ -189,6 +189,10 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                   transform: 'rotate(135deg)',
                   cursor: 'pointer',
                   display: ['none', 'block', 'block'],
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    borderColor: 'linkHover',
+                  },
                 }}
               />
             </Menu>
@@ -343,9 +347,11 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             padding: '12px 22px',
             mr: 1,
             mt: 1,
+            transition: 'all 0.3s ease',
             '&:hover': {
               svg: {
-                fill: isNewProjectPage ? 'white' : 'secondary',
+                transition: 'all 0.3s ease',
+                fill: isNewProjectPage ? 'white' : 'linkHover',
                 marginLeft: 'inherit',
               },
             },

@@ -34,7 +34,7 @@ const Footer = ({ location, ...props }) => {
 
   return (
     <div sx={rootStyles} {...props}>
-      <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
+      <Box sx={{ textAlign: ['center', 'left', 'left'], fontSize: '0.875rem' }}>
         Made by{' '}
         <a
           href="https://thegraph.com"

@@ -128,6 +128,10 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               width: '25px',
               marginTop: '50%',
               transform: 'translateY(-50%)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                fill: 'linkHover',
+              },
             }}
           />
         </Box>
@@ -182,6 +186,10 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
         width: '25px',
         cursor: 'pointer',
         mr: [0, 3, 3],
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          fill: 'linkHover',
+        },
       }}
       onClick={e => {
         e.stopPropagation()
