@@ -122,6 +122,8 @@ type Everest @entity {
   challengeDeposit: BigInt!
   "Fee to apply to be in Everest"
   applicationFee: BigInt!
+  "Address of everest"
+  everestAddress: Bytes!
   "Address of the reserve bank"
   reserveBankAddress: Bytes!
   "Balance of the reserve bank (DAI)"

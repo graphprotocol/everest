@@ -48,11 +48,11 @@ contract('Everest', () => {
     describe('Test voting require statements and functionality', () => {
         // Set up 5 Tokens
         before(async () => {
-            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet, everest)
         })
         it('Voting on a challenge that does not exist fails', async () => {
             const fakeChallengeID = 500
@@ -68,7 +68,8 @@ contract('Everest', () => {
                 member1Address,
                 member5Address,
                 fakeDetails,
-                owner1Address
+                owner1Address,
+                everest
             )
 
             await utils.expectRevert(

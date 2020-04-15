@@ -13,7 +13,7 @@ dataSources:
       startBlock: 7300000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/mappings/everest.ts
       entities:
@@ -56,7 +56,7 @@ dataSources:
       startBlock: 7300000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/mappings/ethereumDIDRegistry.ts
       entities:

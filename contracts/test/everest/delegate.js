@@ -46,10 +46,10 @@ contract('Everest', () => {
 
     describe('Delegates - Testing delegate voting', () => {
         before(async () => {
-            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet)
-            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet)
+            await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet, everest)
+            await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet, everest)
         })
         it('Allows a delegate to vote for the owner', async () => {
             await edr.addDelegate(member2Address, delegateType, owner5Address, delegateValidity, {
@@ -68,7 +68,8 @@ contract('Everest', () => {
                 member1Address,
                 member4Address,
                 fakeDetails,
-                owner1Address
+                owner1Address,
+                everest
             )
 
             // Vote with delegate account

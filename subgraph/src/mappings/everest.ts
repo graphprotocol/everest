@@ -71,6 +71,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.votingPeriodDuration = event.params.votingPeriodDuration.toI32()
   everest.challengeDeposit = event.params.challengeDeposit
   everest.applicationFee = event.params.applicationFee
+  everest.everestAddress = event.address
   everest.reserveBankAddress = event.params.reserveBank
   everest.reserveBankBalance = BigInt.fromI32(0)
   everest.charter = event.params.charter

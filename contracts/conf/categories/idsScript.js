@@ -22,7 +22,7 @@ const ids = wallet.addresses
 // Next, let's seed categories.json with IDs for the 69 categories
 let filledOutIds = {}
 
-for (let i = 0; i <categoryCount; i++){
+for (let i = 0; i < categoryCount; i++) {
     filledOutIds[Object.keys(categories)[i]] = ids[i]
 }
 
