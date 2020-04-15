@@ -49,11 +49,31 @@ contract('everest', () => {
         () => {
             // Set up 5 Tokens
             before(async () => {
-                await helpers.applySignedWithAttributeAndPermit(member1Wallet, owner1Wallet, everest)
-                await helpers.applySignedWithAttributeAndPermit(member2Wallet, owner2Wallet, everest)
-                await helpers.applySignedWithAttributeAndPermit(member3Wallet, owner3Wallet, everest)
-                await helpers.applySignedWithAttributeAndPermit(member4Wallet, owner4Wallet, everest)
-                await helpers.applySignedWithAttributeAndPermit(member5Wallet, owner5Wallet, everest)
+                await helpers.applySignedWithAttributeAndPermit(
+                    member1Wallet,
+                    owner1Wallet,
+                    everest
+                )
+                await helpers.applySignedWithAttributeAndPermit(
+                    member2Wallet,
+                    owner2Wallet,
+                    everest
+                )
+                await helpers.applySignedWithAttributeAndPermit(
+                    member3Wallet,
+                    owner3Wallet,
+                    everest
+                )
+                await helpers.applySignedWithAttributeAndPermit(
+                    member4Wallet,
+                    owner4Wallet,
+                    everest
+                )
+                await helpers.applySignedWithAttributeAndPermit(
+                    member5Wallet,
+                    owner5Wallet,
+                    everest
+                )
             })
 
             it(
@@ -83,7 +103,12 @@ contract('everest', () => {
                         `submitVote - Member can't vote on their own challenge`
                     )
 
-                    await helpers.resolveChallenge(challengeID, owner1Address, owner5Address, everest)
+                    await helpers.resolveChallenge(
+                        challengeID,
+                        owner1Address,
+                        owner5Address,
+                        everest
+                    )
 
                     // Check member has been removed
                     assert(!(await everest.isMember(member5Address)), 'Member was not removed')
@@ -188,7 +213,13 @@ contract('everest', () => {
                 // Check member exists
                 assert(await everest.isMember(member4Address), 'Member was not added')
 
-                await helpers.challenge(member1Address, member4Address, fakeDetails, owner1Address, everest)
+                await helpers.challenge(
+                    member1Address,
+                    member4Address,
+                    fakeDetails,
+                    owner1Address,
+                    everest
+                )
 
                 // Expect that challengee can't have two challenges against them
                 await utils.expectRevert(

@@ -1,5 +1,7 @@
 const fs = require('fs')
 const ethers = require('ethers')
+const parseArgs = require('minimist')
+const path = require('path')
 
 const abi = require('../abis/Everest.json').abi
 const addresses = require('../addresses.json')
@@ -30,32 +32,71 @@ const setup = (provider, everestAddress) => {
     return everestWithSigner
 }
 
+let { network, func, gasPrice, withdrawAmount } = parseArgs(process.argv.slice(2), {
+    string: ['network', 'func', 'gasPrice', 'withdrawAmount']
+})
+
+if (!network || !func || !gasPrice) {
+    console.error(`
+    Usage: ${path.basename(process.argv[1])}
+        --network        <string> - options: ropsten, mainnet
+        --func           <string> - options: updateCategories, withdrawReserveBank
+        --gasPrice       <number> - in gwei (i.e. 5 = 5 gwei)
+        --withdrawAmount <number> - [optional] - pass 2 to withdraw 2 DAI
+    `)
+    process.exit(1)
+}
+
 const overrides = {
-    // The price (in wei) per unit of gas
-    gasPrice: ethers.utils.parseUnits('5.0', 'gwei')
+    gasPrice: ethers.utils.parseUnits(gasPrice, 'gwei')
 }
 
 const updateCategories = async (provider, everestAddress) => {
     const signer = setup(provider, everestAddress)
     const tx = await signer.updateCategories(categories, overrides)
-    console.log(tx)
-
-    await tx.wait()
-
-    const newBytesValue = await signer.categories()
-    console.log(newBytesValue + 'Should match ' + categories)
-    console.log('success')
+    console.log(`  ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
+    const res = await tx.wait()
+    console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
 }
 
 const withdrawReserveBank = async (provider, everestAddress) => {
     const signer = setup(provider, everestAddress)
-    const tx = await signer.withdraw(wallet.signingKey.address, '2000000000000000000', overrides)
-    console.log('TX: ', tx)
-
+    withdrawAmount = ethers.utils.parseUnits(withdrawAmount, 'ether')
+    const tx = await signer.withdraw(wallet.signingKey.address, withdrawAmount, overrides)
+    console.log(`  ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
     const res = await tx.wait()
-
-    console.log('RES: ', res)
+    console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
 }
 
-// updateCategories(ropstenProvider, addresses.ropsten.everest)
-withdrawReserveBank(mainnnetProvider, addresses.mainnet.everest)
+const main = async => {
+    try {
+        let provider
+        let everestAddress
+        if (network == 'mainnet') {
+            provider = mainnnetProvider
+            everestAddress = addresses.mainnet.everest
+        } else if (network == 'ropsten') {
+            provider = ropstenProvider
+            everestAddress = addresses.ropsten.everest
+        } else {
+            console.error(`ERROR: Please provide the correct network name`)
+            process.exit(1)
+        }
+
+        if (func == 'updateCategories') {
+            console.log(`Updating categories to ${categories} on network ${network} ...`)
+            updateCategories(provider, everestAddress)
+        } else if (func == 'withdrawReserveBank') {
+            console.log(`withdrawing ${withdrawAmount} DAI on network ${network} ...`)
+            withdrawReserveBank(provider, everestAddress)
+        } else {
+            console.error(`ERROR: Please provide the correct function name`)
+            process.exit(1)
+        }
+    } catch (e) {
+        console.log(`  ..failed: ${e.message}`)
+        process.exit(1)
+    }
+}
+
+main()
