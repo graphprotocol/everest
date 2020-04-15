@@ -130,7 +130,7 @@ const EditProject = ({ location }) => {
           Edit your project in the Everest registry, a universally shared list
           of projects in Web3. <br />
           <br />
-          A project can be a dApp, DAO, protocol, NGO, research group service
+          A project can be a dApp, DAO, protocol, NGO, research group, service
           provider and more! <br />
           <br />
           Make sure to tag your project&apos;s categories to allow other users
