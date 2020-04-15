@@ -344,8 +344,7 @@ const helpers = {
     },
 
     /// @dev helper function to resolve a challenge, and do checks
-    resolveChallenge: async (challengeID, challengerOwner, caller) => {
-        const everest = await Everest.deployed()
+    resolveChallenge: async (challengeID, challengerOwner, caller, everest) => {
         const token = await Token.deployed()
         const reserveBankAddress = await everest.reserveBank()
         const reserveBankBalanceAfterChallenge = await token.balanceOf(reserveBankAddress)

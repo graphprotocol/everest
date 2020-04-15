@@ -104,7 +104,7 @@ contract('everest', () => {
                         `submitVote - Member can't vote on their own challenge`
                     )
 
-                    await helpers.resolveChallenge(challengeID, owner1Address, owner4Address)
+                    await helpers.resolveChallenge(challengeID, owner1Address, owner4Address, everest)
 
                     // Check member has been removed
                     assert(!(await everest.isMember(member5Address)), 'Member was not removed')
@@ -136,7 +136,7 @@ contract('everest', () => {
                     from: owner3Address
                 })
 
-                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address)
+                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address, everest)
 
                 // Check member still exists
                 assert(
@@ -163,7 +163,7 @@ contract('everest', () => {
                     everest
                 )
 
-                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address)
+                await helpers.resolveChallenge(challengeID, owner1Address, owner5Address, everest)
 
                 // Check member still exists, since only one vote happened
                 assert(
