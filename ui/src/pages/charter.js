@@ -1,10 +1,19 @@
 /** @jsx jsx */
+import { useState, useEffect } from 'react'
 import { Styled, jsx, Box } from 'theme-ui'
 import charter from '../data/charter'
 
 import Seo from '../components/Seo'
 
 const Charter = () => {
+  const [imagePrefix, setImagePrefix] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
+    }
+  }, [])
+
   return (
     <Box>
       <Seo description="Everest Charter to guide registry curation." />
@@ -18,7 +27,7 @@ const Charter = () => {
         }}
       >
         <img
-          src={`/mountain-empty.png`}
+          src={`${imagePrefix}/mountain-empty.png`}
           sx={{
             position: 'absolute',
             right: 0,

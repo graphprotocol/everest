@@ -138,7 +138,13 @@ const Modal = ({ children, showModal, closeModal }) => {
                 }}
               >
                 <Box>
-                  <img src={wallet.icon} sx={iconStyles} alt="Wallet icon" />
+                  <img
+                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${
+                      wallet.icon
+                    }`}
+                    sx={iconStyles}
+                    alt="Wallet icon"
+                  />
                 </Box>
                 <Box>
                   <Styled.h5

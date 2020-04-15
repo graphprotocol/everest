@@ -17,6 +17,7 @@ import Filters from '../components/Filters'
 import Sorting from '../components/Sorting'
 import Button from '../components/Button'
 import Seo from '../components/Seo'
+import Loading from '../components/Loading'
 
 const Projects = ({ location }) => {
   const queryParams = queryString.parse(location.search)
@@ -182,12 +183,7 @@ const Projects = ({ location }) => {
           variant="project"
           selected={selected}
         />
-        {loading && (
-          <img
-            src="/loading-dots-blue.gif"
-            sx={{ position: 'absolute', left: 0, right: 0, margin: '0 auto' }}
-          />
-        )}
+        {loading && <Loading variant="blue" />}
         {data &&
           data.projects &&
           !loading &&

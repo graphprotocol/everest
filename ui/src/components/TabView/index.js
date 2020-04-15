@@ -93,7 +93,6 @@ const TabView = ({
           <Button
             variant={'secondary'}
             onClick={e => {
-              // TODO: loading state
               handleClick(e)
             }}
             text={text}

@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
@@ -18,6 +19,14 @@ const Sorting = ({
   setIsSortingOpen,
   orderBy,
 }) => {
+  const [imagePrefix, setImagePrefix] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
+    }
+  }, [])
+
   const menuItems = Object.keys(orderBy).map(order => ({
     text: (
       <Grid
@@ -29,7 +38,11 @@ const Sorting = ({
       >
         <Styled.p sx={{ color: 'secondary' }}>
           {selectedOrderBy === orderBy[order] && (
-            <img src="/dot.svg" sx={{ ml: -4, pr: 2 }} alt="dot" />
+            <img
+              src={`${imagePrefix}/dot.svg`}
+              sx={{ ml: -4, pr: 2 }}
+              alt="dot"
+            />
           )}
           {order}
         </Styled.p>
@@ -44,7 +57,7 @@ const Sorting = ({
         >
           {ORDER_PARAM[orderBy[order]]}
           <img
-            src="/arrow-down.png"
+            src={`${imagePrefix}/arrow-down.png`}
             sx={{
               width: '8px',
               height: 'auto',

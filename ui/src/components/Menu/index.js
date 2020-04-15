@@ -53,7 +53,9 @@ const Menu = ({ children, items, menuStyles, setOpen, ...props }) => {
               >
                 {item.icon && (
                   <img
-                    src={item.icon}
+                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/${
+                      item.icon
+                    }`}
                     alt={`${item.text} icon`}
                     sx={iconStyles}
                   />

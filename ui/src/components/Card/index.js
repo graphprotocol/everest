@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { pickCategories } from '../../utils/helpers'
 
 import Link from '../Link'
+import Loading from '../Loading'
 import Challenged from '../../images/challenge.svg'
 
 const Card = ({
@@ -26,19 +27,7 @@ const Card = ({
       ml={['auto', 'auto', 0]}
       mr={['auto', 'auto', 0]}
     >
-      {pending && (
-        <img
-          src="/loading-dots-blue.gif"
-          sx={{
-            position: 'absolute',
-            height: '40px',
-            left: 0,
-            right: 0,
-            margin: '0 auto',
-            top: 'calc(50% - 6px)',
-          }}
-        />
-      )}
+      {pending && <Loading variant="blue" sx={{ top: 'calc(50% - 6px)' }} />}
       <Box sx={{ opacity: pending ? 0.32 : 1 }}>
         <Grid
           gap={0}

@@ -48,7 +48,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
         if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
           image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
         } else {
-          image = `/profile-default.png`
+          image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+            ''}/profile-default.png`
         }
         setUserImage(image)
       }
@@ -137,7 +138,12 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
               }}
             >
               <img
-                src={userImage ? userImage : `/profile-default.png`}
+                src={
+                  userImage
+                    ? userImage
+                    : `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+                        ''}/profile-default.png`
+                }
                 alt="profile"
                 sx={imgStyles}
               />
