@@ -77,11 +77,7 @@ const MultiSelect = ({
   }
 
   const compare = (a, b) => {
-    if (a.name > b.name) {
-      return 1
-    } else {
-      return -1
-    }
+    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
   }
 
   const allItems = type === 'categories' ? allCategories() : items

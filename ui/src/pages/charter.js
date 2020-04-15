@@ -68,6 +68,9 @@ const Charter = () => {
               textDecoration: 'none',
               color: 'secondary',
               fontWeight: 'bold',
+              '&:hover': {
+                color: 'linkHover',
+              },
             },
           }}
         >
