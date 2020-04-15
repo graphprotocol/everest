@@ -10,6 +10,7 @@ import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 import Section from '../components/Section'
 import Sorting from '../components/Sorting'
 import Seo from '../components/Seo'
+import Loading from '../components/Loading'
 
 const Categories = () => {
   const [selectedOrderBy, setSelectedOrderBy] = useState(
@@ -66,12 +67,7 @@ const Categories = () => {
           {data && data.categories.length} Categories
         </Styled.p>
       </Box>
-      {loading && !data && (
-        <img
-          src="/loading-dots-blue.gif"
-          sx={{ position: 'absolute', left: 0, right: 0, margin: '0 auto' }}
-        />
-      )}
+      {loading && !data && <Loading variant="blue" />}
       {data && (
         <Section
           items={data.categories

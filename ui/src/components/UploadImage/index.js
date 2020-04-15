@@ -7,6 +7,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
 import Close from '../../images/close.svg'
+import Loading from '../Loading'
 
 const UPLOAD_IMAGE = gql`
   mutation uploadImage($image: File!) {
@@ -117,13 +118,7 @@ const UploadImage = ({ parentImage, setParentImage }) => {
           gap={2}
         >
           <span>Upload image</span>
-          {loadingImage && (
-            <img
-              src={`/loading-dots-white.gif`}
-              alt="Uploading"
-              sx={{ height: '24px', width: 'auto' }}
-            />
-          )}
+          {loadingImage && <Loading variant="white" />}
         </Grid>
       )}
     </label>

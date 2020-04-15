@@ -31,6 +31,7 @@ const Profile = ({ location }) => {
   const { account } = useAccount()
   const queryParams = location ? queryString.parse(location.search) : null
 
+  const [imagePrefix, setImagePrefix] = useState('')
   const [selectedProjectsView, setSelectedProjectsView] = useState('cards')
   const [selectedChallengesView, setSelectedChallengesView] = useState('cards')
   const [selectedDelegatorView, setSelectedDelegatorView] = useState('cards')
@@ -54,7 +55,8 @@ const Profile = ({ location }) => {
       if (threeBoxProfile.image && threeBoxProfile.image.length > 0) {
         image = `https://ipfs.infura.io/ipfs/${threeBoxProfile.image[0].contentUrl['/']}`
       } else {
-        image = `/profile-default.png`
+        image = `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+          ''}/profile-default.png`
       }
       const threeBoxAccounts = await ThreeBox.getVerifiedAccounts(
         threeBoxProfile,
@@ -89,6 +91,12 @@ const Profile = ({ location }) => {
           })
         }
       }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
     }
   }, [])
 
@@ -229,12 +237,13 @@ const Profile = ({ location }) => {
                     handleSelect: () => {
                       window.open(`https://3box.io/${account}`, '_blank')
                     },
-                    icon: '/edit.png',
+                    icon: `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+                      ''}/edit.png`,
                   },
                 ]}
               >
                 <img
-                  src={`/dots.png`}
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
                   sx={{
                     pt: 1,
                     pl: 2,
@@ -307,12 +316,12 @@ const Profile = ({ location }) => {
                   handleSelect: () => {
                     window.open(`https://3box.io/${account}`, '_blank')
                   },
-                  icon: '/edit.png',
+                  icon: `edit.png`,
                 },
               ]}
             >
               <img
-                src={`/dots.png`}
+                src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
                 sx={{
                   pt: 1,
                   pl: 2,
@@ -416,7 +425,7 @@ const Profile = ({ location }) => {
       ) : (
         <Box sx={{ textAlign: 'center', mt: 8 }}>
           <img
-            src={`/mountain-empty.png`}
+            src={`${imagePrefix}/mountain-empty.png`}
             sx={{ height: '190px', width: ['100%', 'auto', 'auto'] }}
           />
           <Divider sx={{ mt: '-6px !important' }} />

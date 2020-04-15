@@ -16,6 +16,7 @@ import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
 import ProjectForm from '../../components/ProjectForm'
+import Loading from '../../components/Loading'
 
 const EditProject = ({ location }) => {
   const queryParams = location ? queryString.parse(location.search) : null
@@ -120,7 +121,7 @@ const EditProject = ({ location }) => {
 
   return (
     <Grid
-      sx={{ gridTemplateColumns: ['1fr', '312px 1fr'], position: 'relative' }}
+      sx={{ gridTemplateColumns: ['1fr', '312px 504px'], position: 'relative' }}
       gap={[1, 4, 8]}
     >
       <Box>
@@ -137,9 +138,7 @@ const EditProject = ({ location }) => {
         </p>
       </Box>
       <Box sx={{ position: 'relative' }}>
-        {loading && (
-          <img src="/loading-dots-white.gif" sx={{ textAlign: 'center' }} />
-        )}
+        {loading && <Loading variant="white" />}
         {pendingTransaction && (
           <Box
             sx={{
@@ -155,7 +154,7 @@ const EditProject = ({ location }) => {
             <Styled.h6 sx={{ color: 'white', fontWeight: 'heading' }}>
               Waiting for transaction{' '}
             </Styled.h6>
-            <img src="/loading-dots-white.gif" />
+            <Loading variant="white" />
           </Box>
         )}
         <ProjectForm

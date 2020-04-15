@@ -14,6 +14,7 @@ import Divider from '../components/Divider'
 import Switcher from '../components/Switcher'
 import Link from '../components/Link'
 import Seo from '../components/Seo'
+import Loading from '../components/Loading'
 
 const Category = ({ location, pageContext }) => {
   const pathParams = location.pathname.split('/')
@@ -39,7 +40,7 @@ const Category = ({ location, pageContext }) => {
   if (loading)
     return (
       <Box sx={{ textAlign: 'center' }}>
-        <img src="/loading-dots-blue.gif" />
+        <Loading variant="blue" />
       </Box>
     )
   if (error) {

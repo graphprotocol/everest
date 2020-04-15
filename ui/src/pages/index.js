@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { jsx, Styled, Box } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { Grid } from '@theme-ui/components'
@@ -26,10 +26,17 @@ import Modal from '../components/Modal'
 const Index = () => {
   const { account } = useAccount()
   const [showModal, setShowModal] = useState(false)
+  const [imagePrefix, setImagePrefix] = useState('')
   const openModal = () => setShowModal(true)
   const closeModal = () => {
     setShowModal(false)
   }
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
+    }
+  }, [])
 
   const { data: categories } = useQuery(CATEGORIES_QUERY, {
     variables: {
@@ -131,7 +138,7 @@ const Index = () => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(/mountain.jpg)',
+            backgroundImage: `url(${imagePrefix}/mountain.jpg)`,
           }}
         />
       </Grid>
@@ -194,7 +201,7 @@ const Index = () => {
             ...imageStyles,
             height: '246px',
             backgroundSize: 'contain',
-            backgroundImage: 'url(/binoculars.png)',
+            backgroundImage: `url(${imagePrefix}/binoculars.png)`,
             filter: 'none',
             boxShadow: 'none',
             order: [2, 1, 1],
@@ -249,7 +256,7 @@ const Index = () => {
         <Box
           sx={{
             ...imageStyles,
-            backgroundImage: 'url(/bottom.png)',
+            backgroundImage: `url(${imagePrefix}/bottom.png)`,
             order: 0,
           }}
         />

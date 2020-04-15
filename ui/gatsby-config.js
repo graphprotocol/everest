@@ -14,7 +14,9 @@ require('dotenv').config({
 })
 
 module.exports = {
+  pathPrefix: '__GATSBY_IPFS_PATH_PREFIX__',
   plugins: [
+    'gatsby-plugin-ipfs',
     'gatsby-plugin-react-helmet',
     // 'gatsby-plugin-webpack-bundle-analyser-v2',
     {

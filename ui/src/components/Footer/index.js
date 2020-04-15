@@ -1,12 +1,21 @@
 /** @jsx jsx */
+import { useState, useEffect } from 'react'
 import { jsx, Box } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 
 const Footer = ({ location, ...props }) => {
+  const [imagePrefix, setImagePrefix] = useState('')
+
   const isNewProjectPage =
     location &&
     (location.pathname.includes('new') || location.pathname.includes('edit'))
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
+    }
+  }, [])
 
   const rootStyles = {
     display: `${isNewProjectPage ? 'none' : 'grid'}`,
@@ -22,7 +31,7 @@ const Footer = ({ location, ...props }) => {
     width: '26px',
     height: 'auto',
   }
-    
+
   return (
     <div sx={rootStyles} {...props}>
       <Box sx={{ textAlign: ['center', 'left', 'left'] }}>
@@ -59,25 +68,30 @@ const Footer = ({ location, ...props }) => {
           }}
         >
           <img
-            src={`/github.png`}
+            src={`${imagePrefix}/github.png`}
             alt="Github Everest"
             title="Github Everest"
             sx={iconStyles}
           />
         </a>
         <img
-          src={`/graph-gray.png`}
+          src={`${imagePrefix}/graph-gray.png`}
           alt="The Graph"
           title="The Graph"
           sx={iconStyles}
         />
         <img
-          src={`/ethereum-gray.png`}
+          src={`${imagePrefix}/ethereum-gray.png`}
           alt="Ethereum"
           title="Ethereum"
           sx={iconStyles}
         />
-        <img src={`/ipfs-gray.png`} alt="IPFS" title="IPFS" sx={iconStyles} />
+        <img
+          src={`${imagePrefix}/ipfs-gray.png`}
+          alt="IPFS"
+          title="IPFS"
+          sx={iconStyles}
+        />
       </Grid>
     </div>
   )

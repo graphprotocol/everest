@@ -41,6 +41,7 @@ import Button from '../components/Button'
 import TabView from '../components/TabView'
 import Link from '../components/Link'
 import Menu from '../components/Menu'
+import Loading from '../components/Loading'
 import MultiSelect from '../components/Select/MultiSelect'
 
 import Close from '../images/close.svg'
@@ -159,7 +160,7 @@ const Project = ({ location }) => {
       {
         query: PROJECT_QUERY,
         variables: {
-          id: data && data.project ? data.project.id : '',
+          id: projectId,
         },
       },
     ],
@@ -176,15 +177,19 @@ const Project = ({ location }) => {
         twitter: data && data.project ? data.project.twitter : '',
         isRepresentative:
           data && data.project ? data.project.isRepresentative : false,
-        createdAt: data && data.project ? data.project.createdAt : [],
-        totalVotes: data && data.project ? data.project.totalVotes : '',
+        createdAt: data && data.project ? data.project.createdAt : '',
+        totalVotes: data && data.project ? data.project.totalVotes : 0,
         currentChallenge: {
           __typename: 'Challenge',
           id: '123',
           endTime: moment()
             .add(4, 'days')
             .unix(),
-          owner: account,
+          owner: {
+            __typename: 'Project',
+            id: challenge.projectId,
+            name: '',
+          },
           description: challenge.description,
           resolved: false,
           votesFor: 0,
@@ -192,6 +197,7 @@ const Project = ({ location }) => {
           votes: [],
         },
         owner: {
+          __typename: 'User',
           id: data && data.project ? data.project.owner.id : '',
         },
         categories: data && data.project ? data.project.categories : [],
@@ -406,7 +412,7 @@ const Project = ({ location }) => {
   if (loading && !error) {
     return (
       <Styled.p sx={{ textAlign: 'center' }}>
-        <img src="/loading-dots-blue.gif" />
+        <Loading variant="blue" />
       </Styled.p>
     )
   }
@@ -526,7 +532,7 @@ const Project = ({ location }) => {
             setShowChallenge(false)
           }
         },
-        icon: '/ownership.png',
+        icon: `ownership.png`,
       },
       {
         text: 'Delegate',
@@ -537,7 +543,7 @@ const Project = ({ location }) => {
             setShowChallenge(false)
           }
         },
-        icon: '/delegate.png',
+        icon: `delegate.png`,
       },
     ])
     if (project.currentChallenge) {
@@ -546,7 +552,10 @@ const Project = ({ location }) => {
           text: (
             <Box>
               <Link to={`/projects/edit?id=${projectId}`}>
-                <img src="/edit.png" sx={iconStyles} />
+                <img
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/edit.png`}
+                  sx={iconStyles}
+                />
                 Edit
               </Link>
             </Box>
@@ -559,7 +568,10 @@ const Project = ({ location }) => {
           text: (
             <Box>
               <Link to={`/projects/edit?id=${projectId}`}>
-                <img src="/edit.png" sx={iconStyles} />
+                <img
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/edit.png`}
+                  sx={iconStyles}
+                />
                 Edit
               </Link>
             </Box>
@@ -571,7 +583,7 @@ const Project = ({ location }) => {
             removeProject({ variables: { projectId } })
             navigate(`/profile?id=${account}`)
           },
-          icon: '/trash.png',
+          icon: `trash.png`,
         },
       ])
     }
@@ -586,7 +598,7 @@ const Project = ({ location }) => {
             setShowTransfer(false)
           }
         },
-        icon: '/challenge.png',
+        icon: `challenge.png`,
       },
       {
         text: 'Request ownership',
@@ -597,7 +609,7 @@ const Project = ({ location }) => {
             '_blank',
           )
         },
-        icon: '/share.png',
+        icon: `share.png`,
       },
     ])
   } else {
@@ -611,7 +623,7 @@ const Project = ({ location }) => {
             '_blank',
           )
         },
-        icon: '/share.png',
+        icon: `share.png`,
       },
     ])
   }
@@ -668,7 +680,11 @@ const Project = ({ location }) => {
               <Styled.h2>
                 {project.name}{' '}
                 {project.isRepresentative && (
-                  <img src="/verified.png" sx={{ width: '24px', ml: -3 }} />
+                  <img
+                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
+                      ''}/verified.png`}
+                    sx={{ width: '24px', ml: -3 }}
+                  />
                 )}
               </Styled.h2>
             </Box>
@@ -702,7 +718,7 @@ const Project = ({ location }) => {
                   </Box>
                 ) : (
                   <img
-                    src={`/dots.png`}
+                    src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
                     sx={{
                       pt: 1,
                       pl: 2,
@@ -797,7 +813,7 @@ const Project = ({ location }) => {
                 </Box>
               ) : (
                 <img
-                  src={`/dots.png`}
+                  src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/dots.png`}
                   sx={{
                     pt: 1,
                     pl: 2,
@@ -1144,7 +1160,7 @@ const Project = ({ location }) => {
                     >
                       Waiting for transaction{' '}
                     </Styled.h6>
-                    <img src="/loading-dots-blue.gif" />
+                    <Loading variant="blue" />
                   </Box>
                 )}
               </Box>
