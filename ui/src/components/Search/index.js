@@ -3,22 +3,22 @@ import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
-import { useQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/react-hooks'
 
 import Card from '../Card'
 import SearchIcon from '../../images/search.svg'
 import Close from '../../images/close.svg'
 
-import { PROJECTS_QUERY } from '../../utils/apollo/queries'
+import { PROJECT_SEARCH } from '../../utils/apollo/queries'
 
 const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
-  const { data } = useQuery(PROJECTS_QUERY, {
-    variables: {
-      where: {
-        name_contains: value,
-      },
-    },
-  })
+  let searchData = null
+
+  const [searchProjects, { data }] = useLazyQuery(PROJECT_SEARCH)
+
+  if (data && data.projectSearch) {
+    searchData = data.projectSearch
+  }
 
   useEffect(() => {
     const handleClick = () => {
@@ -31,6 +31,29 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
       window.removeEventListener('click', handleClick)
     }
   }, [])
+
+  const handleSearch = e => {
+    const value = e.target ? e.target.value : ''
+    if (value === '') {
+      searchData = null
+    }
+    setValue(value)
+    let param = ''
+    if (value.length > 0) {
+      let terms = value.trim().split(' ')
+      terms.forEach((term, index) => {
+        param += index === 0 ? `${term}:*` : `${term}`
+        if (index !== terms.length - 1) {
+          param += ' <-> '
+        }
+      })
+      searchProjects({
+        variables: {
+          text: param,
+        },
+      })
+    }
+  }
 
   return isSearchOpen ? (
     <Box
@@ -70,10 +93,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
             },
           }}
           autoFocus
-          onChange={e => {
-            const value = e.target ? e.target.value : ''
-            setValue(value)
-          }}
+          onChange={handleSearch}
           value={value}
           onClick={e => e.stopPropagation()}
         />
@@ -112,7 +132,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
           />
         </Box>
       </Grid>
-      {value && value.length > 0 && (
+      {value && value.length > 0 && searchData && searchData.length > 0 && (
         <Box
           sx={{
             height: '536px',
@@ -129,7 +149,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               '0 4px 24px 0 rgba(149,152,171,0.16), 0 12px 48px 0 rgba(30,37,44,0.32)',
           }}
         >
-          {value !== '' && data && data.projects && (
+          {value !== '' && (
             <Grid
               sx={{
                 gridTemplateColumns: ['1fr 1fr', '1fr 1fr', 'repeat(3, 1fr)'],
@@ -138,7 +158,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               }}
               gap={4}
             >
-              {data.projects.map((project, index) => (
+              {searchData.map((project, index) => (
                 <Card
                   key={index}
                   title={project.name}
