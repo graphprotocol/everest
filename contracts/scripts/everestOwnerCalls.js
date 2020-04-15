@@ -21,16 +21,7 @@ const mnemonic = fs
     .readFileSync(__dirname + '/../../../../private-keys/.privkey-metamask.txt')
     .toString()
     .trim()
-
 const wallet = new ethers.Wallet.fromMnemonic(mnemonic)
-
-const setup = (provider, everestAddress) => {
-    let ethereum = new ethers.providers.JsonRpcProvider(provider)
-    const everest = new ethers.Contract(everestAddress, abi, ethereum)
-    const connectedWallet = new ethers.Wallet(wallet.signingKey.privateKey, ethereum)
-    const everestWithSigner = everest.connect(connectedWallet)
-    return everestWithSigner
-}
 
 let { network, func, gasPrice, withdrawAmount } = parseArgs(process.argv.slice(2), {
     string: ['network', 'func', 'gasPrice', 'withdrawAmount']
@@ -51,44 +42,47 @@ const overrides = {
     gasPrice: ethers.utils.parseUnits(gasPrice, 'gwei')
 }
 
-const updateCategories = async (provider, everestAddress) => {
-    const signer = setup(provider, everestAddress)
-    const tx = await signer.updateCategories(categories, overrides)
+const updateCategories = async everest => {
+    const tx = await everest.updateCategories(categories, overrides)
     console.log(`  ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
     const res = await tx.wait()
     console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
 }
 
-const withdrawReserveBank = async (provider, everestAddress) => {
-    const signer = setup(provider, everestAddress)
+const withdrawReserveBank = async everest => {
     withdrawAmount = ethers.utils.parseUnits(withdrawAmount, 'ether')
-    const tx = await signer.withdraw(wallet.signingKey.address, withdrawAmount, overrides)
+    const tx = await everest.withdraw(wallet.signingKey.address, withdrawAmount, overrides)
     console.log(`  ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
     const res = await tx.wait()
     console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
 }
 
-const main = async => {
+const main = async () => {
     try {
-        let provider
+        let providerEndpoint
         let everestAddress
         if (network == 'mainnet') {
-            provider = mainnnetProvider
+            providerEndpoint = mainnnetProvider
             everestAddress = addresses.mainnet.everest
         } else if (network == 'ropsten') {
-            provider = ropstenProvider
+            providerEndpoint = ropstenProvider
             everestAddress = addresses.ropsten.everest
         } else {
             console.error(`ERROR: Please provide the correct network name`)
             process.exit(1)
         }
 
+        const provider = new ethers.providers.JsonRpcProvider(providerEndpoint)
+        const connectedWallet = new ethers.Wallet(wallet.signingKey.privateKey, provider)
+        const everest = new ethers.Contract(everestAddress, abi, provider)
+        const everestWithSigner = everest.connect(connectedWallet)
+
         if (func == 'updateCategories') {
             console.log(`Updating categories to ${categories} on network ${network} ...`)
-            updateCategories(provider, everestAddress)
+            updateCategories(everestWithSigner)
         } else if (func == 'withdrawReserveBank') {
             console.log(`withdrawing ${withdrawAmount} DAI on network ${network} ...`)
-            withdrawReserveBank(provider, everestAddress)
+            withdrawReserveBank(everestWithSigner)
         } else {
             console.error(`ERROR: Please provide the correct function name`)
             process.exit(1)
