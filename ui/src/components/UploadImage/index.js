@@ -17,7 +17,6 @@ const UPLOAD_IMAGE = gql`
 
 const UploadImage = ({ parentImage, setParentImage }) => {
   const [image, setImage] = useState(parentImage)
-
   const [uploadImage, { loading: loadingImage }] = useMutation(UPLOAD_IMAGE, {
     onError: error => {
       console.error('Error uploading image to IPFS: ', error)

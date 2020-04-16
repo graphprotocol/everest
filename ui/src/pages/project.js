@@ -426,8 +426,6 @@ const Project = ({ location }) => {
 
   let project = data && data.project
 
-  console.log('project data: ', data)
-
   if (project === null) {
     return (
       <Box>
