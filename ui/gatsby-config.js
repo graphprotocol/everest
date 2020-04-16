@@ -18,7 +18,6 @@ module.exports = {
   plugins: [
     'gatsby-plugin-ipfs',
     'gatsby-plugin-react-helmet',
-    // 'gatsby-plugin-webpack-bundle-analyser-v2',
     {
       resolve: 'gatsby-plugin-theme-ui',
       options: {
