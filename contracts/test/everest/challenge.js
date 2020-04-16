@@ -78,7 +78,7 @@ contract('everest', () => {
             })
 
             it(
-                'should allow a member to be challenged, lose, and be removed.' +
+                'should allow a member to be challenged, lose, and be removed. ' +
                     'Also tests challengee cannot vote on their own challenge',
                 async () => {
                     const challengeID = await helpers.challenge(

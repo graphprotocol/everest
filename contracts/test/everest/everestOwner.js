@@ -81,5 +81,24 @@ contract('Everest', () => {
             const newOwner = await registry.owner()
             assert.equal(newOwnerAddress, newOwner, 'Registry ownership was not transferred')
         })
+
+        it('should allow owner to update the voting period duration', async () => {
+            await everest.updateVotingPeriodDuration(86400, { from: registryOwnerAddress })
+            const newDuration = await everest.votingPeriodDuration()
+            assert.equal(newDuration, 86400, 'Voting period duration was not updated')
+        })
+
+        it('should allow owner to update the challenge deposit', async () => {
+            await everest.updateChallengeDeposit("20000000000000000000", { from: registryOwnerAddress })
+            const newDeposit = await everest.challengeDeposit()
+            assert.equal(newDeposit, "20000000000000000000", 'Challenge deposit was not updated')
+        })
+
+        it('should allow owner to update the application fee', async () => {
+            await everest.updateApplicationFee("20000000000000000000", { from: registryOwnerAddress })
+            const newFee = await everest.applicationFee()
+            assert.equal(newFee, "20000000000000000000", 'Application fee was not updated')
+        })
+
     })
 })

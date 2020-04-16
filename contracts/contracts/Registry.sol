@@ -1,4 +1,4 @@
-pragma solidity ^0.5.8;
+pragma solidity 0.5.8;
 
 import "./lib/Ownable.sol";
 
@@ -24,7 +24,8 @@ contract Registry is Ownable {
     @param _member      The member being checked
     @return             The challengeID
     */
-    function getChallengeID(address _member) public view returns (uint256) {
+    function getChallengeID(address _member) external view returns (uint256) {
+        require(_member != address(0), "Can't check 0 address");
         Member memory member = members[_member];
         return member.challengeID;
     }
@@ -34,7 +35,8 @@ contract Registry is Ownable {
     @param _member      The member being checked
     @return             The start time
     */
-    function getMemberStartTime(address _member) public view returns (uint256) {
+    function getMemberStartTime(address _member) external view returns (uint256) {
+        require(_member != address(0), "Can't check 0 address");
         Member memory member = members[_member];
         return member.memberStartTime;
     }
@@ -49,6 +51,7 @@ contract Registry is Ownable {
     @return             The start time of the member
     */
     function setMember(address _member) external onlyOwner returns (uint256) {
+        require(_member != address(0), "Can't check 0 address");
         Member memory member = Member({
             challengeID: 0,
             /* solium-disable-next-line security/no-block-members*/
@@ -67,6 +70,7 @@ contract Registry is Ownable {
     @param _newChallengeID      The new challenge ID. Pass in 0 to remove a challenge.
     */
     function editChallengeID(address _member, uint256 _newChallengeID) external onlyOwner {
+        require(_member != address(0), "Can't check 0 address");
         Member storage member = members[_member];
         member.challengeID = _newChallengeID;
     }
@@ -76,6 +80,7 @@ contract Registry is Ownable {
     @param _member      The member being removed
     */
     function deleteMember(address _member) external onlyOwner {
+        require(_member != address(0), "Can't check 0 address");
         delete members[_member];
     }
 }

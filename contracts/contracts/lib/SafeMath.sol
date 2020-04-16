@@ -1,5 +1,5 @@
 // From package @openzeppelin/contracts@2.4.0
-pragma solidity ^0.5.0;
+pragma solidity 0.5.8;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow

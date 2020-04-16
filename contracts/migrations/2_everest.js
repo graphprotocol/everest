@@ -117,6 +117,7 @@ module.exports = async (deployer, network) => {
         didAddress,
         reserveBank.address,
         registry.address,
+        params.startingChallengeIDNumber,
         { from: owner }
     )
 

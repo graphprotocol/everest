@@ -62,6 +62,7 @@ contract('Upgrading Contracts', () => {
             assert.equal(typeof newReserveBank.address, 'string', 'New reserve bank did not deploy')
         })
         it('should deploy a new Everest', async () => {
+            const oldChallengeID = await everest.challengeCounter()
             newEverest = await Everest.new(
                 dai.address,
                 params.votingPeriodDuration,
@@ -72,6 +73,7 @@ contract('Upgrading Contracts', () => {
                 DIDregistry.address,
                 newReserveBank.address,
                 registry.address,
+                oldChallengeID + 1,
                 { from: newEverestOwnerAddress }
             )
             assert.equal(typeof newEverest.address, 'string', 'New everest did not deploy')
