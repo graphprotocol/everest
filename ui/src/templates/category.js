@@ -94,6 +94,9 @@ const Category = ({ location, pageContext }) => {
                           variant: 'text.large',
                           color: 'secondary',
                           fontWeight: 'heading',
+                          '&:hover': {
+                            color: 'linkHover',
+                          },
                         }}
                       >
                         {breadcrumb.name}
@@ -109,7 +112,7 @@ const Category = ({ location, pageContext }) => {
                         transform: 'rotate(45deg)',
                         display: 'block',
                         cursor: 'pointer',
-                        mt: 1,
+                        mt: '2px',
                       }}
                     />
                   </Grid>
@@ -122,7 +125,7 @@ const Category = ({ location, pageContext }) => {
         </Box>
       </Grid>
       <Divider />
-      {category.subcategories && (
+      {category.subcategories && category.subcategories.length > 0 && (
         <Section
           title=""
           description={`${category.subcategories.length} Subcategories`}
@@ -139,7 +142,11 @@ const Category = ({ location, pageContext }) => {
       )}
       <Grid columns={[1, 2, 2]} mb={1} mt={6} sx={{ alignItems: 'center' }}>
         <Box ref={viewRef}>
-          <Styled.h3>Projects</Styled.h3>
+          {category.projectCount === 0 ? (
+            <Styled.h3>No projects</Styled.h3>
+          ) : (
+            <Styled.h3>Projects</Styled.h3>
+          )}
           <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
             {category.projectCount} Projects -{' '}
             {challengedProjects && (

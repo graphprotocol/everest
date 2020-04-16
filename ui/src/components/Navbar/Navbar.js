@@ -161,7 +161,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                       Change wallet
                     </Box>
                   ),
-                  icon: '/transfer.png',
+                  icon: 'transfer.png',
                 },
                 {
                   text: (
@@ -174,7 +174,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
                       Sign Out
                     </Box>
                   ),
-                  icon: '/delegate.png',
+                  icon: 'delegate.png',
                 },
               ]}
             >

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import { jsx, Box } from 'theme-ui'
+import { jsx, Box, Styled } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { Grid } from '@theme-ui/components'
 
@@ -36,18 +36,18 @@ const Footer = ({ location, ...props }) => {
     <div sx={rootStyles} {...props}>
       <Box sx={{ textAlign: ['center', 'left', 'left'], fontSize: '0.875rem' }}>
         Made by{' '}
-        <a
+        <Styled.a
           href="https://thegraph.com"
           target="_blank"
           rel="noopener noreferrer"
           sx={{
-            textDecoration: 'none',
-            color: 'secondary',
             fontWeight: 'heading',
+            display: 'inline',
+            fontSize: '0.875rem',
           }}
         >
           The Graph
-        </a>
+        </Styled.a>
       </Box>
       <Grid
         sx={{
