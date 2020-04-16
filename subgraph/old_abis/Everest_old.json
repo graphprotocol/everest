@@ -271,10 +271,6 @@
         {
           "name": "_registry",
           "type": "address"
-        },
-        {
-          "name": "_startingChallengeID",
-          "type": "uint256"
         }
       ],
       "payable": false,
@@ -360,42 +356,6 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "name": "duration",
-          "type": "uint256"
-        }
-      ],
-      "name": "VotingDurationUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "deposit",
-          "type": "uint256"
-        }
-      ],
-      "name": "ChallengeDepositUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "fee",
-          "type": "uint256"
-        }
-      ],
-      "name": "ApplicationFeeUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
           "indexed": false,
           "name": "owner",
           "type": "address"
@@ -444,11 +404,6 @@
           "indexed": false,
           "name": "registry",
           "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "startingChallengeID",
-          "type": "uint256"
         }
       ],
       "name": "EverestDeployed",
@@ -634,7 +589,7 @@
           "type": "bytes32[3]"
         },
         {
-          "name": "_memberOwner",
+          "name": "_owner",
           "type": "address"
         },
         {
@@ -676,7 +631,7 @@
           "type": "bytes32[2]"
         },
         {
-          "name": "_memberOwner",
+          "name": "_owner",
           "type": "address"
         },
         {
@@ -829,7 +784,12 @@
         }
       ],
       "name": "transferOwnershipReserveBank",
-      "outputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -843,7 +803,12 @@
         }
       ],
       "name": "transferOwnershipRegistry",
-      "outputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -871,48 +836,6 @@
         }
       ],
       "name": "updateCategories",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_newVotingDuration",
-          "type": "uint256"
-        }
-      ],
-      "name": "updateVotingPeriodDuration",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_newDeposit",
-          "type": "uint256"
-        }
-      ],
-      "name": "updateChallengeDeposit",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_newFee",
-          "type": "uint256"
-        }
-      ],
-      "name": "updateApplicationFee",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",

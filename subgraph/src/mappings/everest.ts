@@ -1,3 +1,8 @@
+/* Note:
+ * There are some small differences in the abis of everest_old and everest, but not of them
+ * effect how the mappings need to work, so they are the exact same for both contracts
+ */
+
 import { BigInt, store, ipfs, json, Bytes, JSONValue } from '@graphprotocol/graph-ts'
 
 import {

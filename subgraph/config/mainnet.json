@@ -1,7 +1,7 @@
 {
   "network": "mainnet",
-  "everest1address": "0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C",
-  "everest2address": "",
-  "blockNumber1": "9780000",
-  "blockNumber2": ""
+  "everestAddress": "0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C",
+  "everestAddressOld": "0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C",
+  "blockNumber": "9839402",
+  "blockNumberOld": "9839402"
 }

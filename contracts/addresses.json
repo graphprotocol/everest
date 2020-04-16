@@ -1,7 +1,10 @@
 {
   "ropsten": {
-    "updated-on": "April 10th 2020",
+    "updated-on": "April 16th 2020",
     "everest": "0x935681dE14DBEE457A67F45c732CD4113D29a6E7",
+    "blockNumber": "7691724",
+    "oldEverest": "0x935681dE14DBEE457A67F45c732CD4113D29a6E7",
+    "oldBlockNumber": "7691724",
     "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
     "dai": "0x82A351cdFB726DafC8624d8bD6B0bc98d34Ffec1",
     "reserveBank": "0xb93fF7d616Ebc0a9c1A0899bd3A9d64314182092",
@@ -14,8 +17,11 @@
       "reserveBank": "0x4C65804f4b00a50e0750293973D7EAf32602587E"
   },
   "mainnet": {
-    "updated-on": "April 9th 2020",
+    "updated-on": "April 16th 2020",
     "everest": "0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C",
+    "blockNumber": "9839402",
+    "oldEverest": "0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C",
+    "oldBlockNumber": "9839402",
     "ethereumDIDRegistry": "0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B",
     "dai": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
     "reserveBank": "0x661A0eD099Bb3Fe9AA0b293d136dBCAA21B04B4C",

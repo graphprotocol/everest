@@ -88,7 +88,7 @@ contract Everest is Ownable {
     );
 
     event MemberChallenged(
-        address indexed challengee,
+        address indexed member,
         uint256 indexed challengeID,
         address indexed challenger,
         uint256 challengeEndTime,
@@ -104,7 +104,7 @@ contract Everest is Ownable {
     );
 
     event ChallengeFailed(
-        address indexed challengee,
+        address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
         uint256 noVotes,
@@ -113,7 +113,7 @@ contract Everest is Ownable {
     );
 
     event ChallengeSucceeded(
-        address indexed challengee,
+        address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
         uint256 noVotes,
