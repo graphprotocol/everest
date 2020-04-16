@@ -28,16 +28,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `Everest`,
-        short_name: `Everest`,
-        start_url: `/`,
-        display: `standalone`,
-        icon: `https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZZf61rjJ7pDXRKh3R9ekXEj2DnfC9yA43eDB21M8ggay`,
-      },
-    },
-    {
       resolve: `gatsby-plugin-layout`,
       options: {
         component: require.resolve(`./src/components/Layout/`),
