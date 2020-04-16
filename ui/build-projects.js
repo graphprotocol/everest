@@ -275,7 +275,7 @@ async function buildAndDeployProjectsLoop() {
       // Only update DNS after pushing to the production everest bucket
       if (TEXTILE_BUCKET === 'everest') {
         try {
-          setTimeout(() => await updateCloudflareDNS(), 60000)
+          setTimeout(async () => await updateCloudflareDNS(), 60000)
         } catch (e) {
           console.error(`Failed to updated Cloudflare DNS: ${e}`)
         }
