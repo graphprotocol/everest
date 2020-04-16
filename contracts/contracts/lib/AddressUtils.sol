@@ -1,7 +1,7 @@
 // Taken from
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Address.sol
 
-pragma solidity ^0.5.8;
+pragma solidity 0.5.8;
 
 /**
  * @dev Collection of functions related to the address type

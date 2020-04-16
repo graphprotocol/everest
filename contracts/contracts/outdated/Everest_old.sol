@@ -1,22 +1,19 @@
 /*
- Everest is a DAO that is designed to curate a Registry of members.
+    This is the old version of everest, which we upgraded from. The upgrade had a few small changes,
+    but it didn't really change the functionality at all. We decided to go with this to test the
+    updating process before everest goes live.
 
- This storage of the list is in Registry. The EthereumDIDRegistry is used to store data such
- as attributes and delegates and transfer of ownership. The only storage in the Everest contract
- is Challenges and Votes, which can be safely removed upon completion. This allows for Everest
- to be an upgradeable contract, while Registry is the persistent storage.
-
- The DAO is inspired by the Moloch DAO smart contracts https://github.com/MolochVentures/moloch
+    This version of the file is kept so that we have the abis always handy
 */
-pragma solidity 0.5.8;
+pragma solidity ^0.5.8;
 
-import "./ReserveBank.sol";
-import "./Registry.sol";
-import "./lib/EthereumDIDRegistry.sol";
-import "./lib/dai.sol";
-import "./lib/Ownable.sol";
-import "./lib/AddressUtils.sol";
-import "./abdk-libraries-solidity/ABDKMath64x64.sol";
+import "../ReserveBank.sol";
+import "../Registry.sol";
+import "../lib/EthereumDIDRegistry.sol";
+import "../lib/dai.sol";
+import "../lib/Ownable.sol";
+import "../lib/AddressUtils.sol";
+import "../abdk-libraries-solidity/ABDKMath64x64.sol";
 
 contract Everest is Ownable {
     using SafeMath for uint256;
@@ -25,7 +22,7 @@ contract Everest is Ownable {
     using AddressUtils for address;
 
     // -----------------
-    // STATE
+    // GLOBAL CONSTANTS
     // -----------------
 
     // Voting period length for a challenge (in unix seconds)
@@ -51,12 +48,7 @@ contract Everest is Ownable {
     // We pass in the bytes representation of the string 'everest'
     // bytes("everest") = 0x65766572657374. Then add 50 zeros to the end. The bytes32 value
     // is passed to the ERC-1056 registry, and hashed within the delegate functions
-    bytes32 constant delegateType = 0x6576657265737400000000000000000000000000000000000000000000000000;
-
-    mapping (uint256 => Challenge) public challenges;
-    // Challenge counter for challenge IDs. With upgrading the contract, the latest challengeID
-    // must be the last challengeID + 1 of the old version of Everest
-    uint256 public challengeCounter;
+    bytes32 delegateType = 0x6576657265737400000000000000000000000000000000000000000000000000;
 
     // -------
     // EVENTS
@@ -68,10 +60,6 @@ contract Everest is Ownable {
     event CharterUpdated(bytes32 indexed data);
     event CategoriesUpdated(bytes32 indexed data);
     event Withdrawal(address indexed receiver, uint256 amount);
-    event VotingDurationUpdated(uint256 indexed duration);
-    event ChallengeDepositUpdated(uint256 indexed deposit);
-    event ApplicationFeeUpdated(uint256 indexed fee);
-
 
     event EverestDeployed(
         address owner,
@@ -83,12 +71,11 @@ contract Everest is Ownable {
         bytes32 categories,
         address didRegistry,
         address reserveBank,
-        address registry,
-        uint256 startingChallengeID
+        address registry
     );
 
     event MemberChallenged(
-        address indexed challengee,
+        address indexed member,
         uint256 indexed challengeID,
         address indexed challenger,
         uint256 challengeEndTime,
@@ -104,7 +91,7 @@ contract Everest is Ownable {
     );
 
     event ChallengeFailed(
-        address indexed challengee,
+        address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
         uint256 noVotes,
@@ -113,7 +100,7 @@ contract Everest is Ownable {
     );
 
     event ChallengeSucceeded(
-        address indexed challengee,
+        address indexed member,
         uint256 indexed challengeID,
         uint256 yesVotes,
         uint256 noVotes,
@@ -144,13 +131,17 @@ contract Everest is Ownable {
         mapping (address => uint256) voteWeightByMember;        // The vote weight of each member
     }
 
+    mapping (uint256 => Challenge) public challenges;
+    // Challenge counter for challenge IDs
+    uint256 public challengeCounter = 1;
+
     // ----------
     // MODIFIERS
     // ----------
 
     /**
-    @dev                Modifer that allows a function to be called by the owner or delegate of a
-                        member.
+    @dev                Modifer that allows a function to be called by a real member.
+                        Either the member or a delegate can call
     @param _member      Member interacting with everest
     */
     modifier onlyMemberOwnerOrDelegate(address _member) {
@@ -158,17 +149,17 @@ contract Everest is Ownable {
             isMember(_member),
             "onlyMemberOwnerOrDelegate - Address is not a Member"
         );
-        address memberOwner = erc1056Registry.identityOwner(_member);
+        address owner = erc1056Registry.identityOwner(_member);
         bool validDelegate = erc1056Registry.validDelegate(_member, delegateType, msg.sender);
         require(
-            validDelegate || memberOwner == msg.sender,
+            validDelegate || owner == msg.sender,
             "onlyMemberOwnerOrDelegate - Caller must be delegate or owner"
         );
         _;
     }
 
     /**
-    @dev                Modifer that allows a function to be called by owner of a member.
+    @dev                Modifer that allows a function to be called by a member.
                         Only the member can call (no delegate permissions)
     @param _member      Member interacting with everest
     */
@@ -177,9 +168,9 @@ contract Everest is Ownable {
             isMember(_member),
             "onlyMemberOwner - Address is not a member"
         );
-        address memberOwner = erc1056Registry.identityOwner(_member);
+        address owner = erc1056Registry.identityOwner(_member);
         require(
-            memberOwner == msg.sender,
+            owner == msg.sender,
             "onlyMemberOwner - Caller must be the owner"
         );
         _;
@@ -198,16 +189,13 @@ contract Everest is Ownable {
         bytes32 _categories,
         address _DIDregistry,
         address _reserveBank,
-        address _registry,
-        uint256 _startingChallengeID
+        address _registry
     ) public {
         require(_approvedToken.isContract(), "The _approvedToken address should be a contract");
         require(_DIDregistry.isContract(), "The _DIDregistry address should be a contract");
         require(_reserveBank.isContract(), "The _reserveBank address should be a contract");
         require(_registry.isContract(), "The _registry address should be a contract");
         require(_votingPeriodDuration > 0, "constructor - _votingPeriodDuration cannot be 0");
-        require(_challengeDeposit > 0, "constructor - _challengeDeposit cannot be 0");
-        require(_applicationFee > 0, "constructor - _applicationFee cannot be 0");
 
         approvedToken = Dai(_approvedToken);
         votingPeriodDuration = _votingPeriodDuration;
@@ -218,7 +206,6 @@ contract Everest is Ownable {
         erc1056Registry = EthereumDIDRegistry(_DIDregistry);
         reserveBank = ReserveBank(_reserveBank);
         registry = Registry(_registry);
-        challengeCounter = _startingChallengeID;
 
         emit EverestDeployed(
             msg.sender,             // i.e owner
@@ -230,8 +217,7 @@ contract Everest is Ownable {
             _categories,
             _DIDregistry,
             _reserveBank,
-            _registry,
-            _startingChallengeID
+            _registry
         );
     }
 
@@ -253,7 +239,7 @@ contract Everest is Ownable {
     @param _sigV                    V of sigs
     @param _sigR                    R of sigs
     @param _sigS                    S of sigs
-    @param _memberOwner             Owner of the member (on the DID registry)
+    @param _owner                   Owner of the member (on the DID registry)
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
                                     with zeros appended to make it 32 bytes
@@ -265,19 +251,17 @@ contract Everest is Ownable {
         uint8[3] calldata _sigV,
         bytes32[3] calldata _sigR,
         bytes32[3] calldata _sigS,
-        address _memberOwner,
+        address _owner,
         bytes32 _offChainDataName,
         bytes calldata _offChainDataValue,
         uint256 _offChainDataValidity
     ) external {
-        require(_newMember != address(0), "Member can't be 0 address");
-        require(_memberOwner != address(0), "Owner can't be 0 address");
         applySignedWithAttributeAndPermitInternal(
             _newMember,
             _sigV,
             _sigR,
             _sigS,
-            _memberOwner,
+            _owner,
             _offChainDataName,
             _offChainDataValue,
             _offChainDataValidity
@@ -291,22 +275,22 @@ contract Everest is Ownable {
         uint8[3] memory _sigV,
         bytes32[3] memory _sigR,
         bytes32[3] memory _sigS,
-        address _memberOwner,
+        address _owner,
         bytes32 _offChainDataName,
         bytes memory _offChainDataValue,
         uint256 _offChainDataValidity
     ) internal {
-        // Approve Everest to transfer DAI on the owner's behalf
+        // Approve Everest to transfer DAI on the owners behalf
         // Expiry = 0 is infinite. true is unlimited allowance
-        uint256 nonce = approvedToken.nonces(_memberOwner);
-        approvedToken.permit(_memberOwner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
+        uint256 nonce = approvedToken.nonces(_owner);
+        approvedToken.permit(_owner, address(this), nonce, 0, true, _sigV[2], _sigR[2], _sigS[2]);
 
         applySignedWithAttribute(
             _newMember,
             [_sigV[0], _sigV[1]],
             [_sigR[0], _sigR[1]],
             [_sigS[0], _sigS[1]],
-            _memberOwner,
+            _owner,
             _offChainDataName,
             _offChainDataValue,
             _offChainDataValidity
@@ -325,7 +309,7 @@ contract Everest is Ownable {
     @param _sigV                    V of sigs
     @param _sigR                    R of sigs
     @param _sigS                    S of sigs
-    @param _memberOwner             Owner of the member application
+    @param _owner                   Owner of the member application
     @param _offChainDataName        Attribute name. Should be a string less than 32 bytes, converted
                                     to bytes32. example: 'ProjectData' = 0x50726f6a65637444617461,
                                     with zeros appended to make it 32 bytes
@@ -337,13 +321,11 @@ contract Everest is Ownable {
         uint8[2] memory _sigV,
         bytes32[2] memory _sigR,
         bytes32[2] memory _sigS,
-        address _memberOwner,
+        address _owner,
         bytes32 _offChainDataName,
         bytes memory _offChainDataValue,
         uint256 _offChainDataValidity
     ) public {
-        require(_newMember != address(0), "Member can't be 0 address");
-        require(_memberOwner != address(0), "Owner can't be 0 address");
         require(
             registry.getMemberStartTime(_newMember) == 0,
             "applySignedInternal - This member already exists"
@@ -370,11 +352,11 @@ contract Everest is Ownable {
             _offChainDataValidity
         );
 
-        erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _memberOwner);
+        erc1056Registry.changeOwnerSigned(_newMember, _sigV[1], _sigR[1], _sigS[1], _owner);
 
         // Transfers tokens from owner to the reserve bank
         require(
-            approvedToken.transferFrom(_memberOwner, address(reserveBank), applicationFee),
+            approvedToken.transferFrom(_owner, address(reserveBank), applicationFee),
             "applySignedInternal - Token transfer failed"
         );
     }
@@ -388,7 +370,6 @@ contract Everest is Ownable {
     function memberExit(
         address _member
     ) external onlyMemberOwner(_member) {
-        require(_member != address(0), "Member can't be 0 address");
         require(
             !memberChallengeExists(_member),
             "memberExit - Can't exit during ongoing challenge"
@@ -403,8 +384,8 @@ contract Everest is Ownable {
 
     /**
     @dev                        Starts a challenge on a member. Challenger deposits a fee.
-    @param _challenger          The address of the member who is challenging another member
-    @param _challengee          The address of the member being challenged
+    @param _challenger          The memberName of the member who is challenging another member
+    @param _challengee          The memberName of the member being challenged
     @param _details             Extra details relevant to the challenge. (IPFS hash without Qm)
     @return                     Challenge ID for the created challenge
     */
@@ -413,7 +394,6 @@ contract Everest is Ownable {
         address _challengee,
         bytes32 _details
     ) external onlyMemberOwner(_challenger) returns (uint256 challengeID) {
-        require(_challenger != address(0), "Challenger can't be 0 address");
         require(isMember(_challengee), "challenge - Challengee must exist");
         require(
             _challenger != _challengee,
@@ -431,10 +411,10 @@ contract Everest is Ownable {
             noVotes: 0,
             voterCount: 0,
             /* solium-disable-next-line security/no-block-members*/
-            endTime: now.add(votingPeriodDuration),
+            endTime: now + votingPeriodDuration,
             details: _details
         });
-        challengeCounter = challengeCounter.add(1);
+        challengeCounter++;
 
         challenges[newChallengeID] = newChallenge;
 
@@ -452,11 +432,11 @@ contract Everest is Ownable {
             newChallengeID,
             _challenger,
             /* solium-disable-next-line security/no-block-members*/
-            now.add(votingPeriodDuration),
+            now + votingPeriodDuration,
             newChallenge.details
         );
 
-        // Add challengers' vote into the challenge
+        // Add challengers vote into the challenge
         submitVote(newChallengeID, VoteChoice.Yes, _challenger);
         return newChallengeID;
     }
@@ -472,7 +452,6 @@ contract Everest is Ownable {
         VoteChoice _voteChoice,
         address _votingMember
     ) public onlyMemberOwnerOrDelegate(_votingMember) {
-        require(_votingMember != address(0), "Member can't be 0 address");
         require(
             _voteChoice == VoteChoice.Yes || _voteChoice == VoteChoice.No,
             "submitVote - Vote must be either Yes or No"
@@ -511,7 +490,7 @@ contract Everest is Ownable {
         // Store vote with _votingMember, not msg.sender, since a delegate can vote
         storedChallenge.voteChoiceByMember[_votingMember] = _voteChoice;
         storedChallenge.voteWeightByMember[_votingMember] = voteWeight;
-        storedChallenge.voterCount = storedChallenge.voterCount.add(1);
+        storedChallenge.voterCount += 1;
 
         // Count vote
         if (_voteChoice == VoteChoice.Yes) {
@@ -532,14 +511,13 @@ contract Everest is Ownable {
     */
     function submitVotes(
         uint256 _challengeID,
-        VoteChoice[] calldata _voteChoices,
-        address[] calldata _voters
-    ) external {
+        VoteChoice[] memory _voteChoices,
+        address[] memory _voters
+    ) public {
         require(
             _voteChoices.length == _voters.length,
             "submitVotes - Arrays must be equal"
         );
-        require(_voteChoices.length < 90, "submitVotes - Array should be < 90 to avoid going over the block gas limit");
         for (uint256 i; i < _voteChoices.length; i++){
             submitVote(_challengeID, _voteChoices[i], _voters[i]);
         }
@@ -548,10 +526,10 @@ contract Everest is Ownable {
     /**
     @dev                    Resolve a challenge A successful challenge means the member is removed.
                             Anyone can call this function. They will be rewarded with 1/10 of the
-                            challenge deposit.
+                            challenge deposit
     @param _challengeID     The challenge ID
     */
-    function resolveChallenge(uint256 _challengeID) external {
+    function resolveChallenge(uint256 _challengeID) public {
         challengeCanBeResolved(_challengeID);
         Challenge storage storedChallenge = challenges[_challengeID];
 
@@ -559,15 +537,14 @@ contract Everest is Ownable {
         bool moreThanOneVote = storedChallenge.voterCount > 1;
         // Challenge reward is 1/10th the challenge deposit. This allows incentivization to
         // always resolve the challenge for the user that calls this function
-        uint256 challengeRewardDivisor = 10;
-        uint256 resolverReward = challengeDeposit.div(challengeRewardDivisor);
+        uint256 resolverReward = challengeDeposit.div(10);
 
         if (didPass && moreThanOneVote) {
             address challengerOwner = erc1056Registry.identityOwner(storedChallenge.challenger);
 
             // The amount includes the applicationFee, which is the reward for challenging a project
             // and getting it successfully removed. Minus the resolver reward
-            uint256 challengerReward = challengeDeposit.add(applicationFee).sub(resolverReward);
+            uint256 challengerReward = challengeDeposit + applicationFee - resolverReward;
             require(
                 reserveBank.withdraw(challengerOwner, challengerReward),
                 "resolveChallenge - Rewarding challenger failed"
@@ -622,9 +599,8 @@ contract Everest is Ownable {
     @param _amount      The amount of funds being withdrawn
     @return             True if withdrawal is successful
     */
-    function withdraw(address _receiver, uint256 _amount) external onlyOwner returns (bool) {
+    function withdraw(address _receiver, uint256 _amount) public onlyOwner returns (bool) {
         require(_receiver != address(0), "Receiver must not be 0 address");
-        require(_amount > 0, "Amount must be greater than 0");
         emit Withdrawal(_receiver, _amount);
         return reserveBank.withdraw(_receiver, _amount);
     }
@@ -632,21 +608,25 @@ contract Everest is Ownable {
     /**
     @dev                Allows the owner of Everest to transfer the ownership of ReserveBank
     @param _newOwner    The new owner
+    @return             True if ownership transfer is successful
     */
-    function transferOwnershipReserveBank(address _newOwner) external onlyOwner {
+    function transferOwnershipReserveBank(address _newOwner) public onlyOwner returns (bool) {
         reserveBank.transferOwnership(_newOwner);
+        return true;
     }
 
     /**
     @dev                Allows the owner of Everest to transfer the ownership of Registry
     @param _newOwner    The new owner
+    @return             True if ownership transfer is successful
     */
-    function transferOwnershipRegistry(address _newOwner) external onlyOwner {
+    function transferOwnershipRegistry(address _newOwner) public onlyOwner returns (bool) {
         registry.transferOwnership(_newOwner);
+        return true;
     }
 
     /**
-    @dev                Updates the charter for Everest
+    @dev                Updates the charter for the Everest
     @param _newCharter  The data that point to the new charter
     */
     function updateCharter(bytes32 _newCharter) external onlyOwner {
@@ -655,39 +635,12 @@ contract Everest is Ownable {
     }
 
     /**
-    @dev                Updates the categories for Everest
+    @dev                Updates the categories for the Everest
     @param _newCategories  The data that point to the new categories
     */
     function updateCategories(bytes32 _newCategories) external onlyOwner {
         categories = _newCategories;
         emit CategoriesUpdated(categories);
-    }
-
-    /**
-    @dev                        Updates the voting duration for Everest
-    @param _newVotingDuration   New voting duration in unix seconds
-    */
-    function updateVotingPeriodDuration(uint256 _newVotingDuration) external onlyOwner {
-        votingPeriodDuration = _newVotingDuration;
-        emit VotingDurationUpdated(votingPeriodDuration);
-    }
-
-    /**
-    @dev                Updates the challenge deposit required
-    @param _newDeposit  The new value for the challenge deposit, with decimals (10^18)
-    */
-    function updateChallengeDeposit(uint256 _newDeposit) external onlyOwner {
-        challengeDeposit = _newDeposit;
-        emit ChallengeDepositUpdated(challengeDeposit);
-    }
-
-    /**
-    @dev            Updates the application fee for Everest
-    @param _newFee  The new application fee, with decimals (10^18)
-    */
-    function updateApplicationFee(uint256 _newFee) external onlyOwner {
-        applicationFee = _newFee;
-        emit ApplicationFeeUpdated(applicationFee);
     }
 
     // -----------------
@@ -711,7 +664,6 @@ contract Everest is Ownable {
     @return         True is address is a member
     */
     function isMember(address _member) public view returns (bool){
-        require(_member != address(0), "Member can't be 0 address");
         uint256 startTime = registry.getMemberStartTime(_member);
         if (startTime > 0){
             return true;
@@ -726,7 +678,6 @@ contract Everest is Ownable {
     @return         True if a challenge exists on the member
     */
     function memberChallengeExists(address _member) public view returns (bool) {
-        require(_member != address(0), "Member can't be 0 address");
         uint256 challengeID = registry.getChallengeID(_member);
         return (challengeID > 0);
     }
@@ -735,8 +686,9 @@ contract Everest is Ownable {
     @dev                Determines whether voting has concluded in a challenge for a given
                         member. Throws if challenge can't be resolved
     @param _challengeID The challenge ID
+    @return             True if the challenge can be resolved
     */
-    function challengeCanBeResolved(uint256 _challengeID) private view {
+    function challengeCanBeResolved(uint256 _challengeID) private view returns (bool) {
         Challenge storage storedChallenge = challenges[_challengeID];
         require(
             challenges[_challengeID].endTime > 0,
@@ -746,5 +698,6 @@ contract Everest is Ownable {
             hasVotingPeriodExpired(storedChallenge.endTime),
             "challengeCanBeResolved - Current challenge is not ready to be resolved"
         );
+        return true;
     }
 }

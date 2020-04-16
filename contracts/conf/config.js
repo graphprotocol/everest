@@ -61,7 +61,8 @@ const config = {
         // This points to the charter TODO - update mainnet
         charter: ipfsToBytes(charterIPFShash),
         // Point to IPFS hash of categories. TODO - update mainnnet
-        categories: ipfsToBytes(categoriesIPFSHash)
+        categories: ipfsToBytes(categoriesIPFSHash),
+        startingChallengeIDNumber: 1 // starts at 1, future deployments must pull from old everest
     },
     ganacheParams: {
         chainID: 9545,

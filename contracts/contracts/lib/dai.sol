@@ -19,7 +19,7 @@
     Also we changed the pragma from 0.5.12 to ^0.5.8
 */
 
-pragma solidity ^0.5.8;
+pragma solidity 0.5.8;
 
 import "./lib.sol";
 

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.8;
+pragma solidity 0.5.8;
 
 import "./lib/Ownable.sol";
 import "./lib/SafeMath.sol";
@@ -35,7 +35,7 @@ contract ReserveBank is Ownable {
     @return             True if successful
     */
     function withdraw(address _receiver, uint256 _amount)
-        public
+        external
         onlyOwner
         returns (bool)
     {
