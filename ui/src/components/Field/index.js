@@ -30,26 +30,28 @@ const Field = ({
   const [invalidGithub, setInvalidGithub] = useState(false)
 
   useEffect(() => {
-    if (title.toLowerCase() === 'twitter') {
+    if (title && title.toLowerCase() === 'twitter') {
       setInvalidTwitter(
-        value.includes('https://') ||
-          value.includes('http://') ||
-          value.startsWith('/') ||
-          value.includes('twitter.com') ||
-          value.includes('www.') ||
-          value.includes('.com') ||
-          value.includes('@'),
+        value &&
+          (value.includes('https://') ||
+            value.includes('http://') ||
+            value.startsWith('/') ||
+            value.includes('twitter.com') ||
+            value.includes('www.') ||
+            value.includes('.com') ||
+            value.includes('@')),
       )
     }
-    if (title.toLowerCase() === 'github') {
+    if (title && title.toLowerCase() === 'github') {
       setInvalidGithub(
-        value.includes('https://') ||
-          value.includes('http://') ||
-          value.startsWith('/') ||
-          value.includes('github.com') ||
-          value.includes('www.') ||
-          value.includes('.com') ||
-          value.includes('@'),
+        value &&
+          (value.includes('https://') ||
+            value.includes('http://') ||
+            value.startsWith('/') ||
+            value.includes('github.com') ||
+            value.includes('www.') ||
+            value.includes('.com') ||
+            value.includes('@')),
       )
     }
   }, [value])

@@ -129,9 +129,6 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               marginTop: '50%',
               transform: 'translateY(-50%)',
               transition: 'all 0.3s ease',
-              '&:hover': {
-                fill: 'linkHover',
-              },
             }}
           />
         </Box>

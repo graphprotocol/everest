@@ -3,7 +3,6 @@ import { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Styled, jsx } from 'theme-ui'
 import { Grid, Box } from '@theme-ui/components'
-import { navigate } from 'gatsby'
 import { useWeb3React } from '@web3-react/core'
 
 import { metamaskAccountChange } from '../../services/ethers'
@@ -339,9 +338,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
           setValue={setSearchText}
         />
         <Link
-          onClick={() =>
-            userAccount ? navigate('/projects/new') : openModal()
-          }
+          to={userAccount ? '/projects/new' : undefined}
+          onClick={() => !userAccount && openModal()}
           sx={{
             backgroundColor: isNewProjectPage ? 'secondary' : 'transparent',
             padding: '12px 22px',

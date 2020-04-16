@@ -34,8 +34,8 @@ const Card = ({
             sx={{
               position: 'absolute',
               top: 3,
-              right: 4,
-              height: '30px',
+              right: 3,
+              height: '24px',
               width: 'auto',
             }}
           />
