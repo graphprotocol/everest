@@ -34,7 +34,7 @@ module.exports = {
         short_name: `Everest`,
         start_url: `/`,
         display: `standalone`,
-        icon: `static/favicon.png`,
+        icon: `https://api.thegraph.com/ipfs/api/v0/cat?arg=QmZZf61rjJ7pDXRKh3R9ekXEj2DnfC9yA43eDB21M8ggay`,
       },
     },
     {
