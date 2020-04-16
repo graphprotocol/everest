@@ -19,8 +19,10 @@ readAndWriteFile(
       JSON.stringify(
         {
           network: 'mainnet',
-          address: addresses.mainnet.everest,
-          blockNumber: '9780000',
+          everestAddress: addresses.mainnet.everest,
+          everestAddressOld: addresses.mainnet.oldEverest,
+          blockNumber: addresses.mainnet.blockNumber,
+          blockNumberOld: addresses.mainnet.oldBlockNumber,
         },
         null,
         2,
@@ -31,8 +33,10 @@ readAndWriteFile(
       JSON.stringify(
         {
           network: 'ropsten',
-          address: addresses.ropsten.everest,
-          blockNumber: '7300000',
+          everestAddress: addresses.ropsten.everest,
+          everestAddressOld: addresses.ropsten.oldEverest,
+          blockNumber: addresses.ropsten.blockNumber,
+          blockNumberOld: addresses.ropsten.oldBlockNumber,
         },
         null,
         2,

@@ -13,7 +13,7 @@
     ]
   },
   "scripts": {
-    "build:abis":               "lerna exec --scope everest-contracts -- yarn abis",
+    "build:contracts":          "lerna exec --scope everest-contracts -- yarn build",
     "build:mutations":          "lerna exec --scope everest-mutations -- yarn build",
     "build:subgraph-ropsten":   "lerna exec --scope everest-subgraph -- yarn build-ropsten",
     "build:subgraph-mainnet":   "lerna exec --scope everest-subgraph -- yarn build-mainnet",
@@ -22,8 +22,8 @@
     "deploy:subgraph-testing":  "lerna exec --scope everest-subgraph -- yarn deploy-testing",
     "build:ui":                 "lerna exec --scope everest-ui -- yarn build",
     "start:ui":                 "lerna exec --scope everest-ui -- yarn start",
-    "build-ropsten":            "yarn build:abis && yarn build:subgraph-ropsten && yarn build:mutations",
-    "build-mainnet":            "yarn build:abis && yarn build:subgraph-mainnet && yarn build:mutations",
+    "build-ropsten":            "yarn build:contracts && yarn build:subgraph-ropsten && yarn build:mutations",
+    "build-mainnet":            "yarn build:contracts && yarn build:subgraph-mainnet && yarn build:mutations",
     "deploy-ropsten":           "yarn build-ropsten && yarn deploy:subgraph-ropsten",
     "deploy-mainnet":           "yarn build-mainnet && yarn deploy:subgraph-mainnet",
     "deploy-testing":           "yarn build-ropsten && yarn deploy:subgraph-testing",

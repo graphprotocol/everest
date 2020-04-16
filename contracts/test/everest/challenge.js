@@ -29,7 +29,6 @@ contract('everest', () => {
     const owner5Address = owner5Wallet.signingKey.address
 
     const nonMemberWallet = utils.wallets.ten()
-    console.log
     const nonMemberAddress = nonMemberWallet.signingKey.address
 
     const voteChoice = {

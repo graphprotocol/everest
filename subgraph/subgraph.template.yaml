@@ -5,12 +5,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Everest1
+    name: Everest
     network: {{network}}
     source:
-      address: '{{everest1address}}'
+      address: '{{everestAddress}}'
       abi: Everest
-      startBlock: {{blockNumber1}}
+      startBlock: {{blockNumber}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -37,7 +37,7 @@ dataSources:
           handler: handleCategoriesUpdated
         - event: Withdrawal(indexed address,uint256)
           handler: handleWithdrawal
-        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address)
+        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address,uint256)
           handler: handleEverestDeployed
         - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
           handler: handleMemberChallenged
@@ -48,12 +48,12 @@ dataSources:
         - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleChallengeSucceeded
   - kind: ethereum/contract
-    name: Everest2
+    name: Everest_old
     network: {{network}}
     source:
-      address: '{{everest2address}}'
-      abi: Everest
-      startBlock: {{blockNumber2}}
+      address: '{{everestAddressOld}}'
+      abi: Everest_old
+      startBlock: {{blockNumberOld}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -67,8 +67,8 @@ dataSources:
         - Vote
         - User
       abis:
-        - name: Everest
-          file: ../contracts/abis/Everest.json
+        - name: Everest_old
+          file: ./old_abis/Everest_old.json
       eventHandlers:
         - event: NewMember(indexed address,uint256,uint256)
           handler: handleNewMember
