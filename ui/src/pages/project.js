@@ -684,6 +684,7 @@ const Project = ({ location }) => {
                     src={`${window.__GATSBY_IPFS_PATH_PREFIX__ ||
                       ''}/verified.png`}
                     sx={{ width: '24px', ml: -3 }}
+                    title="Verified project"
                   />
                 )}
               </Styled.h2>

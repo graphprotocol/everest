@@ -78,6 +78,7 @@ export default {
       fontWeight: 'bold',
       letterSpacing: '0.31px',
       lineHeight: '2.375rem',
+      transition: 'all 0.3s ease',
       '&:hover': {
         color: 'linkHover',
       },

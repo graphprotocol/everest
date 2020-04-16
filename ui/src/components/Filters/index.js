@@ -44,6 +44,10 @@ const Filters = ({
             variant: 'text.huge',
             color: isFilterOpen ? 'white' : 'secondary',
             fontWeight: 'bold',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              color: !isFilterOpen && 'linkHover',
+            },
           }}
         >
           {selectedFilter}
@@ -59,6 +63,9 @@ const Filters = ({
             transition: 'all 0.2s ease',
             transform: isFilterOpen ? 'rotate(-45deg)' : 'rotate(135deg)',
             display: 'block',
+            '&:hover': {
+              borderColor: !isFilterOpen && 'linkHover',
+            },
           }}
         />
       </Grid>
