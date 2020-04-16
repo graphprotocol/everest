@@ -4,8 +4,9 @@
   "scripts": {
     "abis": "rm -rf ./abis && mkdir ./abis/ && node ./scripts/extractAbis.js",
     "build": "truffle build && yarn abis && yarn flatten",
-    "compile": "truffle compile",
+    "truffle-build": "truffle build",
     "deploy-ropsten": "truffle migrate --reset --network ropsten",
+    "deploy-mainnet": "truffle migrate --reset --network mainnet",
     "fix-js": "eslint ./ --fix",
     "fix-sol": "solium -d contracts/ --fix",
     "flatten": "bash scripts/flatten.sh",
