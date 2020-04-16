@@ -237,8 +237,7 @@ const Profile = ({ location }) => {
                     handleSelect: () => {
                       window.open(`https://3box.io/${account}`, '_blank')
                     },
-                    icon: `${window.__GATSBY_IPFS_PATH_PREFIX__ ||
-                      ''}/edit.png`,
+                    icon: `edit.png`,
                   },
                 ]}
               >
@@ -260,16 +259,18 @@ const Profile = ({ location }) => {
           {profile && profile.name ? (
             <Box>
               <Styled.h2>{profile.name}</Styled.h2>
-              <Styled.p
+              <Styled.a
                 sx={{
                   fontSize: ['0.85rem', '0.85rem', '1rem'],
                   fontWeight: 'heading',
                   color: 'secondary',
                   mt: 1,
                 }}
+                href={`https://3box.io/${profileId}`}
+                target="_blank"
               >
                 {profileId}
-              </Styled.p>
+              </Styled.a>
             </Box>
           ) : (
             <Box>

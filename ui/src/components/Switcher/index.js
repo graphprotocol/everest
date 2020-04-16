@@ -21,6 +21,9 @@ const Switcher = ({ selected, setSelected, ...props }) => {
         sx={{
           ...iconStyles,
           fill: selected === 'table' ? 'secondary' : 'fill',
+          '&:hover': {
+            opacity: selected === 'table' ? 1 : 0.64,
+          },
         }}
         onClick={() => setSelected('table')}
       />
@@ -28,6 +31,9 @@ const Switcher = ({ selected, setSelected, ...props }) => {
         sx={{
           ...iconStyles,
           fill: selected === 'cards' ? 'secondary' : 'fill',
+          '&:hover': {
+            opacity: selected === 'cards' ? 1 : 0.64,
+          },
         }}
         onClick={() => setSelected('cards')}
       />

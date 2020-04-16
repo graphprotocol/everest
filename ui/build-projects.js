@@ -216,6 +216,7 @@ async function updateCloudflareDNS() {
         type: 'TXT',
         name: `${recordName}.${recordDomain}`,
         content: `dnslink=${dnsLink}`,
+        ttl: 120,
       }),
     },
   )
