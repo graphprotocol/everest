@@ -81,4 +81,5 @@ subgraph/node_modules/
 subgraph/src/types/
 subgraph/.DS_STORE
 subgraph/data
+subgraph/subgraph.yaml
 ui/.textile/auth.yml
