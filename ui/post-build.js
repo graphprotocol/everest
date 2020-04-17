@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const fetch = require('isomorphic-fetch')
 
-const filename = path.join(__dirname, 'public/project', 'index.html')
+const filename = path.join(__dirname, 'public/project/template', 'index.html')
 
 let contents
 if (filename) {

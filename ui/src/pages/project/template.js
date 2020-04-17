@@ -6,10 +6,10 @@ import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 import { useMutation } from '@graphprotocol/mutations-apollo-react'
 import ThreeBox from '3box'
-import client from '../utils/apollo/client'
 import cloneDeep from 'lodash.clonedeep'
 import moment from 'moment'
 import { isMobile } from 'react-device-detect'
+import { navigate } from 'gatsby'
 
 import {
   convertDate,
@@ -17,15 +17,16 @@ import {
   stripPrefix,
   socialUrl,
   pickCategories,
-} from '../utils/helpers'
-import { useAccount } from '../utils/hooks'
-import { metamaskAccountChange } from '../services/ethers'
+} from '../../utils/helpers'
+import client from '../../utils/apollo/client'
+import { useAccount } from '../../utils/hooks'
+import { metamaskAccountChange } from '../../services/ethers'
 
 import {
   PROJECT_QUERY,
   USER_PROJECTS_QUERY,
   PROFILE_QUERY,
-} from '../utils/apollo/queries'
+} from '../../utils/apollo/queries'
 import {
   REMOVE_PROJECT,
   RESOLVE_CHALLENGE,
@@ -33,19 +34,18 @@ import {
   VOTE_CHALLENGE,
   TRANSFER_OWNERSHIP,
   DELEGATE_OWNERSHIP,
-} from '../utils/apollo/mutations'
+} from '../../utils/apollo/mutations'
 
-import Divider from '../components/Divider'
-import DataRow from '../components/DataRow'
-import Button from '../components/Button'
-import TabView from '../components/TabView'
-import Link from '../components/Link'
-import Menu from '../components/Menu'
-import Loading from '../components/Loading'
-import MultiSelect from '../components/Select/MultiSelect'
+import Divider from '../../components/Divider'
+import DataRow from '../../components/DataRow'
+import Button from '../../components/Button'
+import TabView from '../../components/TabView'
+import Link from '../../components/Link'
+import Menu from '../../components/Menu'
+import Loading from '../../components/Loading'
+import MultiSelect from '../../components/Select/MultiSelect'
 
-import Close from '../images/close.svg'
-import { navigate } from 'gatsby'
+import Close from '../../images/close.svg'
 
 const Project = ({ location }) => {
   const { account } = useAccount()

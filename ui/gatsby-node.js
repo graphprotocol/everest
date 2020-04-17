@@ -69,7 +69,7 @@ exports.onCreatePage = async ({ page, actions }) => {
     createPage(page)
   }
 
-  if (page.path.match(/^\/project\//)) {
+  if (page.path.match(/^\/project\/template\//)) {
     page.matchPath = '/project/*'
     createPage(page)
   }

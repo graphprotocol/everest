@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
@@ -13,6 +14,14 @@ const Button = ({
   icon,
   ...props
 }) => {
+  const [imagePrefix, setImagePrefix] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setImagePrefix(window.__GATSBY_IPFS_PATH_PREFIX__ || '')
+    }
+  }, [])
+
   return (
     <button
       sx={{
@@ -33,11 +42,13 @@ const Button = ({
       onClick={e => (onClick ? onClick(e) : to ? navigate(to) : '')}
       {...props}
     >
-      {icon && <img sx={iconStyles} src={`/${icon}`} alt={'icon'} />}
+      {icon && (
+        <img sx={iconStyles} src={`${imagePrefix}/${icon}`} alt={'icon'} />
+      )}
       {text}
       {loading && (
         <img
-          src={`/dots.png`}
+          src={`${imagePrefix}/dots.png`}
           sx={{ pt: 1, pl: 2, width: '24px' }}
           alt="dots icon"
         />
