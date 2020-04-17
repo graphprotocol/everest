@@ -1,4 +1,4 @@
-import { ByteArray } from '@graphprotocol/graph-ts'
+import { ByteArray, BigInt } from '@graphprotocol/graph-ts'
 import { Category } from '../types/schema'
 
 // Helper adding 0x12 and 0x20 to make the proper ipfs hash
@@ -35,5 +35,15 @@ export function recursiveCategories(
     return recursiveCategories(parentCategory, categoryIDs, projectID)
   } else {
     return categoryIDs
+  }
+}
+
+// Since everest was updated, we use this function to return us the address
+// relevant to the block number of the event
+export function getEverestAddress(blockNumber: BigInt): string {
+  if (blockNumber.gt(BigInt.fromI32(7735064))) {
+    return '0x275DB6f75F53D8E94c34797D84B1c1896043c6a3'
+  } else {
+    return '0xeCe52D2bA232fde90f56AAe6aBBeaCb17ef2b546'
   }
 }

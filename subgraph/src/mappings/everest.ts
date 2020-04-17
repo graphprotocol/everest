@@ -3,7 +3,15 @@
  * effect how the mappings need to work, so they are the exact same for both contracts
  */
 
-import { BigInt, store, ipfs, json, Bytes, JSONValue } from '@graphprotocol/graph-ts'
+import {
+  BigInt,
+  store,
+  ipfs,
+  json,
+  Bytes,
+  JSONValue,
+  Address,
+} from '@graphprotocol/graph-ts'
 
 import {
   NewMember,
@@ -16,6 +24,8 @@ import {
   ChallengeFailed,
   ChallengeSucceeded,
 } from '../types/Everest/Everest'
+
+import { Dai } from '../types/Everest/Dai'
 
 import { Project, Everest, Challenge, Vote, Category, User } from '../types/schema'
 
@@ -35,7 +45,8 @@ export function handleNewMember(event: NewMember): void {
   project.save()
 
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.plus(event.params.fee)
+  let dai = Dai.bind(everest.approvedToken as Address)
+  everest.reserveBankBalance = dai.balanceOf(everest.reserveBankAddress as Address)
   everest.projectCount = everest.projectCount + 1
   everest.save()
 }
@@ -65,12 +76,22 @@ export function handleCharterUpdated(event: CharterUpdated): void {
 
 export function handleWithdrawal(event: Withdrawal): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(event.params.amount)
+  let dai = Dai.bind(everest.approvedToken as Address)
+  everest.reserveBankBalance = dai.balanceOf(everest.reserveBankAddress as Address)
   everest.save()
 }
 
 export function handleEverestDeployed(event: EverestDeployed): void {
-  let everest = new Everest('1')
+  let everest = Everest.load('1')
+  if (everest == null) {
+    everest = new Everest('1')
+    everest.reserveBankBalance = BigInt.fromI32(0)
+    everest.projectCount = 0
+    everest.claimedProjects = 0
+    everest.challengedProjects = 0
+    everest.categoriesCount = 0
+    everest.createdAt = event.block.timestamp.toI32()
+  }
   everest.owner = event.params.owner
   everest.approvedToken = event.params.approvedToken
   everest.votingPeriodDuration = event.params.votingPeriodDuration.toI32()
@@ -78,14 +99,8 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.applicationFee = event.params.applicationFee
   everest.everestAddress = event.address
   everest.reserveBankAddress = event.params.reserveBank
-  everest.reserveBankBalance = BigInt.fromI32(0)
   everest.charter = event.params.charter
   everest.categories = event.params.categories
-  everest.createdAt = event.block.timestamp.toI32()
-  everest.projectCount = 0
-  everest.claimedProjects = 0
-  everest.challengedProjects = 0
-  everest.categoriesCount = 0
   everest.save()
 
   parseCategoryDetails(event.params.categories, event.block.timestamp)
@@ -135,7 +150,8 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   challengerProject.save()
 
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.plus(everest.challengeDeposit)
+  let dai = Dai.bind(everest.approvedToken as Address)
+  everest.reserveBankBalance = dai.balanceOf(everest.reserveBankAddress as Address)
   everest.challengedProjects = everest.challengedProjects + 1
   everest.save()
 
@@ -175,9 +191,8 @@ export function handleSubmitVote(event: SubmitVote): void {
 // Note a failed challenge means the Project gets to stay on the list
 export function handleChallengeFailed(event: ChallengeFailed): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(
-    event.params.resolverReward,
-  )
+  let dai = Dai.bind(everest.approvedToken as Address)
+  everest.reserveBankBalance = dai.balanceOf(everest.reserveBankAddress as Address)
   everest.challengedProjects = everest.challengedProjects - 1
   everest.save()
 
@@ -200,9 +215,8 @@ export function handleChallengeFailed(event: ChallengeFailed): void {
 // Note a successful challenge means the project is removed from the list
 export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   let everest = Everest.load('1')
-  everest.reserveBankBalance = everest.reserveBankBalance.minus(
-    event.params.challengerReward.plus(event.params.resolverReward),
-  )
+  let dai = Dai.bind(everest.approvedToken as Address)
+  everest.reserveBankBalance = dai.balanceOf(everest.reserveBankAddress as Address)
   everest.projectCount = everest.projectCount - 1
   everest.challengedProjects = everest.challengedProjects - 1
   everest.save()
