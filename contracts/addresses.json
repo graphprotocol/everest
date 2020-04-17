@@ -1,13 +1,14 @@
 {
   "ropsten": {
-    "updated-on": "April 16th 2020",
+    "updated-on": "April 17th 2020",
     "everest": "0x275DB6f75F53D8E94c34797D84B1c1896043c6a3",
-    "blockNumber": "7730906",
+    "blockNumber": "7735064",
     "oldEverest": "0xeCe52D2bA232fde90f56AAe6aBBeaCb17ef2b546",
     "oldBlockNumber": "7730906",
     "ethereumDIDRegistry": "0xdca7ef03e98e0dc2b855be647c39abe984fcf21b",
     "dai": "0x82A351cdFB726DafC8624d8bD6B0bc98d34Ffec1",
     "reserveBank": "0x8adc5cf85E60c2958daC73e40b37ECBdb714e0Ad",
+    "oldReserveBank": "0xf03a1dbc897bbe4965789b5966388b175c892696",
     "registry": "0x34A89C8A1DDe9C049F99F3fc2874a9169FAe1403"
   },
   "ganache": {
@@ -25,6 +26,7 @@
     "ethereumDIDRegistry": "0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B",
     "dai": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
     "reserveBank": "0x661A0eD099Bb3Fe9AA0b293d136dBCAA21B04B4C",
+    "oldReserveBank": "",
     "registry": "0x6E4a563e47AFe3c0208CA9440F7fc2E3c65047b7"
   }
 }

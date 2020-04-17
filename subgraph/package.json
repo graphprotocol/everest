@@ -29,9 +29,8 @@
     ]
   },
   "scripts": {
-    "codegen": "graph codegen --output-dir src/types/",
-    "prepare:mainnet": "node ./config/configScript.js && mustache ./config/mainnet.json subgraph.template.yaml > subgraph.yaml && yarn codegen",
-    "prepare:ropsten": "node ./config/configScript.js && mustache ./config/ropsten.json subgraph.template.yaml > subgraph.yaml && yarn codegen",
+    "prepare:mainnet": "node ./config/configScript.js && mustache ./config/mainnet.json subgraph.template.yaml > subgraph.yaml && yarn graph codegen --output-dir src/types/",
+    "prepare:ropsten": "node ./config/configScript.js && mustache ./config/ropsten.json subgraph.template.yaml > subgraph.yaml && yarn graph codegen --output-dir src/types/",
     "build-ropsten": "yarn prepare:ropsten && graph build",
     "build-mainnet": "yarn prepare:mainnet && graph build",
     "deploy-ropsten": "yarn prepare:ropsten && graph deploy graphprotocol/everest-ropsten --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
