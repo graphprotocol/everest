@@ -47,49 +47,49 @@ dataSources:
           handler: handleChallengeFailed
         - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleChallengeSucceeded
-  - kind: ethereum/contract
-    name: Everest_old
-    network: {{network}}
-    source:
-      address: '{{everestAddressOld}}'
-      abi: Everest_old
-      startBlock: {{blockNumberOld}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/mappings/everest.ts
-      entities:
-        - Project
-        - Category
-        - Challenge
-        - Everest
-        - Vote
-        - User
-      abis:
-        - name: Everest_old
-          file: ./old_abis/Everest_old.json
-      eventHandlers:
-        - event: NewMember(indexed address,uint256,uint256)
-          handler: handleNewMember
-        - event: MemberExited(indexed address)
-          handler: handleMemberExited
-        - event: CharterUpdated(indexed bytes32)
-          handler: handleCharterUpdated
-        - event: CategoriesUpdated(indexed bytes32)
-          handler: handleCategoriesUpdated
-        - event: Withdrawal(indexed address,uint256)
-          handler: handleWithdrawal
-        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address)
-          handler: handleEverestDeployed
-        - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
-          handler: handleMemberChallenged
-        - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
-          handler: handleSubmitVote
-        - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256,uint256,uint256)
-          handler: handleChallengeFailed
-        - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256,uint256,uint256)
-          handler: handleChallengeSucceeded
+  # - kind: ethereum/contract
+  #   name: Everest_old
+  #   network: {{network}}
+  #   source:
+  #     address: '{{everestAddressOld}}'
+  #     abi: Everest_old
+  #     startBlock: {{blockNumberOld}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/mappings/everest.ts
+  #     entities:
+  #       - Project
+  #       - Category
+  #       - Challenge
+  #       - Everest
+  #       - Vote
+  #       - User
+  #     abis:
+  #       - name: Everest_old
+  #         file: ./old_abis/Everest_old.json
+  #     eventHandlers:
+  #       - event: NewMember(indexed address,uint256,uint256)
+  #         handler: handleNewMember
+  #       - event: MemberExited(indexed address)
+  #         handler: handleMemberExited
+  #       - event: CharterUpdated(indexed bytes32)
+  #         handler: handleCharterUpdated
+  #       - event: CategoriesUpdated(indexed bytes32)
+  #         handler: handleCategoriesUpdated
+  #       - event: Withdrawal(indexed address,uint256)
+  #         handler: handleWithdrawal
+  #       - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address)
+  #         handler: handleEverestDeployed
+  #       - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
+  #         handler: handleMemberChallenged
+  #       - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8,uint256)
+  #         handler: handleSubmitVote
+  #       - event: ChallengeFailed(indexed address,indexed uint256,uint256,uint256,uint256,uint256)
+  #         handler: handleChallengeFailed
+  #       - event: ChallengeSucceeded(indexed address,indexed uint256,uint256,uint256,uint256,uint256,uint256)
+  #         handler: handleChallengeSucceeded
   - kind: ethereum/contract
     name: EthereumDIDRegistry
     network: {{network}}
