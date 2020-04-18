@@ -70,7 +70,7 @@ dataSources:
         - User
       abis:
         - name: Everest_old
-          file: ../contracts/abis/Everest.json # This is unique situation, old everest and new are the same on ropsten, but diff on mainnet. So, need to fix TODO
+          file: ./old_abis/Everest_old.json # old everest and new are the same on ropsten, but diff on mainnet. This needs to be tracked
         - name: Dai
           file: ../contracts/abis/dai.json
       eventHandlers:
@@ -84,7 +84,7 @@ dataSources:
           handler: handleCategoriesUpdated
         - event: Withdrawal(indexed address,uint256)
           handler: handleWithdrawal
-        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address,uint256)
+        - event: EverestDeployed(address,address,uint256,uint256,uint256,bytes32,bytes32,address,address,address)
           handler: handleEverestDeployed
         - event: MemberChallenged(indexed address,indexed uint256,indexed address,uint256,bytes32)
           handler: handleMemberChallenged
