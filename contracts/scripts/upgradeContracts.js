@@ -71,7 +71,7 @@ if (!network || !gasPrice || !func) {
     Usage: ${path.basename(process.argv[1])}
         --network               <string> - options: ropsten, mainnet
         --gasPrice              <number> - in gwei (i.e. 5 = 5 gwei)
-        --func                  <string> - options: withdraw, upgrade
+        --func                  <string> - options: withdraw, upgrade, deposit
     `)
     process.exit(1)
 }
@@ -259,14 +259,14 @@ const depositReserveBank = async (connectedWallet, newEverest, newReserveBankAdd
 const depositToEverest = async (connectedWallet, dai) => {
     try {
         const daiWithSigner = dai.connect(connectedWallet)
-        let amount = ethers.utils.parseEther('1.0') // Same decimals as DAI
+        let amount = ethers.utils.parseEther('409.0') // Same decimals as DAI
 
         console.log(`Depositing ${amount} DAI from external account to reserve bank`)
-        const sendTx = await daiWithSigner.transfer("0xe2ff211094156705dE94F1a2B9eEA58db2d07e9A", amount)
+        const sendTx = await daiWithSigner.transfer(addresses.mainnet.reserveBank, amount)
         console.log(`    ..pending: https://ropsten.etherscan.io/tx/${sendTx.hash}`)
         const sendRes = await sendTx.wait()
         console.log(`    success: https://ropsten.etherscan.io/tx/${sendRes.transactionHash}`)
-        console.log(`    deposited 1 DAI into the reserveBank`)
+        console.log(`    deposited 409 DAI into the reserveBank`)
     } catch (e) {
         console.log(`    ..failed in withdrawReserveBank: ${e.message}`)
         process.exit(1)
@@ -305,7 +305,8 @@ const main = async () => {
 
         if (func == 'withdraw') {
             await withdrawReserveBank(oldEverestWithSigner, dai, oldReserveBankAddress)
-            // await tempTest(connectedWallet, dai)
+        } else if (func == 'deposit') {
+            await depositToEverest(connectedWallet, dai)
         } else if (func == 'upgrade') {
             const newReserveBank = await deployNewReserveBank(connectedWallet, daiAddress)
             const newEverest = await deployNewEverest(

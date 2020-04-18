@@ -20,13 +20,13 @@
   "mainnet": {
     "updated-on": "April 17th 2020",
     "everest": "0xCe9795B2a8c4dB753ec5867E4475FCCD988Aa8Bd",
-    "blockNumber": "9892945",
+    "blockNumber": "9892944",
     "reserveBank": "0xB28442E644fedca10d69d577cDCCc81eFDeEE9E0",
     "ethereumDIDRegistry": "0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B",
     "dai": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
     "registry": "0x6E4a563e47AFe3c0208CA9440F7fc2E3c65047b7",
     "oldEverest": "0x62c5191b39d993A68Dc9348a4a15454C60cb6C9C",
-    "oldBlockNumber": "9839402",
+    "oldBlockNumber": "9839401",
     "oldReserveBank": "0x661A0eD099Bb3Fe9AA0b293d136dBCAA21B04B4C"
   }
 }
