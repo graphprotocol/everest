@@ -88,8 +88,7 @@ export function handleEverestDeployed(event: EverestDeployed): void {
     everest.reserveBankBalance = BigInt.fromI32(0)
     everest.projectCount = 0
     everest.claimedProjects = 0
-    everest.challengedProjects = 0
-    everest.categoriesCount = 0
+
     everest.createdAt = event.block.timestamp.toI32()
   }
   everest.owner = event.params.owner
@@ -101,6 +100,8 @@ export function handleEverestDeployed(event: EverestDeployed): void {
   everest.reserveBankAddress = event.params.reserveBank
   everest.charter = event.params.charter
   everest.categories = event.params.categories
+  everest.challengedProjects = 0 // need to reset since no challenges are copied over at the moment
+  everest.categoriesCount = 0 // need to reset for new categories getting updated
   everest.save()
 
   parseCategoryDetails(event.params.categories, event.block.timestamp)
@@ -267,6 +268,7 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
     category = new Category(id)
     category.createdAt = timestamp.toI32()
     category.projectCount = 0
+    category.projects = []
   }
   category.name = categoryData.get('name').isNull()
     ? null
@@ -286,7 +288,6 @@ function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
   category.parentCategory = categoryData.get('parent').isNull()
     ? null
     : categoryData.get('parent').toString()
-  category.projects = []
   category.save()
   everest.save()
 }
