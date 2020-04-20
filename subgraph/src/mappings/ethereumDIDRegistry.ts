@@ -153,7 +153,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
               if (projectIsInCategory != -1) {
                 let categoryProjects = category.projects
                 let temp = categoryProjects.splice(projectIsInCategory, 1)
-                category.projects = categoryProjects
+                category.projects = temp
                 category.projectCount = category.projects.length
                 category.save()
               }
