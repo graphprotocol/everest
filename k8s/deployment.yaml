@@ -34,20 +34,20 @@ spec:
                   name: everest-pinata
                   key: secret-api-key
             - name: IPFS_DEPLOY_CLOUDFLARE__ZONE
-            valueFrom:
-              secretKeyRef:
-                name: everest-cloudflare-ipfs
-                key: cloudflare-zone
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare-ipfs
+                  key: cloudflare-zone
             - name: IPFS_DEPLOY_CLOUDFLARE__API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: everest-cloudflare-ipfs
-                key: cloudflare-api-key
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare-ipfs
+                  key: cloudflare-api-key
             - name: IPFS_DEPLOY_CLOUDFLARE__API_EMAIL
-            valueFrom:
-              secretKeyRef:
-                name: everest-cloudflare-ipfs
-                key: cloudflare-api-email
+              valueFrom:
+                secretKeyRef:
+                  name: everest-cloudflare-ipfs
+                  key: cloudflare-api-email
             - name: IPFS_DEPLOY_CLOUDFLARE__RECORD
               valueFrom:
                 secretKeyRef:
