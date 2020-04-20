@@ -1008,14 +1008,16 @@ const Project = ({ location }) => {
                         {project.currentChallenge.votes.length}
                       </p>
                     </Box>
-                    <Box>
-                      <p sx={{ variant: 'text.small' }}>Challenged by</p>
-                      <Link
-                        to={`/project/${project.currentChallenge.owner.id}`}
-                      >
-                        {project.currentChallenge.owner.name}
-                      </Link>
-                    </Box>
+                    {project.currentChallenge.owner && (
+                      <Box>
+                        <p sx={{ variant: 'text.small' }}>Challenged by</p>
+                        <Link
+                          to={`/project/${project.currentChallenge.owner.id}`}
+                        >
+                          {project.currentChallenge.owner.name}
+                        </Link>
+                      </Box>
+                    )}
                   </Grid>
                   {isCompleted && !challengeResolved ? (
                     <Fragment>
