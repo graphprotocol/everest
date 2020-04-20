@@ -186,10 +186,10 @@ type User @entity {
   createdAt: Int!
 }
 
-# type _Schema_
-#   @fulltext(
-#     name: "projectSearch"
-#     language: en
-#     algorithm: rank
-#     include: [{ entity: "Project", fields: [{ name: "name" }, { name: "description" }] }]
-#   )
+type _Schema_
+  @fulltext(
+    name: "projectSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Project", fields: [{ name: "name" }, { name: "description" }] }]
+  )

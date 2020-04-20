@@ -168,9 +168,10 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
                 [categoryID],
                 project.id,
               )
+              // Push each element of the array into the projCategories array
+              // note - projCategories.push(...categoryIDsWithParents) won't work in assembly script
               for (let i = 0; i < categoryIDsWithParents.length; i++) {
                 projCategories.push(categoryIDsWithParents[i])
-                // projCategories.push(...categoryIDsWithParents) won't work in assembly script
               }
             }
             // Now deliberately set to the array

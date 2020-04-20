@@ -1,5 +1,5 @@
-import { ByteArray, BigInt } from '@graphprotocol/graph-ts'
-import { Category, Project, Test } from '../types/schema'
+import { ByteArray, BigInt, Bytes, JSONValue, ipfs, json } from '@graphprotocol/graph-ts'
+import { Category, Everest } from '../types/schema'
 
 // Helper adding 0x12 and 0x20 to make the proper ipfs hash
 // the returned bytes32 is so [0,31]
@@ -65,4 +65,67 @@ export function spliceProjectFromCategories(
       category.save()
     }
   }
+}
+
+export function getVoteChoice(voteChoice: number): string {
+  let value = 'Null'
+  if (voteChoice == 1) {
+    value = 'Yes'
+  } else if (voteChoice == 2) {
+    value = 'No'
+  }
+  return value
+}
+
+export function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
+  let hexHash = addQm(ipfsHash) as Bytes
+  let base58Hash = hexHash.toBase58()
+  let ipfsData = ipfs.cat(base58Hash)
+
+  if (ipfsData != null) {
+    let categories = json.fromBytes(ipfsData as Bytes).toArray()
+    if (categories != null) {
+      for (let i = 0; i < categories.length; i++) {
+        createCategory(categories[i], timestamp)
+      }
+    }
+  }
+}
+
+function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
+  let categoryData = categoryJSON.toObject()
+  let everest = Everest.load('1')
+  everest.categoriesCount = everest.categoriesCount + 1
+
+  let id: string = categoryData.get('id').isNull()
+    ? null
+    : categoryData.get('id').toString()
+
+  let category = Category.load(id)
+  if (category == null) {
+    category = new Category(id)
+    category.createdAt = timestamp.toI32()
+    category.projectCount = 0
+    category.projects = []
+  }
+  category.name = categoryData.get('name').isNull()
+    ? null
+    : categoryData.get('name').toString()
+  category.description = categoryData.get('description').isNull()
+    ? null
+    : categoryData.get('description').toString()
+  category.slug = categoryData.get('slug').isNull()
+    ? null
+    : categoryData.get('slug').toString()
+  category.imageHash = categoryData.get('imageHash').isNull()
+    ? null
+    : categoryData.get('imageHash').toString()
+  category.imageUrl = categoryData.get('imageUrl').isNull()
+    ? null
+    : categoryData.get('imageUrl').toString()
+  category.parentCategory = categoryData.get('parent').isNull()
+    ? null
+    : categoryData.get('parent').toString()
+  category.save()
+  everest.save()
 }

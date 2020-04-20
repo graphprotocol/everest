@@ -3,15 +3,7 @@
  * effect how the mappings need to work, so they are the exact same for both contracts
  */
 
-import {
-  BigInt,
-  store,
-  ipfs,
-  json,
-  Bytes,
-  JSONValue,
-  Address,
-} from '@graphprotocol/graph-ts'
+import { BigInt, store, ipfs, json, Bytes, Address } from '@graphprotocol/graph-ts'
 
 import {
   NewMember,
@@ -27,9 +19,14 @@ import {
 
 import { Dai } from '../types/Everest/Dai'
 
-import { Project, Everest, Challenge, Vote, Category, User } from '../types/schema'
+import { Project, Everest, Challenge, Vote, User } from '../types/schema'
 
-import { addQm, spliceProjectFromCategories } from './helpers'
+import {
+  addQm,
+  spliceProjectFromCategories,
+  getVoteChoice,
+  parseCategoryDetails,
+} from './helpers'
 
 // This runs before any ethereumDIDRegistry events run, and once an applicaiton is made, the
 // identity is then part of Everest
@@ -232,67 +229,4 @@ export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   let project = Project.load(id)
   spliceProjectFromCategories(project.categories, id)
   store.remove('Project', id)
-}
-
-function getVoteChoice(voteChoice: number): string {
-  let value = 'Null'
-  if (voteChoice == 1) {
-    value = 'Yes'
-  } else if (voteChoice == 2) {
-    value = 'No'
-  }
-  return value
-}
-
-function parseCategoryDetails(ipfsHash: Bytes, timestamp: BigInt): void {
-  let hexHash = addQm(ipfsHash) as Bytes
-  let base58Hash = hexHash.toBase58()
-  let ipfsData = ipfs.cat(base58Hash)
-
-  if (ipfsData != null) {
-    let categories = json.fromBytes(ipfsData as Bytes).toArray()
-    if (categories != null) {
-      for (let i = 0; i < categories.length; i++) {
-        createCategory(categories[i], timestamp)
-      }
-    }
-  }
-}
-
-function createCategory(categoryJSON: JSONValue, timestamp: BigInt): void {
-  let categoryData = categoryJSON.toObject()
-  let everest = Everest.load('1')
-  everest.categoriesCount = everest.categoriesCount + 1
-
-  let id: string = categoryData.get('id').isNull()
-    ? null
-    : categoryData.get('id').toString()
-
-  let category = Category.load(id)
-  if (category == null) {
-    category = new Category(id)
-    category.createdAt = timestamp.toI32()
-    category.projectCount = 0
-    category.projects = []
-  }
-  category.name = categoryData.get('name').isNull()
-    ? null
-    : categoryData.get('name').toString()
-  category.description = categoryData.get('description').isNull()
-    ? null
-    : categoryData.get('description').toString()
-  category.slug = categoryData.get('slug').isNull()
-    ? null
-    : categoryData.get('slug').toString()
-  category.imageHash = categoryData.get('imageHash').isNull()
-    ? null
-    : categoryData.get('imageHash').toString()
-  category.imageUrl = categoryData.get('imageUrl').isNull()
-    ? null
-    : categoryData.get('imageUrl').toString()
-  category.parentCategory = categoryData.get('parent').isNull()
-    ? null
-    : categoryData.get('parent').toString()
-  category.save()
-  everest.save()
 }

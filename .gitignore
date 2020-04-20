@@ -77,6 +77,8 @@ ui/now.json
 
 # subgraph
 subgraph/build/
+subgraph/config/mainnet.json
+subgraph/config/ropsten.json
 subgraph/node_modules/
 subgraph/src/types/
 subgraph/.DS_STORE
