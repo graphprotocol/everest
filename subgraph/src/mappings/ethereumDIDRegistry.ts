@@ -6,8 +6,8 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project, User, Category, Everest } from '../types/schema'
-import { addQm, recursiveCategories } from './helpers'
+import { Project, User, Category, Everest, Test } from '../types/schema'
+import { addQm, recursiveCategories, spliceProjectFromCategories } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
 // If a project is null, it was not added to everest and we want to ignore it
@@ -144,23 +144,15 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
             // Load the projects previous categories
             let projCategories = project.categories //as Array<string>
-
-            // Remove the project from its old categories
-            for (let i = 0; i < projCategories.length; i++) {
-              let category = Category.load(projCategories[i])
-              // Filter out the project, and return the array without it
-              let projectIsInCategory = category.projects.indexOf(project.id)
-              if (projectIsInCategory != -1) {
-                let categoryProjects = category.projects
-                let temp = categoryProjects.splice(projectIsInCategory, 1)
-                category.projects = temp
-                category.projectCount = category.projects.length
-                category.save()
-              }
-            }
+            spliceProjectFromCategories(projCategories, project.id)
 
             // We reset the project categories, because the IPFS file will always have a new values
             projCategories = []
+
+            let test = new Test(event.block.timestamp.toString())
+            test.project = project.id
+            // test.categories = []
+            let cats: Array<string> = []
 
             // Start handling the new categories added to the project
             // Push all of the values into the empty array, including parent IDs
@@ -168,7 +160,17 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
               let categoryObj = categoriesArray[i].toObject()
               let categoryID = categoryObj.get('id').toString()
               let category = Category.load(categoryID) as Category
+              cats.push(categoryID)
               if (!category.projects.includes(project.id)) {
+                let test = new Test(
+                  event.block.timestamp
+                    .toString()
+                    .concat('-InsertWorked-')
+                    .concat(project.name),
+                )
+                test.project = project.id
+                test.categories = [categoryID]
+                test.save()
                 let categoryProjects = category.projects
                 categoryProjects.push(project.id)
                 category.projects = categoryProjects
@@ -180,6 +182,7 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
                 category,
                 [categoryID],
                 project.id,
+                event.block.timestamp,
               )
               for (let i = 0; i < categoryIDsWithParents.length; i++) {
                 projCategories.push(categoryIDsWithParents[i])
@@ -189,6 +192,9 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
 
             // Now deliberately set to the array
             project.categories = projCategories
+
+            test.categories = cats as Array<string>
+            test.save()
           }
         }
       }
