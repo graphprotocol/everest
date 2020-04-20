@@ -18,7 +18,6 @@ export function recursiveCategories(
   category: Category,
   categoryIDs: Array<string>,
   projectID: string,
-  timestamp: BigInt,
 ): Array<string> {
   if (category.parentCategory != null) {
     let parentCategory = Category.load(category.parentCategory) as Category
@@ -28,23 +27,12 @@ export function recursiveCategories(
       parentCategory.projects = parentCategoryProjects
       parentCategory.projectCount = parentCategory.projects.length
       parentCategory.save()
-
-      let project = Project.load(projectID)
-      let test = new Test(
-        timestamp
-          .toString()
-          .concat('-InsertWorked-')
-          .concat(parentCategory.name),
-      )
-      test.project = project.id
-      test.categories = [category.parentCategory]
-      test.save()
     }
     // The returned list could have parent categories twice, so we must de-dep
     if (!categoryIDs.includes(category.parentCategory)) {
       categoryIDs.push(category.parentCategory)
     }
-    return recursiveCategories(parentCategory, categoryIDs, projectID, timestamp)
+    return recursiveCategories(parentCategory, categoryIDs, projectID)
   } else {
     return categoryIDs
   }
@@ -70,18 +58,11 @@ export function spliceProjectFromCategories(
     // Filter out the project, and return the array without it
     let projectIsInCategory = category.projects.indexOf(projectID)
     if (projectIsInCategory != -1) {
-      // let test = new Test(event.block.timestamp.toString().concat("-RemoveWorked-").concat(project.name))
-      // test.project = project.id
-      // test.categories = [projCategories[i]]
       let categoryProjects = category.projects
-      // test.beforeSplice = categoryProjects.toString()
       categoryProjects.splice(projectIsInCategory, 1)
       category.projects = categoryProjects
       category.projectCount = category.projects.length
       category.save()
-
-      // test.afterSplice = category.projects.toString()
-      // test.save()
     }
   }
 }
