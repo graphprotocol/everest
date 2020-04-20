@@ -1,8 +1,12 @@
 const fetch = require('isomorphic-fetch')
 
-let env = process.env.CI ? 'development' : process.env.NODE_ENV
+const activeEnv =
+  process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
+
+console.log(`Using environment config: '${activeEnv}'`)
+
 require('dotenv').config({
-  path: `.env.${env}`,
+  path: `.env.${activeEnv}`,
 })
 
 exports.createPages = async ({ page, actions }) => {

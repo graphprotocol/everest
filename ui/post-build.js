@@ -3,6 +3,8 @@ const path = require('path')
 const fetch = require('isomorphic-fetch')
 
 const filename = path.join(__dirname, 'public/project/template', 'index.html')
+const SUBGRAPH_NAME =
+  process.env.SUBGRAPH_NAME || 'graphprotocol/everest-ropsten'
 
 let contents
 if (filename) {
@@ -30,7 +32,7 @@ function replaceTags(text, oldTag, newTag) {
   return text.replace(oldTag, newTag)
 }
 
-fetch('https://api.thegraph.com/subgraphs/name/graphprotocol/everest', {
+fetch(`https://api.thegraph.com/subgraphs/name/${SUBGRAPH_NAME}`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
