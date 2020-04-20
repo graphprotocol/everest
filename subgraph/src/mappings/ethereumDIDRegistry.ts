@@ -6,7 +6,7 @@ import {
   DIDAttributeChanged,
 } from '../types/EthereumDIDRegistry/EthereumDIDRegistry'
 
-import { Project, User, Category, Everest, Test } from '../types/schema'
+import { Project, User, Category, Everest } from '../types/schema'
 import { addQm, recursiveCategories, spliceProjectFromCategories } from './helpers'
 
 // Projects are created in everest.ts::handleApplicationMade
@@ -149,28 +149,13 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
             // We reset the project categories, because the IPFS file will always have a new values
             projCategories = []
 
-            let test = new Test(event.block.timestamp.toString())
-            test.project = project.id
-            // test.categories = []
-            let cats: Array<string> = []
-
             // Start handling the new categories added to the project
             // Push all of the values into the empty array, including parent IDs
             for (let i = 0; i < categoriesArray.length; i++) {
               let categoryObj = categoriesArray[i].toObject()
               let categoryID = categoryObj.get('id').toString()
               let category = Category.load(categoryID) as Category
-              cats.push(categoryID)
               if (!category.projects.includes(project.id)) {
-                let test = new Test(
-                  event.block.timestamp
-                    .toString()
-                    .concat('-InsertWorked-')
-                    .concat(project.name),
-                )
-                test.project = project.id
-                test.categories = [categoryID]
-                test.save()
                 let categoryProjects = category.projects
                 categoryProjects.push(project.id)
                 category.projects = categoryProjects
@@ -182,19 +167,14 @@ export function handleDIDAttributeChanged(event: DIDAttributeChanged): void {
                 category,
                 [categoryID],
                 project.id,
-                event.block.timestamp,
               )
               for (let i = 0; i < categoryIDsWithParents.length; i++) {
                 projCategories.push(categoryIDsWithParents[i])
                 // projCategories.push(...categoryIDsWithParents) won't work in assembly script
               }
             }
-
             // Now deliberately set to the array
             project.categories = projCategories
-
-            test.categories = cats as Array<string>
-            test.save()
           }
         }
       }
