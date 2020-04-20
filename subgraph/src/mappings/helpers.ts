@@ -1,5 +1,5 @@
 import { ByteArray, BigInt } from '@graphprotocol/graph-ts'
-import { Category } from '../types/schema'
+import { Category, Project, Test } from '../types/schema'
 
 // Helper adding 0x12 and 0x20 to make the proper ipfs hash
 // the returned bytes32 is so [0,31]
@@ -18,6 +18,7 @@ export function recursiveCategories(
   category: Category,
   categoryIDs: Array<string>,
   projectID: string,
+  timestamp: BigInt,
 ): Array<string> {
   if (category.parentCategory != null) {
     let parentCategory = Category.load(category.parentCategory) as Category
@@ -25,14 +26,25 @@ export function recursiveCategories(
       let parentCategoryProjects = parentCategory.projects
       parentCategoryProjects.push(projectID)
       parentCategory.projects = parentCategoryProjects
-      parentCategory.projectCount = category.projects.length
+      parentCategory.projectCount = parentCategory.projects.length
       parentCategory.save()
+
+      let project = Project.load(projectID)
+      let test = new Test(
+        timestamp
+          .toString()
+          .concat('-InsertWorked-')
+          .concat(parentCategory.name),
+      )
+      test.project = project.id
+      test.categories = [category.parentCategory]
+      test.save()
     }
     // The returned list could have parent categories twice, so we must de-dep
     if (!categoryIDs.includes(category.parentCategory)) {
       categoryIDs.push(category.parentCategory)
     }
-    return recursiveCategories(parentCategory, categoryIDs, projectID)
+    return recursiveCategories(parentCategory, categoryIDs, projectID, timestamp)
   } else {
     return categoryIDs
   }
@@ -45,5 +57,31 @@ export function getEverestAddress(blockNumber: BigInt): string {
     return '0x275DB6f75F53D8E94c34797D84B1c1896043c6a3'
   } else {
     return '0xeCe52D2bA232fde90f56AAe6aBBeaCb17ef2b546'
+  }
+}
+
+export function spliceProjectFromCategories(
+  projCategories: Array<string>,
+  projectID: string,
+): void {
+  // Remove the project from its old categories
+  for (let i = 0; i < projCategories.length; i++) {
+    let category = Category.load(projCategories[i])
+    // Filter out the project, and return the array without it
+    let projectIsInCategory = category.projects.indexOf(projectID)
+    if (projectIsInCategory != -1) {
+      // let test = new Test(event.block.timestamp.toString().concat("-RemoveWorked-").concat(project.name))
+      // test.project = project.id
+      // test.categories = [projCategories[i]]
+      let categoryProjects = category.projects
+      // test.beforeSplice = categoryProjects.toString()
+      categoryProjects.splice(projectIsInCategory, 1)
+      category.projects = categoryProjects
+      category.projectCount = category.projects.length
+      category.save()
+
+      // test.afterSplice = category.projects.toString()
+      // test.save()
+    }
   }
 }

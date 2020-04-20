@@ -193,3 +193,17 @@ type User @entity {
 #     algorithm: rank
 #     include: [{ entity: "Project", fields: [{ name: "name" }, { name: "description" }] }]
 #   )
+
+"""
+test
+"""
+type Test @entity {
+  "User ethereum address"
+  id: ID!
+  "Projects the user owns"
+  categories: [Category!]
+  "Projects the user is a delegate of"
+  project: Project
+  beforeSplice: String
+  afterSplice: String
+}

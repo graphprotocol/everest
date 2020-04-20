@@ -29,7 +29,7 @@ import { Dai } from '../types/Everest/Dai'
 
 import { Project, Everest, Challenge, Vote, Category, User } from '../types/schema'
 
-import { addQm } from './helpers'
+import { addQm, spliceProjectFromCategories } from './helpers'
 
 // This runs before any ethereumDIDRegistry events run, and once an applicaiton is made, the
 // identity is then part of Everest
@@ -53,6 +53,8 @@ export function handleNewMember(event: NewMember): void {
 
 export function handleMemberExited(event: MemberExited): void {
   let id = event.params.member.toHexString()
+  let project = Project.load(id)
+  spliceProjectFromCategories(project.categories, id)
   store.remove('Project', id)
 
   let everest = Everest.load('1')
@@ -226,7 +228,10 @@ export function handleChallengeSucceeded(event: ChallengeSucceeded): void {
   challenge.resolved = true
   challenge.save()
 
-  store.remove('Project', event.params.member.toHexString())
+  let id = event.params.member.toHexString()
+  let project = Project.load(id)
+  spliceProjectFromCategories(project.categories, id)
+  store.remove('Project', id)
 }
 
 function getVoteChoice(voteChoice: number): string {
