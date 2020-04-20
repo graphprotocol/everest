@@ -9,13 +9,9 @@ function bail(msg) {
   throw new Error(msg)
 }
 
-const TEXTILE_BUCKET =
-  process.env.TEXTILE_BUCKET || bail('TEXTILE_BUCKET is not defined')
-
 const SUBGRAPH_NAME = process.env.SUBGRAPH_NAME || 'graphprotocol/everest'
 
 let state = {
-  assetsUploaded: false,
   lastUpdatedAt: 0,
   queuedProjects: [],
 }
@@ -59,7 +55,7 @@ async function getLatestProjects(updatedAt) {
 }
 
 function getOldContent() {
-  const filename = path.join(__dirname, 'public/project', 'index.html')
+  const filename = path.join(__dirname, 'public/project/template', 'index.html')
   let content
   if (filename) {
     content = fs.readFileSync(filename, 'utf8')
@@ -125,103 +121,21 @@ function generateProjectPage(project, oldContent) {
 }
 
 async function deployProjectPages() {
-  console.log('Deploying project pages from public/ to textile')
-  console.log(
-    state.assetsUploaded
-      ? 'Assets have already been uploaded, just deploying project pages'
-      : "Assets haven't been uploaded yet, deploying everything",
-  )
+  console.log('Deploying project pages from public/ to public IPFS \n')
 
   const { error } = await child_process.spawnSync(
-    'textile',
-
-    // Upload everything if the assets haven't been uploaded yet;
-    // if they have, just upload the project pages
-    !state.assetsUploaded
-      ? ['--debug', 'bucket', 'push', 'public/', `${TEXTILE_BUCKET}/`]
-      : [
-          '--debug',
-          'bucket',
-          'push',
-          'public/project/',
-          `${TEXTILE_BUCKET}/project/`,
-        ],
+    'ipfs-deploy',
+    ['public/', '-p', 'pinata', '-d', 'cloudflare', '-O'],
     {
       input: '\n',
       encoding: 'utf-8',
       stdio: ['pipe', 'inherit', 'inherit'],
     },
   )
+
   if (error) {
     throw error
   }
-
-  // Mark the assets as uploaded
-  state.assetsUploaded = true
-}
-
-async function updateCloudflareDNS() {
-  console.log(`Update Cloudflare DNS`)
-
-  let cloudflareToken =
-    process.env.CLOUDFLARE_TOKEN || bail('CLOUDFLARE_TOKEN not defined')
-  let cloudflareZoneId =
-    process.env.CLOUDFLARE_ZONE_ID || bail('CLOUDFLARE_ZONE_ID not defined')
-  let recordName =
-    process.env.CLOUDFLARE_RECORD_NAME ||
-    bail('CLOUDFLARE_RECORD_NAME not defined')
-  let recordDomain =
-    process.env.CLOUDFLARE_RECORD_DOMAIN ||
-    bail('CLOUDFLARE_RECORD_DOMAIN not defined')
-
-  // Fetch current DNS record information
-  console.log(`Fetch Cloudflare DNS record`)
-  let getResponse = await fetch(
-    `https://api.cloudflare.com/client/v4/zones/${cloudflareZoneId}/dns_records?name=${recordName}.${recordDomain}`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cloudflareToken}`,
-      },
-    },
-  )
-  let dnsData = await getResponse.json()
-  let record = dnsData.result[0]
-  console.log(`Cloudflare DNS record: ${record.id} (${record.content})`)
-
-  // Identify the current bucket info from Textile
-  let { stdout } = await child_process.spawnSync('textile', ['buckets', 'ls'], {
-    encoding: 'utf-8',
-  })
-  let buckets = stdout
-    .split('\n')
-    .map(line => line.split('\t'))
-    .map(entry => entry.map(col => col.trim()))
-  let bucket = buckets.find(bucket => bucket[0] === TEXTILE_BUCKET)
-  let dnsLink = bucket[4]
-
-  console.log(`Textile bucket info: ${JSON.stringify(bucket)}`)
-
-  // Update DNS record to the current IPFS hash
-  console.log(`Set DNS record to ${dnsLink}`)
-  let updateResponse = await fetch(
-    `https://api.cloudflare.com/client/v4/zones/${cloudflareZoneId}/dns_records/${record.id}`,
-    {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${cloudflareToken}`,
-      },
-      body: JSON.stringify({
-        type: 'TXT',
-        name: `${recordName}.${recordDomain}`,
-        content: `dnslink=${dnsLink}`,
-        ttl: 120,
-      }),
-    },
-  )
-  await updateResponse.json()
-  console.log(`DNS record updated successfully`)
 }
 
 async function fetchProjectsLoop() {
@@ -271,21 +185,11 @@ async function buildAndDeployProjectsLoop() {
       )
 
       console.log(`Deployed project pages`)
-
-      // Only update DNS after pushing to the production everest bucket
-      if (TEXTILE_BUCKET === 'everest') {
-        try {
-          setTimeout(updateCloudflareDNS, 120000)
-        } catch (e) {
-          console.error(`Failed to updated Cloudflare DNS: ${e}`)
-        }
-      }
     } catch (e) {
       console.error(`Deploying project pages failed: ${e}`)
     }
     console.log(`${state.queuedProjects.length} projects still in the queue`)
   }
-
   // check if there are queued projects again in 5s
   return setTimeout(buildAndDeployProjectsLoop, 5000)
 }
