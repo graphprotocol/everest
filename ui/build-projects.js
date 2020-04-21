@@ -125,7 +125,7 @@ async function deployProjectPages() {
 
   const { error } = await child_process.spawnSync(
     'ipfs-deploy',
-    ['public/', '-p', 'pinata', '-d', 'cloudflare', '-O'],
+    ['public/', '-p', 'pinata', '-d', 'cloudflare', '-O', '-C'],
     {
       input: '\n',
       encoding: 'utf-8',
