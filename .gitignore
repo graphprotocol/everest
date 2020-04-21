@@ -85,3 +85,6 @@ subgraph/.DS_STORE
 subgraph/data
 subgraph/subgraph.yaml
 ui/.textile/auth.yml
+
+# vscode
+.vscode/

@@ -32,7 +32,9 @@ export const overrides = async (funcName, votesLength) => {
     challenge: 291455,
     changeOwner: 36784,
     memberExit: 30540,
-    resolveChallenge: 62684, // at $170 ETH, and 10gwei, cost is about $0.10. Worth while for $1
+    // resolveChallenge has failed at 62684 likely a large voting can make this bigger. so 2x
+    // at $170 ETH, and 10gwei, cost is about $0.10. Worth while for $1
+    resolveChallenge: 62684 * 2,
     setAttribute: 33792,
     submitVotes: 102957 * votesLength, // for vote and submitVote
   }
