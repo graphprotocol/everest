@@ -18,6 +18,7 @@ const Sorting = ({
   isSortingOpen,
   setIsSortingOpen,
   orderBy,
+  ...props
 }) => {
   const [imagePrefix, setImagePrefix] = useState('')
 
@@ -93,6 +94,7 @@ const Sorting = ({
       menuStyles={{ width: 'inherit', top: '40px', pl: '40px' }}
       sx={{ justifyContent: 'flex-end' }}
       setOpen={setIsSortingOpen}
+      {...props}
     >
       <Box
         sx={{

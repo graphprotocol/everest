@@ -128,14 +128,28 @@ const Projects = ({ location }) => {
               />
             )}
           </Grid>
-          <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-            {projectCount} Projects - <span>{challengesCount} Challenges</span>
-          </Styled.p>
+          <Grid columns={['max-content 1fr', '1fr', '1fr']}>
+            <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+              {projectCount} Projects -{' '}
+              <span>{challengesCount} Challenges</span>
+            </Styled.p>
+            <Sorting
+              selectedOrderBy={selectedOrderBy}
+              setSelectedOrderBy={setSelectedOrderBy}
+              selectedOrderDirection={selectedOrderDirection}
+              setSelectedOrderDirection={setSelectedOrderDirection}
+              isSortingOpen={isSortingOpen}
+              setIsSortingOpen={setIsSortingOpen}
+              orderBy={ORDER_BY}
+              sx={{ display: ['grid', 'none', 'none'] }}
+            />
+          </Grid>
         </Box>
         <Grid
           sx={{
             gridTemplateColumns: '1fr max-content',
             alignItems: 'baseline',
+            mr: [0, 5],
           }}
         >
           <Sorting
@@ -146,6 +160,7 @@ const Projects = ({ location }) => {
             isSortingOpen={isSortingOpen}
             setIsSortingOpen={setIsSortingOpen}
             orderBy={ORDER_BY}
+            sx={{ display: ['none', 'grid', 'grid'] }}
           />
           <Switcher
             selected={selected}

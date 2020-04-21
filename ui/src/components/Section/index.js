@@ -84,10 +84,16 @@ const Section = ({
           )}
         </Box>
         <Grid
-          columns={[2, 3, 4, 6]}
-          gap={[2, 4]}
+          columns={[
+            'repeat(2, max-content)',
+            'repeat(3, max-content)',
+            'repeat(4, max-content)',
+            6,
+          ]}
+          gap={[2, 5]}
           mt={2}
           sx={{
+            justifyContent: 'space-evenly',
             '@media (max-width: 1190px) and (min-width: 1030px)': {
               gridTemplateColumns: 'repeat(5, 1fr)',
             },

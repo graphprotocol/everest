@@ -21,7 +21,7 @@ const DataRow = ({ name, value, href }) => (
       <Styled.p
         sx={{
           color: 'blackFaded',
-          fontSize: ['0.85rem', '1rem ', '1rem'],
+          fontSize: ['0.85rem', '0.85rem ', '1rem'],
           lineHeight: '2.375rem',
         }}
       >

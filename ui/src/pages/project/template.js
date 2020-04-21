@@ -1169,13 +1169,18 @@ const Project = ({ location }) => {
               </Box>
             )}
           {project.image && (
-            <Box
-              sx={{
-                ...imageStyles,
-                backgroundImage: `url(${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.image})`,
-                margin: ['auto', 'auto', 0],
-              }}
-            ></Box>
+            <Box>
+              <img
+                src={`${process.env.GATSBY_IPFS_HTTP_URI}cat?arg=${project.image}`}
+                alt="Project image"
+                sx={{
+                  maxWidth: ['540px', '540px', '612px'],
+                  height: ['280px', '318px'],
+                  width: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </Box>
           )}
         </Box>
       </Grid>
@@ -1190,14 +1195,6 @@ const projectLogoStyle = {
   objectFit: 'contain',
 }
 const userImageStyle = { height: '43px', width: '43px', borderRadius: '50%' }
-const imageStyles = {
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: '50% 50%',
-  backgroundSize: 'cover',
-  width: '100%',
-  maxWidth: ['540px', '540px', '612px'],
-  height: ['280px', '318px'],
-}
 
 const iconStyles = {
   width: '20px',
