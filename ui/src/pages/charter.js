@@ -22,7 +22,7 @@ const Charter = () => {
           width: '100%',
           height: '400px',
           backgroundColor: 'rgba(30,37,44,0.04)',
-          marginTop: [-6, -6, -9],
+          marginTop: [-6, -6, -8],
           position: 'relative',
         }}
       >
