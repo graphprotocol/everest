@@ -26,7 +26,7 @@ RUN apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g yarn lerna
-RUN npm install -g ipfs-deploy
+RUN yarn global add ipfs-deploy
 
 # Copy root files
 WORKDIR /opt/everest
