@@ -110,8 +110,8 @@ export function handleMemberChallenged(event: MemberChallenged): void {
   let id = event.params.challengeID.toString()
   let challenge = new Challenge(id)
   challenge.endTime = event.params.challengeEndTime.toI32()
-  challenge.votesFor = 0 // Don't need to record one here, since a SubmitVote event will be emitted
-  challenge.votesAgainst = 0
+  challenge.keepVotes = 0 // Don't need to record a vote here, since a SubmitVote event will be emitted
+  challenge.removeVotes = 0
   challenge.project = event.params.member.toHexString()
   challenge.owner = event.params.challenger.toHexString()
   challenge.createdAt = event.block.timestamp.toI32()
@@ -180,9 +180,9 @@ export function handleSubmitVote(event: SubmitVote): void {
 
   let challenge = Challenge.load(event.params.challengeID.toString())
   if (voteChoice == 'Yes') {
-    challenge.votesFor = challenge.votesFor + vote.weight
+    challenge.removeVotes = challenge.removeVotes + vote.weight
   } else if (voteChoice == 'No') {
-    challenge.votesAgainst = challenge.votesAgainst + vote.weight
+    challenge.keepVotes = challenge.keepVotes + vote.weight
   }
 
   challenge.save()

@@ -88,10 +88,10 @@ type Challenge @entity {
   description: String
   "End time of the challenge"
   endTime: Int!
-  "Votes for (in weight)"
-  votesFor: Int!
-  "Votes against (in weight)"
-  votesAgainst: Int!
+  "Votes yes to a challenge for removal of the project (in weight)"
+  removeVotes: Int!
+  "Voting no to a challenge for keeping the project  (in weight)"
+  keepVotes: Int!
   "Project that is being challenged"
   project: Project # Can be null since projects get deleted upon challenge
   "Owner of the challenge, which is a project"
