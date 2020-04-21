@@ -198,7 +198,7 @@ const NewProject = () => {
     addProject({
       variables: data,
     })
-    navigate(`/profile?id=${account}`)
+    navigate(`/profile/?id=${account}`)
   }
 
   return (

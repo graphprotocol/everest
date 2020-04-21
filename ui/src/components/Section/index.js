@@ -93,7 +93,10 @@ const Section = ({
           gap={[2, 5]}
           mt={2}
           sx={{
-            justifyContent: 'space-evenly',
+            justifyContent:
+              items.length === 1
+                ? ['center', 'flex-start', 'flex-start']
+                : 'space-evenly',
             '@media (max-width: 1190px) and (min-width: 1030px)': {
               gridTemplateColumns: 'repeat(5, 1fr)',
             },
