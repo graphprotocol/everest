@@ -82,7 +82,12 @@ const overrides = {
 
 // Withdraw the funds from the old Everest, and send them to a non-contract account.
 // The step is done first to ensure funds are safu
-const withdrawReserveBank = async (oldEverestWithSigner, dai, oldReserveBankAddress) => {
+const withdrawReserveBank = async (
+    oldEverestWithSigner,
+    dai,
+    oldReserveBankAddress,
+    networkString
+) => {
     try {
         if (oldEverestWithSigner.signer.signingKey.address != masterAddress) {
             throw new Error('Wrong signing address for withdrawal')
@@ -92,9 +97,9 @@ const withdrawReserveBank = async (oldEverestWithSigner, dai, oldReserveBankAddr
             `Withdrawing ${withdrawAmount.toString()} DAI from the old reserve bank to graph owned user account....`
         )
         const tx = await oldEverestWithSigner.withdraw(masterAddress, withdrawAmount, overrides)
-        console.log(`    ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
+        console.log(`    ..pending: https://${networkString}etherscan.io/tx/${tx.hash}`)
         const res = await tx.wait()
-        console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
+        console.log(`    success: https://${networkString}etherscan.io/tx/${res.transactionHash}`)
         console.log(`    funds are now in the graphs external account`)
     } catch (e) {
         console.log(`    ..failed in withdrawReserveBank: ${e.message}`)
@@ -103,7 +108,7 @@ const withdrawReserveBank = async (oldEverestWithSigner, dai, oldReserveBankAddr
 }
 
 // Deploy a new Reserve Bank, owned by the new OWNER
-const deployNewReserveBank = async (connectedWallet, daiAddress) => {
+const deployNewReserveBank = async (connectedWallet, daiAddress, networkString) => {
     try {
         if (connectedWallet.signingKey.address != masterAddress) {
             throw new Error('Wrong signing address for deploying new reserve bank')
@@ -116,13 +121,13 @@ const deployNewReserveBank = async (connectedWallet, daiAddress) => {
         console.log(`Deploying a new reserve bank....`)
         const pendingReserveBank = await reserveBankContract.deploy(daiAddress)
         console.log(
-            `    ..pending: https://ropsten.etherscan.io/tx/${pendingReserveBank.deployTransaction.hash}`
+            `    ..pending: https://${networkString}etherscan.io/tx/${pendingReserveBank.deployTransaction.hash}`
         )
         console.log('    New reserve bank: ', pendingReserveBank.address)
 
         const reserveBank = await pendingReserveBank.deployed()
         console.log(
-            `    success: https://ropsten.etherscan.io/tx/${reserveBank.deployTransaction.hash}`
+            `    success: https://${networkString}etherscan.io/tx/${reserveBank.deployTransaction.hash}`
         )
         return reserveBank
     } catch (e) {
@@ -137,7 +142,8 @@ const deployNewEverest = async (
     daiAddress,
     registryAddress,
     oldEverest,
-    newReserveBankAddress
+    newReserveBankAddress,
+    networkString
 ) => {
     try {
         if (connectedWallet.signingKey.address != masterAddress) {
@@ -166,13 +172,13 @@ const deployNewEverest = async (
             startingChallengeID
         )
         console.log(
-            `    ..pending: https://ropsten.etherscan.io/tx/${pendingEverest.deployTransaction.hash}`
+            `    ..pending: https://${networkString}etherscan.io/tx/${pendingEverest.deployTransaction.hash}`
         )
         console.log('   New everest: ', pendingEverest.address)
 
         const everest = await pendingEverest.deployed()
         console.log(
-            `    success: https://ropsten.etherscan.io/tx/${everest.deployTransaction.hash}`
+            `    success: https://${networkString}etherscan.io/tx/${everest.deployTransaction.hash}`
         )
         return everest
     } catch (e) {
@@ -184,7 +190,12 @@ const deployNewEverest = async (
 // Change the new Reserve Bank to be owned by the new Everest.
 // IMPORTANT - ensure the newReserveBankAddress is correct. You must transfer only this address
 //             to the new everest. Accidentally passing the old everest would break it
-const changeReserveBankOwner = async (newReserveBank, newReserveBankAddress, newEverestAddress) => {
+const changeReserveBankOwner = async (
+    newReserveBank,
+    newReserveBankAddress,
+    newEverestAddress,
+    networkString
+) => {
     try {
         // Sanity check to make sure we are passing the right object
         if (newReserveBank.address != newReserveBankAddress) {
@@ -192,9 +203,9 @@ const changeReserveBankOwner = async (newReserveBank, newReserveBankAddress, new
         }
         console.log(`Changing the new reserve bank owner to the new everest....`)
         const tx = await newReserveBank.transferOwnership(newEverestAddress, overrides)
-        console.log(`    ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
+        console.log(`    ..pending: https://${networkString}etherscan.io/tx/${tx.hash}`)
         const res = await tx.wait()
-        console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
+        console.log(`    success: https://${networkString}etherscan.io/tx/${res.transactionHash}`)
         console.log(`    new everest now owns new reserve bank`)
     } catch (e) {
         console.log(`    ..failed in changeReserveBankOwner: ${e.message}`)
@@ -203,7 +214,7 @@ const changeReserveBankOwner = async (newReserveBank, newReserveBankAddress, new
 }
 
 // Change the ownership of the Registry to be the new Everest.
-const changeRegistryOwner = async (oldEverest, newEverest) => {
+const changeRegistryOwner = async (oldEverest, newEverest, networkString) => {
     try {
         if (oldEverest.signer.signingKey.address != masterAddress) {
             throw new Error('Wrong signing address for withdrawal')
@@ -222,9 +233,9 @@ const changeRegistryOwner = async (oldEverest, newEverest) => {
 
         console.log(`Changing the registry owner to the new everest....`)
         const tx = await oldEverest.transferOwnershipRegistry(newEverest.address, overrides)
-        console.log(`    ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
+        console.log(`    ..pending: https://${networkString}etherscan.io/tx/${tx.hash}`)
         const res = await tx.wait()
-        console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
+        console.log(`    success: https://${networkString}etherscan.io/tx/${res.transactionHash}`)
         console.log(`    new everest now owns the registry`)
     } catch (e) {
         console.log(`    ..failed in changeRegistryOwner: ${e.message}`)
@@ -233,22 +244,32 @@ const changeRegistryOwner = async (oldEverest, newEverest) => {
 }
 
 // Withdraw the funds from the old Everest, and send them to the new Everest.
-const depositReserveBank = async (connectedWallet, newEverest, newReserveBankAddress, dai) => {
+const depositReserveBank = async (
+    connectedWallet,
+    newEverest,
+    newReserveBankAddress,
+    dai,
+    networkString
+) => {
     try {
         const daiWithSigner = dai.connect(connectedWallet)
         let amount = ethers.utils.parseEther('1.0') // Same decimals as DAI
 
         console.log(`Depositing ${amount} DAI from external account to reserve bank`)
         const sendTx = await daiWithSigner.transfer(newReserveBankAddress, amount)
-        console.log(`    ..pending: https://ropsten.etherscan.io/tx/${sendTx.hash}`)
+        console.log(`    ..pending: https://${networkString}etherscan.io/tx/${sendTx.hash}`)
         const sendRes = await sendTx.wait()
-        console.log(`    success: https://ropsten.etherscan.io/tx/${sendRes.transactionHash}`)
+        console.log(
+            `    success: https://${networkString}etherscan.io/tx/${sendRes.transactionHash}`
+        )
         console.log(`    deposited 1 DAI into the reserveBank`)
 
         const withdrawTx = await newEverest.withdraw(masterAddress, amount, overrides)
-        console.log(`    ..pending: https://ropsten.etherscan.io/tx/${withdrawTx.hash}`)
+        console.log(`    ..pending: https://${networkString}etherscan.io/tx/${withdrawTx.hash}`)
         const withdrawRes = await withdrawTx.wait()
-        console.log(`    success: https://ropsten.etherscan.io/tx/${withdrawRes.transactionHash}`)
+        console.log(
+            `    success: https://${networkString}etherscan.io/tx/${withdrawRes.transactionHash}`
+        )
         console.log(`    withdrew 1 DAI from the reserveBank`)
     } catch (e) {
         console.log(`    ..failed in withdrawReserveBank: ${e.message}`)
@@ -256,16 +277,18 @@ const depositReserveBank = async (connectedWallet, newEverest, newReserveBankAdd
     }
 }
 
-const depositToEverest = async (connectedWallet, dai) => {
+const depositToEverest = async (connectedWallet, dai, networkString) => {
     try {
         const daiWithSigner = dai.connect(connectedWallet)
         let amount = ethers.utils.parseEther('409.0') // Same decimals as DAI
 
         console.log(`Depositing ${amount} DAI from external account to reserve bank`)
         const sendTx = await daiWithSigner.transfer(addresses.mainnet.reserveBank, amount)
-        console.log(`    ..pending: https://ropsten.etherscan.io/tx/${sendTx.hash}`)
+        console.log(`    ..pending: https://${networkString}etherscan.io/tx/${sendTx.hash}`)
         const sendRes = await sendTx.wait()
-        console.log(`    success: https://ropsten.etherscan.io/tx/${sendRes.transactionHash}`)
+        console.log(
+            `    success: https://${networkString}etherscan.io/tx/${sendRes.transactionHash}`
+        )
         console.log(`    deposited 409 DAI into the reserveBank`)
     } catch (e) {
         console.log(`    ..failed in withdrawReserveBank: ${e.message}`)
@@ -302,24 +325,46 @@ const main = async () => {
         const oldEverest = new ethers.Contract(oldEverestAddress, oldEverestABI, provider)
         const oldEverestWithSigner = oldEverest.connect(connectedWallet)
         const dai = new ethers.Contract(daiAddress, daiABI, provider)
+        const networkString = network == 'ropsten' ? 'ropsten.' : ''
 
         if (func == 'withdraw') {
-            await withdrawReserveBank(oldEverestWithSigner, dai, oldReserveBankAddress)
+            await withdrawReserveBank(
+                oldEverestWithSigner,
+                dai,
+                oldReserveBankAddress,
+                networkString
+            )
         } else if (func == 'deposit') {
-            await depositToEverest(connectedWallet, dai)
+            await depositToEverest(connectedWallet, dai, networkString)
         } else if (func == 'upgrade') {
-            const newReserveBank = await deployNewReserveBank(connectedWallet, daiAddress)
+            const newReserveBank = await deployNewReserveBank(
+                connectedWallet,
+                daiAddress,
+                networkString
+            )
             const newEverest = await deployNewEverest(
                 connectedWallet,
                 daiAddress,
                 registryAddress,
                 oldEverest,
-                newReserveBank.address
+                newReserveBank.address,
+                networkString
             )
-            await changeReserveBankOwner(newReserveBank, newReserveBank.address, newEverest.address)
+            await changeReserveBankOwner(
+                newReserveBank,
+                newReserveBank.address,
+                newEverest.address,
+                networkString
+            )
             // Past here, we can't turn back
-            await changeRegistryOwner(oldEverestWithSigner, newEverest)
-            await depositReserveBank(connectedWallet, newEverest, newReserveBank.address, dai)
+            await changeRegistryOwner(oldEverestWithSigner, newEverest, networkString)
+            await depositReserveBank(
+                connectedWallet,
+                newEverest,
+                newReserveBank.address,
+                dai,
+                networkString
+            )
             console.log('DONE! MAKE SURE TO UPDATE THE CONTRACT ADDRESSES IN addresses.json')
         } else {
             console.log(`You did not pass the write func name`)
