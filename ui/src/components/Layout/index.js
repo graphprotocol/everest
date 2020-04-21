@@ -65,7 +65,7 @@ const LayoutTemplate = ({ children, ...props }) => {
         <Box
           sx={{
             ...mStyles,
-            py: [5, 5, 9],
+            py: [5, 5, 8],
             '@keyframes fadein': {
               from: { opacity: 0 },
               to: { opacity: 1 },
