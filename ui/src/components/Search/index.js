@@ -77,7 +77,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
         gap={0}
       >
         <input
-          placeholder="Search projects & categories"
+          placeholder="Search projects"
           sx={{
             border: 'none',
             fontSize: '1rem',

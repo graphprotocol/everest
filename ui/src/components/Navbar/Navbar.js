@@ -129,7 +129,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             gap={5}
           >
             <Link
-              to={`/profile?id=${userAccount}`}
+              to={`/profile/?id=${userAccount}`}
               sx={{
                 lineHeight: 'inherit',
                 '&:hover': { svg: { marginLeft: 0 } },

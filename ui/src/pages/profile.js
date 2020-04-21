@@ -84,7 +84,7 @@ const Profile = ({ location }) => {
         if (walletConnector && walletConnector.name === 'injected') {
           metamaskAccountChange(accounts => {
             if (accounts && accounts.length > 0) {
-              navigate(`/profile?id=${accounts[0]}`)
+              navigate(`/profile/?id=${accounts[0]}`)
             } else {
               navigate('/')
             }
@@ -172,30 +172,42 @@ const Profile = ({ location }) => {
           <Filters
             items={[
               {
-                text: 'All projects',
+                text: isMobile ? 'All' : 'All projects',
                 handleSelect: () => {
                   setSelectedFilter(FILTERS.all)
                 },
               },
               {
-                text: 'Challenged projects',
+                text: isMobile ? 'Challenged' : 'Challenged projects',
                 handleSelect: () => {
                   setSelectedFilter(FILTERS.challenged)
                 },
               },
             ]}
             menuStyles={{ left: 0, top: '60px' }}
-            width="280px"
+            width={['initial', '280px', '280px']}
             setIsFilterOpen={setIsFilterOpen}
             isFilterOpen={isFilterOpen}
             selectedFilter={selectedFilter}
           />
         </Grid>
-        <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
-          {user && user.projects && (
-            <span>{user.projects.length} Projects</span>
-          )}
-        </Styled.p>
+        <Grid columns={['max-content 1fr', '1fr', '1fr']}>
+          <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
+            {user && user.projects && (
+              <span>{user.projects.length} Projects</span>
+            )}
+          </Styled.p>
+          <Sorting
+            selectedOrderBy={selectedOrderBy}
+            setSelectedOrderBy={setSelectedOrderBy}
+            selectedOrderDirection={selectedOrderDirection}
+            setSelectedOrderDirection={setSelectedOrderDirection}
+            isSortingOpen={isSortingOpen}
+            setIsSortingOpen={setIsSortingOpen}
+            orderBy={ORDER_BY}
+            sx={{ display: ['grid', 'none', 'none'] }}
+          />
+        </Grid>
       </Box>
     )
   }
@@ -394,6 +406,7 @@ const Profile = ({ location }) => {
                 isSortingOpen={isSortingOpen}
                 setIsSortingOpen={setIsSortingOpen}
                 orderBy={ORDER_BY}
+                sx={{ display: ['none', 'grid', 'grid'] }}
               />
               <Switcher
                 selected={selectedProjectsView}
