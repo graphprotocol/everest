@@ -42,19 +42,21 @@ const overrides = {
     gasPrice: ethers.utils.parseUnits(gasPrice, 'gwei')
 }
 
-const updateCategories = async everest => {
+const updateCategories = async (everest, network) => {
+    network = network == 'ropsten'? 'ropsten.' : ''
     const tx = await everest.updateCategories(categories, overrides)
-    console.log(`  ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
+    console.log(`  ..pending: https://${network}etherscan.io/tx/${tx.hash}`)
     const res = await tx.wait()
-    console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
+    console.log(`    success: https://${network}etherscan.io/tx/${res.transactionHash}`)
 }
 
-const withdrawReserveBank = async everest => {
+const withdrawReserveBank = async (everest, network) => {
+    network = network == 'ropsten'? 'ropsten' : ''
     withdrawAmount = ethers.utils.parseUnits(withdrawAmount, 'ether')
     const tx = await everest.withdraw(wallet.signingKey.address, withdrawAmount, overrides)
-    console.log(`  ..pending: https://ropsten.etherscan.io/tx/${tx.hash}`)
+    console.log(`  ..pending: https://${network}etherscan.io/tx/${tx.hash}`)
     const res = await tx.wait()
-    console.log(`    success: https://ropsten.etherscan.io/tx/${res.transactionHash}`)
+    console.log(`    success: https://${network}etherscan.io/tx/${res.transactionHash}`)
 }
 
 const main = async () => {
@@ -79,10 +81,10 @@ const main = async () => {
 
         if (func == 'updateCategories') {
             console.log(`Updating categories to ${categories} on network ${network} ...`)
-            updateCategories(everestWithSigner)
+            updateCategories(everestWithSigner, network)
         } else if (func == 'withdrawReserveBank') {
             console.log(`withdrawing ${withdrawAmount} DAI on network ${network} ...`)
-            withdrawReserveBank(everestWithSigner)
+            withdrawReserveBank(everestWithSigner, network)
         } else {
             console.error(`ERROR: Please provide the correct function name`)
             process.exit(1)

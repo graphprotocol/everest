@@ -66,7 +66,7 @@
         "id": "0x349da07f499d84ce04ab1bf4ae9052a1118837fd",
         "imageHash": "QmaxiEEwXwN494JGvLP3YR6dT4yufXWVWLkdbh5QRUSKUq",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmaxiEEwXwN494JGvLP3YR6dT4yufXWVWLkdbh5QRUSKUq",
-        "name": "Marketing",
+        "name": "Marketing & Advertising",
         "slug": "business-services-marketing-and-advertising",
         "description": "Services for promoting the reputation and general knowledge of an organization, community or product.",
         "parent": "0x9d078dab4fdb9f2be33cb7f0c693b12cc131b338"
@@ -230,7 +230,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmWub9QzdmCQYrWn2fKx4DGfK2uj1AUe65WNzRvT3CJb1X",
         "name": "Wallets",
         "slug": "defi-wallets",
-        "description": "Account providers for holding, transfering or exchanging cryptocurrencies via a mobile or web account or hardware devices.",
+        "description": "Account providers for holding, transferring or exchanging cryptocurrencies via a mobile or web account or hardware devices.",
         "parent": "0x95ea932f8950f11893e7ad77cc43a5c5e05296f2"
     },
     {
@@ -365,7 +365,7 @@
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=Qmbr5gZbtPpMJw8LjuhYGYJLRa76cycPtvPWRTFcjsT6vS",
         "name": "Voting Tools",
         "slug": "governance-voting-tools",
-        "description": "Voting tools that support decentralized governance, including signalling tools, coinvotes, evoting, and other voting mechanisms.",
+        "description": "Voting tools that support decentralized governance, including signalling tools, coin votes, e-voting, and other voting mechanisms.",
         "parent": "0x46aff9a161267c2c01f5ce1b6e3b717a77f21480"
     },
     {
@@ -507,7 +507,7 @@
         "id": "0x00b02151c6c591309ba75beca3975f144774219e",
         "imageHash": "QmREHNxCycZzrYE84KqbsSbjpEQBCP79qJHUGgniBGvRPN",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmREHNxCycZzrYE84KqbsSbjpEQBCP79qJHUGgniBGvRPN",
-        "name": "Browser",
+        "name": "Browsers",
         "slug": "science-and-tech-software-browser",
         "description": "Web and mobile browsers providing access to Web3.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
@@ -552,7 +552,7 @@
         "id": "0x2c67e43388783af95cdca4883311577a20de7093",
         "imageHash": "QmTPKhBtbtL9YyYeixJP548KAH3wphukMESgfNDdogefYj",
         "imageUrl": "https://api.thegraph.com/ipfs/api/v0/cat?arg=QmTPKhBtbtL9YyYeixJP548KAH3wphukMESgfNDdogefYj",
-        "name": "Orcales",
+        "name": "Oracles",
         "slug": "science-and-tech-software-oracles",
         "description": "Oracle providers for decentralized applications and blockchain protocols.",
         "parent": "0x7754746f6e72ae79375b982f26093d5b926fe8f0"
