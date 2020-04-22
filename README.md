@@ -124,7 +124,7 @@ You can also deploy the Everest subgraph from the root folder. Currently it is c
 to only work with the subgraph named `graphprotocol/everest`. If you are not a member
 of graphprotocol on github, you will not be able to deploy the subgraph. Make sure to change the code to deploy to a subgraph under your own github name.
 
-`yarn deploy-ropsten` and `yarn deploy-mainnet` do the following:
+`yarn deploy-subgraph-ropsten` and `yarn deploy-subgraph-mainnet` do the following:
 
 - Building the `./contracts` sub repository
 - Building the `./subgraph` sub repository
