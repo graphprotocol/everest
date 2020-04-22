@@ -242,7 +242,7 @@ const MultiSelect = ({
           </Box>
         )}
         {type === 'categories' &&
-          selected.map((item, index) => (
+          selectedItems.map((item, index) => (
             <Row
               key={index}
               item={{
@@ -250,8 +250,8 @@ const MultiSelect = ({
                 image: item.image || item.imageUrl,
               }}
               parent={item.parent}
-              selected={selected}
-              setSelected={setSelected}
+              selected={selectedItems}
+              setSelected={setValue}
               sx={{ background: 'white', mx: 0, my: 3 }}
               close={true}
               multiselect={true}
