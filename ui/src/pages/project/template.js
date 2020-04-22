@@ -192,8 +192,8 @@ const Project = ({ location }) => {
           },
           description: challenge.description,
           resolved: false,
-          votesFor: 0,
-          votesAgainst: 0,
+          keepVotes: 0,
+          removeVotes: 0,
           votes: [],
         },
         owner: {
@@ -1023,8 +1023,8 @@ const Project = ({ location }) => {
                     <Fragment>
                       <Styled.h6>
                         This challenge has ended and the project will be{' '}
-                        {project.currentChallenge.votesFor >
-                          project.currentChallenge.votesAgainst &&
+                        {project.currentChallenge.removeVotes >
+                          project.currentChallenge.keepVotes &&
                         project.currentChallenge.votes.length > 1 ? (
                           <span>removed</span>
                         ) : (

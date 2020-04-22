@@ -98,9 +98,7 @@ type Challenge @entity {
   owner: Project # Can be null since projects get deleted upon challenge
   "List of all created votes"
   votes: [Vote!] @derivedFrom(field: "challenge")
-  # This is when the challenge is resolved, which is different from end time. When we are past
-  # the end time, we can implicitly calculate votesFor and votesAgainst, and determine if it
-  # passed or failed. Resolved means resolveChallenge() was called in Everest.
+  # This is when the challenge is resolved, which is different from end time
   "True if the challenge has been resolved"
   resolved: Boolean!
   "Time challenge was created on the blockchain"
