@@ -38,6 +38,8 @@ contract Everest is Ownable {
     bytes32 public charter;
     // IPFS hash for off chain storage of the Everest Categories
     bytes32 public categories;
+    // Challenge freeze that can prevent new challenges from being made
+    bool public challengesFrozen;
 
     // Approved token contract reference (i.e. DAI)
     Dai public approvedToken;
@@ -71,6 +73,7 @@ contract Everest is Ownable {
     event VotingDurationUpdated(uint256 indexed duration);
     event ChallengeDepositUpdated(uint256 indexed deposit);
     event ApplicationFeeUpdated(uint256 indexed fee);
+    event ChallengesFrozen(bool isFrozen);
 
 
     event EverestDeployed(
@@ -208,6 +211,7 @@ contract Everest is Ownable {
         require(_votingPeriodDuration > 0, "constructor - _votingPeriodDuration cannot be 0");
         require(_challengeDeposit > 0, "constructor - _challengeDeposit cannot be 0");
         require(_applicationFee > 0, "constructor - _applicationFee cannot be 0");
+        require(_startingChallengeID != 0, "constructor - _startingChallengeID cannot be 0");
 
         approvedToken = Dai(_approvedToken);
         votingPeriodDuration = _votingPeriodDuration;
@@ -419,6 +423,7 @@ contract Everest is Ownable {
             _challenger != _challengee,
             "challenge - Can't challenge self"
         );
+        require(challengesFrozen != true, "challenge - Cannot create challenge, frozen");
         uint256 currentChallengeID = registry.getChallengeID(_challengee);
         require(currentChallengeID == 0, "challenge - Existing challenge must be resolved first");
 
@@ -688,6 +693,15 @@ contract Everest is Ownable {
     function updateApplicationFee(uint256 _newFee) external onlyOwner {
         applicationFee = _newFee;
         emit ApplicationFeeUpdated(applicationFee);
+    }
+
+    /**
+    @dev                Freezes the ability to create challenges
+    @param _isFrozen    Pass in true if challenges are to be frozen
+    */
+    function updateChallengeFreeze(bool _isFrozen) external onlyOwner {
+        challengesFrozen = _isFrozen;
+        emit ChallengesFrozen(challengesFrozen);
     }
 
     // -----------------
