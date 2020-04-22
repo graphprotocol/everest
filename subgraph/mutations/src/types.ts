@@ -91,8 +91,8 @@ interface Challenge {
   id: string
   description: string
   endTime: number
-  votesFor: number
-  votesAgainst: number
+  removeVotes: number
+  keepVotes: number
   project: Project
   owner: string
   votes: Vote[]

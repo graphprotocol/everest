@@ -23,8 +23,8 @@ export const PROJECT_QUERY = gql`
         }
         description
         resolved
-        votesFor
-        votesAgainst
+        keepVotes
+        removeVotes
         votes {
           id
         }
