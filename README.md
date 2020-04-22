@@ -1,6 +1,6 @@
 # Everest
 
-[Everest](everest.link) is a universally shared registry of crypto projects, built on [Ethereum](ethereum.org), [IPFS](ipfs.io) and [The Graph](thegraph.com). The Everest registry is a community-curated registry composed of projects and categories that make up the Web3 ecosystem. 
+[Everest](everest.link) is a universally shared registry of crypto projects, built on [Ethereum](ethereum.org), [IPFS](ipfs.io), [The Graph](thegraph.com) and [3Box](3box.io). The Everest registry is a community-curated registry composed of projects and categories that make up the Web3 ecosystem. 
 
 Everest’s mission is to catalyze the shift to Web3 by organizing all the projects that are working toward this common goal. Decentralization will create transparency and opportunity, enabling anyone in the world to contribute their talents to a global economy.
 
