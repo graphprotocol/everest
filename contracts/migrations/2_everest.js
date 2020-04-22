@@ -124,13 +124,13 @@ module.exports = async (deployer, network) => {
     // The ownership of Registry and ReserveBank must be transferred to Everest
     console.log('Transferring ownership of registry to everest....')
     const ownershipRegistryTx = await registry.transferOwnership(everest.address, {
-        gasPrice: ethers.utils.parseUnits('15', 'gwei')
+        gasPrice: ethers.utils.parseUnits('11', 'gwei')
     })
     console.log(`Transfer registry successful. Hash: ${ownershipRegistryTx.tx}`)
 
     console.log('Transferring ownership of reserve bank to everest....')
     const ownershipReserveBankTx = await reserveBank.transferOwnership(everest.address, {
-        gasPrice: ethers.utils.parseUnits('15', 'gwei')
+        gasPrice: ethers.utils.parseUnits('11', 'gwei')
     })
     console.log(`Transfer reserve bank successful. Hash: ${ownershipReserveBankTx.tx}`)
 

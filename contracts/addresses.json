@@ -15,12 +15,12 @@
       "reserveBank": "0x4C65804f4b00a50e0750293973D7EAf32602587E"
   },
   "mainnet": {
-    "updated-on": "April 17th 2020",
+    "updated-on": "April 22nd 2020",
     "ethereumDIDRegistry": "0xdCa7EF03e98e0DC2B855bE647C39ABe984fcF21B",
     "dai": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-    "blockNumber": "9892944",
-    "everest": "0xCe9795B2a8c4dB753ec5867E4475FCCD988Aa8Bd",
-    "reserveBank": "0xB28442E644fedca10d69d577cDCCc81eFDeEE9E0",
-    "registry": "0x6E4a563e47AFe3c0208CA9440F7fc2E3c65047b7"
+    "blockNumber": "9923744",
+    "everest": "0x445B774C012c5418d6D885f6cbfEB049a7FE6558",
+    "reserveBank": "0x26E4AeB870F7E9cd8A0877F8Ab672FF8113720A7",
+    "registry": "0x5bAba73ba37d58AB7E17fff1FfFaB5719F9C32A0"
   }
 }

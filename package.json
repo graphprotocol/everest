@@ -24,8 +24,8 @@
     "start:ui":                 "lerna exec --scope everest-ui -- yarn start",
     "build-ropsten":            "yarn build:contracts && yarn build:subgraph-ropsten && yarn build:mutations",
     "build-mainnet":            "yarn build:contracts && yarn build:subgraph-mainnet && yarn build:mutations",
-    "deploy-ropsten":           "yarn build-ropsten && yarn deploy:subgraph-ropsten",
-    "deploy-mainnet":           "yarn build-mainnet && yarn deploy:subgraph-mainnet",
+    "deploy-subgraph-ropsten":           "yarn build-ropsten && yarn deploy:subgraph-ropsten",
+    "deploy-subgraph-mainnet":           "yarn build-mainnet && yarn deploy:subgraph-mainnet",
     "deploy-testing":           "yarn build-ropsten && yarn deploy:subgraph-testing",
     "start:dev-ropsten":        "yarn build:mutations && GATSBY_ACTIVE_ENV=development yarn start:ui",
     "start:dev-mainnet":        "yarn build:mutations && GATSBY_ACTIVE_ENV=production yarn start:ui"
