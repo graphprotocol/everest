@@ -6,8 +6,13 @@ vote they can be removed from the list.
 Everest is used specifically to curate a list of crypto projects. However, it is encouraged that
 this code is forked, and used to curate any list. 
 
+## Instructions
+These instructions are specific to just deploying contracts. The root folder has more instructions
+for deploying the whole dapp.
+
 ## Building Solidity and ABIs
-The `package.json` has a command `yarn build` that will run `truffle compile`, run a script to 
+Run `yarn build`
+The `package.json` has a command `yarn build` that will run `truffle build`, run a script to 
 extract the abis, and run a script to create flattened contracts.
 
 ## Linting
@@ -28,9 +33,7 @@ to help.
 ## Current Contract Addresses
 See `addresses.json`
 
-## Deploying to Ropsten
-1. Deploy new contracts to Ropsten with `truffle deploy --network ropsten`. Truffle stores the 
-   addresses for networks, so if you are trying to re-deploy you may have to 
-   run `truffle deploy --reset --network ropsten`
+## Deploying
+1. Deploy new contracts to Ropsten with `yarn deploy-ropsten`. Mainnet is `yarn deploy-mainnet`.
 2. Get the new contract addresses from the deployment. They are logged in the terminal
    output from deploying. Put these contract addresses into `addresses.json`
