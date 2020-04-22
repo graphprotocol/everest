@@ -1073,7 +1073,7 @@ const Project = ({ location }) => {
                         }}
                       >
                         <MultiSelect
-                          setValue={projects => handleVoting(projects, '1')}
+                          setValue={projects => handleVoting(projects, '2')}
                           title="Vote on behalf of"
                           subtitle="You can select multiple projects"
                           items={userProjects}
@@ -1105,7 +1105,7 @@ const Project = ({ location }) => {
                           />
                         </MultiSelect>
                         <MultiSelect
-                          setValue={projects => handleVoting(projects, '2')}
+                          setValue={projects => handleVoting(projects, '1')}
                           title="Vote on behalf of"
                           subtitle="You can select multiple projects"
                           items={userProjects}
