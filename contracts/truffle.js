@@ -37,7 +37,7 @@ module.exports = {
             // one need one address in HD wallet
             provider: () => new HDWalletProvider(mnemonic, mainnetProvider, 0, 1),
             network_id: 1,
-            gasPrice: ethers.utils.parseUnits('8', 'gwei')
+            gasPrice: ethers.utils.parseUnits('15', 'gwei')
         }
     },
     compilers: {
