@@ -223,6 +223,20 @@
     {
       "constant": true,
       "inputs": [],
+      "name": "challengesFrozen",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
       "name": "categories",
       "outputs": [
         {
@@ -390,6 +404,18 @@
         }
       ],
       "name": "ApplicationFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "isFrozen",
+          "type": "bool"
+        }
+      ],
+      "name": "ChallengesFrozen",
       "type": "event"
     },
     {
@@ -913,6 +939,20 @@
         }
       ],
       "name": "updateApplicationFee",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_isFrozen",
+          "type": "bool"
+        }
+      ],
+      "name": "updateChallengeFreeze",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",

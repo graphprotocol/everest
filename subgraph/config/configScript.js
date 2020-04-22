@@ -20,9 +20,7 @@ readAndWriteFile(
         {
           network: 'mainnet',
           everestAddress: addresses.mainnet.everest,
-          everestAddressOld: addresses.mainnet.oldEverest,
           blockNumber: addresses.mainnet.blockNumber,
-          blockNumberOld: addresses.mainnet.oldBlockNumber,
         },
         null,
         2,
@@ -34,9 +32,7 @@ readAndWriteFile(
         {
           network: 'ropsten',
           everestAddress: addresses.ropsten.everest,
-          everestAddressOld: addresses.ropsten.oldEverest,
           blockNumber: addresses.ropsten.blockNumber,
-          blockNumberOld: addresses.ropsten.oldBlockNumber,
         },
         null,
         2,
