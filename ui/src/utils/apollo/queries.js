@@ -57,6 +57,11 @@ export const USER_PROJECTS_QUERY = gql`
         name
         avatar
       }
+      delegatorProjects {
+        id
+        name
+        avatar
+      }
     }
   }
 `
@@ -316,6 +321,7 @@ export const PROFILE_QUERY = gql`
         name
         description
         createdAt
+        avatar
         currentChallenge {
           id
         }

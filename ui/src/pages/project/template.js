@@ -87,6 +87,8 @@ const Project = ({ location }) => {
   })
 
   let userProjects = userData && userData.user ? userData.user.projects : []
+  let userDelegatorProjects =
+    userData && userData.user ? userData.user.delegatorProjects : []
 
   const [removeProject] = useMutation(REMOVE_PROJECT, {
     client: client,
@@ -587,7 +589,11 @@ const Project = ({ location }) => {
         },
       ])
     }
-  } else if (userProjects.length > 0 && project && !project.currentChallenge) {
+  } else if (
+    project &&
+    !project.currentChallenge &&
+    (userProjects.length > 0 || userDelegatorProjects.length > 0)
+  ) {
     items = items.concat([
       {
         text: 'Challenge',
@@ -855,7 +861,7 @@ const Project = ({ location }) => {
           icon="challenge.png"
           handleClick={handleChallenge}
           showFilters={true}
-          items={userProjects}
+          items={userProjects.concat(userDelegatorProjects)}
           sx={{ mt: ['220px', '140px', '140px'] }}
         />
       )}

@@ -64,9 +64,9 @@ const Select = ({ items, variant, setValue }) => {
           >
             <Box sx={{ position: 'relative' }}>
               {items &&
-                items.map(item => (
+                items.map((item, index) => (
                   <Row
-                    key={item.name}
+                    key={index}
                     item={item}
                     parent={item.parent}
                     selected={selected}
