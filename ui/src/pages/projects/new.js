@@ -17,10 +17,12 @@ import { PROFILE_QUERY } from '../../utils/apollo/queries'
 import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
 import ProjectForm from '../../components/ProjectForm'
+import Loading from '../../components/Loading'
 
 const NewProject = () => {
   const { account } = useAccount()
   const [isDisabled, setIsDisabled] = useState(true)
+  const [pendingTransaction, setPendingTransaction] = useState(false)
   const [daiAmount, setDaiAmount] = useState(null)
   const [project, setProject] = useState({
     name: '',
@@ -66,6 +68,96 @@ const NewProject = () => {
     },
   })
 
+  let mutationOptions
+  if (profile && profile.user === null) {
+    mutationOptions = {
+      client: client,
+      onError: error => {
+        console.error('Error adding a project: ', error)
+        setPendingTransaction(false)
+      },
+      onCompleted: data => {
+        setPendingTransaction(false)
+        if (data && data.addProject && data.addProject.id) {
+          navigate(`/project/${data.addProject.id}`)
+        } else {
+          navigate(`/profile?id=${account}`)
+        }
+      },
+    }
+  } else {
+    mutationOptions = {
+      client: client,
+      refetchQueries: [
+        {
+          query: PROFILE_QUERY,
+          variables: {
+            id: account,
+            orderBy: ORDER_BY['Name'],
+            orderDirection: ORDER_DIRECTION.ASC,
+          },
+        },
+      ],
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addProject: {
+          id: '123',
+          name: project.name,
+          description: project.description,
+          avatar: project.avatar ? project.avatar : defaultImage,
+          image: project.image,
+          website: project.website,
+          github: project.github,
+          twitter: project.twitter,
+          isRepresentative: project.isRepresentative,
+          createdAt: moment().unix(),
+          currentChallenge: null,
+          categories: project.categories,
+          delegates: [],
+          __typename: 'Project',
+        },
+      },
+      onError: error => {
+        console.error('Error adding a project: ', error)
+      },
+      update: (proxy, result) => {
+        const profileData = cloneDeep(
+          proxy.readQuery({
+            query: PROFILE_QUERY,
+            variables: {
+              id: account,
+              orderBy: ORDER_BY['Name'],
+              orderDirection: ORDER_DIRECTION.ASC,
+            },
+          }),
+        )
+
+        proxy.writeQuery({
+          query: PROFILE_QUERY,
+          variables: {
+            id: account,
+            orderBy: ORDER_BY['Name'],
+            orderDirection: ORDER_DIRECTION.ASC,
+          },
+          data: {
+            user: {
+              id: account,
+              __typename: 'User',
+              delegatorProjects:
+                profileData && profileData.user
+                  ? profileData.user.delegatorProjects
+                  : [],
+              projects:
+                profileData && profileData.user
+                  ? [...profileData.user.projects, result.data.addProject]
+                  : [result.data.addProject],
+            },
+          },
+        })
+      },
+    }
+  }
+
   const [daiBalance] = useMutation(DAI_BALANCE, {
     client: client,
     onCompleted: data => {
@@ -78,74 +170,7 @@ const NewProject = () => {
     },
   })
 
-  const [addProject] = useMutation(ADD_PROJECT, {
-    client: client,
-    refetchQueries: [
-      {
-        query: PROFILE_QUERY,
-        variables: {
-          id: account,
-          orderBy: ORDER_BY['Name'],
-          orderDirection: ORDER_DIRECTION.ASC,
-        },
-      },
-    ],
-    optimisticResponse: {
-      __typename: 'Mutation',
-      addProject: {
-        id: '123',
-        name: project.name,
-        description: project.description,
-        avatar: project.avatar ? project.avatar : defaultImage,
-        image: project.image,
-        website: project.website,
-        github: project.github,
-        twitter: project.twitter,
-        isRepresentative: project.isRepresentative,
-        createdAt: moment().unix(),
-        currentChallenge: null,
-        categories: project.categories,
-        delegates: [],
-        __typename: 'Project',
-      },
-    },
-    onError: error => {
-      console.error('Error adding a project: ', error)
-    },
-    update: (proxy, result) => {
-      const profileData = cloneDeep(
-        proxy.readQuery({
-          query: PROFILE_QUERY,
-          variables: {
-            id: account,
-            orderBy: ORDER_BY['Name'],
-            orderDirection: ORDER_DIRECTION.ASC,
-          },
-        }),
-      )
-
-      proxy.writeQuery({
-        query: PROFILE_QUERY,
-        variables: {
-          id: account,
-          orderBy: ORDER_BY['Name'],
-          orderDirection: ORDER_DIRECTION.ASC,
-        },
-        data: {
-          user: {
-            id: account,
-            __typename: 'User',
-            delegatorProjects:
-              profile && profile.user && profile.user.delegatorProjects,
-            projects:
-              profileData && profileData.user
-                ? [...profileData.user.projects, result.data.addProject]
-                : [result.data.addProject],
-          },
-        },
-      })
-    },
-  })
+  const [addProject] = useMutation(ADD_PROJECT, mutationOptions)
 
   useEffect(() => {
     if (account) {
@@ -198,7 +223,11 @@ const NewProject = () => {
     addProject({
       variables: data,
     })
-    navigate(`/profile/?id=${account}`)
+    if (profile && profile.user) {
+      navigate(`/profile/?id=${account}`)
+    } else {
+      setPendingTransaction(true)
+    }
   }
 
   return (
@@ -225,7 +254,7 @@ const NewProject = () => {
         <p sx={{ variant: 'text.field', mt: 5 }}>Listing fee</p>
         <p sx={{ variant: 'text.huge', color: 'white' }}>10 DAI</p>
       </Box>
-      <Box>
+      <Box sx={{ position: 'relative' }}>
         {daiAmount && parseFloat(daiAmount) < 10 && (
           <Styled.h6
             sx={{
@@ -241,6 +270,24 @@ const NewProject = () => {
             DAI to your Wallet.
           </Styled.h6>
         )}
+        {pendingTransaction && (
+          <Box
+            sx={{
+              position: 'fixed',
+              width: '420px',
+              height: '80px',
+              textAlign: 'center',
+              margin: '0 auto',
+              top: '50%',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <Styled.h6 sx={{ color: 'white', fontWeight: 'heading' }}>
+              Waiting for transaction{' '}
+            </Styled.h6>
+            <Loading variant="white" />
+          </Box>
+        )}
         <ProjectForm
           project={project}
           isDisabled={isDisabled}
@@ -250,6 +297,9 @@ const NewProject = () => {
           buttonText="Add project"
           setImage={setImage}
           categories={categories ? categories.categories : []}
+          sx={
+            pendingTransaction ? { opacity: 0.32, pointerEvents: 'none' } : {}
+          }
         />
       </Box>
     </Grid>

@@ -116,6 +116,8 @@ const Profile = ({ location }) => {
               currentChallenge_not: null,
             },
           },
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   })
 
   const { data: userChallenges } = useQuery(USER_CHALLENGES_QUERY, {
