@@ -278,16 +278,16 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             }}
           >
             <Styled.a href="/">
-              Home <Arrow sx={{ ml: 1, fill: 'secondary' }} />
-            </Styled.a>
-            <Styled.a href="/projects">
-              Projects <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+              Home
             </Styled.a>
             <Styled.a href="/categories">
-              Categories <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+              Categories
+            </Styled.a>
+            <Styled.a href="/projects">
+              Projects
             </Styled.a>
             <Styled.a href="/charter">
-              Charter <Arrow sx={{ ml: 1, fill: 'secondary' }} />
+              Charter
             </Styled.a>
           </Box>
         </Box>
@@ -315,9 +315,8 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
           <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
           <span sx={{ pl: 3 }}>Everest</span>
         </Link>
-
-        <Link to="/projects">Projects</Link>
         <Link to="/categories">Categories</Link>
+        <Link to="/projects">Projects</Link>
         <Link to="/charter">Charter</Link>
       </Grid>
       <Grid

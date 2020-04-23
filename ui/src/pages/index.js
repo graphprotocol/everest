@@ -148,8 +148,7 @@ const Index = () => {
       <Divider sx={{ my: 4 }} />
       <Section
         title="Categories"
-        description="All projects belong to at least one category. Categories are also
-      curated in a decentralized way."
+        description="All projects belong to at least one category."
         items={
           categories
             ? categories.categories.slice(0, 12).map(category => {
