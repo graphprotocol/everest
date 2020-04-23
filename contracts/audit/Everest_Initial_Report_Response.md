@@ -19,6 +19,9 @@ We will fix the following right now:
   - votingPeriodDuration
   - challengeDeposit
   - applicationFee
+- We put in a pause for challenges so that the upgrade process can go smoother. We realized that
+  a challenge would get in a stuck state from the migration, if it was existing. This was, we 
+  can ensure the data does not get corrupted.
 
 ## QSP-2 didAddress is undefined for the mainnet deployment
 This was found after the commit hash we gave to Quantstamp to review, so it is already fixed.
