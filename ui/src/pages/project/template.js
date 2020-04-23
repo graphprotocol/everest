@@ -607,11 +607,7 @@ const Project = ({ location }) => {
         },
       ])
     }
-  } else if (
-    project &&
-    !project.currentChallenge &&
-    (userProjects.length > 0 || userDelegatorProjects.length > 0)
-  ) {
+  } else if (project && !project.currentChallenge && userProjects.length > 0) {
     items = items.concat([
       {
         text: 'Challenge',
@@ -879,7 +875,7 @@ const Project = ({ location }) => {
           icon="challenge.png"
           handleClick={handleChallenge}
           showFilters={true}
-          items={userProjects.concat(userDelegatorProjects)}
+          items={userProjects}
           sx={{ mt: ['220px', '140px', '140px'] }}
         />
       )}

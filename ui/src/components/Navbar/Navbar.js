@@ -16,7 +16,6 @@ import Search from '../../components/Search'
 import Logo from '../../images/logo.svg'
 import Plus from '../../images/close.svg'
 import Bars from '../../images/bars.svg'
-import Arrow from '../../images/arrow.svg'
 import Close from '../../images/close.svg'
 import ThreeBox from '3box'
 
@@ -277,18 +276,10 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
               },
             }}
           >
-            <Styled.a href="/">
-              Home
-            </Styled.a>
-            <Styled.a href="/categories">
-              Categories
-            </Styled.a>
-            <Styled.a href="/projects">
-              Projects
-            </Styled.a>
-            <Styled.a href="/charter">
-              Charter
-            </Styled.a>
+            <Styled.a href="/">Home</Styled.a>
+            <Styled.a href="/categories">Categories</Styled.a>
+            <Styled.a href="/projects">Projects</Styled.a>
+            <Styled.a href="/charter">Charter</Styled.a>
           </Box>
         </Box>
       )}
