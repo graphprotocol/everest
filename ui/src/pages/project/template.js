@@ -535,7 +535,7 @@ const Project = ({ location }) => {
 
   let tweet = ''
   if (project) {
-    tweet = `We’d like to claim the ${project.name} project on @everest_tcr. Please transfer ownership to ${account} 🙌
+    tweet = `We’d like to claim the ${project.name} project on @EverestRegistry. Please transfer ownership to ${account} 🙌
   everest.link/projects/${project.id}`
   }
 

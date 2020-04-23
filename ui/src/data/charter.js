@@ -6,7 +6,7 @@ export default [
     body: (
       <p>
         Everest’s mission is to catalyze the shift to Web3 by organizing all the
-        projects that are working toward this common goal. Decentralization will
+        projects working toward this common goal. Decentralization will
         create transparency and opportunity, enabling anyone in the world to
         contribute their talents to a global economy.
         <br />
@@ -57,9 +57,9 @@ export default [
           play a key role in the project, you should claim the project by
           selecting the “Project representative” option when creating the
           listing. If the organization is hierarchical, employees higher in the
-          hierarchy take precedence over others in the organization. It’s
-          preferable to have Project Representatives maintaining listings over
-          community members to increase the authenticity of the data.
+          hierarchy take precedence. It’s preferable to have Project Representatives
+          maintaining listings over community members to increase the authenticity
+          of the data.
           <br />
           <br />
           Owners who are not representatives may see their projects challenged
@@ -68,7 +68,7 @@ export default [
           Representatives upon request.
           <br />
           <br />
-          <strong>Challenging Projects Owners</strong> and delegates can
+          <strong>Challenging Projects</strong> Owners and delegates can
           challenge listings on behalf of their projects if they believe the
           listing is conveying fraudulent or inaccurate information.
           <br />
@@ -77,7 +77,7 @@ export default [
         <div>
           Registry listings should only be challenged if there is reasonable
           belief that the project does not belong on the registry because of
-          these reasons:
+          one ore more of the following reasons:
           <ol type="a" style={{ margin: '32px 0 32px 32px' }}>
             <li>
               The project details are inaccurate (eg. outdated information,
@@ -117,16 +117,16 @@ export default [
         <br />
         <strong>Voting Rules</strong> Registry members can vote on active
         challenges to other projects to keep or remove them from the registry.
-        Each project has one vote but votes are time-weighted based on how long
-        the project has been a part of the registry.
+        Each project has one vote but votes are time-weighted with the square root
+        of the length of time the project has been a part of the registry.
         <br />
         <br />
         Project owners or delegates will have up to 2 days after a challenge has
         been initiated to vote on the challenge and they can vote on behalf of
         multiple projects. A challenge is successful if there is at least one
-        vote and the number of votes to remove the project exceeds the number of
-        votes to keep the project. If there is a tie vote, the challenge is not
-        successful.
+        non-initiating vote and the weight of votes to remove the project exceeds
+        the weight of votes to keep the project. If there is a tie vote, the
+        challenge is not successful.
         <br />
         <br />
         <strong>Reserve Bank</strong> The Reserve Bank holds the deposits of all
@@ -167,8 +167,7 @@ export default [
           rel="noopener noreferrer"
         >
           Github repo
-        </a>{' '}
-        to learn more and contribute.
+        </a>{' '}.
       </p>
     ),
   },
