@@ -2,6 +2,7 @@ export const FILTERS = {
   all: 'All',
   challenged: 'Challenged',
   delegated: 'Delegated',
+  claimed: 'Claimed',
 }
 
 export const CATEGORIES_ORDER_BY = {

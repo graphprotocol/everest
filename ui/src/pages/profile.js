@@ -106,14 +106,21 @@ const Profile = ({ location }) => {
     orderDirection: selectedOrderDirection,
   }
 
-  const { error, data } = useQuery(PROFILE_QUERY, {
+  const { error, data, loading } = useQuery(PROFILE_QUERY, {
     variables:
       selectedFilter === FILTERS.all
         ? variables
-        : {
+        : selectedFilter === FILTERS.challenged
+        ? {
             ...variables,
             where: {
               currentChallenge_not: null,
+            },
+          }
+        : {
+            ...variables,
+            where: {
+              isRepresentative: true,
             },
           },
     fetchPolicy: 'network-only',
@@ -183,6 +190,12 @@ const Profile = ({ location }) => {
                 text: isMobile ? 'Challenged' : 'Challenged projects',
                 handleSelect: () => {
                   setSelectedFilter(FILTERS.challenged)
+                },
+              },
+              {
+                text: isMobile ? 'Claimed' : 'Claimed projects',
+                handleSelect: () => {
+                  setSelectedFilter(FILTERS.claimed)
                 },
               },
             ]}
@@ -434,39 +447,42 @@ const Profile = ({ location }) => {
             selected={selectedProjectsView}
           />
         </Fragment>
-      ) : selectedFilter === FILTERS.challenged ? (
+      ) : selectedFilter === FILTERS.challenged ||
+        selectedFilter === FILTERS.claimed ? (
         <Grid columns={[1, 2, 2]} mb={1} mt={6}>
           {renderHeaders()}
         </Grid>
       ) : (
-        <Box sx={{ textAlign: 'center', mt: 8 }}>
-          <img
-            src={`${imagePrefix}/mountain-empty.png`}
-            sx={{ height: '190px', width: ['100%', 'auto', 'auto'] }}
-          />
-          <Divider sx={{ mt: '-6px !important' }} />
-          {isOwner() ? (
-            <Fragment>
-              <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
-              <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
-                This is where you&apos;ll see projects you created
-              </Styled.p>
-              <Button
-                text="Add a Project"
-                to="/projects/new"
-                variant="primary"
-                sx={{ m: '0 auto', mt: 7 }}
-              />
-            </Fragment>
-          ) : (
-            <Fragment>
-              <Styled.h5 sx={{ mt: 7 }}>Projects</Styled.h5>
-              <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
-                This user has no projects
-              </Styled.p>
-            </Fragment>
-          )}
-        </Box>
+        !loading && (
+          <Box sx={{ textAlign: 'center', mt: 8 }}>
+            <img
+              src={`${imagePrefix}/mountain-empty.png`}
+              sx={{ height: '190px', width: ['100%', 'auto', 'auto'] }}
+            />
+            <Divider sx={{ mt: '-6px !important' }} />
+            {isOwner() ? (
+              <Fragment>
+                <Styled.h5 sx={{ mt: 7 }}>Your Projects</Styled.h5>
+                <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+                  This is where you&apos;ll see projects you created
+                </Styled.p>
+                <Button
+                  text="Add a Project"
+                  to="/projects/new"
+                  variant="primary"
+                  sx={{ m: '0 auto', mt: 7 }}
+                />
+              </Fragment>
+            ) : (
+              <Fragment>
+                <Styled.h5 sx={{ mt: 7 }}>Projects</Styled.h5>
+                <Styled.p sx={{ opacity: 0.64, mt: 3 }}>
+                  This user has no projects
+                </Styled.p>
+              </Fragment>
+            )}
+          </Box>
+        )
       )}
 
       {user && user.delegatorProjects && user.delegatorProjects.length > 0 && (

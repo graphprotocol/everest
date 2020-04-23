@@ -25,6 +25,7 @@ const Projects = ({ location }) => {
   const [allProjects, setAllProjects] = useState([])
   const [projectCount, setProjectCount] = useState(0)
   const [challengesCount, setChallengesCount] = useState(null)
+  const [claimedCount, setClaimedCount] = useState(null)
   const [selected, setSelected] = useState('cards')
   const [selectedFilter, setSelectedFilter] = useState(
     queryParams && queryParams.view ? queryParams.view : FILTERS.all,
@@ -49,10 +50,17 @@ const Projects = ({ location }) => {
     variables:
       selectedFilter === FILTERS.all
         ? variables
-        : {
+        : selectedFilter === FILTERS.challenged
+        ? {
             ...variables,
             where: {
               currentChallenge_not: null,
+            },
+          }
+        : {
+            ...variables,
+            where: {
+              isRepresentative: true,
             },
           },
     notifyOnNetworkStatusChange: true,
@@ -73,6 +81,11 @@ const Projects = ({ location }) => {
     setChallengesCount(
       everestData && everestData.everests
         ? everestData.everests[0].challengedProjects
+        : 0,
+    )
+    setClaimedCount(
+      everestData && everestData.everests
+        ? everestData.everests[0].claimedProjects
         : 0,
     )
   }, [data, everestData])
@@ -102,31 +115,36 @@ const Projects = ({ location }) => {
             >
               Projects
             </Styled.h2>
-            {challengesCount !== 0 && (
-              <Filters
-                items={[
-                  {
-                    text: isMobile ? 'All' : 'All projects',
-                    handleSelect: () => {
-                      setSelectedFilter(FILTERS.all)
-                      navigate(`?view=${FILTERS.all}`)
-                    },
+            <Filters
+              items={[
+                {
+                  text: isMobile ? 'All' : 'All projects',
+                  handleSelect: () => {
+                    setSelectedFilter(FILTERS.all)
+                    navigate(`?view=${FILTERS.all}`)
                   },
-                  {
-                    text: isMobile ? 'Challenged' : 'Challenged projects',
-                    handleSelect: () => {
-                      setSelectedFilter(FILTERS.challenged)
-                      navigate(`?view=${FILTERS.challenged}`)
-                    },
+                },
+                {
+                  text: isMobile ? 'Challenged' : 'Challenged projects',
+                  handleSelect: () => {
+                    setSelectedFilter(FILTERS.challenged)
+                    navigate(`?view=${FILTERS.challenged}`)
                   },
-                ]}
-                menuStyles={{ left: 0, top: '60px' }}
-                width={['initial', '280px', '280px']}
-                setIsFilterOpen={setIsFilterOpen}
-                isFilterOpen={isFilterOpen}
-                selectedFilter={selectedFilter}
-              />
-            )}
+                },
+                {
+                  text: isMobile ? 'Claimed' : 'Claimed projects',
+                  handleSelect: () => {
+                    setSelectedFilter(FILTERS.claimed)
+                    navigate(`?view=${FILTERS.claimed}`)
+                  },
+                },
+              ]}
+              menuStyles={{ left: 0, top: '60px' }}
+              width={['initial', '280px', '280px']}
+              setIsFilterOpen={setIsFilterOpen}
+              isFilterOpen={isFilterOpen}
+              selectedFilter={selectedFilter}
+            />
           </Grid>
           <Grid columns={['max-content 1fr', '1fr', '1fr']}>
             <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
@@ -204,7 +222,9 @@ const Projects = ({ location }) => {
           !loading &&
           (selectedFilter === FILTERS.all
             ? data.projects.length < projectCount
-            : data.projects.length < challengesCount) && (
+            : selectedFilter === FILTERS.challenged
+            ? data.projects.length < challengesCount
+            : data.projects.length < claimedCount) && (
             <Button
               variant="secondary"
               text="Load more"
@@ -219,11 +239,18 @@ const Projects = ({ location }) => {
                   variables:
                     selectedFilter === FILTERS.all
                       ? { ...variables, skip: data.projects.length }
-                      : {
+                      : selectedFilter === FILTERS.challenged
+                      ? {
                           ...variables,
                           skip: data.projects.length,
                           where: {
                             currentChallenge_not: null,
+                          },
+                        }
+                      : {
+                          ...variables,
+                          where: {
+                            isRepresentative: true,
                           },
                         },
                   updateQuery: (prev, { fetchMoreResult }) => {
