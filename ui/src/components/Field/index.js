@@ -184,18 +184,17 @@ const Field = ({
           )}
         </Grid>
       </Box>
-      {error ||
-        ((invalidTwitter || invalidGithub) && (
-          <p
-            sx={{
-              variant: 'text.smaller',
-              color: color,
-              pt: 2,
-            }}
-          >
-            {error || 'Please enter a valid username.'}
-          </p>
-        ))}
+      {(error || invalidTwitter || invalidGithub) && (
+        <p
+          sx={{
+            variant: 'text.smaller',
+            color: error ? 'error' : color,
+            pt: 2,
+          }}
+        >
+          {error || 'Please enter a valid username.'}
+        </p>
+      )}
     </Box>
   )
 }

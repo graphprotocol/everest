@@ -14,6 +14,9 @@ export const PROJECT_QUERY = gql`
       avatar
       totalVotes
       isRepresentative
+      delegates {
+        id
+      }
       currentChallenge {
         id
         endTime
@@ -42,6 +45,38 @@ export const PROJECT_QUERY = gql`
         }
         subcategories {
           id
+          name
+          imageUrl
+          parentCategory {
+            id
+            name
+          }
+          subcategories {
+            id
+            name
+            imageUrl
+            parentCategory {
+              id
+              name
+              parentCategory {
+                id
+                name
+              }
+            }
+            subcategories {
+              id
+              name
+              imageUrl
+              parentCategory {
+                id
+                name
+                parentCategory {
+                  id
+                  name
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -114,6 +149,10 @@ export const ALL_CATEGORIES_QUERY = gql`
       description
       imageUrl
       projectCount
+      parentCategory {
+        id
+        name
+      }
       subcategories {
         id
         name
@@ -132,6 +171,19 @@ export const ALL_CATEGORIES_QUERY = gql`
             parentCategory {
               id
               name
+            }
+          }
+          subcategories {
+            id
+            name
+            imageUrl
+            parentCategory {
+              id
+              name
+              parentCategory {
+                id
+                name
+              }
             }
           }
         }
@@ -313,6 +365,38 @@ export const PROFILE_QUERY = gql`
           }
           subcategories {
             id
+            name
+            imageUrl
+            parentCategory {
+              id
+              name
+            }
+            subcategories {
+              id
+              name
+              imageUrl
+              parentCategory {
+                id
+                name
+                parentCategory {
+                  id
+                  name
+                }
+              }
+              subcategories {
+                id
+                name
+                imageUrl
+                parentCategory {
+                  id
+                  name
+                  parentCategory {
+                    id
+                    name
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -36,6 +36,8 @@ import {
   DELEGATE_OWNERSHIP,
 } from '../../utils/apollo/mutations'
 
+import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
+
 import Divider from '../../components/Divider'
 import DataRow from '../../components/DataRow'
 import Button from '../../components/Button'
@@ -76,13 +78,15 @@ const Project = ({ location }) => {
     variables: {
       id: account,
     },
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   })
 
   const { data: profile } = useQuery(PROFILE_QUERY, {
     variables: {
       id: account,
-      orderBy: 'createdAt',
-      orderDirection: 'desc',
+      orderBy: ORDER_BY['Name'],
+      orderDirection: ORDER_DIRECTION.ASC,
     },
   })
 
@@ -97,8 +101,8 @@ const Project = ({ location }) => {
         query: PROFILE_QUERY,
         variables: {
           id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
+          orderBy: ORDER_BY['Name'],
+          orderDirection: ORDER_DIRECTION.ASC,
         },
       },
     ],
@@ -115,8 +119,8 @@ const Project = ({ location }) => {
           query: PROFILE_QUERY,
           variables: {
             id: account,
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
+            orderBy: ORDER_BY['Name'],
+            orderDirection: ORDER_DIRECTION.ASC,
           },
         }),
       )
@@ -129,8 +133,8 @@ const Project = ({ location }) => {
         query: PROFILE_QUERY,
         variables: {
           id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
+          orderBy: ORDER_BY['Name'],
+          orderDirection: ORDER_DIRECTION.ASC,
         },
         data: {
           user: {
@@ -209,6 +213,10 @@ const Project = ({ location }) => {
     onError: error => {
       console.error('Error challenging project: ', error)
     },
+    onCompleted: () => {
+      setPendingVotes(false)
+      setPendingResolve(false)
+    },
     update: (proxy, result) => {
       const projectData = cloneDeep(
         proxy.readQuery({
@@ -252,8 +260,8 @@ const Project = ({ location }) => {
         query: PROFILE_QUERY,
         variables: {
           id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
+          orderBy: ORDER_BY['Name'],
+          orderDirection: ORDER_DIRECTION.ASC,
         },
       },
     ],
@@ -271,6 +279,7 @@ const Project = ({ location }) => {
         isRepresentative:
           data && data.project ? data.project.isRepresentative : false,
         createdAt: data && data.project ? data.project.createdAt : [],
+        delegates: data && data.project ? data.project.delegates : [],
         currentChallenge:
           data && data.project ? data.project.currentChallenge : [],
         categories: data && data.project ? data.project.categories : [],
@@ -280,14 +289,14 @@ const Project = ({ location }) => {
     onError: error => {
       console.error('Error transferring ownership: ', error)
     },
-    update: proxy => {
+    update: (proxy, result) => {
       const profileData = cloneDeep(
         proxy.readQuery({
           query: PROFILE_QUERY,
           variables: {
             id: account,
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
+            orderBy: ORDER_BY['Name'],
+            orderDirection: ORDER_DIRECTION.ASC,
           },
         }),
       )
@@ -295,12 +304,13 @@ const Project = ({ location }) => {
       const remainingProjects = profileData.user.projects.filter(
         project => project.id !== projectId,
       )
+
       proxy.writeQuery({
         query: PROFILE_QUERY,
         variables: {
           id: account,
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
+          orderBy: ORDER_BY['Name'],
+          orderDirection: ORDER_DIRECTION.ASC,
         },
         data: {
           user: {
@@ -308,7 +318,7 @@ const Project = ({ location }) => {
             __typename: 'User',
             delegatorProjects:
               profile && profile.user && profile.user.delegatorProjects,
-            projects: remainingProjects,
+            projects: [...remainingProjects, result.data.transferOwnership],
           },
         },
       })
@@ -449,6 +459,14 @@ const Project = ({ location }) => {
         votes.includes(up.id) ||
         project.currentChallenge.owner === up.id,
     }))
+    const delegatedProjects = userDelegatorProjects.map(up => ({
+      ...up,
+      disabled:
+        up.id === project.id ||
+        votes.includes(up.id) ||
+        project.currentChallenge.owner === up.id,
+    }))
+    userProjects = userProjects.concat(delegatedProjects)
     hideVoting =
       userProjects.length === 1 &&
       userProjects[0].id === project.currentChallenge.owner
