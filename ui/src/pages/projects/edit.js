@@ -64,7 +64,7 @@ const EditProject = ({ location }) => {
   const [editProject] = useMutation(EDIT_PROJECT, {
     client: client,
     onError: error => {
-      console.log(`Error with project ${projectId}: ${error.message}`)
+      console.error(`Error with project ${projectId}: ${error.message}`)
       setPendingTransaction(false)
     },
     onCompleted: () => {
