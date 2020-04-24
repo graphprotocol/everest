@@ -8,9 +8,7 @@ ARG GATSBY_GRAPHQL_HTTP_URI
 ARG GATSBY_CHAIN_ID
 
 RUN apt update -y
-RUN apt-get install -y software-properties-common
-RUN apt update -y
-RUN apt-get install -y git
+RUN apt-get install -y software-properties-common git build-essential
 
 # Install NPM and Yarn
 RUN apt-get install -y curl
