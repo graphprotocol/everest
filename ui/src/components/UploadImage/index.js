@@ -116,8 +116,17 @@ const UploadImage = ({ parentImage, setParentImage }) => {
           }}
           gap={2}
         >
-          <span>Upload image</span>
-          {loadingImage && <Loading variant="white" />}
+          {loadingImage ? (
+            <span>
+              Uploading
+              <Loading
+                variant="white"
+                sx={{ height: '40px', left: 'auto', right: '30px', top: '5px' }}
+              />
+            </span>
+          ) : (
+            <span>Upload image</span>
+          )}
         </Grid>
       )}
     </label>

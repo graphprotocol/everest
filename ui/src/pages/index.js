@@ -51,7 +51,10 @@ const Index = () => {
       orderDirection: 'desc',
     },
   })
-  const { data: everestData } = useQuery(EVEREST_QUERY)
+  const { data: everestData } = useQuery(EVEREST_QUERY, {
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+  })
   const everestStats =
     everestData && everestData.everests && everestData.everests[0]
 

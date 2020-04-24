@@ -15,10 +15,10 @@ const Row = ({
   variant,
   ...props
 }) => {
-  const isSelected = multiselect && selected.find(sel => sel.name === item.name)
+  const isSelected = multiselect && selected.find(sel => sel.id === item.id)
   return (
     <Grid
-      key={item.name}
+      key={item.id}
       columns={3}
       gap={4}
       sx={{
@@ -36,10 +36,10 @@ const Row = ({
         e.stopPropagation()
         if (close) return
         if (multiselect) {
-          const sel = selected.find(sel => sel.name === item.name)
+          const sel = selected.find(sel => sel.id === item.id)
           if (sel) {
             selected.find((sel, index) => {
-              if (sel.name === item.name) {
+              if (sel.id === item.id) {
                 delete selected[index]
               }
               return null
@@ -97,7 +97,7 @@ const Row = ({
             e.preventDefault()
             e.stopPropagation()
             if (multiselect) {
-              const selectedItem = selected.find(sel => sel.name === item.name)
+              const selectedItem = selected.find(sel => sel.id === item.id)
               const index = selected.indexOf(selectedItem)
               delete selected[index]
               setSelected(selected.flat())
