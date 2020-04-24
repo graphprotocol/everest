@@ -11,6 +11,7 @@ RUN apt update -y
 RUN apt-get install -y software-properties-common
 RUN apt update -y
 RUN apt-get install -y git
+RUN apt-get install build-essential
 
 # Install NPM and Yarn
 RUN apt-get install -y curl
