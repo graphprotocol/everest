@@ -10,6 +10,7 @@ ARG GATSBY_CHAIN_ID
 RUN apt update -y
 RUN apt-get install -y software-properties-common
 RUN apt update -y
+RUN apt-get install -y git
 
 # Install NPM and Yarn
 RUN apt-get install -y curl
