@@ -1,5 +1,8 @@
 FROM ubuntu
 
+# Disable all user interactivity during build
+ENV DEBIAN_FRONTEND noninteractive
+
 ARG GATSBY_IPFS_HTTP_URI
 ARG GATSBY_NETWORK_CONNECTOR_URI
 ARG GATSBY_INFURA_ID
