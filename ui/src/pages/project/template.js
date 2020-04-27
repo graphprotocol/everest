@@ -624,7 +624,7 @@ const Project = ({ location }) => {
         handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
-        https://everest.link/projects/${project.id}`,
+        https://everest.link/project/${project.id}`,
             '_blank',
           )
         },
@@ -638,7 +638,7 @@ const Project = ({ location }) => {
         handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
-        https://everest.link/projects/${project.id}`,
+        https://everest.link/project/${project.id}`,
             '_blank',
           )
         },
