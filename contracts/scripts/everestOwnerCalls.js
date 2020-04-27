@@ -6,6 +6,7 @@ const path = require('path')
 const abi = require('../abis/Everest.json').abi
 const addresses = require('../addresses.json')
 const categories = require('../conf/config.js').everestParams.categories
+const charter = require('../conf/config.js').everestParams.charter
 
 const ropstenProvider = `https://ropsten.infura.io/v3/${fs
     .readFileSync(__dirname + '/../../../../private-keys/.infurakey.txt')
@@ -31,7 +32,10 @@ if (!network || !func || !gasPrice) {
     console.error(`
     Usage: ${path.basename(process.argv[1])}
         --network        <string> - options: ropsten, mainnet
-        --func           <string> - options: updateCategories, withdrawReserveBank, updateVotingPeriodDuration
+        --func           <string> - options:    updateCategories
+                                                withdrawReserveBank
+                                                updateVotingPeriodDuration
+                                                updateCharter
         --gasPrice       <number> - in gwei (i.e. 5 = 5 gwei)
         --withdrawAmount <number> - [optional] - pass 2 to withdraw 2 DAI
     `)
@@ -44,6 +48,13 @@ const overrides = {
 
 const updateCategories = async (everest, networkString) => {
     const tx = await everest.updateCategories(categories, overrides)
+    console.log(`  ..pending: https://${networkString}etherscan.io/tx/${tx.hash}`)
+    const res = await tx.wait()
+    console.log(`    success: https://${networkString}etherscan.io/tx/${res.transactionHash}`)
+}
+
+const updateCharter = async (everest, networkString) => {
+    const tx = await everest.updateCharter(charter, overrides)
     console.log(`  ..pending: https://${networkString}etherscan.io/tx/${tx.hash}`)
     const res = await tx.wait()
     console.log(`    success: https://${networkString}etherscan.io/tx/${res.transactionHash}`)
@@ -88,6 +99,9 @@ const main = async () => {
         if (func == 'updateCategories') {
             console.log(`Updating categories to ${categories} on network ${network} ...`)
             updateCategories(everestWithSigner, networkString)
+        } else if (func == 'updateCharter') {
+            console.log(`Updating charter to ${charter} on network ${network} ...`)
+            updateCharter(everestWithSigner, networkString)
         } else if (func == 'withdrawReserveBank') {
             console.log(`withdrawing ${withdrawAmount} DAI on network ${network} ...`)
             withdrawReserveBank(everestWithSigner, networkString)
