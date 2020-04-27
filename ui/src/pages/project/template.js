@@ -535,8 +535,7 @@ const Project = ({ location }) => {
 
   let tweet = ''
   if (project) {
-    tweet = `We’d like to claim the ${project.name} project on @EverestRegistry. Please transfer ownership to ${account} 🙌
-  everest.link/projects/${project.id}`
+    tweet = `We’d like to claim the ${project.name} project on @EverestRegistry. Please transfer ownership to ${account} 🙌`
   }
 
   let items = []
@@ -625,7 +624,7 @@ const Project = ({ location }) => {
         handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
-        ${window.location.href}`,
+        https://everest.link/projects/${project.id}`,
             '_blank',
           )
         },
@@ -639,7 +638,7 @@ const Project = ({ location }) => {
         handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
-        ${window.location.href}`,
+        https://everest.link/projects/${project.id}`,
             '_blank',
           )
         },
