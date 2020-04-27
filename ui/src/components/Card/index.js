@@ -104,7 +104,7 @@ const Card = ({
                 color: 'secondary',
               }}
             >
-              {title}
+              {title && title.length > 22 ? title.slice(0, 22) + '...' : title}
             </Styled.p>
             {variant !== 'project' && (
               <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>
