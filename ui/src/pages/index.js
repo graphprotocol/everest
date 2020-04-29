@@ -247,7 +247,7 @@ const Index = () => {
                 isChallenged: project.currentChallenge !== null,
               }
             })}
-            linkTo="/projects?view=Challenged"
+            linkTo="/projects/?view=Challenged"
             linkText="View all Challenges"
             variant="project"
           />
