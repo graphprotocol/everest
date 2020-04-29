@@ -249,6 +249,7 @@ const Projects = ({ location }) => {
                         }
                       : {
                           ...variables,
+                          skip: data.projects.length,
                           where: {
                             isRepresentative: true,
                           },
