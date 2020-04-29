@@ -121,21 +121,21 @@ const Projects = ({ location }) => {
                   text: isMobile ? 'All' : 'All projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.all)
-                    navigate(`?view=${FILTERS.all}`)
+                    navigate(`/projects/?view=${FILTERS.all}`)
                   },
                 },
                 {
                   text: isMobile ? 'Challenged' : 'Challenged projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.challenged)
-                    navigate(`?view=${FILTERS.challenged}`)
+                    navigate(`/projects/?view=${FILTERS.challenged}`)
                   },
                 },
                 {
                   text: isMobile ? 'Claimed' : 'Claimed projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.claimed)
-                    navigate(`?view=${FILTERS.claimed}`)
+                    navigate(`/projects/?view=${FILTERS.claimed}`)
                   },
                 },
               ]}
