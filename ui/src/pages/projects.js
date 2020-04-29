@@ -149,7 +149,11 @@ const Projects = ({ location }) => {
           <Grid columns={['max-content 1fr', '1fr', '1fr']}>
             <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
               {projectCount} Projects -{' '}
-              <span>{challengesCount} Challenges</span>
+              {selectedFilter === FILTERS.claimed ? (
+                <span>{claimedCount} Claimed</span>
+              ) : (
+                <span>{challengesCount} Challenges</span>
+              )}
             </Styled.p>
             <Sorting
               selectedOrderBy={selectedOrderBy}
