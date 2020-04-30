@@ -680,7 +680,6 @@ const Project = ({ location }) => {
                     gridTemplateColumns: 'max-content max-content',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    maxWidth: '100%',
                     display: 'flex'
                   }
                 : {}
