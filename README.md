@@ -18,7 +18,7 @@ To contribute to the Everest registry, users can **add projects**, **challenge e
 and **vote on challenges** to curate the registry. **Project owners** can also edit project details
 at any time and **delegate voting** to other users.
 
-Read the [Everest Charter](http://www.everest.link/charter) to learn more about project listing guidelines,
+Read the [Everest Charter](https://www.everest.link/charter) to learn more about project listing guidelines,
 registry curation, project challenges and community maintenance.
 
 Everest is built on [The Graph](thegraph.com), an indexing and querying layer for efficient
