@@ -43,7 +43,7 @@ const Categories = () => {
     <Box>
       <Seo
         description="Categories for projects on the Everest registry."
-        pathname="/categories"
+        pathname="/categories/"
       />
       <Box>
         <Grid
@@ -78,7 +78,7 @@ const Categories = () => {
                 name: cat.name,
                 description: `${cat.projectCount} PROJECTS`,
                 image: cat.imageUrl,
-                to: `/category/${cat.id}`,
+                to: `/category/${cat.id}/`,
               }
             })}
           variant="category"

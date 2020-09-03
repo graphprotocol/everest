@@ -43,7 +43,7 @@
     "gatsby-plugin-prefetch-google-fonts": "^1.4.3",
     "gatsby-plugin-react-helmet": "^3.1.16",
     "gatsby-plugin-react-svg": "^2.1.2",
-    "gatsby-plugin-remove-trailing-slashes": "^2.1.17",
+    "gatsby-plugin-force-trailing-slashes": "^1.0.4",
     "gatsby-plugin-theme-ui": "0.3.0",
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-source-graphql": "2.1.28",

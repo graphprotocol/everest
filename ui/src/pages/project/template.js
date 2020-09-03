@@ -570,7 +570,7 @@ const Project = ({ location }) => {
         {
           text: (
             <Box>
-              <Link to={`/projects/edit?id=${projectId}`}>
+              <Link to={`/projects/edit/?id=${projectId}`}>
                 <img
                   src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/edit.png`}
                   sx={iconStyles}
@@ -586,7 +586,7 @@ const Project = ({ location }) => {
         {
           text: (
             <Box>
-              <Link to={`/projects/edit?id=${projectId}`}>
+              <Link to={`/projects/edit/?id=${projectId}`}>
                 <img
                   src={`${window.__GATSBY_IPFS_PATH_PREFIX__ || ''}/edit.png`}
                   sx={iconStyles}
@@ -624,7 +624,7 @@ const Project = ({ location }) => {
         handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
-        https://everest.link/project/${project.id}`,
+        https://everest.link/project/${project.id}/`,
             '_blank',
           )
         },
@@ -638,7 +638,7 @@ const Project = ({ location }) => {
         handleSelect: () => {
           window.open(
             `https://twitter.com/intent/tweet?text=${tweet} @graphprotocol 
-        https://everest.link/project/${project.id}`,
+        https://everest.link/project/${project.id}/`,
             '_blank',
           )
         },
@@ -680,7 +680,7 @@ const Project = ({ location }) => {
                     gridTemplateColumns: 'max-content max-content',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    display: 'flex'
+                    display: 'flex',
                   }
                 : {}
             }
@@ -688,7 +688,7 @@ const Project = ({ location }) => {
             <Box>
               <p sx={{ variant: 'text.large' }}>
                 {pickCategories(project.categories).map((cat, index) => (
-                  <Link to={`/category/${cat.id}`} key={index}>
+                  <Link to={`/category/${cat.id}/`} key={index}>
                     {cat.name}
                     {index !==
                       pickCategories(project.categories).length - 1 && (
@@ -1032,7 +1032,7 @@ const Project = ({ location }) => {
                       <Box>
                         <p sx={{ variant: 'text.small' }}>Challenged by</p>
                         <Link
-                          to={`/project/${project.currentChallenge.owner.id}`}
+                          to={`/project/${project.currentChallenge.owner.id}/`}
                         >
                           {project.currentChallenge.owner.name}
                         </Link>
