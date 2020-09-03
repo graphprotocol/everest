@@ -47,7 +47,7 @@ exports.createPages = async ({ page, actions }) => {
     let categories = resultData.data.categories || []
     categories.forEach(category => {
       createPage({
-        path: `/category/${category.id}`,
+        path: `/category/${category.id}/`,
         component: require.resolve('./src/templates/category.js'),
         context: category,
       })
@@ -55,7 +55,7 @@ exports.createPages = async ({ page, actions }) => {
       if (category.subcategories) {
         category.subcategories.forEach(subcategory => {
           createPage({
-            path: `/category/${subcategory.id}`,
+            path: `/category/${subcategory.id}/`,
             component: require.resolve('./src/templates/category.js'),
             context: subcategory,
           })

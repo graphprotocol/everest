@@ -66,7 +66,7 @@ export const getBreadcrumbs = item => {
   while (parent) {
     breadcrumbs = breadcrumbs.concat({
       name: parent.name,
-      url: `/category/${parent.id}`,
+      url: `/category/${parent.id}/`,
     })
     parent = parent.parentCategory
   }

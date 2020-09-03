@@ -18,6 +18,7 @@ module.exports = {
   plugins: [
     'gatsby-plugin-ipfs',
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-force-trailing-slashes',
     {
       resolve: 'gatsby-plugin-theme-ui',
       options: {

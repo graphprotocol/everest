@@ -90,7 +90,7 @@ const Index = () => {
             Universally <br />
             shared{' '}
             <Link
-              to="/projects"
+              to="/projects/"
               sx={{
                 fontSize: 'inherit',
                 display: 'inline',
@@ -127,7 +127,7 @@ const Index = () => {
                 <Button
                   onClick={async () =>
                     account || (await getAddress())
-                      ? navigate('/projects/new')
+                      ? navigate('/projects/new/')
                       : setShowModal(true)
                   }
                   text="Add a project"
@@ -159,12 +159,12 @@ const Index = () => {
                   name: category.name,
                   description: `${category.projectCount} projects`,
                   image: category.imageUrl,
-                  to: `/category/${category.id}`,
+                  to: `/category/${category.id}/`,
                 }
               })
             : []
         }
-        linkTo="/categories"
+        linkTo="/categories/"
         linkText="View all Categories"
         variant="category"
       />
@@ -180,7 +180,7 @@ const Index = () => {
                     project.description && project.description.length > 30
                       ? project.description.slice(0, 26) + '...'
                       : project.description,
-                  to: `/project/${project.id}`,
+                  to: `/project/${project.id}/`,
                   image: project.avatar,
                   categories: project.categories,
                   isChallenged: project.currentChallenge !== null,
@@ -188,7 +188,7 @@ const Index = () => {
               })
             : []
         }
-        linkTo="/projects"
+        linkTo="/projects/"
         linkText="View all Projects"
         variant="project"
       />
@@ -241,7 +241,7 @@ const Index = () => {
                 description: project.description
                   ? project.description.slice(0, 20) + '...'
                   : '',
-                to: `/project/${project.id}`,
+                to: `/project/${project.id}/`,
                 image: project.avatar,
                 categories: project.categories,
                 isChallenged: project.currentChallenge !== null,
@@ -287,7 +287,7 @@ const Index = () => {
                 <Button
                   onClick={async () =>
                     account || (await getAddress())
-                      ? navigate('/projects/new')
+                      ? navigate('/projects/new/')
                       : setShowModal(true)
                   }
                   text="Add a project"

@@ -94,7 +94,7 @@ const Projects = ({ location }) => {
     <Grid>
       <Seo
         description="Projects on the Everest registry."
-        pathname="/projects"
+        pathname="/projects/"
       />
       <Grid columns={[1, 2, 2]}>
         <Box>
@@ -207,7 +207,7 @@ const Projects = ({ location }) => {
                     ? project.description.slice(0, 26) + '...'
                     : project.description
                   : '',
-                to: `/project/${project.id}`,
+                to: `/project/${project.id}/`,
                 image: project.avatar,
                 isChallenged: project.currentChallenge !== null,
                 category:
