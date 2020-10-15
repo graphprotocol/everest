@@ -31,9 +31,11 @@ const Projects = ({ location }) => {
     queryParams && queryParams.view ? queryParams.view : FILTERS.all,
   )
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [selectedOrderBy, setSelectedOrderBy] = useState(ORDER_BY['Name'])
+  const [selectedOrderBy, setSelectedOrderBy] = useState(
+    selectedOrderBy ? selectedOrderBy : ORDER_BY['Name']
+  )
   const [selectedOrderDirection, setSelectedOrderDirection] = useState(
-    ORDER_DIRECTION.ASC,
+    selectedOrderDirection ? selectedOrderDirection : ORDER_DIRECTION.ASC,
   )
   const [isSortingOpen, setIsSortingOpen] = useState(false)
 
