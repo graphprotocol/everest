@@ -75,15 +75,14 @@ const Sorting = ({
       </Grid>
     ),
     handleSelect: () => {
-      if (selectedOrderBy === orderBy[order]) {
-        setSelectedOrderDirection(
+      if (selectedOrderBy !== orderBy[order]) {
+        setSelectedOrderBy(orderBy[order])
+      },
+      setSelectedOrderDirection(
           selectedOrderDirection === ORDER_DIRECTION.ASC
             ? ORDER_DIRECTION.DESC
             : ORDER_DIRECTION.ASC,
         )
-      } else {
-        setSelectedOrderBy(orderBy[order])
-      }
     },
     delay: 500,
   }))
