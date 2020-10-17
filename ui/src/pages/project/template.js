@@ -537,7 +537,10 @@ const Project = ({ location }) => {
   if (project) {
     tweet = `We’d like to claim the ${project.name} project on @EverestRegistry. Please transfer ownership to ${account} 🙌`
   }
-
+  
+  if (project.website && !project.website.includes('http'))
+    project.website = 'http://' + project.website
+  
   let items = []
 
   if (account && project && project.owner && account === project.owner.id) {
