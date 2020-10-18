@@ -166,7 +166,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
                   variant="project"
                   image={project.avatar}
                   to={`/project/${project.id}`}
-                  category={project.categories[0] ? project.categories[0].name : "None"}
+                  category={project.categories?.[0]?.name ?? 'None'}
                   isChallenged={project.isChallenged}
                 />
               ))}
