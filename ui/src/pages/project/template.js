@@ -538,8 +538,9 @@ const Project = ({ location }) => {
     tweet = `We’d like to claim the ${project.name} project on @EverestRegistry. Please transfer ownership to ${account} 🙌`
   }
   
-  if (project.website && !project.website.startsWith('http'))
+  if (project.website && !project.website.startsWith('http')) {
     project.website = 'http://' + project.website
+  }
   
   let items = []
 
