@@ -132,10 +132,11 @@ const Profile = ({ location }) => {
       endTime: moment().unix(),
       projects:
         data && data.user
-          ? data.user.projects.reduce(
-              (acc, current) => acc.concat(current.id),
-              [],
-            )
+          ? data.user.projects.reduce((acc, current) => {
+            if(current) {
+              return acc.concat(current.id)
+            }
+          }, [])
           : [],
     },
   })
