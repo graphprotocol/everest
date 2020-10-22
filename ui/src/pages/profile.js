@@ -136,6 +136,7 @@ const Profile = ({ location }) => {
             if(current) {
               return acc.concat(current.id)
             }
+            return acc
           }, [])
           : [],
     },
