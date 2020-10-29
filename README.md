@@ -1,7 +1,7 @@
 # Everest
 
-[Everest](everest.link) is a universally shared registry of crypto projects, built on
-[Ethereum](ethereum.org), [IPFS](ipfs.io), [The Graph](thegraph.com) and [3Box](3box.io). The
+[Everest](https://everest.link/) is a universally shared registry of crypto projects, built on
+[Ethereum](https://ethereum.org), [IPFS](https://ipfs.io), [The Graph](https://thegraph.com) and [3Box](https://3box.io). The
 Everest registry is a community-curated registry composed of projects and categories that make up
 the Web3 ecosystem. 
 
@@ -18,10 +18,10 @@ To contribute to the Everest registry, users can **add projects**, **challenge e
 and **vote on challenges** to curate the registry. **Project owners** can also edit project details
 at any time and **delegate voting** to other users.
 
-Read the [Everest Charter](everest.link/charter) to learn more about project listing guidelines,
+Read the [Everest Charter](https://everest.link/charter) to learn more about project listing guidelines,
 registry curation, project challenges and community maintenance.
 
-Everest is built on [The Graph](thegraph.com), an indexing and querying layer for efficient
+Everest is built on [The Graph](https://thegraph.com), an indexing and querying layer for efficient
 retrieval of blockchain data. The Everest subgraph captures project details using the ERC-1056
 identity standard and can be queried by other dApps to integrate project data. The goal of Everest
 is to be a starting point for creating useful data on-chain, that can be referenced by other dApps
