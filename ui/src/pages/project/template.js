@@ -873,6 +873,7 @@ const Project = ({ location }) => {
               successfully curating the Everest registry.
             </span>
           }
+          projectId={challenge.projectId}
           value={challenge.description}
           setValue={setChallengeData}
           text="Challenge"
