@@ -51,13 +51,13 @@ const Projects = ({ location }) => {
       selectedFilter === FILTERS.all
         ? variables
         : selectedFilter === FILTERS.challenged
-        ? {
+          ? {
             ...variables,
             where: {
               currentChallenge_not: null,
             },
           }
-        : {
+          : {
             ...variables,
             where: {
               isRepresentative: true,
@@ -152,8 +152,8 @@ const Projects = ({ location }) => {
               {selectedFilter === FILTERS.claimed ? (
                 <span>{claimedCount} Claimed</span>
               ) : (
-                <span>{challengesCount} Challenges</span>
-              )}
+                  <span>{challengesCount} Challenges</span>
+                )}
             </Styled.p>
             <Sorting
               selectedOrderBy={selectedOrderBy}
@@ -212,7 +212,7 @@ const Projects = ({ location }) => {
                 isChallenged: project.currentChallenge !== null,
                 category:
                   project.categories.length > 0
-                    ? project.categories[0].name
+                    ? project.categories[0]?.name
                     : '',
               }
             })
@@ -227,8 +227,8 @@ const Projects = ({ location }) => {
           (selectedFilter === FILTERS.all
             ? data.projects.length < projectCount
             : selectedFilter === FILTERS.challenged
-            ? data.projects.length < challengesCount
-            : data.projects.length < claimedCount) && (
+              ? data.projects.length < challengesCount
+              : data.projects.length < claimedCount) && (
             <Button
               variant="secondary"
               text="Load more"
@@ -244,14 +244,14 @@ const Projects = ({ location }) => {
                     selectedFilter === FILTERS.all
                       ? { ...variables, skip: data.projects.length }
                       : selectedFilter === FILTERS.challenged
-                      ? {
+                        ? {
                           ...variables,
                           skip: data.projects.length,
                           where: {
                             currentChallenge_not: null,
                           },
                         }
-                      : {
+                        : {
                           ...variables,
                           skip: data.projects.length,
                           where: {

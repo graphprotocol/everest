@@ -159,41 +159,42 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               }}
               gap={4}
             >
-              {searchData.map((project, index) => (
-                <Card
+              {searchData.map((project, index) => {
+                console.log("project: ", project)
+                return <Card
                   key={index}
                   title={project.name}
                   variant="project"
                   image={project.avatar}
                   to={`/project/${project.id}`}
-                  category={project.categories?.[0]?.name ?? 'None'}
+                  categories={project.categories}
                   isChallenged={project.isChallenged}
                 />
-              ))}
+              })}
             </Grid>
           )}
         </Box>
       )}
     </Box>
   ) : (
-    <SearchIcon
-      sx={{
-        fill: 'secondary',
-        height: '25px',
-        width: '25px',
-        cursor: 'pointer',
-        mr: [0, 3, 3],
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          fill: 'linkHover',
-        },
-      }}
-      onClick={e => {
-        e.stopPropagation()
-        setIsSearchOpen(true)
-      }}
-    />
-  )
+      <SearchIcon
+        sx={{
+          fill: 'secondary',
+          height: '25px',
+          width: '25px',
+          cursor: 'pointer',
+          mr: [0, 3, 3],
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            fill: 'linkHover',
+          },
+        }}
+        onClick={e => {
+          e.stopPropagation()
+          setIsSearchOpen(true)
+        }}
+      />
+    )
 }
 
 Search.propTypes = {
