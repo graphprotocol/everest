@@ -159,9 +159,8 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
               }}
               gap={4}
             >
-              {searchData.map((project, index) => {
-                console.log("project: ", project)
-                return <Card
+              {searchData.map((project, index) => (
+                <Card
                   key={index}
                   title={project.name}
                   variant="project"
@@ -170,7 +169,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
                   categories={project.categories}
                   isChallenged={project.isChallenged}
                 />
-              })}
+              ))}
             </Grid>
           )}
         </Box>
