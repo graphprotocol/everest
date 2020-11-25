@@ -44,14 +44,9 @@ module.exports = {
       resolve: 'gatsby-plugin-react-svg',
     },
     {
-      resolve: `gatsby-plugin-prefetch-google-fonts`,
+      resolve: `gatsby-plugin-google-fonts`,
       options: {
-        fonts: [
-          {
-            family: 'Space Mono',
-            variants: ['400', '400i', '700', '900', '900i'],
-          },
-        ],
+        fonts: [`Space Mono\:400,400i,700,900,900i`]
       },
     },
     {
