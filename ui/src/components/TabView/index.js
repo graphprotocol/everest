@@ -14,6 +14,7 @@ const TabView = ({
   header,
   placeholder,
   heading,
+  projectId,
   value,
   setValue,
   text,
@@ -98,7 +99,7 @@ const TabView = ({
             text={text}
             icon={icon}
             sx={{ margin: ['auto', 'auto', 0] }}
-            disabled={value.length === 0}
+            disabled={value.length === 0 || !projectId}
           />
         </Box>
       </Grid>
@@ -115,6 +116,7 @@ TabView.propTypes = {
   header: PropTypes.string,
   placeholder: PropTypes.string,
   heading: PropTypes.string,
+  projectId: PropTypes.string,
   value: PropTypes.string,
   setValue: PropTypes.func,
   text: PropTypes.string,

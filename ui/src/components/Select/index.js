@@ -87,7 +87,10 @@ const Select = ({ items, variant, setValue }) => {
             item={selected}
             parent={selected.parent}
             selected={selected}
-            setSelected={setSelected}
+            setSelected={item => {
+              setSelected(item);
+              setValue(item);
+            }}
             sx={{ background: 'white', mx: 0, my: 3 }}
             close={true}
             variant={variant}
