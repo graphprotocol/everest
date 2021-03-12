@@ -201,7 +201,11 @@ const NewProject = () => {
         !(
           value.length > 0 &&
           project.categories &&
-          project.categories.length > 0
+          project.categories.length > 0 &&
+          (
+            daiAmount &&
+            parseFloat(daiAmount) >= 10
+          )
         ),
       )
     } else {
