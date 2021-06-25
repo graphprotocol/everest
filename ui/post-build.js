@@ -67,7 +67,7 @@ fetch(`https://api.thegraph.com/subgraphs/name/${SUBGRAPH_NAME}`, {
             const newTags = getMetaTags(
               project.name,
               project.description,
-              `https://api.thegraph.com/ipfs/api/v0/cat?arg=${project.avatar}`,
+              `https://ipfs.everest.link/cat?arg=${project.avatar}`,
               `https://everest.link/project/${project.id}`,
             )
             Object.keys(oldTags).forEach(function(tag) {

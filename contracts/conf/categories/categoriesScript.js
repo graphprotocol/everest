@@ -15,7 +15,7 @@ for (let i = 0; i < categoryCount; i++) {
     let key = Object.keys(ids)[i]
     category.id = ids[key]
     category.imageHash = ipfsHashes[key]
-    category.imageUrl = 'https://api.thegraph.com/ipfs/api/v0/cat?arg=' + ipfsHashes[key]
+    category.imageUrl = 'https://ipfs.everest.link/cat?arg=' + ipfsHashes[key]
     category.name = names[key]
     category.slug = key
     category.description = descriptions[key]
@@ -53,7 +53,7 @@ const pinToIPFS = async () => {
     })
 
     await exec(
-        `ipfs-sync sync-files --from http://localhost:5001/ --to https://api.staging.thegraph.com/ipfs/ --file-list ${__dirname}/../ipfs-sync/categories.txt`,
+        `ipfs-sync sync-files --from http://localhost:5001/ --to https://ipfs.everest.link/ --file-list ${__dirname}/../ipfs-sync/categories.txt`,
         (err, stdout, stderr) => {
             if (err) {
                 //some err occurred
@@ -67,7 +67,7 @@ const pinToIPFS = async () => {
     )
 
     await exec(
-        `ipfs-sync sync-files --from http://localhost:5001/ --to https://api.thegraph.com/ipfs/ --file-list ${__dirname}/../ipfs-sync/categories.txt`,
+        `ipfs-sync sync-files --from http://localhost:5001/ --to https://ipfs.everest.link/ --file-list ${__dirname}/../ipfs-sync/categories.txt`,
         (err, stdout, stderr) => {
             if (err) {
                 //some err occurred

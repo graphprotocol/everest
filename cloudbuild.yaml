@@ -9,7 +9,7 @@ steps:
     args:
       - build
       - --build-arg
-      - GATSBY_IPFS_HTTP_URI=https://api.thegraph.com/ipfs/api/v0/
+      - GATSBY_IPFS_HTTP_URI=https://ipfs.everest.link/
       - --build-arg
       - GATSBY_NETWORK_CONNECTOR_URI=https://$_ETHEREUM_NETWORK.infura.io/v3/$_INFURA_ID
       - --build-arg

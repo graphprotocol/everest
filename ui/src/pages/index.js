@@ -45,6 +45,15 @@ const Index = () => {
       orderDirection: ORDER_DIRECTION.ASC,
     },
   })
+
+  if (categories && categories.categories.length) {
+    categories.categories.forEach(category => {
+      if (category.imageUrl.includes('https://api.thegraph.com/ipfs/api/v0/')) {
+        category.imageUrl = category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      }
+    })
+  }
+
   const { data: projects } = useQuery(PROJECTS_QUERY, {
     variables: {
       orderBy: 'createdAt',

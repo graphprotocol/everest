@@ -71,7 +71,7 @@ Run these commands from the root directory:
 1. Create an `.env.development` file inside of the `ui` folder with the following content:
 
 ```
-GATSBY_IPFS_HTTP_URI=https://api.thegraph.com/ipfs/api/v0/
+GATSBY_IPFS_HTTP_URI=https://ipfs.everest.link/
 GATSBY_NETWORK_CONNECTOR_URI=https://ropsten.infura.io/v3/[INFURA_ID]
 GATSBY_INFURA_ID=[INFURA_ID]
 GATSBY_NETWORK_URI=https://api.thegraph.com
@@ -96,7 +96,7 @@ This will build mutations, and bring up the UI on port `4000`.
 1. Create an `.env.development` file inside of the `ui` folder with the following content:
 
 ```
-GATSBY_IPFS_HTTP_URI=https://api.thegraph.com/ipfs/api/v0/
+GATSBY_IPFS_HTTP_URI=https://ipfs.everest.link/
 GATSBY_NETWORK_CONNECTOR_URI=https://mainnet.infura.io/v3/[INFURA_ID]
 GATSBY_INFURA_ID=[INFURA_ID]
 GATSBY_NETWORK_URI=https://api.thegraph.com
