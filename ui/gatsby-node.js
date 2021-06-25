@@ -46,6 +46,9 @@ exports.createPages = async ({ page, actions }) => {
   if (resultData && resultData.data) {
     let categories = resultData.data.categories || []
     categories.forEach(category => {
+      if (category.imageUrl.includes('https://api.thegraph.com/ipfs/api/v0/')) {
+        category.imageUrl = category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      }
       createPage({
         path: `/category/${category.id}/`,
         component: require.resolve('./src/templates/category.js'),

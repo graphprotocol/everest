@@ -35,6 +35,15 @@ const Category = ({ location, pageContext }) => {
     },
   })
 
+  if (data && data.category) {
+    data.category.imageUrl = data.category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+    if (data.category.subcategories && data.category.subcategories.length) {
+      data.category.subcategories.forEach((subcategory) => {
+        subcategory.imageUrl = subcategory.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      })
+    }
+  }
+
   const viewRef = useRef()
 
   if (loading)
