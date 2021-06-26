@@ -23,7 +23,7 @@
     "ethers": "^4.0.40",
     "graphql-tag": "^2.10.3",
     "graphql": "^14.6.0",
-    "ipfs-http-client": "^42.0.0",
+    "ipfs-http-client": "47.0.1",
     "js-sha3": "^0.8.0",
     "rxjs": "^6.5.4",
     "numeral": "^2.0.6"
