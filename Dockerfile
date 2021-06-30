@@ -15,7 +15,7 @@ RUN apt-get install -y software-properties-common git build-essential
 
 # Install NPM and Yarn
 RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g yarn lerna
 RUN yarn global add ipfs-deploy

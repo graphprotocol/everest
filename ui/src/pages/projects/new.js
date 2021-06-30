@@ -79,7 +79,7 @@ const NewProject = () => {
       onCompleted: data => {
         setPendingTransaction(false)
         if (data && data.addProject && data.addProject.id) {
-          navigate(`/project/${data.addProject.id}`)
+          navigate(`/project/${data.addProject.id}/`)
         } else {
           navigate(`/profile?id=${account}`)
         }

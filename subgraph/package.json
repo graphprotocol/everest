@@ -33,9 +33,9 @@
     "prepare:ropsten": "node ./config/configScript.js && mustache ./config/ropsten.json subgraph.template.yaml > subgraph.yaml && yarn graph codegen --output-dir src/types/",
     "build-ropsten": "yarn prepare:ropsten && graph build",
     "build-mainnet": "yarn prepare:mainnet && graph build",
-    "deploy-ropsten": "yarn prepare:ropsten && graph deploy graphprotocol/everest-ropsten --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-mainnet": "yarn prepare:mainnet && graph deploy graphprotocol/everest --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-testing": "yarn prepare:ropsten && graph deploy davekaj/everest --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+    "deploy-ropsten": "yarn prepare:ropsten && graph deploy graphprotocol/everest-ropsten --ipfs https://ipfs.everest.link/ --node https://api.thegraph.com/deploy/",
+    "deploy-mainnet": "yarn prepare:mainnet && graph deploy graphprotocol/everest --ipfs https://ipfs.everest.link/ --node https://api.thegraph.com/deploy/",
+    "deploy-testing": "yarn prepare:ropsten && graph deploy davekaj/everest --ipfs https://ipfs.everest.link/ --node https://api.thegraph.com/deploy/"
   },
   "dependencies": {
     "mustache": "^4.0.1"

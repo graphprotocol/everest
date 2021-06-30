@@ -32,7 +32,7 @@ const pinToIPFS = async () => {
     )
 
     await exec(
-        `ipfs-sync sync-files --from http://localhost:5001/ --to https://api.thegraph.com/ipfs/ --file-list ${__dirname}/charter.txt`,
+        `ipfs-sync sync-files --from http://localhost:5001/ --to https://ipfs.everest.link/ --file-list ${__dirname}/charter.txt`,
         (err, stdout, stderr) => {
             if (err) {
                 //some err occurred

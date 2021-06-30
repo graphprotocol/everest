@@ -277,9 +277,9 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
             }}
           >
             <Styled.a href="/">Home</Styled.a>
-            <Styled.a href="/categories">Categories</Styled.a>
-            <Styled.a href="/projects">Projects</Styled.a>
-            <Styled.a href="/charter">Charter</Styled.a>
+            <Styled.a href="/categories/">Categories</Styled.a>
+            <Styled.a href="/projects/">Projects</Styled.a>
+            <Styled.a href="/charter/">Charter</Styled.a>
           </Box>
         </Box>
       )}
@@ -306,9 +306,9 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
           <Logo sx={{ verticalAlign: 'middle', lineHeight: '1rem' }} />
           <span sx={{ pl: 3 }}>Everest</span>
         </Link>
-        <Link to="/categories">Categories</Link>
-        <Link to="/projects">Projects</Link>
-        <Link to="/charter">Charter</Link>
+        <Link to="/categories/">Categories</Link>
+        <Link to="/projects/">Projects</Link>
+        <Link to="/charter/">Charter</Link>
       </Grid>
       <Grid
         sx={{
@@ -328,7 +328,7 @@ const Navbar = ({ location, setParentMobileOpen, ...props }) => {
           setValue={setSearchText}
         />
         <Link
-          to={userAccount ? '/projects/new' : undefined}
+          to={userAccount ? '/projects/new/' : undefined}
           onClick={() => !userAccount && openModal()}
           sx={{
             backgroundColor: isNewProjectPage ? 'secondary' : 'transparent',

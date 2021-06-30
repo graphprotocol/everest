@@ -66,7 +66,7 @@ export const getBreadcrumbs = item => {
   while (parent) {
     breadcrumbs = breadcrumbs.concat({
       name: parent.name,
-      url: `/category/${parent.id}`,
+      url: `/category/${parent.id}/`,
     })
     parent = parent.parentCategory
   }
@@ -74,7 +74,7 @@ export const getBreadcrumbs = item => {
 }
 
 export const pickCategories = categories => {
-  let projectCategories = categories ? [...categories] : []
+  let projectCategories = categories && typeof categories === 'object' ? [...categories] : []
   if (projectCategories.length > 0) {
     for (const pc of categories) {
       if (pc.parentCategory) {

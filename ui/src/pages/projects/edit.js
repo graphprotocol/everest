@@ -69,7 +69,7 @@ const EditProject = ({ location }) => {
     },
     onCompleted: () => {
       setPendingTransaction(false)
-      navigate(`/project/${projectId}`)
+      navigate(`/project/${projectId}/`)
     },
   })
 

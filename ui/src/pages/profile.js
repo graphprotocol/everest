@@ -436,7 +436,7 @@ const Profile = ({ location }) => {
                 description: project.description
                   ? project.description.slice(0, 30) + '...'
                   : '',
-                to: `/project/${project.id}`,
+                to: `/project/${project.id}/`,
                 image: project.avatar,
                 pending: project.id.indexOf('0x') < 0,
                 isChallenged: project.currentChallenge !== null,
@@ -468,7 +468,7 @@ const Profile = ({ location }) => {
                 </Styled.p>
                 <Button
                   text="Add a Project"
-                  to="/projects/new"
+                  to="/projects/new/"
                   variant="primary"
                   sx={{ m: '0 auto', mt: 7 }}
                 />
@@ -508,7 +508,7 @@ const Profile = ({ location }) => {
               return {
                 ...project,
                 description: project.description.slice(0, 30) + '...',
-                to: `/project/${project.id}`,
+                to: `/project/${project.id}/`,
                 image: project.avatar,
                 pending: project.id.indexOf('0x') < 0,
                 isChallenged: project.currentChallenge !== null,
@@ -550,7 +550,7 @@ const Profile = ({ location }) => {
                     return {
                       ...project,
                       description: project.description.slice(0, 30) + '...',
-                      to: `/project/${project.id}`,
+                      to: `/project/${project.id}/`,
                       image: project.avatar,
                       pending: project.id.indexOf('0x') < 0,
                       isChallenged: project.currentChallenge !== null,
