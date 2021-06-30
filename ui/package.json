@@ -34,7 +34,7 @@
     "base-x": "^3.0.7",
     "dotenv": "^8.2.0",
     "ethers": "^4.0.40",
-    "gatsby": "^2.18.4",
+    "gatsby": "2.24.7",
     "gatsby-plugin-emotion": "^4.1.22",
     "gatsby-plugin-eslint": "^2.0.8",
     "gatsby-plugin-ipfs": "2.0.2",
