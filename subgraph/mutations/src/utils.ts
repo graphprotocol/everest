@@ -4,9 +4,7 @@ export const uploadToIpfs = async (ipfs: any, data: any): Promise<string> => {
   let result
 
   try {
-    for await (const returnedValue of ipfs.add(data)) {
-      result = returnedValue
-    }
+    result = await ipfs.add(data)
   } catch (e) {
     console.log('ipfs error: ', e)
   }
