@@ -1,6 +1,13 @@
 {
-  "name": "everest-contracts",
+  "name": "@graphprotocol/everest-contracts",
   "version": "0.0.1",
+  "files": [
+    "abis/**/*",
+    "build/**/*",
+    "addresses.json",
+    "README.md",
+    "LICENSE.txt"
+  ],
   "scripts": {
     "abis": "rm -rf ./abis && mkdir ./abis/ && node ./scripts/extractAbis.js",
     "build": "truffle build && yarn abis && yarn flatten",
