@@ -13,7 +13,7 @@
     ]
   },
   "scripts": {
-    "build:contracts": "lerna exec --scope everest-contracts -- yarn build",
+    "build:contracts": "lerna exec --scope @graphprotocol/everest-contracts -- yarn build",
     "build:mutations": "lerna exec --scope everest-mutations -- yarn build",
     "build:subgraph-ropsten": "lerna exec --scope everest-subgraph -- yarn build-ropsten",
     "build:subgraph-mainnet": "lerna exec --scope everest-subgraph -- yarn build-mainnet",
