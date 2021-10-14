@@ -123,18 +123,19 @@ const sendTransaction = async (tx: Promise<Transaction>) => {
 }
 
 const abis = {
-  Context: require('everest-contracts/abis/Context.json').abi,
-  Dai: require('everest-contracts/abis/Dai.json').abi,
-  EthereumDIDRegistry: require('everest-contracts/abis/EthereumDIDRegistry.json').abi,
-  LibNote: require('everest-contracts/abis/LibNote.json').abi,
-  Ownable: require('everest-contracts/abis/Ownable.json').abi,
-  Registry: require('everest-contracts/abis/Registry.json').abi,
-  ReserveBank: require('everest-contracts/abis/ReserveBank.json').abi,
-  SafeMath: require('everest-contracts/abis/SafeMath.json').abi,
-  Everest: require('everest-contracts/abis/Everest.json').abi,
+  Context: require('@graphprotocol/everest-contracts/abis/Context.json').abi,
+  Dai: require('@graphprotocol/everest-contracts/abis/Dai.json').abi,
+  EthereumDIDRegistry: require('@graphprotocol/everest-contracts/abis/EthereumDIDRegistry.json')
+    .abi,
+  LibNote: require('@graphprotocol/everest-contracts/abis/LibNote.json').abi,
+  Ownable: require('@graphprotocol/everest-contracts/abis/Ownable.json').abi,
+  Registry: require('@graphprotocol/everest-contracts/abis/Registry.json').abi,
+  ReserveBank: require('@graphprotocol/everest-contracts/abis/ReserveBank.json').abi,
+  SafeMath: require('@graphprotocol/everest-contracts/abis/SafeMath.json').abi,
+  Everest: require('@graphprotocol/everest-contracts/abis/Everest.json').abi,
 }
 
-const addresses = require('everest-contracts/addresses.json')
+const addresses = require('@graphprotocol/everest-contracts/addresses.json')
 
 const addressMap = {
   Dai: 'dai',
