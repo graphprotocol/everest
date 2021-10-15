@@ -201,7 +201,11 @@ const NewProject = () => {
         !(
           value.length > 0 &&
           project.categories &&
-          project.categories.length > 0
+          project.categories.length > 0 &&
+          (
+            daiAmount &&
+            parseFloat(daiAmount) >= 10
+          )
         ),
       )
     } else {
@@ -209,7 +213,11 @@ const NewProject = () => {
         !(
           value.length > 0 &&
           project.description !== '' &&
-          project.name !== ''
+          project.name !== '' &&
+          (
+            daiAmount &&
+            parseFloat(daiAmount) >= 10
+          )
         ),
       )
     }
@@ -266,7 +274,7 @@ const NewProject = () => {
               fontWeight: 'heading',
             }}
           >
-            You need at least 10 DAI in order to add a project. Please add more
+            * You need at least 10 DAI in order to add a project. Please add more
             DAI to your Wallet.
           </Styled.h6>
         )}
