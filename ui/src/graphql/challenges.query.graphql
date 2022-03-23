@@ -1,0 +1,24 @@
+  query challenges($projects: [ID!], $endTime: Int) {
+    challenges(where: { owner_in: $projects, endTime_lt: $endTime }) {
+      id
+      project {
+        id
+        name
+        description
+        avatar
+        image
+        website
+        github
+        twitter
+        isRepresentative
+        createdAt
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          name
+        }
+      }
+    }
+  }

@@ -1,0 +1,38 @@
+query projects(
+    $orderBy: Project_orderBy
+    $orderDirection: OrderDirection
+    $where: Project_filter
+    $first: Int
+    $skip: Int
+  ) {
+    projects(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: $where
+      first: $first
+      skip: $skip
+    ) {
+      id
+      name
+      image
+      description
+      avatar
+      createdAt
+      isRepresentative
+      currentChallenge {
+        id
+      }
+      categories {
+        id
+        name
+        description
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+        }
+      }
+    }
+  }

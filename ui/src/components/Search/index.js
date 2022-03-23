@@ -9,12 +9,12 @@ import Card from '../Card'
 import SearchIcon from '../../images/search.svg'
 import Close from '../../images/close.svg'
 
-import { PROJECT_SEARCH } from '../../utils/apollo/queries'
+import { projectSearchDocument } from '../../../.graphclient'
 
 const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
   let searchData = null
 
-  const [searchProjects, { data }] = useLazyQuery(PROJECT_SEARCH)
+  const [searchProjects, { data }] = useLazyQuery(projectSearchDocument)
 
   if (data && data.projectSearch) {
     searchData = data.projectSearch
@@ -176,24 +176,24 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
       )}
     </Box>
   ) : (
-      <SearchIcon
-        sx={{
-          fill: 'secondary',
-          height: '25px',
-          width: '25px',
-          cursor: 'pointer',
-          mr: [0, 3, 3],
-          transition: 'all 0.3s ease',
-          '&:hover': {
-            fill: 'linkHover',
-          },
-        }}
-        onClick={e => {
-          e.stopPropagation()
-          setIsSearchOpen(true)
-        }}
-      />
-    )
+    <SearchIcon
+      sx={{
+        fill: 'secondary',
+        height: '25px',
+        width: '25px',
+        cursor: 'pointer',
+        mr: [0, 3, 3],
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          fill: 'linkHover',
+        },
+      }}
+      onClick={e => {
+        e.stopPropagation()
+        setIsSearchOpen(true)
+      }}
+    />
+  )
 }
 
 Search.propTypes = {

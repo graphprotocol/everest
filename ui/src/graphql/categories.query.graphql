@@ -1,0 +1,30 @@
+query categories(
+    $parentCategory: String
+    $orderBy: Category_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    categories(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { parentCategory: $parentCategory }
+    ) {
+      id
+      name
+      description
+      imageUrl
+      projectCount
+      subcategories {
+        id
+        projects {
+          id
+        }
+      }
+      parentCategory {
+        id
+        name
+      }
+      projects {
+        id
+      }
+    }
+  }

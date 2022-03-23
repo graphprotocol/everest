@@ -1,0 +1,7 @@
+  query challenge($id: ID!) {
+    id
+    description
+    votes {
+      id
+    }
+  }

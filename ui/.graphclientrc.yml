@@ -1,0 +1,11 @@
+# This loads the Subgraph schema, from the actual Subgrahp
+sources:
+  - name: everest
+    handler:
+      graphql:
+        endpoint: ${GATSBY_GRAPHQL_HTTP_URI}
+
+# Loads all queries and generates a TypedDocumentNode
+documents:
+  - "./src/graphql/**/*.graphql"
+

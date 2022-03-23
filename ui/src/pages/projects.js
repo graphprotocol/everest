@@ -8,7 +8,6 @@ import queryString from 'query-string'
 import { navigate } from '@reach/router'
 import { isMobile } from 'react-device-detect'
 
-import { PROJECTS_QUERY, EVEREST_QUERY } from '../utils/apollo/queries'
 import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Section from '../components/Section'
@@ -18,6 +17,7 @@ import Sorting from '../components/Sorting'
 import Button from '../components/Button'
 import Seo from '../components/Seo'
 import Loading from '../components/Loading'
+import { everestsDocument, projectsDocument } from '../../.graphclient'
 
 const Projects = ({ location }) => {
   const queryParams = queryString.parse(location.search)
@@ -44,20 +44,20 @@ const Projects = ({ location }) => {
     skip: 0,
   }
 
-  const { data: everestData } = useQuery(EVEREST_QUERY)
+  const { data: everestData } = useQuery(everestsDocument)
 
-  const { error, data, loading, fetchMore } = useQuery(PROJECTS_QUERY, {
+  const { error, data, loading, fetchMore } = useQuery(projectsDocument, {
     variables:
       selectedFilter === FILTERS.all
         ? variables
         : selectedFilter === FILTERS.challenged
-          ? {
+        ? {
             ...variables,
             where: {
               currentChallenge_not: null,
             },
           }
-          : {
+        : {
             ...variables,
             where: {
               isRepresentative: true,
@@ -152,8 +152,8 @@ const Projects = ({ location }) => {
               {selectedFilter === FILTERS.claimed ? (
                 <span>{claimedCount} Claimed</span>
               ) : (
-                  <span>{challengesCount} Challenges</span>
-                )}
+                <span>{challengesCount} Challenges</span>
+              )}
             </Styled.p>
             <Sorting
               selectedOrderBy={selectedOrderBy}
@@ -227,8 +227,8 @@ const Projects = ({ location }) => {
           (selectedFilter === FILTERS.all
             ? data.projects.length < projectCount
             : selectedFilter === FILTERS.challenged
-              ? data.projects.length < challengesCount
-              : data.projects.length < claimedCount) && (
+            ? data.projects.length < challengesCount
+            : data.projects.length < claimedCount) && (
             <Button
               variant="secondary"
               text="Load more"
@@ -244,14 +244,14 @@ const Projects = ({ location }) => {
                     selectedFilter === FILTERS.all
                       ? { ...variables, skip: data.projects.length }
                       : selectedFilter === FILTERS.challenged
-                        ? {
+                      ? {
                           ...variables,
                           skip: data.projects.length,
                           where: {
                             currentChallenge_not: null,
                           },
                         }
-                        : {
+                      : {
                           ...variables,
                           skip: data.projects.length,
                           where: {

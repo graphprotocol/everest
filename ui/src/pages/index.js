@@ -9,11 +9,6 @@ import { isMobile } from 'react-device-detect'
 
 import { useAccount } from '../utils/hooks'
 import { getAddress } from '../services/ethers'
-import {
-  CATEGORIES_QUERY,
-  PROJECTS_QUERY,
-  EVEREST_QUERY,
-} from '../utils/apollo/queries'
 import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Link from '../components/Link'
@@ -22,6 +17,11 @@ import Button from '../components/Button'
 import Section from '../components/Section'
 import Divider from '../components/Divider'
 import Modal from '../components/Modal'
+import {
+  categoriesDocument,
+  everestsDocument,
+  projectsDocument,
+} from '../../.graphclient'
 
 const Index = () => {
   const { account } = useAccount()
@@ -38,7 +38,7 @@ const Index = () => {
     }
   }, [])
 
-  const { data: categories } = useQuery(CATEGORIES_QUERY, {
+  const { data: categories } = useQuery(categoriesDocument, {
     variables: {
       parentCategory: null,
       orderBy: CATEGORIES_ORDER_BY.Name,
@@ -49,18 +49,22 @@ const Index = () => {
   if (categories && categories.categories.length) {
     categories.categories.forEach(category => {
       if (category.imageUrl.includes('https://api.thegraph.com/ipfs/api/v0/')) {
-        category.imageUrl = category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+        // TODO: Apollo Client v3 does support mutability on responses, this needs to be done somewhere else
+        // category.imageUrl = category.imageUrl.replace(
+        //   'https://api.thegraph.com/ipfs/api/v0/',
+        //   'https://ipfs.everest.link/',
+        // )
       }
     })
   }
 
-  const { data: projects } = useQuery(PROJECTS_QUERY, {
+  const { data: projects } = useQuery(projectsDocument, {
     variables: {
       orderBy: 'createdAt',
       orderDirection: 'desc',
     },
   })
-  const { data: everestData } = useQuery(EVEREST_QUERY, {
+  const { data: everestData } = useQuery(everestsDocument, {
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
   })

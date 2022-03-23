@@ -13,7 +13,6 @@ import moment from 'moment'
 import { useAccount } from '../utils/hooks'
 import { metamaskAccountChange } from '../services/ethers'
 import { convertDate } from '../utils/helpers'
-import { PROFILE_QUERY, USER_CHALLENGES_QUERY } from '../utils/apollo/queries'
 import { FILTERS, ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Divider from '../components/Divider'
@@ -26,6 +25,7 @@ import Menu from '../components/Menu'
 import Filters from '../components/Filters'
 import Link from '../components/Link'
 import ProfilePlaceholder from '../images/profile-placeholder.svg'
+import { challengesDocument, profileDocument } from '../../.graphclient'
 
 const Profile = ({ location }) => {
   const { account } = useAccount()
@@ -106,7 +106,7 @@ const Profile = ({ location }) => {
     orderDirection: selectedOrderDirection,
   }
 
-  const { error, data, loading } = useQuery(PROFILE_QUERY, {
+  const { error, data, loading } = useQuery(profileDocument, {
     variables:
       selectedFilter === FILTERS.all
         ? variables
@@ -127,7 +127,7 @@ const Profile = ({ location }) => {
     notifyOnNetworkStatusChange: true,
   })
 
-  const { data: userChallenges } = useQuery(USER_CHALLENGES_QUERY, {
+  const { data: userChallenges } = useQuery(challengesDocument, {
     variables: {
       endTime: moment().unix(),
       projects:

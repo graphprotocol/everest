@@ -1,0 +1,21 @@
+query pagesCategories {
+  categories {
+    id
+    name
+    imageUrl
+    description
+    subcategories {
+      id
+      projects {
+        id
+      }
+    }
+    parentCategory {
+      id
+      name
+    }
+    projects {
+      id
+    }
+  }
+}

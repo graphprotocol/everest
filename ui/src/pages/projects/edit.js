@@ -10,13 +10,14 @@ import queryString from 'query-string'
 
 import client from '../../utils/apollo/client'
 
-import { EDIT_PROJECT } from '../../utils/apollo/mutations'
-import { PROJECT_QUERY } from '../../utils/apollo/queries'
-import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
 import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
 import ProjectForm from '../../components/ProjectForm'
 import Loading from '../../components/Loading'
+import {
+  allCategoriesDocument,
+  editProjectDocument,
+} from '../../../.graphclient'
 
 const EditProject = ({ location }) => {
   const queryParams = location ? queryString.parse(location.search) : null
@@ -37,7 +38,7 @@ const EditProject = ({ location }) => {
     categories: [],
   })
 
-  const { loading, error, data } = useQuery(PROJECT_QUERY, {
+  const { loading, error, data } = useQuery(projectDocument, {
     variables: {
       id: projectId,
     },
@@ -61,7 +62,7 @@ const EditProject = ({ location }) => {
     }
   }, [data])
 
-  const [editProject] = useMutation(EDIT_PROJECT, {
+  const [editProject] = useMutation(editProjectDocument, {
     client: client,
     onError: error => {
       console.error(`Error with project ${projectId}: ${error.message}`)
@@ -73,7 +74,7 @@ const EditProject = ({ location }) => {
     },
   })
 
-  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY, {
+  const { data: categories } = useQuery(allCategoriesDocument, {
     variables: {
       orderBy: ORDER_BY.Name,
       orderDirection: ORDER_DIRECTION.ASC,

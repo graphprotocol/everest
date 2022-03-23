@@ -1,0 +1,80 @@
+query project($id: ID!) {
+  project(id: $id) {
+    id
+    name
+    description
+    createdAt
+    website
+    twitter
+    github
+    image
+    avatar
+    totalVotes
+    isRepresentative
+    delegates {
+      id
+    }
+    currentChallenge {
+      id
+      endTime
+      owner {
+        id
+        name
+      }
+      description
+      resolved
+      keepVotes
+      removeVotes
+      votes {
+        id
+      }
+    }
+    owner {
+      id
+    }
+    categories {
+      id
+      name
+      imageUrl
+      parentCategory {
+        id
+        name
+      }
+      subcategories {
+        id
+        name
+        imageUrl
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+          name
+          imageUrl
+          parentCategory {
+            id
+            name
+            parentCategory {
+              id
+              name
+            }
+          }
+          subcategories {
+            id
+            name
+            imageUrl
+            parentCategory {
+              id
+              name
+              parentCategory {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

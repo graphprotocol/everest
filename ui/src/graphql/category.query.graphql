@@ -1,0 +1,66 @@
+query category(
+    $id: ID!
+    $orderBy: Category_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    category(id: $id) {
+      id
+      name
+      description
+      imageUrl
+      projectCount
+      subcategories(orderBy: $orderBy, orderDirection: $orderDirection) {
+        id
+        name
+        description
+        imageUrl
+        projectCount
+        projects {
+          id
+          name
+          description
+          avatar
+          createdAt
+          currentChallenge {
+            id
+          }
+          categories {
+            id
+            name
+          }
+        }
+      }
+      parentCategory {
+        id
+        name
+        parentCategory {
+          id
+          name
+        }
+      }
+      projects {
+        id
+        name
+        image
+        description
+        avatar
+        createdAt
+        isRepresentative
+        currentChallenge {
+          id
+        }
+        categories {
+          id
+          name
+          description
+          parentCategory {
+            id
+            name
+          }
+          subcategories {
+            id
+          }
+        }
+      }
+    }
+  }
