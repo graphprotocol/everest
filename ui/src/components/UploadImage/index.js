@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { jsx } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useMutation } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
+import { gql } from 'graphql-tag'
 
 import Close from '../../images/close.svg'
 import Loading from '../Loading'

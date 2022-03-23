@@ -21,20 +21,17 @@ import {
 import client from '../../utils/apollo/client'
 import { useAccount } from '../../utils/hooks'
 import { metamaskAccountChange } from '../../services/ethers'
-
 import {
-  PROJECT_QUERY,
-  USER_PROJECTS_QUERY,
-  PROFILE_QUERY,
-} from '../../utils/apollo/queries'
-import {
-  REMOVE_PROJECT,
-  RESOLVE_CHALLENGE,
-  CHALLENGE_PROJECT,
-  VOTE_CHALLENGE,
-  TRANSFER_OWNERSHIP,
-  DELEGATE_OWNERSHIP,
-} from '../../utils/apollo/mutations'
+  projectDocument,
+  everestUserProjectsDocument,
+  profileDocument,
+  removeProjectDocument,
+  resolveChallengeDocument,
+  challengeProjectDocument,
+  voteChallengeDocument,
+  transferOwnershipDocument,
+  delegateOwnershipDocument,
+} from '../../../.graphclient'
 
 import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
@@ -68,13 +65,13 @@ const Project = ({ location }) => {
   const projectId =
     location && index ? location.pathname.slice(index, index + 42) : ''
 
-  const { loading, error, data } = useQuery(PROJECT_QUERY, {
+  const { loading, error, data } = useQuery(projectDocument, {
     variables: {
       id: projectId,
     },
   })
 
-  const { data: userData } = useQuery(USER_PROJECTS_QUERY, {
+  const { data: userData } = useQuery(everestUserProjectsDocument, {
     variables: {
       id: account,
     },
@@ -82,7 +79,7 @@ const Project = ({ location }) => {
     notifyOnNetworkStatusChange: true,
   })
 
-  const { data: profile } = useQuery(PROFILE_QUERY, {
+  const { data: profile } = useQuery(profileDocument, {
     variables: {
       id: account,
       orderBy: ORDER_BY['Name'],
@@ -94,11 +91,11 @@ const Project = ({ location }) => {
   let userDelegatorProjects =
     userData && userData.user ? userData.user.delegatorProjects : []
 
-  const [removeProject] = useMutation(REMOVE_PROJECT, {
+  const [removeProject] = useMutation(removeProjectDocument, {
     client: client,
     refetchQueries: [
       {
-        query: PROFILE_QUERY,
+        query: profileDocument,
         variables: {
           id: account,
           orderBy: ORDER_BY['Name'],
@@ -116,7 +113,7 @@ const Project = ({ location }) => {
     update: proxy => {
       const profileData = cloneDeep(
         proxy.readQuery({
-          query: PROFILE_QUERY,
+          query: profileDocument,
           variables: {
             id: account,
             orderBy: ORDER_BY['Name'],
@@ -130,7 +127,7 @@ const Project = ({ location }) => {
       )
 
       proxy.writeQuery({
-        query: PROFILE_QUERY,
+        query: profileDocument,
         variables: {
           id: account,
           orderBy: ORDER_BY['Name'],
@@ -149,7 +146,7 @@ const Project = ({ location }) => {
     },
   })
 
-  const [resolveChallenge] = useMutation(RESOLVE_CHALLENGE, {
+  const [resolveChallenge] = useMutation(resolveChallengeDocument, {
     client: client,
     onError: error => {
       console.error('Error voting on a challenge: ', error)
@@ -160,11 +157,11 @@ const Project = ({ location }) => {
     },
   })
 
-  const [challengeProject] = useMutation(CHALLENGE_PROJECT, {
+  const [challengeProject] = useMutation(challengeProjectDocument, {
     client: client,
     refetchQueries: [
       {
-        query: PROJECT_QUERY,
+        query: projectDocument,
         variables: {
           id: projectId,
         },
@@ -220,7 +217,7 @@ const Project = ({ location }) => {
     update: (proxy, result) => {
       const projectData = cloneDeep(
         proxy.readQuery({
-          query: PROJECT_QUERY,
+          query: projectDocument,
           variables: {
             id: data && data.project ? data.project.id : '',
           },
@@ -228,7 +225,7 @@ const Project = ({ location }) => {
       )
 
       proxy.writeQuery({
-        query: PROJECT_QUERY,
+        query: projectDocument,
         variables: {
           id: data && data.project ? data.project.id : '',
         },
@@ -242,7 +239,7 @@ const Project = ({ location }) => {
     },
   })
 
-  const [voteChallenge] = useMutation(VOTE_CHALLENGE, {
+  const [voteChallenge] = useMutation(voteChallengeDocument, {
     client: client,
     onError: error => {
       console.error('Error voting on a challenge: ', error)
@@ -253,11 +250,11 @@ const Project = ({ location }) => {
     },
   })
 
-  const [transferOwnership] = useMutation(TRANSFER_OWNERSHIP, {
+  const [transferOwnership] = useMutation(transferOwnershipDocument, {
     client: client,
     refetchQueries: [
       {
-        query: PROFILE_QUERY,
+        query: profileDocument,
         variables: {
           id: account,
           orderBy: ORDER_BY['Name'],
@@ -292,7 +289,7 @@ const Project = ({ location }) => {
     update: (proxy, result) => {
       const profileData = cloneDeep(
         proxy.readQuery({
-          query: PROFILE_QUERY,
+          query: profileDocument,
           variables: {
             id: account,
             orderBy: ORDER_BY['Name'],
@@ -306,7 +303,7 @@ const Project = ({ location }) => {
       )
 
       proxy.writeQuery({
-        query: PROFILE_QUERY,
+        query: profileDocument,
         variables: {
           id: account,
           orderBy: ORDER_BY['Name'],
@@ -325,11 +322,11 @@ const Project = ({ location }) => {
     },
   })
 
-  const [delegateOwnership] = useMutation(DELEGATE_OWNERSHIP, {
+  const [delegateOwnership] = useMutation(delegateOwnershipDocument, {
     client: client,
     refetchQueries: [
       {
-        query: PROFILE_QUERY,
+        query: profileDocument,
         variables: {
           id: account,
           orderBy: 'createdAt',
@@ -364,7 +361,7 @@ const Project = ({ location }) => {
     update: (proxy, result) => {
       const profileData = cloneDeep(
         proxy.readQuery({
-          query: PROFILE_QUERY,
+          query: profileDocument,
           variables: {
             id: account,
             orderBy: 'createdAt',
@@ -374,7 +371,7 @@ const Project = ({ location }) => {
       )
 
       proxy.writeQuery({
-        query: PROFILE_QUERY,
+        query: profileDocument,
         variables: {
           id: account,
           orderBy: 'createdAt',
@@ -537,11 +534,11 @@ const Project = ({ location }) => {
   if (project) {
     tweet = `We’d like to claim the ${project.name} project on @EverestRegistry. Please transfer ownership to ${account} 🙌`
   }
-  
+
   if (project.website && !project.website.startsWith('http')) {
     project.website = 'http://' + project.website
   }
-  
+
   let items = []
 
   if (account && project && project.owner && account === project.owner.id) {

@@ -5,7 +5,6 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
-import { CATEGORY_QUERY } from '../utils/apollo/queries'
 import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 import { getBreadcrumbs } from '../utils/helpers'
 
@@ -15,6 +14,7 @@ import Switcher from '../components/Switcher'
 import Link from '../components/Link'
 import Seo from '../components/Seo'
 import Loading from '../components/Loading'
+import { categoryDocument } from '../../.graphclient'
 
 const Category = ({ location, pageContext }) => {
   const pathParams = location.pathname.split('/')
@@ -27,7 +27,7 @@ const Category = ({ location, pageContext }) => {
 
   const [selected, setSelected] = useState('cards')
 
-  const { loading, error, data } = useQuery(CATEGORY_QUERY, {
+  const { loading, error, data } = useQuery(categoryDocument, {
     variables: {
       id: categoryName,
       orderBy: CATEGORIES_ORDER_BY.Name,
@@ -36,10 +36,16 @@ const Category = ({ location, pageContext }) => {
   })
 
   if (data && data.category) {
-    data.category.imageUrl = data.category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+    data.category.imageUrl = data.category.imageUrl.replace(
+      'https://api.thegraph.com/ipfs/api/v0/',
+      'https://ipfs.everest.link/',
+    )
     if (data.category.subcategories && data.category.subcategories.length) {
-      data.category.subcategories.forEach((subcategory) => {
-        subcategory.imageUrl = subcategory.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      data.category.subcategories.forEach(subcategory => {
+        subcategory.imageUrl = subcategory.imageUrl.replace(
+          'https://api.thegraph.com/ipfs/api/v0/',
+          'https://ipfs.everest.link/',
+        )
       })
     }
   }

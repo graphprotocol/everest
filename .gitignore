@@ -88,3 +88,6 @@ ui/.textile/auth.yml
 
 # vscode
 .vscode/
+
+# The Graph Client
+.graphclient

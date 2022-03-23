@@ -1,0 +1,97 @@
+query profile(
+  $id: ID!
+  $orderBy: Project_orderBy
+  $orderDirection: OrderDirection
+  $where: Project_filter
+) {
+  user(id: $id) {
+    id
+    projects(
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: $where
+    ) {
+      id
+      name
+      description
+      avatar
+      image
+      website
+      github
+      twitter
+      isRepresentative
+      createdAt
+      delegates {
+        id
+      }
+      currentChallenge {
+        id
+      }
+      categories {
+        id
+        name
+        imageUrl
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+          name
+          imageUrl
+          parentCategory {
+            id
+            name
+          }
+          subcategories {
+            id
+            name
+            imageUrl
+            parentCategory {
+              id
+              name
+              parentCategory {
+                id
+                name
+              }
+            }
+            subcategories {
+              id
+              name
+              imageUrl
+              parentCategory {
+                id
+                name
+                parentCategory {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    delegatorProjects {
+      id
+      name
+      description
+      createdAt
+      avatar
+      currentChallenge {
+        id
+      }
+      categories {
+        id
+        name
+        parentCategory {
+          id
+          name
+        }
+        subcategories {
+          id
+        }
+      }
+    }
+  }
+}

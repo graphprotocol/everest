@@ -11,13 +11,16 @@ import moment from 'moment'
 import client from '../../utils/apollo/client'
 import { useAccount } from '../../utils/hooks'
 
-import { ADD_PROJECT, DAI_BALANCE } from '../../utils/apollo/mutations'
-import { ALL_CATEGORIES_QUERY } from '../../utils/apollo/queries'
-import { PROFILE_QUERY } from '../../utils/apollo/queries'
 import { ORDER_BY, ORDER_DIRECTION } from '../../utils/constants'
 
 import ProjectForm from '../../components/ProjectForm'
 import Loading from '../../components/Loading'
+import {
+  addProjectDocument,
+  allCategoriesDocument,
+  daiBalanceDocument,
+  profileDocument,
+} from '../../../.graphclient'
 
 const NewProject = () => {
   const { account } = useAccount()
@@ -35,6 +38,8 @@ const NewProject = () => {
     isRepresentative: false,
     categories: [],
   })
+
+  console.log(project)
 
   const defaultImages = [
     'QmbJvMyzrYUj5PmNWdhTTi9DmeHiuKRzsrme4FSSpyjFrR',
@@ -54,18 +59,19 @@ const NewProject = () => {
 
   const defaultImage = defaultImages[Math.floor(Math.random() * 11 + 1)]
 
-  const { data: categories } = useQuery(ALL_CATEGORIES_QUERY, {
+  const { data: categories } = useQuery(allCategoriesDocument, {
     variables: {
       orderBy: ORDER_BY.Name,
       orderDirection: ORDER_DIRECTION.ASC,
     },
   })
-  const { data: profile } = useQuery(PROFILE_QUERY, {
+  const { data: profile } = useQuery(profileDocument, {
     variables: {
       id: account,
       orderBy: ORDER_BY['Name'],
       orderDirection: ORDER_DIRECTION.ASC,
     },
+    skip: !account,
   })
 
   let mutationOptions
@@ -90,7 +96,7 @@ const NewProject = () => {
       client: client,
       refetchQueries: [
         {
-          query: PROFILE_QUERY,
+          query: profileDocument,
           variables: {
             id: account,
             orderBy: ORDER_BY['Name'],
@@ -123,7 +129,7 @@ const NewProject = () => {
       update: (proxy, result) => {
         const profileData = cloneDeep(
           proxy.readQuery({
-            query: PROFILE_QUERY,
+            query: profileDocument,
             variables: {
               id: account,
               orderBy: ORDER_BY['Name'],
@@ -133,7 +139,7 @@ const NewProject = () => {
         )
 
         proxy.writeQuery({
-          query: PROFILE_QUERY,
+          query: profileDocument,
           variables: {
             id: account,
             orderBy: ORDER_BY['Name'],
@@ -158,7 +164,7 @@ const NewProject = () => {
     }
   }
 
-  const [daiBalance] = useMutation(DAI_BALANCE, {
+  const [daiBalance] = useMutation(daiBalanceDocument, {
     client: client,
     onCompleted: data => {
       if (data && data.daiBalance) {
@@ -170,7 +176,7 @@ const NewProject = () => {
     },
   })
 
-  const [addProject] = useMutation(ADD_PROJECT, mutationOptions)
+  const [addProject] = useMutation(addProjectDocument, mutationOptions)
 
   useEffect(() => {
     if (account) {

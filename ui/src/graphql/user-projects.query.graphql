@@ -1,0 +1,15 @@
+query everestUserProjects($id: ID!) {
+    user(id: $id) {
+      id
+      projects {
+        id
+        name
+        avatar
+      }
+      delegatorProjects {
+        id
+        name
+        avatar
+      }
+    }
+  }

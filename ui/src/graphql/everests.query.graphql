@@ -1,0 +1,10 @@
+  query everests {
+    everests {
+      id
+      projectCount
+      categoriesCount
+      reserveBankBalance
+      claimedProjects
+      challengedProjects
+    }
+  }

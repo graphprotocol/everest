@@ -1,4 +1,4 @@
-const fetch = require('isomorphic-fetch')
+const { fetch } = require('cross-undici-fetch')
 
 const activeEnv =
   process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
@@ -12,27 +12,29 @@ require('dotenv').config({
 exports.createPages = async ({ page, actions }) => {
   const { createPage } = actions
 
-  const query = `{ 
-    categories {
-      id
-      name
-      imageUrl
-      description
-      subcategories {
+  const query = /* GraphQL */ `
+    {
+      categories {
         id
+        name
+        imageUrl
+        description
+        subcategories {
+          id
+          projects {
+            id
+          }
+        }
+        parentCategory {
+          id
+          name
+        }
         projects {
           id
         }
       }
-      parentCategory {
-        id
-        name
-      }
-      projects {
-        id
-      }
     }
-  }`
+  `
 
   const result = await fetch(process.env.GATSBY_GRAPHQL_HTTP_URI, {
     method: 'POST',
@@ -102,6 +104,22 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   }
 
   actions.setWebpackConfig({
+    resolve: {
+      alias: {
+        'cross-undici-fetch': require.resolve(
+          'cross-undici-fetch/dist/global-ponyfill.js',
+        ),
+      },
+    },
     node: { fs: 'empty', net: 'empty', child_process: 'empty' },
+    module: {
+      rules: [
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto',
+        },
+      ],
+    },
   })
 }

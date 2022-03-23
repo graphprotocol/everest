@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
+    "build:client": "DOTENV_CONFIG_PATH=./.env.development graphclient build --require dotenv/config",
     "build": "rm -rf public/ && rm -rf .cache && gatsby build --prefix-paths",
     "build:staging": "rm -rf public/ && rm -rf .cache && GATSBY_ACTIVE_ENV=staging gatsby build --prefix-paths && node post-build.js",
     "develop": "gatsby develop -p 4000",
@@ -30,7 +31,6 @@
     "@web3-react/network-connector": "^6.0.4",
     "@web3-react/walletconnect-connector": "^6.0.2",
     "@web3-react/walletlink-connector": "^6.0.2",
-    "apollo-boost": "^0.4.4",
     "base-x": "^3.0.7",
     "dotenv": "^8.2.0",
     "ethers": "^4.0.40",
@@ -64,8 +64,11 @@
     "web3-react": "^5.0.5"
   },
   "devDependencies": {
+    "babel-preset-gatsby": "2.9.1",
+    "@graphprotocol/client-cli": "0.0.2",
     "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.8",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "dotenv": "16.0.0"
   },
   "repository": {
     "type": "git",

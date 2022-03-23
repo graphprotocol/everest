@@ -4,13 +4,13 @@ import { Styled, jsx, Box } from 'theme-ui'
 import { Grid } from '@theme-ui/components'
 import { useQuery } from '@apollo/react-hooks'
 
-import { CATEGORIES_QUERY } from '../utils/apollo/queries'
 import { CATEGORIES_ORDER_BY, ORDER_DIRECTION } from '../utils/constants'
 
 import Section from '../components/Section'
 import Sorting from '../components/Sorting'
 import Seo from '../components/Seo'
 import Loading from '../components/Loading'
+import { categoriesDocument } from '../../.graphclient'
 
 const Categories = () => {
   const [selectedOrderBy, setSelectedOrderBy] = useState(
@@ -21,7 +21,7 @@ const Categories = () => {
   )
   const [isSortingOpen, setIsSortingOpen] = useState(false)
 
-  const { loading, data, error } = useQuery(CATEGORIES_QUERY, {
+  const { loading, data, error } = useQuery(categoriesDocument, {
     variables: {
       parentCategory: null,
       orderDirection: selectedOrderDirection,
@@ -32,7 +32,11 @@ const Categories = () => {
   if (data && data.categories.length) {
     data.categories.forEach(category => {
       if (category.imageUrl.includes('https://api.thegraph.com/ipfs/api/v0/')) {
-        category.imageUrl = category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+        // TODO: Apollo Client v3 does support mutability on responses, this needs to be done somewhere else
+        // category.imageUrl = category.imageUrl.replace(
+        //   'https://api.thegraph.com/ipfs/api/v0/',
+        //   'https://ipfs.everest.link/',
+        // )
       }
     })
   }
