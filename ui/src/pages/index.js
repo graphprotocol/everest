@@ -45,6 +45,15 @@ const Index = () => {
       orderDirection: ORDER_DIRECTION.ASC,
     },
   })
+
+  if (categories && categories.categories.length) {
+    categories.categories.forEach(category => {
+      if (category.imageUrl.includes('https://api.thegraph.com/ipfs/api/v0/')) {
+        category.imageUrl = category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      }
+    })
+  }
+
   const { data: projects } = useQuery(PROJECTS_QUERY, {
     variables: {
       orderBy: 'createdAt',
@@ -90,7 +99,7 @@ const Index = () => {
             Universally <br />
             shared{' '}
             <Link
-              to="/projects"
+              to="/projects/"
               sx={{
                 fontSize: 'inherit',
                 display: 'inline',
@@ -127,7 +136,7 @@ const Index = () => {
                 <Button
                   onClick={async () =>
                     account || (await getAddress())
-                      ? navigate('/projects/new')
+                      ? navigate('/projects/new/')
                       : setShowModal(true)
                   }
                   text="Add a project"
@@ -159,12 +168,12 @@ const Index = () => {
                   name: category.name,
                   description: `${category.projectCount} projects`,
                   image: category.imageUrl,
-                  to: `/category/${category.id}`,
+                  to: `/category/${category.id}/`,
                 }
               })
             : []
         }
-        linkTo="/categories"
+        linkTo="/categories/"
         linkText="View all Categories"
         variant="category"
       />
@@ -180,7 +189,7 @@ const Index = () => {
                     project.description && project.description.length > 30
                       ? project.description.slice(0, 26) + '...'
                       : project.description,
-                  to: `/project/${project.id}`,
+                  to: `/project/${project.id}/`,
                   image: project.avatar,
                   categories: project.categories,
                   isChallenged: project.currentChallenge !== null,
@@ -188,7 +197,7 @@ const Index = () => {
               })
             : []
         }
-        linkTo="/projects"
+        linkTo="/projects/"
         linkText="View all Projects"
         variant="project"
       />
@@ -241,13 +250,13 @@ const Index = () => {
                 description: project.description
                   ? project.description.slice(0, 20) + '...'
                   : '',
-                to: `/project/${project.id}`,
+                to: `/project/${project.id}/`,
                 image: project.avatar,
                 categories: project.categories,
                 isChallenged: project.currentChallenge !== null,
               }
             })}
-            linkTo="/projects?view=Challenged"
+            linkTo="/projects/?view=Challenged"
             linkText="View all Challenges"
             variant="project"
           />
@@ -287,7 +296,7 @@ const Index = () => {
                 <Button
                   onClick={async () =>
                     account || (await getAddress())
-                      ? navigate('/projects/new')
+                      ? navigate('/projects/new/')
                       : setShowModal(true)
                   }
                   text="Add a project"

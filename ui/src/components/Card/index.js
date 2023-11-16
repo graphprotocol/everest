@@ -64,17 +64,17 @@ const Card = ({
               />
             </Box>
           ) : (
-            <Box>
-              <img
-                src={image}
-                alt={title}
-                sx={{
-                  height: '120px',
-                  width: ['164px', '180px', '180px'],
-                }}
-              />
-            </Box>
-          )}
+              <Box>
+                <img
+                  src={image}
+                  alt={title}
+                  sx={{
+                    height: '120px',
+                    width: ['164px', '180px', '180px'],
+                  }}
+                />
+              </Box>
+            )}
           <Box
             sx={{
               textAlign: 'center',
@@ -88,8 +88,8 @@ const Card = ({
                 variant === 'project'
                   ? 0
                   : title && title.length === 16
-                  ? 4
-                  : [2, 3, 3],
+                    ? 4
+                    : [2, 3, 3],
               position: 'relative',
             }}
           >
@@ -104,7 +104,7 @@ const Card = ({
                 color: 'secondary',
               }}
             >
-              {title}
+              {title && title.length > 22 ? title.slice(0, 22) + '...' : title}
             </Styled.p>
             {variant !== 'project' && (
               <p sx={{ variant: 'text.tag', pt: 1 }}>{description}</p>

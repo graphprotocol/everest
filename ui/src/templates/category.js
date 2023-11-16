@@ -35,6 +35,15 @@ const Category = ({ location, pageContext }) => {
     },
   })
 
+  if (data && data.category) {
+    data.category.imageUrl = data.category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+    if (data.category.subcategories && data.category.subcategories.length) {
+      data.category.subcategories.forEach((subcategory) => {
+        subcategory.imageUrl = subcategory.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      })
+    }
+  }
+
   const viewRef = useRef()
 
   if (loading)
@@ -62,7 +71,7 @@ const Category = ({ location, pageContext }) => {
         title={pageContext ? pageContext.name : ''}
         description={pageContext ? pageContext.description : ''}
         image={pageContext ? pageContext.imageUrl : ''}
-        pathname={`/category/${pageContext ? pageContext.id : ''}`}
+        pathname={`/category/${pageContext ? pageContext.id : ''}/`}
       />
       <Grid sx={topStyles} gap={[1, 4, 7]}>
         <Box sx={{ mx: ['auto', 0] }}>
@@ -134,7 +143,7 @@ const Category = ({ location, pageContext }) => {
               name: subcat.name,
               description: `${subcat.projectCount} projects`,
               image: subcat.imageUrl,
-              to: `/category/${subcat.id}`,
+              to: `/category/${subcat.id}/`,
             }
           })}
           variant="category"
@@ -166,7 +175,7 @@ const Category = ({ location, pageContext }) => {
           return {
             ...project,
             description: project.description.slice(0, 40) + '...',
-            to: `/project/${project.id}`,
+            to: `/project/${project.id}/`,
             categories: project.categories,
             isChallenged: project.currentChallenge !== null,
             image: project.avatar,

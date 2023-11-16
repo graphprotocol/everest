@@ -166,7 +166,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
                   variant="project"
                   image={project.avatar}
                   to={`/project/${project.id}`}
-                  category={project.categories[0].name}
+                  categories={project.categories}
                   isChallenged={project.isChallenged}
                 />
               ))}
@@ -176,24 +176,24 @@ const Search = ({ isSearchOpen, setIsSearchOpen, value, setValue }) => {
       )}
     </Box>
   ) : (
-    <SearchIcon
-      sx={{
-        fill: 'secondary',
-        height: '25px',
-        width: '25px',
-        cursor: 'pointer',
-        mr: [0, 3, 3],
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          fill: 'linkHover',
-        },
-      }}
-      onClick={e => {
-        e.stopPropagation()
-        setIsSearchOpen(true)
-      }}
-    />
-  )
+      <SearchIcon
+        sx={{
+          fill: 'secondary',
+          height: '25px',
+          width: '25px',
+          cursor: 'pointer',
+          mr: [0, 3, 3],
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            fill: 'linkHover',
+          },
+        }}
+        onClick={e => {
+          e.stopPropagation()
+          setIsSearchOpen(true)
+        }}
+      />
+    )
 }
 
 Search.propTypes = {

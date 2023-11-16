@@ -15,7 +15,7 @@
     "@graphprotocol/mutations": "^0.0.0-alpha.0",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
-    "everest-contracts": "^0.0.1",
+    "@graphprotocol/everest-contracts": "^0.0.1",
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
     "apollo-link-state": "^0.4.2",
@@ -23,7 +23,7 @@
     "ethers": "^4.0.40",
     "graphql-tag": "^2.10.3",
     "graphql": "^14.6.0",
-    "ipfs-http-client": "^42.0.0",
+    "ipfs-http-client": "47.0.1",
     "js-sha3": "^0.8.0",
     "rxjs": "^6.5.4",
     "numeral": "^2.0.6"

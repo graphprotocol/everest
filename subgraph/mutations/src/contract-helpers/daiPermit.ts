@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 
-const addresses = require('everest-contracts/addresses.json')
+const addresses = require('@graphprotocol/everest-contracts/addresses.json')
 
 //////////////////////////
 //////// DAI utils ///////

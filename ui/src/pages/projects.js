@@ -51,13 +51,13 @@ const Projects = ({ location }) => {
       selectedFilter === FILTERS.all
         ? variables
         : selectedFilter === FILTERS.challenged
-        ? {
+          ? {
             ...variables,
             where: {
               currentChallenge_not: null,
             },
           }
-        : {
+          : {
             ...variables,
             where: {
               isRepresentative: true,
@@ -94,7 +94,7 @@ const Projects = ({ location }) => {
     <Grid>
       <Seo
         description="Projects on the Everest registry."
-        pathname="/projects"
+        pathname="/projects/"
       />
       <Grid columns={[1, 2, 2]}>
         <Box>
@@ -121,21 +121,21 @@ const Projects = ({ location }) => {
                   text: isMobile ? 'All' : 'All projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.all)
-                    navigate(`?view=${FILTERS.all}`)
+                    navigate(`/projects/?view=${FILTERS.all}`)
                   },
                 },
                 {
                   text: isMobile ? 'Challenged' : 'Challenged projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.challenged)
-                    navigate(`?view=${FILTERS.challenged}`)
+                    navigate(`/projects/?view=${FILTERS.challenged}`)
                   },
                 },
                 {
                   text: isMobile ? 'Claimed' : 'Claimed projects',
                   handleSelect: () => {
                     setSelectedFilter(FILTERS.claimed)
-                    navigate(`?view=${FILTERS.claimed}`)
+                    navigate(`/projects/?view=${FILTERS.claimed}`)
                   },
                 },
               ]}
@@ -149,7 +149,11 @@ const Projects = ({ location }) => {
           <Grid columns={['max-content 1fr', '1fr', '1fr']}>
             <Styled.p sx={{ opacity: 0.64, color: 'rgba(9,6,16,0.5)' }}>
               {projectCount} Projects -{' '}
-              <span>{challengesCount} Challenges</span>
+              {selectedFilter === FILTERS.claimed ? (
+                <span>{claimedCount} Claimed</span>
+              ) : (
+                  <span>{challengesCount} Challenges</span>
+                )}
             </Styled.p>
             <Sorting
               selectedOrderBy={selectedOrderBy}
@@ -203,12 +207,12 @@ const Projects = ({ location }) => {
                     ? project.description.slice(0, 26) + '...'
                     : project.description
                   : '',
-                to: `/project/${project.id}`,
+                to: `/project/${project.id}/`,
                 image: project.avatar,
                 isChallenged: project.currentChallenge !== null,
                 category:
                   project.categories.length > 0
-                    ? project.categories[0].name
+                    ? project.categories[0]?.name
                     : '',
               }
             })
@@ -223,8 +227,8 @@ const Projects = ({ location }) => {
           (selectedFilter === FILTERS.all
             ? data.projects.length < projectCount
             : selectedFilter === FILTERS.challenged
-            ? data.projects.length < challengesCount
-            : data.projects.length < claimedCount) && (
+              ? data.projects.length < challengesCount
+              : data.projects.length < claimedCount) && (
             <Button
               variant="secondary"
               text="Load more"
@@ -240,15 +244,16 @@ const Projects = ({ location }) => {
                     selectedFilter === FILTERS.all
                       ? { ...variables, skip: data.projects.length }
                       : selectedFilter === FILTERS.challenged
-                      ? {
+                        ? {
                           ...variables,
                           skip: data.projects.length,
                           where: {
                             currentChallenge_not: null,
                           },
                         }
-                      : {
+                        : {
                           ...variables,
+                          skip: data.projects.length,
                           where: {
                             isRepresentative: true,
                           },

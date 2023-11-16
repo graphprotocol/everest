@@ -29,6 +29,14 @@ const Categories = () => {
     },
   })
 
+  if (data && data.categories.length) {
+    data.categories.forEach(category => {
+      if (category.imageUrl.includes('https://api.thegraph.com/ipfs/api/v0/')) {
+        category.imageUrl = category.imageUrl.replace('https://api.thegraph.com/ipfs/api/v0/', 'https://ipfs.everest.link/')
+      }
+    })
+  }
+
   if (error) {
     console.error('Error getting categories: ', error)
     return <div />
@@ -43,7 +51,7 @@ const Categories = () => {
     <Box>
       <Seo
         description="Categories for projects on the Everest registry."
-        pathname="/categories"
+        pathname="/categories/"
       />
       <Box>
         <Grid
@@ -78,7 +86,7 @@ const Categories = () => {
                 name: cat.name,
                 description: `${cat.projectCount} PROJECTS`,
                 image: cat.imageUrl,
-                to: `/category/${cat.id}`,
+                to: `/category/${cat.id}/`,
               }
             })}
           variant="category"

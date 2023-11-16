@@ -22,7 +22,7 @@ export const getFromIpfs = async (ipfs: any, hash: string) => {
   return result
 }
 
-export const ipfsClient = new IpfsClient('https://api.staging.thegraph.com/ipfs/api/v0/')
+export const ipfsClient = new IpfsClient('https://ipfs.everest.link/')
 
 export const createApolloClient = mutationsModule => {
   const mutations = createMutations({
@@ -31,7 +31,7 @@ export const createApolloClient = mutationsModule => {
     node: '',
     config: {
       ethereum: provider,
-      ipfs: 'https://api.staging.thegraph.com/ipfs/api/v0/',
+      ipfs: 'https://ipfs.everest.link/',
     },
   })
 
